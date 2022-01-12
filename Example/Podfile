@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '9.0'
+
+target 'BloctoSDK_Example' do
+  pod 'BloctoSDK', :path => '../'
+
+  target 'BloctoSDK_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
