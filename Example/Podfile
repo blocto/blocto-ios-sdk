@@ -8,6 +8,5 @@ target 'BloctoSDK_Example' do
   target 'BloctoSDK_Tests' do
     inherit! :search_paths
 
-    
   end
 end

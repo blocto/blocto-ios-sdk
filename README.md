@@ -22,7 +22,7 @@ pod 'BloctoSDK'
 
 ## Author
 
-scottphc, scott.ph.chou@gmail.com
+scottphc, scott@portto.com
 
 ## License
 
