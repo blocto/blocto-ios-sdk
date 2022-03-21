@@ -1,0 +1,33 @@
+//
+//  Error.swift
+//  BloctoSDK
+//
+//  Created by Andrew Wang on 2022/3/14.
+//
+
+import Foundation
+    
+public enum InternalError: Swift.Error {
+    case appIdNotSet
+    case encodeToURLFailed
+}
+
+public enum QueryError: Swift.Error {
+    case userRejected
+    case forbiddenBlockchain
+    case invalidResponse
+    case other(code: String)
+    
+    init(code: String) {
+        switch code {
+        case "user_rejected":
+            self = .userRejected
+        case "forbidden_blockchain":
+            self = .forbiddenBlockchain
+        case "invalid_response":
+            self = .invalidResponse
+        default:
+            self = .other(code: code)
+        }
+    }
+}
