@@ -16,12 +16,16 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        BloctoSDK.shared.initialize(with: bloctoSDKAppId, logging: false)
         
-        window = UIWindow()
+        let window = UIWindow()
+        self.window = window
         let viewController = ViewController()
-        window?.rootViewController = viewController
-        window?.makeKeyAndVisible()
+        window.rootViewController = viewController
+        window.makeKeyAndVisible()
+        BloctoSDK.shared.initialize(
+            with: bloctoSDKAppId,
+            window: window,
+            logging: false)
         return true
     }
     

@@ -16,6 +16,11 @@ public struct RequestAccountMethod: CallbackMethod {
     
     let blockchain: Blockchain
     
+    /// initialize request account method
+    /// - Parameters:
+    ///   - id: Used to find a stored callback. No need to pass if there is no specific requirement, for example, testing.
+    ///   - blockchain: pre-defined blockchain in BloctoSDK
+    ///   - callback: callback will be called by either from blocto native app or web SDK after getting account or reject.
     public init(
         id: UUID = UUID(),
         blockchain: Blockchain,
@@ -26,8 +31,8 @@ public struct RequestAccountMethod: CallbackMethod {
         self.callback = callback
     }
     
-    public func encodeToURL(domainWithPath: String) throws -> URL? {
-        guard let baseURL = URL(string: domainWithPath),
+    public func encodeToURL(baseURLString: String) throws -> URL? {
+        guard let baseURL = URL(string: baseURLString),
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
                   return nil
               }

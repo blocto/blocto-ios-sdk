@@ -6,30 +6,61 @@
 //
 
 import UIKit
+import AuthenticationServices
 
 public class BloctoSDK {
     
     public static let shared: BloctoSDK = BloctoSDK()
 
 #if DEBUG
-    let bloctoAssociatedDomainWithPath: String = "https://staging.blocto.app/"
+    let bloctoAssociatedDomain: String = "https://staging.blocto.app/"
 #else
-    let bloctoAssociatedDomainWithPath: String = "https://blocto.app/"
+    let bloctoAssociatedDomain: String = "https://blocto.app/"
 #endif
+    let webBaseURLString: String = "https://sdk.blocto.app/"
     let requestPath: String = "sdk"
+    let responsePath: String = "/blocto"
     let responseHost: String = "blocto"
     
-    var requestBloctoAssociatedDomainWithPath: String {
-        bloctoAssociatedDomainWithPath + requestPath
+    var requestBloctoBaseURLString: String {
+        bloctoAssociatedDomain + requestPath
     }
     
-    var appId: String = ""
-    var logging: Bool = true
+    var webRequestBloctoBaseURLString: String {
+        webBaseURLString + requestPath
+    }
+    
+    var webCallbackURLScheme: String {
+        "blocto"
+    }
+    
     var uuidToMethod: [UUID: Method] = [:]
 
-    public func initialize(with appId: String, logging: Bool = true) {
+    var appId: String = ""
+    var window: UIWindow = UIWindow()
+    var logging: Bool = true
+    var urlOpening: URLOpening = UIApplication.shared
+    var sessioningType: AuthenticationSessioning.Type = ASWebAuthenticationSession.self
+    
+    /// initialize Blocto SDK
+    /// - Parameters:
+    ///   - appId: Registed id in https://developers.blocto.app/
+    ///   - window: PresentationContextProvider of web SDK authentication.
+    ///   - logging: Enabling log message, default is true.
+    ///   - urlOpening: Handling url which opened app, default is UIApplication.shared.
+    ///   - sessioningType: Type that handles web SDK authentication session, default is ASWebAuthenticationSession.
+    public func initialize(
+        with appId: String,
+        window: UIWindow,
+        logging: Bool = true,
+        urlOpening: URLOpening = UIApplication.shared,
+        sessioningType: AuthenticationSessioning.Type = ASWebAuthenticationSession.self
+    ) {
         self.appId = appId
+        self.window = window
         self.logging = logging
+        self.urlOpening = urlOpening
+        self.sessioningType = sessioningType
     }
     
     public func `continue`(_ userActivity: NSUserActivity) {
@@ -37,7 +68,7 @@ public class BloctoSDK {
             log(message: "webpageURL not found.")
             return
         }
-        resolve(url: url)
+        methodResolve(expectHost: responseHost, url: url)
     }
     
     public func application(
@@ -45,29 +76,36 @@ public class BloctoSDK {
         open url: URL,
         options: [UIApplication.OpenURLOptionsKey: Any]
     ) {
-        resolve(url: url)
+        guard url.path == responsePath else {
+            log(message: "url path should be \(responsePath) rather than \(url.path).")
+            return
+        }
+        methodResolve(url: url)
     }
 
     public func send(method: Method) -> Void {
         do {
             try checkConfigration()
-            guard let requestURL = try method.encodeToURL(domainWithPath: requestBloctoAssociatedDomainWithPath) else {
+            guard let requestURL = try method.encodeToURL(baseURLString: requestBloctoBaseURLString) else {
                 method.handleError(error: InternalError.encodeToURLFailed)
                 return
             }
             uuidToMethod[method.id] = method
-            UIApplication.shared.open(
+            urlOpening.open(
                 requestURL,
                 options: [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly: true],
                 completionHandler: { [weak self] opened in
+                    guard let self = self else { return }
                     if opened {
-                        self?.log(message: "open universal link successfully.")
+                        self.log(message: "open universal link successfully.")
                     } else {
-                        self?.log(message: "can't open universal link.")
+                        self.log(message: "can't open universal link.")
+                        self.routeToWebSDK(window: self.window, method: method)
                     }
                 })
         } catch {
             method.handleError(error: error)
+            routeToWebSDK(window: window, method: method)
         }
     }
 
@@ -80,8 +118,53 @@ public class BloctoSDK {
         print(message)
     }
 
-    private func resolve(url: URL) {
-        guard url.host == responseHost else { return }
+    private func routeToWebSDK(
+        window: UIWindow,
+        method: Method
+    ) {
+        do {
+            guard let requestURL = try method.encodeToURL(baseURLString: webRequestBloctoBaseURLString) else {
+                method.handleError(error: InternalError.encodeToURLFailed)
+                return
+            }
+            var session: AuthenticationSessioning?
+            
+            session = sessioningType.init(
+                url: requestURL,
+                callbackURLScheme: webCallbackURLScheme,
+                completionHandler: { [weak self] callbackURL, error in
+                    guard let self = self else { return }
+                    if let error = error {
+                        self.log(message: error.localizedDescription)
+                    } else if let callbackURL = callbackURL {
+                        self.methodResolve(expectHost: nil, url: callbackURL)
+                    } else {
+                        self.log(message: "callback URL not found.")
+                    }
+                    session = nil
+                })
+            
+            session?.presentationContextProvider = window
+            
+            let startsSuccessfully = session?.start()
+            if startsSuccessfully == false {
+                method.handleError(error: InternalError.webSDKSessionFailed)
+            }
+        } catch {
+            method.handleError(error: error)
+        }
+    }
+    
+    private func methodResolve(
+        expectHost: String? = nil,
+        url: URL
+    ) {
+        if let expectHost = expectHost {
+            guard url.host == expectHost else {
+                log(message: "\(url.host ?? "host is nil") should be \(expectHost)")
+                return
+            }
+        }
         guard let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             log(message: "urlComponents not found.")
             return
@@ -97,8 +180,12 @@ public class BloctoSDK {
         method.resolve(components: urlComponents)
     }
 
-    private func routeToWebSDK(requstURL: URL) {
-        // TODO: routeToWebSDK
+}
+
+extension UIWindow: ASWebAuthenticationPresentationContextProviding {
+
+    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        return self
     }
 
 }

@@ -10,6 +10,7 @@ import Foundation
 public enum InternalError: Swift.Error {
     case appIdNotSet
     case encodeToURLFailed
+    case webSDKSessionFailed
 }
 
 public enum QueryError: Swift.Error {
