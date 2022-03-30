@@ -1,0 +1,24 @@
+//
+//  AuthenticationSessioning.swift
+//  BloctoSDK
+//
+//  Created by Andrew Wang on 2022/3/25.
+//
+
+import Foundation
+import AuthenticationServices
+
+public protocol AuthenticationSessioning {
+
+    var presentationContextProvider: ASWebAuthenticationPresentationContextProviding? { get set }
+
+    init(
+        url URL: URL,
+        callbackURLScheme: String?,
+        completionHandler: @escaping (URL?, Error?) -> Void)
+
+    func start() -> Bool
+
+}
+
+extension ASWebAuthenticationSession: AuthenticationSessioning {}

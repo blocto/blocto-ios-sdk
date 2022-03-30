@@ -1,0 +1,14 @@
+opt_in_rules:
+- vertical_whitespace
+- statement_position
+- colon
+- trailing_whitespace
+- trailing_newline
+- trailing_comma
+- redundant_nil_coalescing
+
+disabled_rules:
+- unused_closure_parameter
+
+excluded:
+  - Pods
