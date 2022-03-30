@@ -36,22 +36,24 @@ public struct RequestAccountMethod: CallbackMethod {
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
                   return nil
               }
-        let queryItems = BloctoSDK.shared.sharedQueryItem(
+        let queryItems = URLEncoding.sharedQueryItem(
             appId: BloctoSDK.shared.appId,
             requestId: id.uuidString,
             blockchain: blockchain,
             method: type.rawValue)
-        components.queryItems = BloctoSDK.shared.encode(queryItems)
+        components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }
     
-    public func resolve(components: URLComponents) {
+    public func resolve(components: URLComponents, logging: Bool) {
         if let errorCode = components.queryItem(for: .error) {
             callback(.failure(QueryError(code: errorCode)))
             return
         }
         guard let address = components.queryItem(for: .address) else {
-            BloctoSDK.shared.log(message: "\(QueryName.address.rawValue) not found.")
+            log(
+                enable: logging,
+                message: "\(QueryName.address.rawValue) not found.")
             callback(.failure(QueryError.invalidResponse))
             return
         }

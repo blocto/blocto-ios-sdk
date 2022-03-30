@@ -7,7 +7,7 @@
 
 import Foundation
     
-public enum InternalError: Swift.Error {
+enum InternalError: Swift.Error {
     case appIdNotSet
     case encodeToURLFailed
     case webSDKSessionFailed

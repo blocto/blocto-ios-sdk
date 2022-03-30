@@ -8,19 +8,24 @@
 import UIKit
 import AuthenticationServices
 
+func log(enable: Bool, message: String) {
+    guard enable else { return }
+    print("BloctoSDK: " + message)
+}
+
 public class BloctoSDK {
     
     public static let shared: BloctoSDK = BloctoSDK()
 
 #if DEBUG
-    let bloctoAssociatedDomain: String = "https://staging.blocto.app/"
+    private let bloctoAssociatedDomain: String = "https://staging.blocto.app/"
 #else
-    let bloctoAssociatedDomain: String = "https://blocto.app/"
+    private let bloctoAssociatedDomain: String = "https://blocto.app/"
 #endif
-    let webBaseURLString: String = "https://sdk.blocto.app/"
-    let requestPath: String = "sdk"
-    let responsePath: String = "/blocto"
-    let responseHost: String = "blocto"
+    private let webBaseURLString: String = "https://sdk.blocto.app/"
+    private let requestPath: String = "sdk"
+    private let responsePath: String = "/blocto"
+    private let responseHost: String = "blocto"
     
     var requestBloctoBaseURLString: String {
         bloctoAssociatedDomain + requestPath
@@ -65,7 +70,9 @@ public class BloctoSDK {
     
     public func `continue`(_ userActivity: NSUserActivity) {
         guard let url = userActivity.webpageURL else {
-            log(message: "webpageURL not found.")
+            log(
+                enable: logging,
+                message: "webpageURL not found.")
             return
         }
         methodResolve(expectHost: responseHost, url: url)
@@ -77,7 +84,9 @@ public class BloctoSDK {
         options: [UIApplication.OpenURLOptionsKey: Any]
     ) {
         guard url.path == responsePath else {
-            log(message: "url path should be \(responsePath) rather than \(url.path).")
+            log(
+                enable: logging,
+                message: "url path should be \(responsePath) rather than \(url.path).")
             return
         }
         methodResolve(url: url)
@@ -97,9 +106,13 @@ public class BloctoSDK {
                 completionHandler: { [weak self] opened in
                     guard let self = self else { return }
                     if opened {
-                        self.log(message: "open universal link successfully.")
+                        log(
+                            enable: self.logging,
+                            message: "open universal link successfully.")
                     } else {
-                        self.log(message: "can't open universal link.")
+                        log(
+                            enable: self.logging,
+                            message: "can't open universal link.")
                         self.routeToWebSDK(window: self.window, method: method)
                     }
                 })
@@ -109,13 +122,8 @@ public class BloctoSDK {
         }
     }
 
-    internal func checkConfigration() throws {
+    private func checkConfigration() throws {
         guard appId.isEmpty == false else { throw InternalError.appIdNotSet }
-    }
-    
-    internal func log(message: String) {
-        guard logging else { return }
-        print(message)
     }
 
     private func routeToWebSDK(
@@ -135,11 +143,15 @@ public class BloctoSDK {
                 completionHandler: { [weak self] callbackURL, error in
                     guard let self = self else { return }
                     if let error = error {
-                        self.log(message: error.localizedDescription)
+                        log(
+                            enable: self.logging,
+                            message: error.localizedDescription)
                     } else if let callbackURL = callbackURL {
                         self.methodResolve(expectHost: nil, url: callbackURL)
                     } else {
-                        self.log(message: "callback URL not found.")
+                        log(
+                            enable: self.logging,
+                            message: "callback URL not found.")
                     }
                     session = nil
                 })
@@ -161,23 +173,31 @@ public class BloctoSDK {
     ) {
         if let expectHost = expectHost {
             guard url.host == expectHost else {
-                log(message: "\(url.host ?? "host is nil") should be \(expectHost)")
+                log(
+                    enable: logging,
+                    message: "\(url.host ?? "host is nil") should be \(expectHost)")
                 return
             }
         }
         guard let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            log(message: "urlComponents not found.")
+            log(
+                enable: logging,
+                message: "urlComponents not found.")
             return
         }
         guard let uuid = urlComponents.getRequestId() else {
-            log(message: "\(QueryName.requestId.rawValue) not found.")
+            log(
+                enable: logging,
+                message: "\(QueryName.requestId.rawValue) not found.")
             return
         }
         guard let method = uuidToMethod[uuid] else {
-            log(message: "\(QueryName.method.rawValue) not found.")
+            log(
+                enable: logging,
+                message: "\(QueryName.method.rawValue) not found.")
             return
         }
-        method.resolve(components: urlComponents)
+        method.resolve(components: urlComponents, logging: logging)
     }
 
 }

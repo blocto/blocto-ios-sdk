@@ -36,4 +36,8 @@ class MockAuthenticationSession: AuthenticationSessioning {
         }
     }
     
+    enum InternalError: Swift.Error {
+        case webSDKSessionFailed
+    }
+
 }
