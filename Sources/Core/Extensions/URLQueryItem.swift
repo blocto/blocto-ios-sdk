@@ -8,9 +8,9 @@
 import Foundation
 
 extension URLQueryItem {
-    
+
     init(name: QueryName, value: String?) {
         self.init(name: name.rawValue, value: value)
     }
-    
+
 }

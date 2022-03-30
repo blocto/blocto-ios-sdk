@@ -6,7 +6,7 @@
 //
 
 import Foundation
-    
+
 public enum MethodType: String {
     case requestAccount = "request_account"
     case signMessage = "sign_message"

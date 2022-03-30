@@ -6,7 +6,7 @@
 //
 
 import Foundation
-    
+
 enum InternalError: Swift.Error {
     case appIdNotSet
     case encodeToURLFailed
@@ -18,7 +18,7 @@ public enum QueryError: Swift.Error {
     case forbiddenBlockchain
     case invalidResponse
     case other(code: String)
-    
+
     init(code: String) {
         switch code {
         case "user_rejected":

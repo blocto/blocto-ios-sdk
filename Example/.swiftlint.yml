@@ -1,0 +1,10 @@
+excluded:
+  - Pods
+
+line_length: 285
+function_body_length: 120
+function_parameter_count: 7
+
+identifier_name:
+  min_length: 1
+  max_length: 50

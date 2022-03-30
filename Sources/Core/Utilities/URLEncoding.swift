@@ -8,7 +8,7 @@
 import Foundation
 
 enum URLEncoding {
-    
+
     static func sharedQueryItem(
         appId: String,
         requestId: String,
@@ -19,7 +19,7 @@ enum URLEncoding {
             QueryItem(name: .appId, value: appId),
             QueryItem(name: .requestId, value: requestId),
             QueryItem(name: .blockchain, value: blockchain),
-            QueryItem(name: .method, value: method),
+            QueryItem(name: .method, value: method)
         ]
     }
 
@@ -30,19 +30,19 @@ enum URLEncoding {
 }
 
 struct ArrayEncoding {
-    
+
     func encode(key: String) -> String {
         "\(key)[]"
     }
-    
+
 }
 
 struct BoolEncoding {
-    
+
     func encode(value: Bool) -> String {
         value ? "true" : "false"
     }
-    
+
 }
 
 extension CharacterSet {

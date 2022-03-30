@@ -13,12 +13,12 @@ enum QueryName: String {
     case requestId = "request_id"
     case blockchain
     case method
-    
+
     // response
     case address
     case signature
     case txHash = "tx_hash"
-    
+
     // error
     case error
 }

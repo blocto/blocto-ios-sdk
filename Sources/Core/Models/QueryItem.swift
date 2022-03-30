@@ -16,11 +16,11 @@ struct QueryItem {
         self.name = name
         self.value = value
     }
-    
+
     var getQueryComponents: [URLQueryItem] {
         queryComponents(fromKey: name.rawValue, value: value)
     }
-    
+
     private func queryComponents(fromKey key: String, value: Any) -> [URLQueryItem] {
         var components: [URLQueryItem] = []
         switch value {

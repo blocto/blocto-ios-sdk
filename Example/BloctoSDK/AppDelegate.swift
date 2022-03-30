@@ -16,7 +16,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
+
         let window = UIWindow()
         self.window = window
         let viewController = ViewController()
@@ -28,11 +28,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             logging: false)
         return true
     }
-    
+
     func application(
         _ app: UIApplication,
         open url: URL,
-        options: [UIApplication.OpenURLOptionsKey : Any] = [:]
+        options: [UIApplication.OpenURLOptionsKey: Any] = [:]
     ) -> Bool {
         BloctoSDK.shared.application(
             app,
@@ -40,7 +40,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             options: options)
         return true
     }
-    
+
     private func application(
         _ application: UIApplication,
         continue userActivity: NSUserActivity,

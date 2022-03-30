@@ -9,9 +9,9 @@
 import BloctoSDK
 
 class MockUIApplication: URLOpening {
-    
+
     private var opened: Bool = false
-    
+
     func setup(opened: Bool) {
         self.opened = opened
     }
@@ -23,5 +23,5 @@ class MockUIApplication: URLOpening {
     ) {
         completion?(opened)
     }
-    
+
 }

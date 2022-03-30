@@ -9,13 +9,13 @@ import Foundation
 
 public struct RequestAccountMethod: CallbackMethod {
     public typealias Response = String
-    
+
     public let id: UUID
     public let type: MethodType = .requestAccount
     public let callback: Callback
-    
+
     let blockchain: Blockchain
-    
+
     /// initialize request account method
     /// - Parameters:
     ///   - id: Used to find a stored callback. No need to pass if there is no specific requirement, for example, testing.
@@ -30,7 +30,7 @@ public struct RequestAccountMethod: CallbackMethod {
         self.blockchain = blockchain
         self.callback = callback
     }
-    
+
     public func encodeToURL(baseURLString: String) throws -> URL? {
         guard let baseURL = URL(string: baseURLString),
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
@@ -44,7 +44,7 @@ public struct RequestAccountMethod: CallbackMethod {
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }
-    
+
     public func resolve(components: URLComponents, logging: Bool) {
         if let errorCode = components.queryItem(for: .error) {
             callback(.failure(QueryError(code: errorCode)))
@@ -59,7 +59,7 @@ public struct RequestAccountMethod: CallbackMethod {
         }
         callback(.success(address))
     }
-    
+
     public func handleError(error: Swift.Error) {
         callback(.failure(error))
     }

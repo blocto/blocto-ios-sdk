@@ -13,7 +13,7 @@ import SnapKit
 import BloctoSDK
 
 final class ViewController: UIViewController {
-    
+
     private var requestAccountButton: UIButton = {
         let button: UIButton = UIButton()
         button.setTitle("request account", for: .normal)
@@ -25,7 +25,7 @@ final class ViewController: UIViewController {
         button.contentEdgeInsets = .init(top: 12, left: 12, bottom: 12, right: 12)
         return button
     }()
-    
+
     private var textField: UITextField = {
         let textField = UITextField()
         return textField
@@ -42,7 +42,7 @@ final class ViewController: UIViewController {
         button.contentEdgeInsets = .init(top: 8, left: 8, bottom: 8, right: 8)
         return button
     }()
-    
+
     private lazy var disposeBag: DisposeBag = DisposeBag()
 
     override func viewDidLoad() {
@@ -53,16 +53,16 @@ final class ViewController: UIViewController {
 
     private func setupViews() {
         view.backgroundColor = .white
-        
+
         view.addSubview(requestAccountButton)
-        
+
         requestAccountButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(50)
             $0.centerX.equalToSuperview()
             $0.leading.trailing.equalToSuperview().inset(50)
         }
     }
-    
+
     private func setupBinding() {
         _ = requestAccountButton.rx.tap
             .throttle(

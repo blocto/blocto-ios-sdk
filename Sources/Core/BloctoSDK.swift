@@ -14,7 +14,7 @@ func log(enable: Bool, message: String) {
 }
 
 public class BloctoSDK {
-    
+
     public static let shared: BloctoSDK = BloctoSDK()
 
 #if DEBUG
@@ -22,23 +22,23 @@ public class BloctoSDK {
 #else
     private let bloctoAssociatedDomain: String = "https://blocto.app/"
 #endif
-    private let webBaseURLString: String = "https://sdk.blocto.app/"
+    private let webBaseURLString: String = "https://wallet.blocto.app/sdk"
     private let requestPath: String = "sdk"
     private let responsePath: String = "/blocto"
     private let responseHost: String = "blocto"
-    
+
     var requestBloctoBaseURLString: String {
         bloctoAssociatedDomain + requestPath
     }
-    
+
     var webRequestBloctoBaseURLString: String {
         webBaseURLString + requestPath
     }
-    
+
     var webCallbackURLScheme: String {
         "blocto"
     }
-    
+
     var uuidToMethod: [UUID: Method] = [:]
 
     var appId: String = ""
@@ -46,7 +46,7 @@ public class BloctoSDK {
     var logging: Bool = true
     var urlOpening: URLOpening = UIApplication.shared
     var sessioningType: AuthenticationSessioning.Type = ASWebAuthenticationSession.self
-    
+
     /// initialize Blocto SDK
     /// - Parameters:
     ///   - appId: Registed id in https://developers.blocto.app/
@@ -67,7 +67,7 @@ public class BloctoSDK {
         self.urlOpening = urlOpening
         self.sessioningType = sessioningType
     }
-    
+
     public func `continue`(_ userActivity: NSUserActivity) {
         guard let url = userActivity.webpageURL else {
             log(
@@ -77,7 +77,7 @@ public class BloctoSDK {
         }
         methodResolve(expectHost: responseHost, url: url)
     }
-    
+
     public func application(
         _ app: UIApplication,
         open url: URL,
@@ -92,7 +92,7 @@ public class BloctoSDK {
         methodResolve(url: url)
     }
 
-    public func send(method: Method) -> Void {
+    public func send(method: Method) {
         do {
             try checkConfigration()
             guard let requestURL = try method.encodeToURL(baseURLString: requestBloctoBaseURLString) else {
@@ -136,7 +136,7 @@ public class BloctoSDK {
                 return
             }
             var session: AuthenticationSessioning?
-            
+
             session = sessioningType.init(
                 url: requestURL,
                 callbackURLScheme: webCallbackURLScheme,
@@ -155,9 +155,9 @@ public class BloctoSDK {
                     }
                     session = nil
                 })
-            
+
             session?.presentationContextProvider = window
-            
+
             let startsSuccessfully = session?.start()
             if startsSuccessfully == false {
                 method.handleError(error: InternalError.webSDKSessionFailed)
@@ -166,7 +166,7 @@ public class BloctoSDK {
             method.handleError(error: error)
         }
     }
-    
+
     private func methodResolve(
         expectHost: String? = nil,
         url: URL
@@ -198,14 +198,6 @@ public class BloctoSDK {
             return
         }
         method.resolve(components: urlComponents, logging: logging)
-    }
-
-}
-
-extension UIWindow: ASWebAuthenticationPresentationContextProviding {
-
-    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        return self
     }
 
 }
