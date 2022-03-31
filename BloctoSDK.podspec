@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.default_subspec = "Core"
   s.social_media_url = 'https://twitter.com/BloctoApp'
 
-  s.ios.deployment_target = '13.0'
+  s.ios.deployment_target = '12.0'
 
   s.subspec "Core" do |ss|
       ss.source_files  = "Sources/Core/**/*"

@@ -42,9 +42,13 @@ public class BloctoSDK {
     var uuidToMethod: [UUID: Method] = [:]
 
     var appId: String = ""
-    var window: UIWindow = UIWindow()
+
+    private var window: UIWindow = UIWindow()
+    
     var logging: Bool = true
+    
     var urlOpening: URLOpening = UIApplication.shared
+    
     var sessioningType: AuthenticationSessioning.Type = ASWebAuthenticationSession.self
 
     /// initialize Blocto SDK
@@ -54,6 +58,7 @@ public class BloctoSDK {
     ///   - logging: Enabling log message, default is true.
     ///   - urlOpening: Handling url which opened app, default is UIApplication.shared.
     ///   - sessioningType: Type that handles web SDK authentication session, default is ASWebAuthenticationSession.
+    @available(iOS 13.0, *)
     public func initialize(
         with appId: String,
         window: UIWindow,
@@ -63,6 +68,19 @@ public class BloctoSDK {
     ) {
         self.appId = appId
         self.window = window
+        self.logging = logging
+        self.urlOpening = urlOpening
+        self.sessioningType = sessioningType
+    }
+    
+    @available(iOS, introduced: 12.0, obsoleted: 13.0, message: "There is presentationContextProvider in system protocol ASWebAuthenticationSession start from iOS 13. Use initialize with window for webSDK instead.")
+    public func initialize(
+        with appId: String,
+        logging: Bool = true,
+        urlOpening: URLOpening = UIApplication.shared,
+        sessioningType: AuthenticationSessioning.Type = ASWebAuthenticationSession.self
+    ) {
+        self.appId = appId
         self.logging = logging
         self.urlOpening = urlOpening
         self.sessioningType = sessioningType
@@ -95,10 +113,12 @@ public class BloctoSDK {
     public func send(method: Method) {
         do {
             try checkConfigration()
-            guard let requestURL = try method.encodeToURL(baseURLString: requestBloctoBaseURLString) else {
-                method.handleError(error: InternalError.encodeToURLFailed)
-                return
-            }
+            guard let requestURL = try method.encodeToURL(
+                appId: appId,
+                baseURLString: requestBloctoBaseURLString) else {
+                    method.handleError(error: InternalError.encodeToURLFailed)
+                    return
+                }
             uuidToMethod[method.id] = method
             urlOpening.open(
                 requestURL,
@@ -113,7 +133,11 @@ public class BloctoSDK {
                         log(
                             enable: self.logging,
                             message: "can't open universal link.")
-                        self.routeToWebSDK(window: self.window, method: method)
+                        if #available(iOS 13.0, *) {
+                            self.routeToWebSDK(window: self.window, method: method)
+                        } else {
+                            self.routeToWebSDK(method: method)
+                        }
                     }
                 })
         } catch {
@@ -127,14 +151,16 @@ public class BloctoSDK {
     }
 
     private func routeToWebSDK(
-        window: UIWindow,
+        window: UIWindow? = nil,
         method: Method
     ) {
         do {
-            guard let requestURL = try method.encodeToURL(baseURLString: webRequestBloctoBaseURLString) else {
-                method.handleError(error: InternalError.encodeToURLFailed)
-                return
-            }
+            guard let requestURL = try method.encodeToURL(
+                appId: appId,
+                baseURLString: webRequestBloctoBaseURLString) else {
+                    method.handleError(error: InternalError.encodeToURLFailed)
+                    return
+                }
             var session: AuthenticationSessioning?
 
             session = sessioningType.init(
@@ -156,7 +182,9 @@ public class BloctoSDK {
                     session = nil
                 })
 
-            session?.presentationContextProvider = window
+            if #available(iOS 13.0, *) {
+                session?.presentationContextProvider = window
+            }
 
             let startsSuccessfully = session?.start()
             if startsSuccessfully == false {

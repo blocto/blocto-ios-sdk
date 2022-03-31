@@ -22,10 +22,16 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let viewController = ViewController()
         window.rootViewController = viewController
         window.makeKeyAndVisible()
-        BloctoSDK.shared.initialize(
-            with: bloctoSDKAppId,
-            window: window,
-            logging: false)
+        if #available(iOS 13.0, *) {
+            BloctoSDK.shared.initialize(
+                with: bloctoSDKAppId,
+                window: window,
+                logging: false)
+        } else {
+            BloctoSDK.shared.initialize(
+                with: bloctoSDKAppId,
+                logging: false)
+        }
         return true
     }
 
