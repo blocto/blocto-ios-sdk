@@ -31,13 +31,13 @@ public struct RequestAccountMethod: CallbackMethod {
         self.callback = callback
     }
 
-    public func encodeToURL(baseURLString: String) throws -> URL? {
+    public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
         guard let baseURL = URL(string: baseURLString),
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
                   return nil
               }
         let queryItems = URLEncoding.sharedQueryItem(
-            appId: BloctoSDK.shared.appId,
+            appId: appId,
             requestId: id.uuidString,
             blockchain: blockchain,
             method: type.rawValue)
