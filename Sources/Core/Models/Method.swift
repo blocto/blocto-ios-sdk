@@ -11,7 +11,7 @@ public protocol Method {
     var id: UUID { get }
     var type: MethodType { get }
 
-    func encodeToURL(baseURLString: String) throws -> URL?
+    func encodeToURL(appId: String, baseURLString: String) throws -> URL?
     func resolve(components: URLComponents, logging: Bool)
     func handleError(error: Swift.Error)
 }
