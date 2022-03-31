@@ -36,11 +36,11 @@ public struct RequestAccountMethod: CallbackMethod {
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
                   return nil
               }
-        let queryItems = URLEncoding.sharedQueryItem(
+        let queryItems = URLEncoding.queryItems(
             appId: appId,
             requestId: id.uuidString,
             blockchain: blockchain,
-            method: type.rawValue)
+            method: .requestAccount)
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }

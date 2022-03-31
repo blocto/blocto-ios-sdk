@@ -7,20 +7,31 @@
 
 import Foundation
 
-enum URLEncoding {
+public enum URLEncoding {
 
-    static func sharedQueryItem(
+    static func queryItems(
         appId: String,
         requestId: String,
         blockchain: Blockchain,
-        method: String
+        method: MethodContentType
     ) -> [QueryItem] {
-        [
+        var queryItems = [
             QueryItem(name: .appId, value: appId),
             QueryItem(name: .requestId, value: requestId),
             QueryItem(name: .blockchain, value: blockchain),
             QueryItem(name: .method, value: method)
         ]
+        switch method {
+            case .requestAccount:
+                break
+            case let .signMessage(from, message),
+                let .sendTransaction(from, message):
+                queryItems.append(contentsOf: [
+                    QueryItem(name: .from, value: from),
+                    QueryItem(name: .message, value: message)
+                ])
+        }
+        return queryItems
     }
 
     static func encode(_ queryItems: [QueryItem]) -> [URLQueryItem] {

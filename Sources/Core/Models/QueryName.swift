@@ -7,12 +7,14 @@
 
 import Foundation
 
-enum QueryName: String {
+public enum QueryName: String {
     // request
     case appId = "app_id"
     case requestId = "request_id"
     case blockchain
     case method
+    case from
+    case message
 
     // response
     case address

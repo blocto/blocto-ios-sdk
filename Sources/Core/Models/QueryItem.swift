@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct QueryItem {
+public struct QueryItem {
 
     let name: QueryName
     let value: Any
