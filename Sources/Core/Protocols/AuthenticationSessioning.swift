@@ -10,6 +10,7 @@ import AuthenticationServices
 
 public protocol AuthenticationSessioning {
 
+    @available(iOS 13.0, *)
     var presentationContextProvider: ASWebAuthenticationPresentationContextProviding? { get set }
 
     init(

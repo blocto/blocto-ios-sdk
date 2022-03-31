@@ -19,11 +19,18 @@ class AccountRequestTests: XCTestCase {
         let requestId = UUID()
         var address: String?
         let expectedAddress: String = "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv"
-        BloctoSDK.shared.initialize(
-            with: appId,
-            window: UIWindow(),
-            logging: false,
-            urlOpening: mockUIApplication)
+        if #available(iOS 13.0, *) {
+            BloctoSDK.shared.initialize(
+                with: appId,
+                window: UIWindow(),
+                logging: false,
+                urlOpening: mockUIApplication)
+        } else {
+            BloctoSDK.shared.initialize(
+                with: appId,
+                logging: false,
+                urlOpening: mockUIApplication)
+        }
 
         mockUIApplication.setup(opened: true)
 
@@ -62,12 +69,20 @@ class AccountRequestTests: XCTestCase {
         let requestId = UUID()
         var address: String?
         let expectedAddress: String = "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv"
-        BloctoSDK.shared.initialize(
-            with: appId,
-            window: UIWindow(),
-            logging: false,
-            urlOpening: mockUIApplication,
-            sessioningType: MockAuthenticationSession.self)
+        if #available(iOS 13.0, *) {
+            BloctoSDK.shared.initialize(
+                with: appId,
+                window: UIWindow(),
+                logging: false,
+                urlOpening: mockUIApplication,
+                sessioningType: MockAuthenticationSession.self)
+        } else {
+            BloctoSDK.shared.initialize(
+                with: appId,
+                logging: false,
+                urlOpening: mockUIApplication,
+                sessioningType: MockAuthenticationSession.self)
+        }
 
         mockUIApplication.setup(opened: false)
 

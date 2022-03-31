@@ -11,7 +11,15 @@ import AuthenticationServices
 
 class MockAuthenticationSession: AuthenticationSessioning {
 
-    var presentationContextProvider: ASWebAuthenticationPresentationContextProviding?
+    @available(iOS 13.0, *)
+    var presentationContextProvider: ASWebAuthenticationPresentationContextProviding? {
+        get {
+            return nil
+        }
+        set {
+            print(newValue.debugDescription)
+        }
+    }
     private let completionHandler: (URL?, Error?) -> Void
     private var callbackURLScheme: String?
     private static var callbackURL: URL?
