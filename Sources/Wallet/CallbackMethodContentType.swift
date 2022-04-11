@@ -9,12 +9,20 @@ import Foundation
 
 public enum CallbackMethodContentType {
 
-    case requestAccount(address: String)
+    case requestAccount(
+        requestId: String,
+        address: String)
 
-    case signMessage(signature: String)
+    case signMessage(
+        requestId: String,
+        signature: String)
 
-    case signAndSendTransaction(txHash: String)
+    case signAndSendTransaction(
+        requestId: String,
+        txHash: String)
     
-    case error(error: QueryError)
+    case error(
+        requestId: String,
+        error: QueryError)
 
 }
