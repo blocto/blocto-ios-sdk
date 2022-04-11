@@ -47,13 +47,4 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    private func application(
-        _ application: UIApplication,
-        continue userActivity: NSUserActivity,
-        restorationHandler: @escaping ([Any]?) -> Void
-    ) -> Bool {
-        BloctoSDK.shared.continue(userActivity)
-        return true
-    }
-
 }

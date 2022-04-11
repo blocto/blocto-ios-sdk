@@ -19,7 +19,6 @@ Pod::Spec.new do |s|
   s.subspec "Core" do |ss|
       ss.source_files  = "Sources/Core/**/*"
       ss.framework  = "Foundation"
-      ss.dependency "SolanaWeb3"
   end
   
   s.subspec "Solana" do |ss|

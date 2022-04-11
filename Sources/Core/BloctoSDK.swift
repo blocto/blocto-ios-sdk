@@ -87,16 +87,6 @@ public class BloctoSDK {
         self.sessioningType = sessioningType
     }
 
-    public func `continue`(_ userActivity: NSUserActivity) {
-        guard let url = userActivity.webpageURL else {
-            log(
-                enable: logging,
-                message: "webpageURL not found.")
-            return
-        }
-        methodResolve(expectHost: responseHost, url: url)
-    }
-
     public func application(
         _ app: UIApplication,
         open url: URL,
@@ -208,12 +198,14 @@ public class BloctoSDK {
                 return
             }
         }
-        guard let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            log(
-                enable: logging,
-                message: "urlComponents not found.")
-            return
-        }
+        guard let urlComponents = URLComponents(
+            url: url,
+            resolvingAgainstBaseURL: false) else {
+                log(
+                    enable: logging,
+                    message: "urlComponents not found.")
+                return
+            }
         guard let uuid = urlComponents.getRequestId() else {
             log(
                 enable: logging,

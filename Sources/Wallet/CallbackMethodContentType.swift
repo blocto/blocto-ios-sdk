@@ -14,5 +14,7 @@ public enum CallbackMethodContentType {
     case signMessage(signature: String)
 
     case signAndSendTransaction(txHash: String)
+    
+    case error(error: QueryError)
 
 }
