@@ -13,18 +13,18 @@ public struct ParsedMethod {
     public let requestId: String
     public let blockchain: Blockchain
     public let method: MethodContentType
-    
+
     public init?(param: [String: String]) {
         guard let appId = param[QueryName.appId.rawValue] else { return nil }
         self.appId = appId
-        
+
         guard let requestId = param[QueryName.requestId.rawValue] else { return nil }
         self.requestId = requestId
-        
+
         guard let rawBlockchain = param[QueryName.blockchain.rawValue],
               let blockchain = Blockchain(rawValue: rawBlockchain) else { return nil }
         self.blockchain = blockchain
-        
+
         guard let rawMethod = param[QueryName.method.rawValue],
               let method = MethodType(rawValue: rawMethod) else { return nil }
         switch method {
@@ -34,10 +34,16 @@ public struct ParsedMethod {
                 guard let from = param[QueryName.from.rawValue],
                       let message = param[QueryName.message.rawValue] else { return nil }
                 self.method = .signMessage(from: from, message: message)
-            case .sendTransaction:
+            case .signAndSendTransaction:
                 guard let from = param[QueryName.from.rawValue],
                       let message = param[QueryName.message.rawValue] else { return nil }
-                self.method = .sendTransaction(from: from, message: message)
+                let extraPublicKeySignaturePairs = QueryDecoding.decodeDictionary(
+                    param: param,
+                    queryName: .extraPublicKeySignaturePairs)
+                self.method = .signAndSendTransaction(
+                    from: from,
+                    message: message,
+                    extraPublicKeySignaturePairs: extraPublicKeySignaturePairs)
         }
     }
 

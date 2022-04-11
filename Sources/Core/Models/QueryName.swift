@@ -15,6 +15,7 @@ public enum QueryName: String {
     case method
     case from
     case message
+    case extraPublicKeySignaturePairs = "extra_public_key_signature_pairs"
 
     // response
     case address

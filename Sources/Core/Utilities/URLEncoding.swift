@@ -24,11 +24,16 @@ public enum URLEncoding {
         switch method {
             case .requestAccount:
                 break
-            case let .signMessage(from, message),
-                let .sendTransaction(from, message):
+            case let .signMessage(from, message):
                 queryItems.append(contentsOf: [
                     QueryItem(name: .from, value: from),
                     QueryItem(name: .message, value: message)
+                ])
+            case let .signAndSendTransaction(from, message, extraPublicKeySignaturePairs):
+                queryItems.append(contentsOf: [
+                    QueryItem(name: .from, value: from),
+                    QueryItem(name: .message, value: message),
+                    QueryItem(name: .extraPublicKeySignaturePairs, value: extraPublicKeySignaturePairs)
                 ])
         }
         return queryItems
@@ -43,6 +48,17 @@ public enum URLEncoding {
 struct ArrayEncoding {
 
     func encode(key: String) -> String {
+        "\(key)[]"
+    }
+
+}
+
+struct DictionaryEncoding {
+
+    func encode(
+        key: String,
+        value: [String: Any]
+    ) -> String {
         "\(key)[]"
     }
 

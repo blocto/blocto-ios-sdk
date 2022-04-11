@@ -9,6 +9,13 @@ import Foundation
 
 public enum MethodContentType {
     case requestAccount
-    case signMessage(from: String, message: String)
-    case sendTransaction(from: String, message: String)
+
+    case signMessage(
+        from: String,
+        message: String)
+
+    case signAndSendTransaction(
+        from: String,
+        message: String,
+        extraPublicKeySignaturePairs: [String: String])
 }

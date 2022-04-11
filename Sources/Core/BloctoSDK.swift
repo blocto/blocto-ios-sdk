@@ -13,6 +13,8 @@ func log(enable: Bool, message: String) {
     print("BloctoSDK: " + message)
 }
 
+let responsePath: String = "/blocto"
+
 public class BloctoSDK {
 
     public static let shared: BloctoSDK = BloctoSDK()
@@ -24,7 +26,6 @@ public class BloctoSDK {
 #endif
     private let webBaseURLString: String = "https://wallet.blocto.app/sdk"
     private let requestPath: String = "sdk"
-    private let responsePath: String = "/blocto"
     private let responseHost: String = "blocto"
 
     var requestBloctoBaseURLString: String {
@@ -44,11 +45,11 @@ public class BloctoSDK {
     var appId: String = ""
 
     private var window: UIWindow = UIWindow()
-    
+
     var logging: Bool = true
-    
+
     var urlOpening: URLOpening = UIApplication.shared
-    
+
     var sessioningType: AuthenticationSessioning.Type = ASWebAuthenticationSession.self
 
     /// initialize Blocto SDK
@@ -72,7 +73,7 @@ public class BloctoSDK {
         self.urlOpening = urlOpening
         self.sessioningType = sessioningType
     }
-    
+
     @available(iOS, introduced: 12.0, obsoleted: 13.0, message: "There is presentationContextProvider in system protocol ASWebAuthenticationSession start from iOS 13. Use initialize with window for webSDK instead.")
     public func initialize(
         with appId: String,

@@ -9,7 +9,7 @@
 import XCTest
 import BloctoSDK
 
-class AccountRequestTests: XCTestCase {
+class SignAndSendTransactionTests: XCTestCase {
 
     var mockUIApplication: MockUIApplication!
 
@@ -25,8 +25,8 @@ class AccountRequestTests: XCTestCase {
     func testOpenNativeAppWhenInstalled() {
         // Given:
         let requestId = UUID()
-        var address: String?
-        let expectedAddress: String = "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv"
+        var txHash: String?
+        let expectedTxHash: String = "65ZG7Retj1acmX2DXv9YdU12JJ53a5sKgBmmDGHVexTyDnFq8C3inKMMvcdMXi5NvZCLSueThdSNNHJBWdw7neUC"
         if #available(iOS 13.0, *) {
             BloctoSDK.shared.initialize(
                 with: appId,
@@ -43,14 +43,16 @@ class AccountRequestTests: XCTestCase {
         mockUIApplication.setup(opened: true)
 
         // When:
-        let requestAccountMethod = RequestAccountMethod(
+        let requestAccountMethod = SignAndSendSolanaTransactionMethod(
             id: requestId,
-            blockchain: Blockchain.solana) { result in
+            blockchain: Blockchain.solana,
+            from: "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv",
+            message: "testMessage") { result in
                 switch result {
-                case let .success(receivedAddress):
-                    address = receivedAddress
-                case let .failure(error):
-                    XCTFail(error.localizedDescription)
+                    case let .success(receivedtxHash):
+                        txHash = receivedtxHash
+                    case let .failure(error):
+                        XCTFail(error.localizedDescription)
                 }
             }
         BloctoSDK.shared.send(method: requestAccountMethod)
@@ -59,7 +61,7 @@ class AccountRequestTests: XCTestCase {
         components?.path = "/blocto"
         components?.queryItems = [
             .init(name: "request_id", value: requestId.uuidString),
-            .init(name: "address", value: expectedAddress)
+            .init(name: "tx_hash", value: expectedTxHash)
         ]
 
         BloctoSDK.shared.application(
@@ -68,15 +70,15 @@ class AccountRequestTests: XCTestCase {
             options: [:])
 
         // Then:
-        XCTAssert(address == expectedAddress, "address should be \(expectedAddress) rather then \(address!)")
+        XCTAssert(txHash == expectedTxHash, "txHash should be \(expectedTxHash) rather then \(txHash!)")
 
     }
 
     func testOpenWebSDK() {
         // Given:
         let requestId = UUID()
-        var address: String?
-        let expectedAddress: String = "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv"
+        var txHash: String?
+        let expectedTxHash: String = "65ZG7Retj1acmX2DXv9YdU12JJ53a5sKgBmmDGHVexTyDnFq8C3inKMMvcdMXi5NvZCLSueThdSNNHJBWdw7neUC"
         if #available(iOS 13.0, *) {
             BloctoSDK.shared.initialize(
                 with: appId,
@@ -96,26 +98,28 @@ class AccountRequestTests: XCTestCase {
 
         var components = URLComponents(string: webRedirectBaseURLString)
         components?.queryItems = [
-            .init(name: "address", value: expectedAddress),
-            .init(name: "request_id", value: requestId.uuidString)
+            .init(name: "request_id", value: requestId.uuidString),
+            .init(name: "tx_hash", value: expectedTxHash)
         ]
         MockAuthenticationSession.setCallbackURL(components!.url!)
 
         // When:
-        let requestAccountMethod = RequestAccountMethod(
+        let requestAccountMethod = SignAndSendSolanaTransactionMethod(
             id: requestId,
-            blockchain: Blockchain.solana) { result in
+            blockchain: .solana,
+            from: "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv",
+            message: "testMessage") { result in
                 switch result {
-                case let .success(receivedAddress):
-                    address = receivedAddress
-                case let .failure(error):
-                    XCTFail(error.localizedDescription)
+                    case let .success(receivedAddress):
+                        txHash = receivedAddress
+                    case let .failure(error):
+                        XCTFail(error.localizedDescription)
                 }
             }
         BloctoSDK.shared.send(method: requestAccountMethod)
 
         // Then:
-        XCTAssert(address == expectedAddress, "address should be \(expectedAddress) rather then \(address!)")
+        XCTAssert(txHash == expectedTxHash, "txHash should be \(expectedTxHash) rather then \(txHash!)")
     }
 
 }

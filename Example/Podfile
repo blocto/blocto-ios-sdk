@@ -4,6 +4,7 @@ platform :ios, '13.0'
 
 target 'BloctoSDK_Example' do
   pod 'BloctoSDK/Solana', :path => '../'
+  pod 'BloctoSDK/Wallet', :path => '../'
   pod 'SnapKit'
   pod 'RxSwift'
   pod 'RxCocoa'

@@ -63,9 +63,10 @@ extension MethodContentType: Equatable {
             case let (.signMessage(lFrom, lMessage), .signMessage(rFrom, rMessage)):
                 return lFrom == rFrom
                 && lMessage == rMessage
-            case let (.sendTransaction(lFrom, lMessage), .sendTransaction(rFrom, rMessage)):
+            case let (.signAndSendTransaction(lFrom, lMessage, lExtraPublicKeySignaturePairs), .signAndSendTransaction(rFrom, rMessage, rExtraPublicKeySignaturePairs)):
                 return lFrom == rFrom
                 && lMessage == rMessage
+                && lExtraPublicKeySignaturePairs == rExtraPublicKeySignaturePairs
             default:
                 return false
         }
