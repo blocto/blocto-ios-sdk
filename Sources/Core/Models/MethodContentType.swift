@@ -18,4 +18,15 @@ public enum MethodContentType {
         from: String,
         message: String,
         extraPublicKeySignaturePairs: [String: String])
+    
+    var rawValue: String {
+        switch self {
+            case .requestAccount:
+                return MethodType.requestAccount.rawValue
+            case .signMessage:
+                return MethodType.signMessage.rawValue
+            case .signAndSendTransaction:
+                return MethodType.signAndSendTransaction.rawValue
+        }
+    }
 }

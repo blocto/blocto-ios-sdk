@@ -119,11 +119,11 @@ public class BloctoSDK {
                     if opened {
                         log(
                             enable: self.logging,
-                            message: "open universal link successfully.")
+                            message: "open universal link \(requestURL) successfully.")
                     } else {
                         log(
                             enable: self.logging,
-                            message: "can't open universal link.")
+                            message: "can't open universal link \(requestURL).")
                         if #available(iOS 13.0, *) {
                             self.routeToWebSDK(window: self.window, method: method)
                         } else {

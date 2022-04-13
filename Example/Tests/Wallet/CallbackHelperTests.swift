@@ -34,8 +34,9 @@ class CallbackHelperTests: XCTestCase {
         // When:
         MethodCallbackHelper.sendBack(
             urlOpening: mockUIApplication,
-            requestId: requestId,
-            methodContentType: .requestAccount(address: address),
+            methodContentType: .requestAccount(
+                requestId: requestId,
+                address: address),
             baseURLString: appUniversalLinkBaseURLString) { opened in
                 expectedOpened = opened
             }
@@ -46,15 +47,21 @@ class CallbackHelperTests: XCTestCase {
 
     func testRequestAccountQueryItems() throws {
         // Given:
+        let requestId = UUID().uuidString
         let address = "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv"
-        let callbackMethodContentType: CallbackMethodContentType = .requestAccount(address: address)
-        let expectResult: [URLQueryItem] = [.init(name: .address, value: address)]
+        let callbackMethodContentType: CallbackMethodContentType = .requestAccount(
+            requestId: requestId,
+            address: address)
+        let expectResult: [URLQueryItem] = [
+            .init(name: .requestId, value: requestId),
+            .init(name: .address, value: address)
+        ]
 
         // When:
         let result = MethodCallbackHelper.queryItems(from: callbackMethodContentType)
 
         // Then:
-        XCTAssertEqual(result, expectResult)
+        XCTAssertArrayElementsEqual(result, expectResult)
     }
 
 }

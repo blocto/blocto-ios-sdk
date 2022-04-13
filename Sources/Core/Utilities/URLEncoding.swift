@@ -19,7 +19,7 @@ public enum URLEncoding {
             QueryItem(name: .appId, value: appId),
             QueryItem(name: .requestId, value: requestId),
             QueryItem(name: .blockchain, value: blockchain),
-            QueryItem(name: .method, value: method)
+            QueryItem(name: .method, value: method.rawValue)
         ]
         switch method {
             case .requestAccount:
