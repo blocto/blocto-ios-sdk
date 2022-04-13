@@ -11,7 +11,7 @@ import XCTest
 
 class CallbackHelperTests: XCTestCase {
 
-    private let appUniversalLinkBaseURLString: String = "https://c161-61-216-44-25.ngrok.io/"
+    private let appUniversalLinkBaseURLString: String = "https://04b2-61-216-44-25.ngrok.io/"
     private var mockUIApplication: MockUIApplication!
 
     override func setUp() {

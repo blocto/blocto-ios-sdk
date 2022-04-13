@@ -14,7 +14,7 @@ enum InternalError: Swift.Error {
 }
 
 public enum QueryError: Swift.Error {
-    
+
     case userRejected
     case forbiddenBlockchain
     case invalidResponse
@@ -32,7 +32,7 @@ public enum QueryError: Swift.Error {
                 self = .other(code: code)
         }
     }
-    
+
     var rawValue: String {
         switch self {
             case .userRejected:
@@ -45,5 +45,5 @@ public enum QueryError: Swift.Error {
                 return code
         }
     }
-    
+
 }

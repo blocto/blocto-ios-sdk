@@ -18,7 +18,7 @@ public enum MethodContentType {
         from: String,
         message: String,
         extraPublicKeySignaturePairs: [String: String])
-    
+
     var rawValue: String {
         switch self {
             case .requestAccount:

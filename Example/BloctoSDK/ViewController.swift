@@ -26,9 +26,13 @@ final class ViewController: UIViewController {
         return button
     }()
 
-    private var textField: UITextField = {
-        let textField = UITextField()
-        return textField
+    private lazy var textLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .black
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
     }()
 
     private var sendButton: UIButton = {
@@ -55,9 +59,16 @@ final class ViewController: UIViewController {
         view.backgroundColor = .white
 
         view.addSubview(requestAccountButton)
+        view.addSubview(textLabel)
 
         requestAccountButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(50)
+            $0.centerX.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(50)
+        }
+
+        textLabel.snp.makeConstraints {
+            $0.top.equalTo(requestAccountButton.snp.bottom).offset(50)
             $0.centerX.equalToSuperview()
             $0.leading.trailing.equalToSuperview().inset(50)
         }
@@ -73,10 +84,21 @@ final class ViewController: UIViewController {
             .subscribe(onNext: { [weak self] _ in
                 BloctoSDK.shared.solana.requestAccount { [weak self] result in
                     switch result {
-                    case .success(let address):
-                        self?.requestAccountButton.setTitle(address, for: .normal)
-                    case .failure(let error):
-                        self?.requestAccountButton.setTitle(error.localizedDescription, for: .normal)
+                        case .success(let address):
+                            self?.textLabel.text = address
+                        case .failure(let error):
+                            if let error = error as? QueryError {
+                                switch error {
+                                    case .userRejected:
+                                        self?.textLabel.text = "user rejected."
+                                    case .forbiddenBlockchain:
+                                        self?.textLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
+                                    case .invalidResponse:
+                                        self?.textLabel.text = "invalid response"
+                                    case .other(let code):
+                                        self?.textLabel.text = code
+                                }
+                            }
                     }
                 }
             })

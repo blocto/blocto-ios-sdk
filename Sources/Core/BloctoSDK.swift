@@ -87,6 +87,24 @@ public class BloctoSDK {
         self.sessioningType = sessioningType
     }
 
+    /// Entry of Universal Links entry
+    /// - Parameter userActivity: the same userActivity from UIApplicationDelegate
+    public func `continue`(_ userActivity: NSUserActivity) {
+        guard let url = userActivity.webpageURL else {
+            log(
+                enable: logging,
+                message: "webpageURL not found.")
+            return
+        }
+        guard url.path == responsePath else {
+            log(
+                enable: logging,
+                message: "url path should be \(responsePath) rather than \(url.path).")
+            return
+        }
+        methodResolve(url: url)
+    }
+
     public func application(
         _ app: UIApplication,
         open url: URL,

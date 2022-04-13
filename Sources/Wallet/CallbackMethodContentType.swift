@@ -20,7 +20,7 @@ public enum CallbackMethodContentType {
     case signAndSendTransaction(
         requestId: String,
         txHash: String)
-    
+
     case error(
         requestId: String,
         error: QueryError)
