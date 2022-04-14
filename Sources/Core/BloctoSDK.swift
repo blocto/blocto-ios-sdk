@@ -108,7 +108,7 @@ public class BloctoSDK {
         }
         methodResolve(url: url)
     }
-    
+
     /// Entry of custom scheme
     /// - Parameters:
     ///   - app: UIApplication

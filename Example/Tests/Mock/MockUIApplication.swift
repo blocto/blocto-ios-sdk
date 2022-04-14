@@ -10,10 +10,13 @@ import BloctoSDK
 
 class MockUIApplication: URLOpening {
 
-    private var opened: Bool = false
+    var url: URL?
+    var lastOptions: [UIApplication.OpenExternalURLOptionsKey: Any]?
+    private var openedOrder: [Bool] = []
+    private var callback: ((_ url: URL?) -> Void)?
 
-    func setup(opened: Bool) {
-        self.opened = opened
+    func setup(openedOrder: [Bool]) {
+        self.openedOrder = openedOrder
     }
 
     func open(
@@ -21,7 +24,10 @@ class MockUIApplication: URLOpening {
         options: [UIApplication.OpenExternalURLOptionsKey: Any],
         completionHandler completion: ((Bool) -> Void)?
     ) {
-        completion?(opened)
+        self.url = url
+        lastOptions = options
+        let first = openedOrder.removeFirst()
+        completion?(first)
     }
 
 }

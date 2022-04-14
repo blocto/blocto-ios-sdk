@@ -52,7 +52,7 @@ public class MethodCallbackHelper {
             }
         }
     }
-    
+
     static func openWithCustomScheme(
         urlOpening: URLOpening,
         appId: String,
@@ -61,7 +61,7 @@ public class MethodCallbackHelper {
     ) {
         var components = urlComponents
         components.scheme = customScheme(appId: appId)
-        components.host = nil
+        components.host = ""
         components.path = ""
         guard let openURL = components.url else {
             log(
@@ -70,6 +70,7 @@ public class MethodCallbackHelper {
             completion(false)
             return
         }
+
         urlOpening.open(
             openURL,
             options: [:]

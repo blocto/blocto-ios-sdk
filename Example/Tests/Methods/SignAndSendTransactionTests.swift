@@ -36,7 +36,7 @@ class SignAndSendTransactionTests: XCTestCase {
                 urlOpening: mockUIApplication)
         }
 
-        mockUIApplication.setup(opened: true)
+        mockUIApplication.setup(openedOrder: [true])
 
         // When:
         let requestAccountMethod = SignAndSendSolanaTransactionMethod(
@@ -88,7 +88,7 @@ class SignAndSendTransactionTests: XCTestCase {
                 sessioningType: MockAuthenticationSession.self)
         }
 
-        mockUIApplication.setup(opened: false)
+        mockUIApplication.setup(openedOrder: [false])
 
         var components = URLComponents(string: webRedirectBaseURLString)
         components?.queryItems = [

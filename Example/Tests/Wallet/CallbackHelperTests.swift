@@ -11,8 +11,6 @@ import XCTest
 
 class CallbackHelperTests: XCTestCase {
 
-    private let appUniversalLinkBaseURLString: String = "https://04b2-61-216-44-25.ngrok.io/"
-    private let appId = "64776cec-5953-4a58-8025-772f55a3917b"
     private var mockUIApplication: MockUIApplication!
 
     override func setUp() {
@@ -24,13 +22,14 @@ class CallbackHelperTests: XCTestCase {
         mockUIApplication = nil
     }
 
-    func testSendBack() throws {
+    func testSendBackUniversalLinksSuccess() throws {
         // Given:
         let requestId = UUID().uuidString
         let address = "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv"
-        var expectedOpened: Bool = false
+        let expectedOpenedOrder: [Bool] = [true]
+        var receivingOpened: Bool?
 
-        mockUIApplication.setup(opened: true)
+        mockUIApplication.setup(openedOrder: expectedOpenedOrder)
 
         // When:
         MethodCallbackHelper.sendBack(
@@ -40,11 +39,39 @@ class CallbackHelperTests: XCTestCase {
                 requestId: requestId,
                 address: address),
             baseURLString: appUniversalLinkBaseURLString) { opened in
-                expectedOpened = opened
+                receivingOpened = opened
             }
 
         // Then:
-        XCTAssertEqual(expectedOpened, true)
+        XCTAssertEqual(mockUIApplication.url, URL(string: "\(appUniversalLinkBaseURLString)blocto?request_id=\(requestId)&address=\(address)")!)
+        // swiftlint:disable force_cast
+        XCTAssertEqual(mockUIApplication.lastOptions as! [UIApplication.OpenExternalURLOptionsKey: Bool], [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly: true])
+        XCTAssertEqual(receivingOpened, true)
+    }
+
+    func testSendBackUniversalLinksFailed() throws {
+        // Given:
+        let requestId = UUID().uuidString
+        let address = "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv"
+        let openedOrder: [Bool] = [false, true]
+        var receivingOpened: Bool?
+
+        mockUIApplication.setup(openedOrder: openedOrder)
+
+        // When:
+        MethodCallbackHelper.sendBack(
+            urlOpening: mockUIApplication,
+            appId: appId,
+            methodContentType: .requestAccount(
+                requestId: requestId,
+                address: address),
+            baseURLString: appUniversalLinkBaseURLString) { opened in
+                receivingOpened = opened
+            }
+
+        // Then:
+        XCTAssertEqual(mockUIApplication.url, URL(string: "\(appCustomSchemeBaseURLString)?request_id=\(requestId)&address=\(address)")!)
+        XCTAssertEqual(receivingOpened!, true)
     }
 
     func testRequestAccountQueryItems() throws {
