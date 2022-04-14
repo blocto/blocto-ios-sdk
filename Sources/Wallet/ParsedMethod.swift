@@ -36,13 +36,16 @@ public struct ParsedMethod {
                 self.method = .signMessage(from: from, message: message)
             case .signAndSendTransaction:
                 guard let from = param[QueryName.from.rawValue],
-                      let message = param[QueryName.message.rawValue] else { return nil }
+                      let message = param[QueryName.message.rawValue],
+                      let isInvokeWrappedString = param[QueryName.isInvokeWrapped.rawValue],
+                      let isInvokeWrapped = Bool(isInvokeWrappedString) else { return nil }
                 let extraPublicKeySignaturePairs = QueryDecoding.decodeDictionary(
                     param: param,
                     queryName: .extraPublicKeySignaturePairs)
                 self.method = .signAndSendTransaction(
                     from: from,
                     message: message,
+                    isInvokeWrapped: isInvokeWrapped,
                     extraPublicKeySignaturePairs: extraPublicKeySignaturePairs)
         }
     }

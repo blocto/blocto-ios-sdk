@@ -13,10 +13,6 @@ class SignAndSendTransactionTests: XCTestCase {
 
     var mockUIApplication: MockUIApplication!
 
-    let appId: String = "64776cec-5953-4a58-8025-772f55a3917b"
-    let appUniversalLinkBaseURLString: String = "https://c161-61-216-44-25.ngrok.io/"
-    let webRedirectBaseURLString: String = "blocto://"
-
     override func setUp() {
         super.setUp()
         mockUIApplication = MockUIApplication()
@@ -57,13 +53,11 @@ class SignAndSendTransactionTests: XCTestCase {
             }
         BloctoSDK.shared.send(method: requestAccountMethod)
 
-        var components = URLComponents(string: appUniversalLinkBaseURLString)
-        components?.path = "/blocto"
+        var components = URLComponents(string: appCustomSchemeBaseURLString)
         components?.queryItems = [
             .init(name: "request_id", value: requestId.uuidString),
             .init(name: "tx_hash", value: expectedTxHash)
         ]
-
         BloctoSDK.shared.application(
             UIApplication.shared,
             open: components!.url!,

@@ -13,10 +13,6 @@ class AccountRequestTests: XCTestCase {
 
     var mockUIApplication: MockUIApplication!
 
-    let appId: String = "64776cec-5953-4a58-8025-772f55a3917b"
-    let appUniversalLinkBaseURLString: String = "https://c161-61-216-44-25.ngrok.io/"
-    let webRedirectBaseURLString: String = "blocto://"
-
     override func setUp() {
         super.setUp()
         mockUIApplication = MockUIApplication()
@@ -55,13 +51,54 @@ class AccountRequestTests: XCTestCase {
             }
         BloctoSDK.shared.send(method: requestAccountMethod)
 
-        var components = URLComponents(string: appUniversalLinkBaseURLString)
-        components?.path = "/blocto"
+        let userActivity = NSUserActivity(activityType: "NSUserActivityTypeBrowsingWeb")
+        userActivity.webpageURL = URL(string: "\(appUniversalLinkBaseURLString)blocto?request_id=\(requestId)&address=\(expectedAddress)")
+
+        BloctoSDK.shared.continue(userActivity)
+
+        // Then:
+        XCTAssert(address == expectedAddress, "address should be \(expectedAddress) rather then \(address!)")
+
+    }
+
+    func testOpenNativeAppWhenInstalledCustomScheme() {
+        // Given:
+        let requestId = UUID()
+        var address: String?
+        let expectedAddress: String = "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv"
+        if #available(iOS 13.0, *) {
+            BloctoSDK.shared.initialize(
+                with: appId,
+                window: UIWindow(),
+                logging: false,
+                urlOpening: mockUIApplication)
+        } else {
+            BloctoSDK.shared.initialize(
+                with: appId,
+                logging: false,
+                urlOpening: mockUIApplication)
+        }
+
+        mockUIApplication.setup(opened: true)
+
+        // When:
+        let requestAccountMethod = RequestAccountMethod(
+            id: requestId,
+            blockchain: Blockchain.solana) { result in
+                switch result {
+                    case let .success(receivedAddress):
+                        address = receivedAddress
+                    case let .failure(error):
+                        XCTFail(error.localizedDescription)
+                }
+            }
+        BloctoSDK.shared.send(method: requestAccountMethod)
+
+        var components = URLComponents(string: appCustomSchemeBaseURLString)
         components?.queryItems = [
             .init(name: "request_id", value: requestId.uuidString),
             .init(name: "address", value: expectedAddress)
         ]
-
         BloctoSDK.shared.application(
             UIApplication.shared,
             open: components!.url!,

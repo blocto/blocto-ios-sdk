@@ -15,6 +15,7 @@ public enum QueryName: String {
     case method
     case from
     case message
+    case isInvokeWrapped
     case extraPublicKeySignaturePairs = "extra_public_key_signature_pairs"
 
     // response

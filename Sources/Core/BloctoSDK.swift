@@ -14,6 +14,11 @@ func log(enable: Bool, message: String) {
 }
 
 let responsePath: String = "/blocto"
+let responseScheme: String = "blocto"
+
+func customScheme(appId: String) -> String {
+    responseScheme + appId
+}
 
 public class BloctoSDK {
 
@@ -26,7 +31,6 @@ public class BloctoSDK {
 #endif
     private let webBaseURLString: String = "https://wallet.blocto.app/sdk"
     private let requestPath: String = "sdk"
-    private let responseHost: String = "blocto"
 
     var requestBloctoBaseURLString: String {
         bloctoAssociatedDomain + requestPath
@@ -87,7 +91,7 @@ public class BloctoSDK {
         self.sessioningType = sessioningType
     }
 
-    /// Entry of Universal Links entry
+    /// Entry of Universal Links
     /// - Parameter userActivity: the same userActivity from UIApplicationDelegate
     public func `continue`(_ userActivity: NSUserActivity) {
         guard let url = userActivity.webpageURL else {
@@ -104,19 +108,31 @@ public class BloctoSDK {
         }
         methodResolve(url: url)
     }
-
+    
+    /// Entry of custom scheme
+    /// - Parameters:
+    ///   - app: UIApplication
+    ///   - url: custom scheme URL
+    ///   - options: options from UIApplicationDelegate
     public func application(
         _ app: UIApplication,
         open url: URL,
         options: [UIApplication.OpenURLOptionsKey: Any]
     ) {
-        guard url.path == responsePath else {
+        do {
+            try checkConfigration()
+            guard url.scheme == customScheme(appId: appId) else {
+                log(
+                    enable: logging,
+                    message: "url scheme should be \(responseScheme) rather than \(String(describing: url.scheme)).")
+                return
+            }
+            methodResolve(url: url)
+        } catch {
             log(
                 enable: logging,
-                message: "url path should be \(responsePath) rather than \(url.path).")
-            return
+                message: "error: \(error) when opened by \(url)")
         }
-        methodResolve(url: url)
     }
 
     public func send(method: Method) {

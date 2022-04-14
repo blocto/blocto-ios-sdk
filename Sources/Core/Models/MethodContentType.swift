@@ -17,6 +17,7 @@ public enum MethodContentType {
     case signAndSendTransaction(
         from: String,
         message: String,
+        isInvokeWrapped: Bool,
         extraPublicKeySignaturePairs: [String: String])
 
     var rawValue: String {

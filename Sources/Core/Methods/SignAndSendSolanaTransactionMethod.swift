@@ -55,6 +55,7 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
             method: .signAndSendTransaction(
                 from: from,
                 message: message,
+                isInvokeWrapped: true,
                 extraPublicKeySignaturePairs: publicKeySignaturePairs))
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url

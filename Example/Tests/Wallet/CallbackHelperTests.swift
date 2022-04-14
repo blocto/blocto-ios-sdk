@@ -12,6 +12,7 @@ import XCTest
 class CallbackHelperTests: XCTestCase {
 
     private let appUniversalLinkBaseURLString: String = "https://04b2-61-216-44-25.ngrok.io/"
+    private let appId = "64776cec-5953-4a58-8025-772f55a3917b"
     private var mockUIApplication: MockUIApplication!
 
     override func setUp() {
@@ -34,6 +35,7 @@ class CallbackHelperTests: XCTestCase {
         // When:
         MethodCallbackHelper.sendBack(
             urlOpening: mockUIApplication,
+            appId: appId,
             methodContentType: .requestAccount(
                 requestId: requestId,
                 address: address),

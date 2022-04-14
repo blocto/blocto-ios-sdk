@@ -29,10 +29,11 @@ public enum URLEncoding {
                     QueryItem(name: .from, value: from),
                     QueryItem(name: .message, value: message)
                 ])
-            case let .signAndSendTransaction(from, message, extraPublicKeySignaturePairs):
+            case let .signAndSendTransaction(from, message, isInvokeWrapped, extraPublicKeySignaturePairs):
                 queryItems.append(contentsOf: [
                     QueryItem(name: .from, value: from),
                     QueryItem(name: .message, value: message),
+                    QueryItem(name: .isInvokeWrapped, value: isInvokeWrapped),
                     QueryItem(name: .extraPublicKeySignaturePairs, value: extraPublicKeySignaturePairs)
                 ])
         }

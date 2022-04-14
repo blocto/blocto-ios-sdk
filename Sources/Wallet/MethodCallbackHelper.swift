@@ -11,6 +11,7 @@ public class MethodCallbackHelper {
 
     static public func sendBack(
         urlOpening: URLOpening,
+        appId: String,
         methodContentType: CallbackMethodContentType,
         baseURLString: String,
         completion: @escaping (_ opened: Bool) -> Void
@@ -40,7 +41,52 @@ public class MethodCallbackHelper {
             openURL,
             options: [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly: true]
         ) { opened in
-            completion(opened)
+            if opened {
+                completion(true)
+            } else {
+                openWithCustomScheme(
+                    urlOpening: urlOpening,
+                    appId: appId,
+                    urlComponents: components,
+                    completion: completion)
+            }
+        }
+    }
+    
+    static func openWithCustomScheme(
+        urlOpening: URLOpening,
+        appId: String,
+        urlComponents: URLComponents,
+        completion: @escaping (_ opened: Bool) -> Void
+    ) {
+        var components = urlComponents
+        components.scheme = customScheme(appId: appId)
+        components.host = nil
+        components.path = ""
+        guard let openURL = components.url else {
+            log(
+                enable: true,
+                message: "components's url not found.")
+            completion(false)
+            return
+        }
+        urlOpening.open(
+            openURL,
+            options: [:]
+        ) { opened in
+            if opened {
+                log(
+                    enable: true,
+                    message: "opened with custom scheme \(openURL).")
+                completion(true)
+                return
+            } else {
+                log(
+                    enable: true,
+                    message: "can't open with custom scheme \(openURL).")
+                completion(false)
+                return
+            }
         }
     }
 
