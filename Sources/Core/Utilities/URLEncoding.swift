@@ -7,20 +7,37 @@
 
 import Foundation
 
-enum URLEncoding {
+public enum URLEncoding {
 
-    static func sharedQueryItem(
+    static func queryItems(
         appId: String,
         requestId: String,
         blockchain: Blockchain,
-        method: String
+        method: MethodContentType
     ) -> [QueryItem] {
-        [
+        var queryItems = [
             QueryItem(name: .appId, value: appId),
             QueryItem(name: .requestId, value: requestId),
             QueryItem(name: .blockchain, value: blockchain),
-            QueryItem(name: .method, value: method)
+            QueryItem(name: .method, value: method.rawValue)
         ]
+        switch method {
+            case .requestAccount:
+                break
+            case let .signMessage(from, message):
+                queryItems.append(contentsOf: [
+                    QueryItem(name: .from, value: from),
+                    QueryItem(name: .message, value: message)
+                ])
+            case let .signAndSendTransaction(from, message, isInvokeWrapped, extraPublicKeySignaturePairs):
+                queryItems.append(contentsOf: [
+                    QueryItem(name: .from, value: from),
+                    QueryItem(name: .message, value: message),
+                    QueryItem(name: .isInvokeWrapped, value: isInvokeWrapped),
+                    QueryItem(name: .extraPublicKeySignaturePairs, value: extraPublicKeySignaturePairs)
+                ])
+        }
+        return queryItems
     }
 
     static func encode(_ queryItems: [QueryItem]) -> [URLQueryItem] {
@@ -32,6 +49,17 @@ enum URLEncoding {
 struct ArrayEncoding {
 
     func encode(key: String) -> String {
+        "\(key)[]"
+    }
+
+}
+
+struct DictionaryEncoding {
+
+    func encode(
+        key: String,
+        value: [String: Any]
+    ) -> String {
         "\(key)[]"
     }
 

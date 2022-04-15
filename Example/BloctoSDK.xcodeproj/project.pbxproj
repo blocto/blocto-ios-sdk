@@ -7,14 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F707DA1A5D83DF13F8A7216 /* Pods_BloctoSDK_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C80BED560E0C1A37A539B6 /* Pods_BloctoSDK_Tests.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* AccountRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* AccountRequestTests.swift */; };
-		647E59F3024BA9A6C04A0768 /* Pods_BloctoSDK_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBE9222A628CA0352B78C6D1 /* Pods_BloctoSDK_Tests.framework */; };
+		6D1FC37B27F5973100F7FD5C /* ParsedMethodTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1FC37927F5952300F7FD5C /* ParsedMethodTests.swift */; };
+		6D3D57952808367A00228BBD /* Consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3D57932808365100228BBD /* Consts.swift */; };
+		6D72112327FDE61200F1EB7F /* QueryItemEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D72112227FDE61200F1EB7F /* QueryItemEncodingTests.swift */; };
 		6DD6F12127EDBF0000B514B1 /* MockUIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F11D27EDBA4600B514B1 /* MockUIApplication.swift */; };
 		6DD6F12227EDBF0300B514B1 /* MockAuthenticationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F11F27EDBB6600B514B1 /* MockAuthenticationSession.swift */; };
+		6DFA2AF128001AE700F7DA2C /* XCTAssertDictionaryEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFA2AEF2800193F00F7DA2C /* XCTAssertDictionaryEqual.swift */; };
+		6DFA2AF528001EE200F7DA2C /* SignAndSendTransactionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFA2AF428001EE200F7DA2C /* SignAndSendTransactionTests.swift */; };
+		6DFA2AF72801601300F7DA2C /* XCTAssertArrayElementsEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFA2AF62801601300F7DA2C /* XCTAssertArrayElementsEqual.swift */; };
+		6DFA2B0B28040E5100F7DA2C /* CallbackHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFA2B0A28040E5100F7DA2C /* CallbackHelperTests.swift */; };
 		CF7AD397128E9042FE1D1588 /* Pods_BloctoSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C3079E8801413560944E19A /* Pods_BloctoSDK_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +38,7 @@
 /* Begin PBXFileReference section */
 		1BFFAE4C7F4B8BD55F9140D2 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		25D1785E7B031B39796A2C37 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		4CA3783EEA551213E2718327 /* Pods-BloctoSDK_Example-BloctoSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Example-BloctoSDK_Tests.debug.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Example-BloctoSDK_Tests/Pods-BloctoSDK_Example-BloctoSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* BloctoSDK_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BloctoSDK_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -40,13 +48,21 @@
 		607FACE51AFB9204008FA782 /* BloctoSDK_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BloctoSDK_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* AccountRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRequestTests.swift; sourceTree = "<group>"; };
+		6D1FC37927F5952300F7FD5C /* ParsedMethodTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsedMethodTests.swift; sourceTree = "<group>"; };
+		6D3D57932808365100228BBD /* Consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consts.swift; sourceTree = "<group>"; };
 		6D5954E827E1D44B009F43C9 /* BloctoSDK_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BloctoSDK_Example.entitlements; sourceTree = "<group>"; };
+		6D72112227FDE61200F1EB7F /* QueryItemEncodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryItemEncodingTests.swift; sourceTree = "<group>"; };
 		6DD6F11D27EDBA4600B514B1 /* MockUIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIApplication.swift; sourceTree = "<group>"; };
 		6DD6F11F27EDBB6600B514B1 /* MockAuthenticationSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthenticationSession.swift; sourceTree = "<group>"; };
+		6DFA2AEF2800193F00F7DA2C /* XCTAssertDictionaryEqual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTAssertDictionaryEqual.swift; sourceTree = "<group>"; };
+		6DFA2AF428001EE200F7DA2C /* SignAndSendTransactionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignAndSendTransactionTests.swift; sourceTree = "<group>"; };
+		6DFA2AF62801601300F7DA2C /* XCTAssertArrayElementsEqual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTAssertArrayElementsEqual.swift; sourceTree = "<group>"; };
+		6DFA2B0A28040E5100F7DA2C /* CallbackHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallbackHelperTests.swift; sourceTree = "<group>"; };
 		76106B0491B28F46B323B7EA /* Pods-BloctoSDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Example.debug.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Example/Pods-BloctoSDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		7B4773D7FF1C314AB322C220 /* Pods-BloctoSDK_Example-BloctoSDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Example-BloctoSDK_Tests.release.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Example-BloctoSDK_Tests/Pods-BloctoSDK_Example-BloctoSDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		7C3079E8801413560944E19A /* Pods_BloctoSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BloctoSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		BBE9222A628CA0352B78C6D1 /* Pods_BloctoSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BloctoSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D21171C3979541A14284A0C6 /* BloctoSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = BloctoSDK.podspec; path = ../BloctoSDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		E4C80BED560E0C1A37A539B6 /* Pods_BloctoSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BloctoSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5DC540626CCE54728D6AFC2 /* Pods-BloctoSDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Tests.release.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Tests/Pods-BloctoSDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		E7B5C4AE7ED73BFAF1EF6F89 /* Pods-BloctoSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Tests.debug.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Tests/Pods-BloctoSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		F3C55340010DDCD85710450D /* Pods-BloctoSDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Example.release.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Example/Pods-BloctoSDK_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -65,7 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				647E59F3024BA9A6C04A0768 /* Pods_BloctoSDK_Tests.framework in Frameworks */,
+				4F707DA1A5D83DF13F8A7216 /* Pods_BloctoSDK_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +95,8 @@
 				F3C55340010DDCD85710450D /* Pods-BloctoSDK_Example.release.xcconfig */,
 				E7B5C4AE7ED73BFAF1EF6F89 /* Pods-BloctoSDK_Tests.debug.xcconfig */,
 				E5DC540626CCE54728D6AFC2 /* Pods-BloctoSDK_Tests.release.xcconfig */,
+				4CA3783EEA551213E2718327 /* Pods-BloctoSDK_Example-BloctoSDK_Tests.debug.xcconfig */,
+				7B4773D7FF1C314AB322C220 /* Pods-BloctoSDK_Example-BloctoSDK_Tests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -129,9 +147,14 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				6DFA2B0928040E2D00F7DA2C /* Wallet */,
+				6DFA2AEE2800192700F7DA2C /* Utilities */,
+				6D72112127FDE5DE00F1EB7F /* QueryItemCoding */,
+				6D1FC37827F5950100F7FD5C /* Types */,
+				6D1FC37727F594EB00F7FD5C /* Methods */,
 				6DD6F11C27EDBA3600B514B1 /* Mock */,
-				607FACEB1AFB9204008FA782 /* AccountRequestTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
+				6D3D57932808365100228BBD /* Consts.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -158,9 +181,34 @@
 			isa = PBXGroup;
 			children = (
 				7C3079E8801413560944E19A /* Pods_BloctoSDK_Example.framework */,
-				BBE9222A628CA0352B78C6D1 /* Pods_BloctoSDK_Tests.framework */,
+				E4C80BED560E0C1A37A539B6 /* Pods_BloctoSDK_Tests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6D1FC37727F594EB00F7FD5C /* Methods */ = {
+			isa = PBXGroup;
+			children = (
+				607FACEB1AFB9204008FA782 /* AccountRequestTests.swift */,
+				6DFA2AF428001EE200F7DA2C /* SignAndSendTransactionTests.swift */,
+			);
+			path = Methods;
+			sourceTree = "<group>";
+		};
+		6D1FC37827F5950100F7FD5C /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				6D1FC37927F5952300F7FD5C /* ParsedMethodTests.swift */,
+			);
+			path = Types;
+			sourceTree = "<group>";
+		};
+		6D72112127FDE5DE00F1EB7F /* QueryItemCoding */ = {
+			isa = PBXGroup;
+			children = (
+				6D72112227FDE61200F1EB7F /* QueryItemEncodingTests.swift */,
+			);
+			path = QueryItemCoding;
 			sourceTree = "<group>";
 		};
 		6DD6F11C27EDBA3600B514B1 /* Mock */ = {
@@ -170,6 +218,23 @@
 				6DD6F11F27EDBB6600B514B1 /* MockAuthenticationSession.swift */,
 			);
 			path = Mock;
+			sourceTree = "<group>";
+		};
+		6DFA2AEE2800192700F7DA2C /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				6DFA2AEF2800193F00F7DA2C /* XCTAssertDictionaryEqual.swift */,
+				6DFA2AF62801601300F7DA2C /* XCTAssertArrayElementsEqual.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		6DFA2B0928040E2D00F7DA2C /* Wallet */ = {
+			isa = PBXGroup;
+			children = (
+				6DFA2B0A28040E5100F7DA2C /* CallbackHelperTests.swift */,
+			);
+			path = Wallet;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -203,6 +268,7 @@
 				607FACE11AFB9204008FA782 /* Sources */,
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
+				6D1FC37C27F5992800F7FD5C /* Run SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -297,6 +363,25 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		6D1FC37C27F5992800F7FD5C /* Run SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run SwiftLint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "
+";
+		};
 		6DD6F12E27F454F200B514B1 /* Run SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -379,8 +464,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DFA2B0B28040E5100F7DA2C /* CallbackHelperTests.swift in Sources */,
+				6D3D57952808367A00228BBD /* Consts.swift in Sources */,
+				6D72112327FDE61200F1EB7F /* QueryItemEncodingTests.swift in Sources */,
 				6DD6F12127EDBF0000B514B1 /* MockUIApplication.swift in Sources */,
+				6D1FC37B27F5973100F7FD5C /* ParsedMethodTests.swift in Sources */,
+				6DFA2AF72801601300F7DA2C /* XCTAssertArrayElementsEqual.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* AccountRequestTests.swift in Sources */,
+				6DFA2AF528001EE200F7DA2C /* SignAndSendTransactionTests.swift in Sources */,
+				6DFA2AF128001AE700F7DA2C /* XCTAssertDictionaryEqual.swift in Sources */,
 				6DD6F12227EDBF0300B514B1 /* MockAuthenticationSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

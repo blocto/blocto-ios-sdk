@@ -26,11 +26,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             BloctoSDK.shared.initialize(
                 with: bloctoSDKAppId,
                 window: window,
-                logging: false)
+                logging: true)
         } else {
             BloctoSDK.shared.initialize(
                 with: bloctoSDKAppId,
-                logging: false)
+                logging: true)
         }
         return true
     }
@@ -47,10 +47,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    private func application(
+    func application(
         _ application: UIApplication,
         continue userActivity: NSUserActivity,
-        restorationHandler: @escaping ([Any]?) -> Void
+        restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void
     ) -> Bool {
         BloctoSDK.shared.continue(userActivity)
         return true

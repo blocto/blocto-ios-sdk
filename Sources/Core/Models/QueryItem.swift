@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct QueryItem {
+public struct QueryItem {
 
     let name: QueryName
     let value: Any
@@ -62,6 +62,14 @@ struct QueryItem {
     }
 
     private func escape(_ string: String) -> String {
+        QueryEscape.escape(string)
+    }
+
+}
+
+enum QueryEscape {
+
+    static func escape(_ string: String) -> String {
         string.addingPercentEncoding(withAllowedCharacters: .afURLQueryAllowed) ?? string
     }
 

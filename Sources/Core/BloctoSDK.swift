@@ -13,6 +13,13 @@ func log(enable: Bool, message: String) {
     print("BloctoSDK: " + message)
 }
 
+let responsePath: String = "/blocto"
+let responseScheme: String = "blocto"
+
+func customScheme(appId: String) -> String {
+    responseScheme + appId
+}
+
 public class BloctoSDK {
 
     public static let shared: BloctoSDK = BloctoSDK()
@@ -24,8 +31,6 @@ public class BloctoSDK {
 #endif
     private let webBaseURLString: String = "https://wallet.blocto.app/sdk"
     private let requestPath: String = "sdk"
-    private let responsePath: String = "/blocto"
-    private let responseHost: String = "blocto"
 
     var requestBloctoBaseURLString: String {
         bloctoAssociatedDomain + requestPath
@@ -44,11 +49,11 @@ public class BloctoSDK {
     var appId: String = ""
 
     private var window: UIWindow = UIWindow()
-    
+
     var logging: Bool = true
-    
+
     var urlOpening: URLOpening = UIApplication.shared
-    
+
     var sessioningType: AuthenticationSessioning.Type = ASWebAuthenticationSession.self
 
     /// initialize Blocto SDK
@@ -72,7 +77,7 @@ public class BloctoSDK {
         self.urlOpening = urlOpening
         self.sessioningType = sessioningType
     }
-    
+
     @available(iOS, introduced: 12.0, obsoleted: 13.0, message: "There is presentationContextProvider in system protocol ASWebAuthenticationSession start from iOS 13. Use initialize with window for webSDK instead.")
     public func initialize(
         with appId: String,
@@ -86,6 +91,8 @@ public class BloctoSDK {
         self.sessioningType = sessioningType
     }
 
+    /// Entry of Universal Links
+    /// - Parameter userActivity: the same userActivity from UIApplicationDelegate
     public func `continue`(_ userActivity: NSUserActivity) {
         guard let url = userActivity.webpageURL else {
             log(
@@ -93,14 +100,6 @@ public class BloctoSDK {
                 message: "webpageURL not found.")
             return
         }
-        methodResolve(expectHost: responseHost, url: url)
-    }
-
-    public func application(
-        _ app: UIApplication,
-        open url: URL,
-        options: [UIApplication.OpenURLOptionsKey: Any]
-    ) {
         guard url.path == responsePath else {
             log(
                 enable: logging,
@@ -108,6 +107,32 @@ public class BloctoSDK {
             return
         }
         methodResolve(url: url)
+    }
+
+    /// Entry of custom scheme
+    /// - Parameters:
+    ///   - app: UIApplication
+    ///   - url: custom scheme URL
+    ///   - options: options from UIApplicationDelegate
+    public func application(
+        _ app: UIApplication,
+        open url: URL,
+        options: [UIApplication.OpenURLOptionsKey: Any]
+    ) {
+        do {
+            try checkConfigration()
+            guard url.scheme == customScheme(appId: appId) else {
+                log(
+                    enable: logging,
+                    message: "url scheme should be \(responseScheme) rather than \(String(describing: url.scheme)).")
+                return
+            }
+            methodResolve(url: url)
+        } catch {
+            log(
+                enable: logging,
+                message: "error: \(error) when opened by \(url)")
+        }
     }
 
     public func send(method: Method) {
@@ -128,11 +153,11 @@ public class BloctoSDK {
                     if opened {
                         log(
                             enable: self.logging,
-                            message: "open universal link successfully.")
+                            message: "open universal link \(requestURL) successfully.")
                     } else {
                         log(
                             enable: self.logging,
-                            message: "can't open universal link.")
+                            message: "can't open universal link \(requestURL).")
                         if #available(iOS 13.0, *) {
                             self.routeToWebSDK(window: self.window, method: method)
                         } else {
@@ -207,12 +232,14 @@ public class BloctoSDK {
                 return
             }
         }
-        guard let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            log(
-                enable: logging,
-                message: "urlComponents not found.")
-            return
-        }
+        guard let urlComponents = URLComponents(
+            url: url,
+            resolvingAgainstBaseURL: false) else {
+                log(
+                    enable: logging,
+                    message: "urlComponents not found.")
+                return
+            }
         guard let uuid = urlComponents.getRequestId() else {
             log(
                 enable: logging,

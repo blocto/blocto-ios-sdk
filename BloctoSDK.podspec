@@ -26,5 +26,10 @@ Pod::Spec.new do |s|
       ss.dependency "BloctoSDK/Core"
       ss.dependency "RxSwift", "~> 6.0"
   end
+  
+  s.subspec "Wallet" do |ss|
+    ss.source_files = "Sources/Wallet/**/*"
+    ss.dependency "BloctoSDK/Core"
+  end
 
 end

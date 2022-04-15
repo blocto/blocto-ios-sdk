@@ -1,17 +1,21 @@
 //
-//  RequestAccountMethod.swift
+//  SignAndSendSolanaTransactionMethod.swift
 //  BloctoSDK
 //
-//  Created by Andrew Wang on 2022/3/14.
+//  Created by Andrew Wang on 2022/4/8.
 //
 
 import Foundation
 
-public struct RequestAccountMethod: CallbackMethod {
+public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
     public typealias Response = String
 
     public let id: UUID
-    public let type: MethodType = .requestAccount
+    public let type: MethodType = .signAndSendTransaction
+    public let from: String
+    public let message: String
+    public let isInvokeWrapped: Bool
+    public let publicKeySignaturePairs: [String: String]
     public let callback: Callback
 
     let blockchain: Blockchain
@@ -24,10 +28,18 @@ public struct RequestAccountMethod: CallbackMethod {
     public init(
         id: UUID = UUID(),
         blockchain: Blockchain,
+        from: String,
+        message: String,
+        isInvokeWrapped: Bool = true,
+        publicKeySignaturePairs: [String: String] = [:],
         callback: @escaping Callback
     ) {
         self.id = id
         self.blockchain = blockchain
+        self.from = from
+        self.message = message
+        self.isInvokeWrapped = isInvokeWrapped
+        self.publicKeySignaturePairs = publicKeySignaturePairs
         self.callback = callback
     }
 
@@ -40,7 +52,11 @@ public struct RequestAccountMethod: CallbackMethod {
             appId: appId,
             requestId: id.uuidString,
             blockchain: blockchain,
-            method: .requestAccount)
+            method: .signAndSendTransaction(
+                from: from,
+                message: message,
+                isInvokeWrapped: true,
+                extraPublicKeySignaturePairs: publicKeySignaturePairs))
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }
@@ -50,15 +66,15 @@ public struct RequestAccountMethod: CallbackMethod {
             callback(.failure(QueryError(code: errorCode)))
             return
         }
-        let targetQueryName = QueryName.address
-        guard let address = components.queryItem(for: targetQueryName) else {
+        let targetQueryName = QueryName.txHash
+        guard let txHash = components.queryItem(for: targetQueryName) else {
             log(
                 enable: logging,
                 message: "\(targetQueryName.rawValue) not found.")
             callback(.failure(QueryError.invalidResponse))
             return
         }
-        callback(.success(address))
+        callback(.success(txHash))
     }
 
     public func handleError(error: Swift.Error) {
