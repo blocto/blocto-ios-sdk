@@ -16,5 +16,17 @@ public struct RoutingInfo {
     public let methodContentType: CallbackMethodContentType
 
     public let baseURLString: String
+    
+    public init(
+        appId: String,
+        requestId: String,
+        methodContentType: CallbackMethodContentType,
+        baseURLString: String
+    ) {
+        self.appId = appId
+        self.requestId = requestId
+        self.methodContentType = methodContentType
+        self.baseURLString = baseURLString
+    }
 
 }
