@@ -7,10 +7,12 @@
 
 import Foundation
 
-enum InternalError: Swift.Error {
+enum Error: Swift.Error {
+    case callbackSelfNotfound
     case appIdNotSet
     case encodeToURLFailed
     case webSDKSessionFailed
+    case apiProviderNotFound
 }
 
 public enum QueryError: Swift.Error {

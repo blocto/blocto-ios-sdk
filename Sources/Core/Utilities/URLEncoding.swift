@@ -29,13 +29,19 @@ public enum URLEncoding {
                     QueryItem(name: .from, value: from),
                     QueryItem(name: .message, value: message)
                 ])
-            case let .signAndSendTransaction(from, message, isInvokeWrapped, extraPublicKeySignaturePairs):
+            case let .signAndSendTransaction(from, isInvokeWrapped, transactionInfo):
                 queryItems.append(contentsOf: [
                     QueryItem(name: .from, value: from),
-                    QueryItem(name: .message, value: message),
                     QueryItem(name: .isInvokeWrapped, value: isInvokeWrapped),
-                    QueryItem(name: .extraPublicKeySignaturePairs, value: extraPublicKeySignaturePairs)
+                    QueryItem(name: .message, value: transactionInfo.message),
+                    QueryItem(name: .publicKeySignaturePairs, value: transactionInfo.publicKeySignaturePairs)
                 ])
+                if let appendMessages = transactionInfo.appendTx {
+                    queryItems.append(
+                        QueryItem(
+                            name: .appendTx,
+                            value: appendMessages))
+                }
         }
         return queryItems
     }

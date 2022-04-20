@@ -14,14 +14,14 @@ class QueryItemEncodingTests: XCTestCase {
     func testDictionaryEncoding() throws {
         // Given:
         let queryItem = QueryItem(
-            name: QueryName.extraPublicKeySignaturePairs,
+            name: QueryName.publicKeySignaturePairs,
             value: [
                 "test1": "1",
                 "test2": "2"
             ])
         let expect: [URLQueryItem] = [
-            URLQueryItem(name: QueryName.extraPublicKeySignaturePairs.rawValue + "%5Btest1%5D", value: "1"),
-            URLQueryItem(name: QueryName.extraPublicKeySignaturePairs.rawValue + "%5Btest2%5D", value: "2")
+            URLQueryItem(name: QueryName.publicKeySignaturePairs.rawValue + "%5Btest1%5D", value: "1"),
+            URLQueryItem(name: QueryName.publicKeySignaturePairs.rawValue + "%5Btest2%5D", value: "2")
         ]
 
         // When:
@@ -34,8 +34,8 @@ class QueryItemEncodingTests: XCTestCase {
     func testDictionaryDecoding() throws {
         // Given:
         let param = [
-            QueryName.extraPublicKeySignaturePairs.rawValue + "%5Btest1%5D": "1",
-            QueryName.extraPublicKeySignaturePairs.rawValue + "%5Btest2%5D": "2"
+            QueryName.publicKeySignaturePairs.rawValue + "%5Btest1%5D": "1",
+            QueryName.publicKeySignaturePairs.rawValue + "%5Btest2%5D": "2"
         ]
 
         let expect: [String: String] = [
@@ -44,9 +44,52 @@ class QueryItemEncodingTests: XCTestCase {
         ]
 
         // When:
-        let dictionary = QueryDecoding.decodeDictionary(
+        let dictionary: [String: String] = QueryDecoding.decodeDictionary(
             param: param,
-            queryName: .extraPublicKeySignaturePairs)
+            queryName: .publicKeySignaturePairs)
+
+        // Then:
+        XCTAssertDictionaryEqual(dictionary, expect)
+    }
+
+    func testDictionaryDataEncoding() throws {
+        // Given:
+        let data1 = "1234".hexDecodedData
+        let data2 = "2345".hexDecodedData
+        let queryItem = QueryItem(
+            name: QueryName.appendTx,
+            value: [
+                "test1": data1,
+                "test2": data2
+            ])
+        let expect: [URLQueryItem] = [
+            URLQueryItem(name: QueryName.appendTx.rawValue + "%5Btest1%5D", value: "1234"),
+            URLQueryItem(name: QueryName.appendTx.rawValue + "%5Btest2%5D", value: "2345")
+        ]
+
+        // When:
+        let queryComponents = queryItem.getQueryComponents
+
+        // Then:
+        XCTAssertArrayElementsEqual(queryComponents, expect)
+    }
+
+    func testDictionaryDataDecoding() throws {
+        // Given:
+        let param = [
+            QueryName.appendTx.rawValue + "%5Btest1%5D": "1234",
+            QueryName.appendTx.rawValue + "%5Btest2%5D": "2345"
+        ]
+
+        let expect: [String: Data] = [
+            "test1": "1234".hexDecodedData,
+            "test2": "2345".hexDecodedData
+        ]
+
+        // When:
+        let dictionary: [String: Data] = QueryDecoding.decodeDictionary(
+            param: param,
+            queryName: .appendTx)
 
         // Then:
         XCTAssertDictionaryEqual(dictionary, expect)

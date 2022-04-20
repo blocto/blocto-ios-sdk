@@ -16,9 +16,8 @@ public enum MethodContentType {
 
     case signAndSendTransaction(
         from: String,
-        message: String,
         isInvokeWrapped: Bool,
-        extraPublicKeySignaturePairs: [String: String])
+        transactionInfo: SolanaTransactionInfo)
 
     var rawValue: String {
         switch self {

@@ -106,6 +106,9 @@ public class BloctoSDK {
                 message: "url path should be \(responsePath) rather than \(url.path).")
             return
         }
+        log(
+            enable: logging,
+            message: "App get called by Universal Links: \(url)")
         methodResolve(url: url)
     }
 
@@ -127,6 +130,9 @@ public class BloctoSDK {
                     message: "url scheme should be \(responseScheme) rather than \(String(describing: url.scheme)).")
                 return
             }
+            log(
+                enable: logging,
+                message: "App get called by custom scheme: \(url)")
             methodResolve(url: url)
         } catch {
             log(
@@ -141,7 +147,7 @@ public class BloctoSDK {
             guard let requestURL = try method.encodeToURL(
                 appId: appId,
                 baseURLString: requestBloctoBaseURLString) else {
-                    method.handleError(error: InternalError.encodeToURLFailed)
+                    method.handleError(error: Error.encodeToURLFailed)
                     return
                 }
             uuidToMethod[method.id] = method
@@ -172,7 +178,7 @@ public class BloctoSDK {
     }
 
     private func checkConfigration() throws {
-        guard appId.isEmpty == false else { throw InternalError.appIdNotSet }
+        guard appId.isEmpty == false else { throw Error.appIdNotSet }
     }
 
     private func routeToWebSDK(
@@ -183,7 +189,7 @@ public class BloctoSDK {
             guard let requestURL = try method.encodeToURL(
                 appId: appId,
                 baseURLString: webRequestBloctoBaseURLString) else {
-                    method.handleError(error: InternalError.encodeToURLFailed)
+                    method.handleError(error: Error.encodeToURLFailed)
                     return
                 }
             var session: AuthenticationSessioning?
@@ -213,7 +219,7 @@ public class BloctoSDK {
 
             let startsSuccessfully = session?.start()
             if startsSuccessfully == false {
-                method.handleError(error: InternalError.webSDKSessionFailed)
+                method.handleError(error: Error.webSDKSessionFailed)
             }
         } catch {
             method.handleError(error: error)
