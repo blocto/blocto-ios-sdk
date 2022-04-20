@@ -11,18 +11,18 @@ public class MethodCallbackHelper {
 
     static public func sendBack(
         urlOpening: URLOpening,
-        appId: String,
-        methodContentType: CallbackMethodContentType,
-        baseURLString: String,
+        routingInfo: RoutingInfo,
         completion: @escaping (_ opened: Bool) -> Void
     ) {
-        guard baseURLString.isEmpty == false else {
+        guard routingInfo.baseURLString.isEmpty == false else {
             completion(false)
             return
         }
-        var components = URLComponents(string: baseURLString)
+        var components = URLComponents(string: routingInfo.baseURLString)
         components?.path = responsePath
-        components?.queryItems = queryItems(from: methodContentType)
+        var items = queryItems(from: routingInfo.methodContentType)
+        items.append(.init(name: .requestId, value: routingInfo.requestId))
+        components?.queryItems = items
         guard let components = components else {
             log(
                 enable: true,
@@ -46,7 +46,7 @@ public class MethodCallbackHelper {
             } else {
                 openWithCustomScheme(
                     urlOpening: urlOpening,
-                    appId: appId,
+                    appId: routingInfo.appId,
                     urlComponents: components,
                     completion: completion)
             }
@@ -93,24 +93,20 @@ public class MethodCallbackHelper {
 
     static func queryItems(from methodContentType: CallbackMethodContentType) -> [URLQueryItem] {
         switch methodContentType {
-            case let .requestAccount(requestId, address):
+            case let .requestAccount(address):
                 return [
-                    .init(name: .requestId, value: requestId),
                     .init(name: .address, value: address)
                 ]
-            case let .signMessage(requestId, signature):
+            case let .signMessage(signature):
                 return [
-                    .init(name: .requestId, value: requestId),
                     .init(name: .signature, value: signature)
                 ]
-            case let .signAndSendTransaction(requestId, txHash):
+            case let .signAndSendTransaction(txHash):
                 return [
-                    .init(name: .requestId, value: requestId),
                     .init(name: .txHash, value: txHash)
                 ]
-            case let .error(requestId, error):
+            case let .error(error):
                 return [
-                    .init(name: .requestId, value: requestId),
                     .init(name: .error, value: error.rawValue)
                 ]
         }
