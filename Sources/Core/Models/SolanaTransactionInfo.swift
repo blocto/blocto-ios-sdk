@@ -9,10 +9,10 @@ import Foundation
 
 public struct SolanaTransactionInfo {
 
-    let message: String
+    public let message: String
 
-    let appendTx: [String: Data]?
+    public let appendTx: [String: Data]?
 
-    let publicKeySignaturePairs: [String: String]
+    public let publicKeySignaturePairs: [String: String]
 
 }
