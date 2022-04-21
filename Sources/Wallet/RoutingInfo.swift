@@ -16,7 +16,7 @@ public struct RoutingInfo {
     public let methodContentType: CallbackMethodContentType
 
     public let baseURLString: String
-    
+
     public init(
         appId: String,
         requestId: String,
