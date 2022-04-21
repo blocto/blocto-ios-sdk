@@ -20,6 +20,7 @@ public enum QueryError: Swift.Error {
     case userRejected
     case forbiddenBlockchain
     case invalidResponse
+    case userNotMatch
     case other(code: String)
 
     init(code: String) {
@@ -30,6 +31,8 @@ public enum QueryError: Swift.Error {
                 self = .forbiddenBlockchain
             case QueryError.invalidResponse.rawValue:
                 self = .invalidResponse
+            case QueryError.userNotMatch.rawValue:
+                self = .userNotMatch
             default:
                 self = .other(code: code)
         }
@@ -43,6 +46,8 @@ public enum QueryError: Swift.Error {
                 return "forbidden_blockchain"
             case .invalidResponse:
                 return "invalid_response"
+            case .userNotMatch:
+                return "user_not_match"
             case .other(let code):
                 return code
         }
