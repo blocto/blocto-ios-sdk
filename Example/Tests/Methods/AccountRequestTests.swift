@@ -86,10 +86,10 @@ class AccountRequestTests: XCTestCase {
             id: requestId,
             blockchain: Blockchain.solana) { result in
                 switch result {
-                    case let .success(receivedAddress):
-                        address = receivedAddress
-                    case let .failure(error):
-                        XCTFail(error.localizedDescription)
+                case let .success(receivedAddress):
+                    address = receivedAddress
+                case let .failure(error):
+                    XCTFail(error.localizedDescription)
                 }
             }
         BloctoSDK.shared.send(method: requestAccountMethod)

@@ -25,31 +25,31 @@ public enum QueryError: Swift.Error {
 
     init(code: String) {
         switch code {
-            case QueryError.userRejected.rawValue:
-                self = .userRejected
-            case QueryError.forbiddenBlockchain.rawValue:
-                self = .forbiddenBlockchain
-            case QueryError.invalidResponse.rawValue:
-                self = .invalidResponse
-            case QueryError.userNotMatch.rawValue:
-                self = .userNotMatch
-            default:
-                self = .other(code: code)
+        case QueryError.userRejected.rawValue:
+            self = .userRejected
+        case QueryError.forbiddenBlockchain.rawValue:
+            self = .forbiddenBlockchain
+        case QueryError.invalidResponse.rawValue:
+            self = .invalidResponse
+        case QueryError.userNotMatch.rawValue:
+            self = .userNotMatch
+        default:
+            self = .other(code: code)
         }
     }
 
     var rawValue: String {
         switch self {
-            case .userRejected:
-                return "user_rejected"
-            case .forbiddenBlockchain:
-                return "forbidden_blockchain"
-            case .invalidResponse:
-                return "invalid_response"
-            case .userNotMatch:
-                return "user_not_match"
-            case .other(let code):
-                return code
+        case .userRejected:
+            return "user_rejected"
+        case .forbiddenBlockchain:
+            return "forbidden_blockchain"
+        case .invalidResponse:
+            return "invalid_response"
+        case .userNotMatch:
+            return "user_not_match"
+        case .other(let code):
+            return code
         }
     }
 

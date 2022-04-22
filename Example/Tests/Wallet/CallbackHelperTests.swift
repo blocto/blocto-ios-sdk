@@ -72,8 +72,8 @@ class CallbackHelperTests: XCTestCase {
                 requestId: requestId,
                 methodContentType: .requestAccount(address: address),
                 baseURLString: appUniversalLinkBaseURLString)) { opened in
-                receivingOpened = opened
-            }
+                    receivingOpened = opened
+                }
 
         // Then:
         XCTAssertArrayElementsEqual(

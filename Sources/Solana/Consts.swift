@@ -12,13 +12,13 @@ enum AppInfo {
     static var applicationBundle: Bundle {
         let bundle = Bundle.main
         switch bundle.bundleURL.pathExtension {
-            case "app":
-                return bundle
-            case "appex":
-                // .../Client.app/PlugIns/SendTo.appex
-                return Bundle(url: bundle.bundleURL.deletingLastPathComponent().deletingLastPathComponent())!
-            default:
-                fatalError("Unable to get application Bundle (Bundle.main.bundlePath=\(bundle.bundlePath))")
+        case "app":
+            return bundle
+        case "appex":
+            // .../Client.app/PlugIns/SendTo.appex
+            return Bundle(url: bundle.bundleURL.deletingLastPathComponent().deletingLastPathComponent())!
+        default:
+            fatalError("Unable to get application Bundle (Bundle.main.bundlePath=\(bundle.bundlePath))")
         }
     }
 

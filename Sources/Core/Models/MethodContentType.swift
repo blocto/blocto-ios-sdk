@@ -21,12 +21,12 @@ public enum MethodContentType {
 
     var rawValue: String {
         switch self {
-            case .requestAccount:
-                return MethodType.requestAccount.rawValue
-            case .signMessage:
-                return MethodType.signMessage.rawValue
-            case .signAndSendTransaction:
-                return MethodType.signAndSendTransaction.rawValue
+        case .requestAccount:
+            return MethodType.requestAccount.rawValue
+        case .signMessage:
+            return MethodType.signMessage.rawValue
+        case .signAndSendTransaction:
+            return MethodType.signAndSendTransaction.rawValue
         }
     }
 }

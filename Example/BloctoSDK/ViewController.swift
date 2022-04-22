@@ -277,11 +277,11 @@ final class ViewController: UIViewController {
                 self?.resetRequestAccountStatus()
                 self?.bloctoSolanaSDK.requestAccount { [weak self] result in
                     switch result {
-                        case .success(let address):
-                            self?.userWalletAddress = address
-                            self?.requestAccountResultLabel.text = address
-                        case .failure(let error):
-                            self?.handleSetValueError(error)
+                    case .success(let address):
+                        self?.userWalletAddress = address
+                        self?.requestAccountResultLabel.text = address
+                    case .failure(let error):
+                        self?.handleSetValueError(error)
                     }
                 }
             })
@@ -435,10 +435,10 @@ final class ViewController: UIViewController {
                 guard let self = self else { return }
                 self.resetSetValueStatus()
                 switch result {
-                    case let .success(txHsh):
-                        self.setValueResultLabel.text = txHsh
-                    case let .failure(error):
-                        self.handleSetValueError(error)
+                case let .success(txHsh):
+                    self.setValueResultLabel.text = txHsh
+                case let .failure(error):
+                    self.handleSetValueError(error)
                 }
             }
     }
@@ -454,20 +454,20 @@ final class ViewController: UIViewController {
                 guard let self = self else { return }
                 self.resetGetValueStatus()
                 switch result {
-                    case let .success(accountInfo):
-                        guard let data = accountInfo?.data else {
-                            self.handleGetValueError(Error.message("data not found."))
-                            return
-                        }
-                        var pointer = 0
-                        do {
-                            let valueAccountData = try ValueAccountData(buffer: data, pointer: &pointer)
-                            self.getValueResultLabel.text = "\(valueAccountData.value)"
-                        } catch {
-                            self.handleGetValueError(error)
-                        }
-                    case let .failure(error):
+                case let .success(accountInfo):
+                    guard let data = accountInfo?.data else {
+                        self.handleGetValueError(Error.message("data not found."))
+                        return
+                    }
+                    var pointer = 0
+                    do {
+                        let valueAccountData = try ValueAccountData(buffer: data, pointer: &pointer)
+                        self.getValueResultLabel.text = "\(valueAccountData.value)"
+                    } catch {
                         self.handleGetValueError(error)
+                    }
+                case let .failure(error):
+                    self.handleGetValueError(error)
                 }
             }
     }
@@ -494,7 +494,6 @@ final class ViewController: UIViewController {
               }
 
         var transaction = Transaction()
-//        transaction.add(transactionInstruction)
         transaction.feePayer = userWalletPublicKey
 
         let connetion = Connection(endpointURL: AppConsts.solanaRPCEndpoint)
@@ -502,58 +501,58 @@ final class ViewController: UIViewController {
             dataLength: 10) { [weak self] result in
                 guard let self = self else { return }
                 switch result {
-                    case let .success(minBalance):
-                        do {
-                            let newAccount = try Account()
-                            let createAccountInstruction = try SystemProgram.createAccount(
-                                fromPublicKey: userWalletPublicKey,
-                                newAccountPublicKey: newAccount.publicKey,
-                                lamports: minBalance,
-                                space: 10,
-                                programId: programId)
-                            transaction.add(createAccountInstruction)
+                case let .success(minBalance):
+                    do {
+                        let newAccount = try Account()
+                        let createAccountInstruction = try SystemProgram.createAccount(
+                            fromPublicKey: userWalletPublicKey,
+                            newAccountPublicKey: newAccount.publicKey,
+                            lamports: minBalance,
+                            space: 10,
+                            programId: programId)
+                        transaction.add(createAccountInstruction)
 
-                            let setValueInstruction = try self.createSetValueInstruction(
-                                dappPublicKey: dappPublicKey,
-                                userWalletPublicKey: userWalletPublicKey,
-                                programId: programId,
-                                value: value)
-                            transaction.add(setValueInstruction)
+                        let setValueInstruction = try self.createSetValueInstruction(
+                            dappPublicKey: dappPublicKey,
+                            userWalletPublicKey: userWalletPublicKey,
+                            programId: programId,
+                            value: value)
+                        transaction.add(setValueInstruction)
 
-                            self.bloctoSolanaSDK.convertToProgramWalletTransaction(
-                                transaction,
-                                solanaAddress: userWalletAddress) { [weak self] result in
-                                    guard let self = self else { return }
-                                    switch result {
-                                        case let .success(transaction):
-                                            do {
-                                                var newTransaction = transaction
-                                                try newTransaction.partialSign(signers: [newAccount])
+                        self.bloctoSolanaSDK.convertToProgramWalletTransaction(
+                            transaction,
+                            solanaAddress: userWalletAddress) { [weak self] result in
+                                guard let self = self else { return }
+                                switch result {
+                                case let .success(transaction):
+                                    do {
+                                        var newTransaction = transaction
+                                        try newTransaction.partialSign(signers: [newAccount])
 
-                                                self.bloctoSolanaSDK.signAndSendTransaction(
-                                                    from: userWalletAddress,
-                                                    transaction: newTransaction) { [weak self] result in
-                                                        guard let self = self else { return }
-                                                        self.resetPartialSignTxStatus()
-                                                        switch result {
-                                                            case let .success(txHash):
-                                                                self.partialSignTxResultLabel.text = txHash
-                                                            case let .failure(error):
-                                                                self.handlePartialSignTxError(error)
-                                                        }
-                                                    }
-                                            } catch {
-                                                self.handlePartialSignTxError(error)
+                                        self.bloctoSolanaSDK.signAndSendTransaction(
+                                            from: userWalletAddress,
+                                            transaction: newTransaction) { [weak self] result in
+                                                guard let self = self else { return }
+                                                self.resetPartialSignTxStatus()
+                                                switch result {
+                                                case let .success(txHash):
+                                                    self.partialSignTxResultLabel.text = txHash
+                                                case let .failure(error):
+                                                    self.handlePartialSignTxError(error)
+                                                }
                                             }
-                                        case let .failure(error):
-                                            self.handlePartialSignTxError(error)
+                                    } catch {
+                                        self.handlePartialSignTxError(error)
                                     }
+                                case let .failure(error):
+                                    self.handlePartialSignTxError(error)
                                 }
-                        } catch {
-                            self.handlePartialSignTxError(error)
-                        }
-                    case let .failure(error):
+                            }
+                    } catch {
                         self.handlePartialSignTxError(error)
+                    }
+                case let .failure(error):
+                    self.handlePartialSignTxError(error)
                 }
             }
     }
@@ -589,16 +588,16 @@ final class ViewController: UIViewController {
     private func handleRequestAccountError(_ error: Swift.Error) {
         if let error = error as? QueryError {
             switch error {
-                case .userRejected:
-                    requestAccountResultLabel.text = "user rejected."
-                case .forbiddenBlockchain:
-                    requestAccountResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
-                case .invalidResponse:
-                    requestAccountResultLabel.text = "invalid response."
-                case .userNotMatch:
-                    requestAccountResultLabel.text = "user not matched."
-                case .other(let code):
-                    requestAccountResultLabel.text = code
+            case .userRejected:
+                requestAccountResultLabel.text = "user rejected."
+            case .forbiddenBlockchain:
+                requestAccountResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
+            case .invalidResponse:
+                requestAccountResultLabel.text = "invalid response."
+            case .userNotMatch:
+                requestAccountResultLabel.text = "user not matched."
+            case .other(let code):
+                requestAccountResultLabel.text = code
             }
         } else if let error = error as? Error {
             requestAccountResultLabel.text = error.message
@@ -612,16 +611,16 @@ final class ViewController: UIViewController {
     private func handleSetValueError(_ error: Swift.Error) {
         if let error = error as? QueryError {
             switch error {
-                case .userRejected:
-                    setValueResultLabel.text = "user rejected."
-                case .forbiddenBlockchain:
-                    setValueResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
-                case .invalidResponse:
-                    setValueResultLabel.text = "invalid response."
-                case .userNotMatch:
-                    setValueResultLabel.text = "user not matched."
-                case .other(let code):
-                    setValueResultLabel.text = code
+            case .userRejected:
+                setValueResultLabel.text = "user rejected."
+            case .forbiddenBlockchain:
+                setValueResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
+            case .invalidResponse:
+                setValueResultLabel.text = "invalid response."
+            case .userNotMatch:
+                setValueResultLabel.text = "user not matched."
+            case .other(let code):
+                setValueResultLabel.text = code
             }
         } else if let error = error as? Error {
             setValueResultLabel.text = error.message
@@ -641,16 +640,16 @@ final class ViewController: UIViewController {
     private func handlePartialSignTxError(_ error: Swift.Error) {
         if let error = error as? QueryError {
             switch error {
-                case .userRejected:
-                    partialSignTxResultLabel.text = "user rejected."
-                case .forbiddenBlockchain:
-                    partialSignTxResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
-                case .invalidResponse:
-                    partialSignTxResultLabel.text = "invalid response."
-                case .userNotMatch:
-                    partialSignTxResultLabel.text = "user not matched."
-                case .other(let code):
-                    partialSignTxResultLabel.text = code
+            case .userRejected:
+                partialSignTxResultLabel.text = "user rejected."
+            case .forbiddenBlockchain:
+                partialSignTxResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
+            case .invalidResponse:
+                partialSignTxResultLabel.text = "invalid response."
+            case .userNotMatch:
+                partialSignTxResultLabel.text = "user not matched."
+            case .other(let code):
+                partialSignTxResultLabel.text = code
             }
         } else if let error = error as? Error {
             partialSignTxResultLabel.text = error.message
@@ -670,8 +669,8 @@ extension ViewController {
 
         var message: String {
             switch self {
-                case let .message(message):
-                    return message
+            case let .message(message):
+                return message
             }
         }
     }

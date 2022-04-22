@@ -58,18 +58,18 @@ extension MethodContentType: Equatable {
 
     public static func == (lhs: MethodContentType, rhs: MethodContentType) -> Bool {
         switch (lhs, rhs) {
-            case (.requestAccount, .requestAccount):
-                return true
-            case let (.signMessage(lFrom, lMessage), .signMessage(rFrom, rMessage)):
-                return lFrom == rFrom
-                && lMessage == rMessage
-            case let (.signAndSendTransaction(lFrom, lIsInvokeWrapped, lTransactionInfo),
-                        .signAndSendTransaction(rFrom, rIsInvokeWrapped, rTransactionInfo)):
-                return lFrom == rFrom
-                && lIsInvokeWrapped == rIsInvokeWrapped
-                && lTransactionInfo == rTransactionInfo
-            default:
-                return false
+        case (.requestAccount, .requestAccount):
+            return true
+        case let (.signMessage(lFrom, lMessage), .signMessage(rFrom, rMessage)):
+            return lFrom == rFrom
+            && lMessage == rMessage
+        case let (.signAndSendTransaction(lFrom, lIsInvokeWrapped, lTransactionInfo),
+                  .signAndSendTransaction(rFrom, rIsInvokeWrapped, rTransactionInfo)):
+            return lFrom == rFrom
+            && lIsInvokeWrapped == rIsInvokeWrapped
+            && lTransactionInfo == rTransactionInfo
+        default:
+            return false
         }
     }
 

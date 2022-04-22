@@ -22,26 +22,27 @@ public enum URLEncoding {
             QueryItem(name: .method, value: method.rawValue)
         ]
         switch method {
-            case .requestAccount:
-                break
-            case let .signMessage(from, message):
-                queryItems.append(contentsOf: [
-                    QueryItem(name: .from, value: from),
-                    QueryItem(name: .message, value: message)
-                ])
-            case let .signAndSendTransaction(from, isInvokeWrapped, transactionInfo):
-                queryItems.append(contentsOf: [
-                    QueryItem(name: .from, value: from),
-                    QueryItem(name: .isInvokeWrapped, value: isInvokeWrapped),
-                    QueryItem(name: .message, value: transactionInfo.message),
-                    QueryItem(name: .publicKeySignaturePairs, value: transactionInfo.publicKeySignaturePairs)
-                ])
-                if let appendMessages = transactionInfo.appendTx {
-                    queryItems.append(
-                        QueryItem(
-                            name: .appendTx,
-                            value: appendMessages))
-                }
+        case .requestAccount:
+            break
+        case let .signMessage(from, message):
+            queryItems.append(contentsOf: [
+                QueryItem(name: .from, value: from),
+                QueryItem(name: .message, value: message)
+            ])
+        case let .signAndSendTransaction(from, isInvokeWrapped, transactionInfo):
+            queryItems.append(contentsOf: [
+                QueryItem(name: .from, value: from),
+                QueryItem(name: .isInvokeWrapped, value: isInvokeWrapped),
+                QueryItem(name: .message, value: transactionInfo.message),
+                QueryItem(name: .appendTx, value: transactionInfo.appendTx ?? [:]),
+                QueryItem(name: .publicKeySignaturePairs, value: transactionInfo.publicKeySignaturePairs)
+            ])
+            if let appendMessages = transactionInfo.appendTx {
+                queryItems.append(
+                    QueryItem(
+                        name: .appendTx,
+                        value: appendMessages))
+            }
         }
         return queryItems
     }

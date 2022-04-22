@@ -14,15 +14,15 @@ final public class ApiProvider: MoyaProvider<ConvertTransactionRequest> {
         endpointClosure: @escaping EndpointClosure = MoyaProvider.defaultEndpointMapping,
         stubClosure: @escaping StubClosure = MoyaProvider.neverStub
     ) {
-            var plugins: [PluginType] = plugins
+        var plugins: [PluginType] = plugins
 #if DEBUG
         plugins.append(BONetworkLoggerPlugin(verbose: true))
 #endif
-            super.init(
-                endpointClosure: endpointClosure,
-                stubClosure: stubClosure,
-                plugins: plugins)
-        }
+        super.init(
+            endpointClosure: endpointClosure,
+            stubClosure: stubClosure,
+            plugins: plugins)
+    }
 }
 
 public final class BONetworkLoggerPlugin: PluginType {

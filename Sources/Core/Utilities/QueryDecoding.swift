@@ -18,24 +18,24 @@ public enum QueryDecoding {
                 param: param,
                 target: queryName.rawValue)
             switch T.self {
-                case is String.Type:
-                    if let value = dictionary[queryName.rawValue] as? [String: T] {
-                        return value
-                    } else {
-                        return [String: T]()
-                    }
-                case is Data.Type:
-                    if let value = dictionary[queryName.rawValue] as? [String: String] {
-                        return value.reduce([String: T]()) { partialResult, value in
-                            var result = partialResult
-                            result[value.key] = value.value.hexDecodedData as? T
-                            return result
-                        }
-                    } else {
-                        return [String: T]()
-                    }
-                default:
+            case is String.Type:
+                if let value = dictionary[queryName.rawValue] as? [String: T] {
+                    return value
+                } else {
                     return [String: T]()
+                }
+            case is Data.Type:
+                if let value = dictionary[queryName.rawValue] as? [String: String] {
+                    return value.reduce([String: T]()) { partialResult, value in
+                        var result = partialResult
+                        result[value.key] = value.value.hexDecodedData as? T
+                        return result
+                    }
+                } else {
+                    return [String: T]()
+                }
+            default:
+                return [String: T]()
             }
         } catch {
             return [String: T]()
