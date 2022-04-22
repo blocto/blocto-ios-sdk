@@ -146,38 +146,45 @@ public class BloctoSolanaSDK {
         }
     }
 
-    func convertToProgramWalletTransaction(
+    public func convertToProgramWalletTransaction(
         _ transaction: Transaction,
         solanaAddress: String,
-        apiProvider: ApiProvider,
+        apiProvider: ApiProvider = ApiProvider(),
         completion: @escaping (Result<Transaction, Swift.Error>) -> Void
     ) {
-        do {
-            var transaction = transaction
-            let serializeMessage = try transaction.serializeMessage()
-            let request = ConvertTransactionRequest(
-                solanaAddress: solanaAddress,
-                message: serializeMessage.hexString)
-            _ = apiProvider.request(request) { [weak self] result in
-                switch result {
-                    case let .success(response):
-                        do {
-                            let createTransactionResponse = try JSONDecoder().decode(SolanaCreateTransactionResponse.self, from: response.data)
-
-                            let message = try Message(data: createTransactionResponse.rawTx.hexDecodedData)
-                            let convertedTransaction = Transaction(message: message, signatures: [])
-                            let data = createTransactionResponse.rawTx.hexDecodedData.sha1()
-                            self?.appendTxMap[data.hexString] = createTransactionResponse.appendTx
-                            completion(.success(convertedTransaction))
-                        } catch {
-                            completion(.failure(error))
+        addRecentBlockhashIfNeeded(transaction) { result in
+            switch result {
+                case let .success(transaction):
+                    do {
+                        var transaction = transaction
+                        let serializeMessage = try transaction.serializeMessage()
+                        let request = ConvertTransactionRequest(
+                            solanaAddress: solanaAddress,
+                            message: serializeMessage.hexString)
+                        _ = apiProvider.request(request) { [weak self] result in
+                            switch result {
+                                case let .success(response):
+                                    do {
+                                        let createTransactionResponse = try JSONDecoder().decode(SolanaCreateTransactionResponse.self, from: response.data)
+                                        
+                                        let message = try Message(data: createTransactionResponse.rawTx.hexDecodedData)
+                                        let convertedTransaction = Transaction(message: message, signatures: [])
+                                        let data = createTransactionResponse.rawTx.hexDecodedData.sha1()
+                                        self?.appendTxMap[data.hexString] = createTransactionResponse.appendTx
+                                        completion(.success(convertedTransaction))
+                                    } catch {
+                                        completion(.failure(error))
+                                    }
+                                case let .failure(error):
+                                    completion(.failure(error))
+                            }
                         }
-                    case let .failure(error):
+                    } catch {
                         completion(.failure(error))
-                }
+                    }
+                case let .failure(error):
+                    completion(.failure(error))
             }
-        } catch {
-            completion(.failure(error))
         }
     }
 

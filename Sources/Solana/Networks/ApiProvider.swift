@@ -9,7 +9,7 @@ import Moya
 
 final public class ApiProvider: MoyaProvider<ConvertTransactionRequest> {
 
-    init(
+    public init(
         plugins: [PluginType] = [],
         endpointClosure: @escaping EndpointClosure = MoyaProvider.defaultEndpointMapping,
         stubClosure: @escaping StubClosure = MoyaProvider.neverStub

@@ -19,7 +19,7 @@ final class ViewController: UIViewController {
     private let dappAddress: String = "4AXy5YYCXpMapaVuzKkz25kVHzrdLDgKN3TiQvtf1Eu8"
     private let programId: String = "G4YkbRN4nFQGEUg4SXzPsrManWzuk8bNq9JaMhXepnZ6"
 
-    private var solanaBloctoSDK = BloctoSDK.shared.solana
+    private lazy var bloctoSolanaSDK = BloctoSDK.shared.solana
 
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -39,7 +39,7 @@ final class ViewController: UIViewController {
         view.addSubview(titleLabel)
 
         view.addSubview(requestAccountButton)
-        view.addSubview(accountTextLabel)
+        view.addSubview(requestAccountResultLabel)
 
         view.addSubview(separator1)
 
@@ -47,7 +47,6 @@ final class ViewController: UIViewController {
         view.addSubview(inputTextField)
         view.addSubview(setValueButton)
         view.addSubview(setValueResultLabel)
-        view.addSubview(errorLabel)
 
         view.addSubview(separator2)
 
@@ -71,13 +70,13 @@ final class ViewController: UIViewController {
             $0.leading.equalToSuperview().inset(20)
         }
 
-        accountTextLabel.snp.makeConstraints {
+        requestAccountResultLabel.snp.makeConstraints {
             $0.top.equalTo(requestAccountButton.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
         separator1.snp.makeConstraints {
-            $0.top.equalTo(accountTextLabel.snp.bottom).offset(20)
+            $0.top.equalTo(requestAccountResultLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
@@ -102,13 +101,8 @@ final class ViewController: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
-        errorLabel.snp.makeConstraints {
-            $0.top.equalTo(setValueResultLabel.snp.bottom).offset(20)
-            $0.leading.trailing.equalToSuperview().inset(20)
-        }
-
         separator2.snp.makeConstraints {
-            $0.top.equalTo(errorLabel.snp.bottom).offset(20)
+            $0.top.equalTo(setValueResultLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
@@ -160,19 +154,13 @@ final class ViewController: UIViewController {
         return label
     }()
 
-    private var requestAccountButton: UIButton = {
-        let button: UIButton = UIButton()
-        button.setTitle("request account", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.backgroundColor = .blue
-        button.layer.cornerRadius = 10
-        button.clipsToBounds = true
-        button.contentEdgeInsets = .init(top: 12, left: 12, bottom: 12, right: 12)
-        return button
-    }()
+    private lazy var requestAccountButton: UIButton = createButton(
+        text: "Request account",
+        indicator: requestAccountLoadingIndicator)
+    
+    private lazy var requestAccountLoadingIndicator = createLoadingIndicator()
 
-    private lazy var accountTextLabel: UILabel = {
+    private lazy var requestAccountResultLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
         label.textColor = .black
@@ -183,16 +171,9 @@ final class ViewController: UIViewController {
 
     private lazy var separator1 = createSeparator()
 
-    private lazy var setValueTitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .black
-        label.textAlignment = .left
-        label.text = "Set a Value"
-        return label
-    }()
+    private lazy var setValueTitleLabel: UILabel = createLabel(text: "Set a Value")
 
-    private var inputTextField: UITextField = {
+    private lazy var inputTextField: UITextField = {
         let textField = UITextField()
         textField.font = UIFont.systemFont(ofSize: 16)
         textField.textColor = .black
@@ -209,24 +190,11 @@ final class ViewController: UIViewController {
         return textField
     }()
 
-    private lazy var setValueButton: UIButton = {
-        let button: UIButton = UIButton()
-        button.setTitle("Send transaction", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.backgroundColor = .blue
-        button.layer.cornerRadius = 10
-        button.clipsToBounds = true
-        button.contentEdgeInsets = .init(top: 12, left: 12, bottom: 12, right: 12)
-
-        button.addSubview(loadingIndicator)
-
-        loadingIndicator.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview().inset(20)
-        }
-        return button
-    }()
+    private lazy var setValueButton: UIButton = createButton(
+        text: "Send transaction",
+        indicator: setValueLoadingIndicator)
+    
+    private lazy var setValueLoadingIndicator = createLoadingIndicator()
 
     private lazy var setValueResultLabel: UILabel = {
         let label = UILabel()
@@ -235,22 +203,6 @@ final class ViewController: UIViewController {
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
-    }()
-
-    private lazy var errorLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .red
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        return label
-    }()
-
-    private let loadingIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView()
-        indicator.hidesWhenStopped = true
-        indicator.color = .white
-        return indicator
     }()
 
     private lazy var separator2 = createSeparator()
@@ -264,17 +216,11 @@ final class ViewController: UIViewController {
         return label
     }()
 
-    private var getValueButton: UIButton = {
-        let button: UIButton = UIButton()
-        button.setTitle("Get Value", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        button.backgroundColor = .blue
-        button.layer.cornerRadius = 10
-        button.clipsToBounds = true
-        button.contentEdgeInsets = .init(top: 12, left: 12, bottom: 12, right: 12)
-        return button
-    }()
+    private lazy var getValueButton: UIButton = createButton(
+        text: "Get Value",
+        indicator: getValueLoadingIndicator)
+    
+    private lazy var getValueLoadingIndicator = createLoadingIndicator()
 
     private lazy var getValueResultLabel: UILabel = {
         let label = UILabel()
@@ -286,26 +232,13 @@ final class ViewController: UIViewController {
 
     private lazy var separator3 = createSeparator()
 
-    private lazy var partialSignTxTitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .black
-        label.textAlignment = .left
-        label.text = "Create Account/Send Transaction (partialSign)"
-        return label
-    }()
+    private lazy var partialSignTxTitleLabel: UILabel = createLabel(text: "Create Account/Send Transaction (partialSign)")
 
-    private var partialSignTxButton: UIButton = {
-        let button: UIButton = UIButton()
-        button.setTitle("Send partial sign tx", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        button.backgroundColor = .blue
-        button.layer.cornerRadius = 10
-        button.clipsToBounds = true
-        button.contentEdgeInsets = .init(top: 12, left: 12, bottom: 12, right: 12)
-        return button
-    }()
+    private lazy var partialSignTxButton: UIButton = createButton(
+        text: "Send partial sign tx",
+        indicator: partialSignTxLoadingIndicator)
+    
+    private lazy var partialSignTxLoadingIndicator = createLoadingIndicator()
 
     private lazy var partialSignTxResultLabel: UILabel = {
         let label = UILabel()
@@ -345,13 +278,14 @@ final class ViewController: UIViewController {
                 scheduler: MainScheduler.instance)
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
-                self?.solanaBloctoSDK.requestAccount { [weak self] result in
+                self?.resetRequestAccountStatus()
+                self?.bloctoSolanaSDK.requestAccount { [weak self] result in
                     switch result {
                         case .success(let address):
                             self?.userWalletAddress = address
-                            self?.accountTextLabel.text = address
+                            self?.requestAccountResultLabel.text = address
                         case .failure(let error):
-                            self?.handleError(error)
+                            self?.handleSetValueError(error)
                     }
                 }
             })
@@ -364,9 +298,8 @@ final class ViewController: UIViewController {
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.loadingIndicator.startAnimating()
-                self.setValueButton.isEnabled = false
-                self.errorLabel.text = nil
+                self.resetSetValueStatus()
+                self.setValueLoadingIndicator.startAnimating()
                 self.sendTransaction()
             })
 
@@ -378,7 +311,22 @@ final class ViewController: UIViewController {
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.resetSendButton()
+                self.resetGetValueStatus()
+                self.getValueLoadingIndicator.startAnimating()
+                self.getValue()
+            })
+        
+        _ = partialSignTxButton.rx.tap
+            .throttle(
+                DispatchTimeInterval.milliseconds(500),
+                latest: false,
+                scheduler: MainScheduler.instance)
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.resetPartialSignTxStatus()
+                self.partialSignTxLoadingIndicator.startAnimating()
+                self.partialSign()
             })
     }
 
@@ -390,41 +338,90 @@ final class ViewController: UIViewController {
         }
         return view
     }
+    
+    private func createLabel(text: String) -> UILabel {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.textColor = .black
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }
+    
+    private func createButton(text: String, indicator: UIActivityIndicatorView) -> UIButton {
+        let button: UIButton = UIButton()
+        button.setTitle("Send transaction", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.backgroundColor = .blue
+        button.layer.cornerRadius = 10
+        button.clipsToBounds = true
+        button.contentEdgeInsets = .init(top: 12, left: 35, bottom: 12, right: 35)
+        
+        button.addSubview(indicator)
+        
+        indicator.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(20)
+            $0.centerY.equalToSuperview()
+        }
+        return button
+    }
+    
+    private func createLoadingIndicator() -> UIActivityIndicatorView {
+        let indicator = UIActivityIndicatorView()
+        indicator.hidesWhenStopped = true
+        indicator.color = .white
+        return indicator
+    }
+    
+    private func resetRequestAccountStatus() {
+        requestAccountResultLabel.text = nil
+        requestAccountResultLabel.textColor = .black
+        requestAccountLoadingIndicator.stopAnimating()
+    }
+    
+    private func resetSetValueStatus() {
+        setValueResultLabel.text = nil
+        setValueResultLabel.textColor = .black
+        setValueLoadingIndicator.stopAnimating()
+    }
 
-    private func resetSendButton() {
-        errorLabel.text = nil
-        setValueButton.isEnabled = true
-        loadingIndicator.stopAnimating()
+    private func resetGetValueStatus() {
+        getValueResultLabel.text = nil
+        getValueResultLabel.textColor = .black
+        getValueLoadingIndicator.stopAnimating()
+    }
+    
+    private func resetPartialSignTxStatus() {
+        partialSignTxResultLabel.text = nil
+        partialSignTxResultLabel.textColor = .black
+        partialSignTxLoadingIndicator.stopAnimating()
     }
 
     private func sendTransaction() {
         guard let userWalletAddress = userWalletAddress else {
-            resetSendButton()
+            handleSetValueError(Error.message("User address not found. Please request account first."))
             return
         }
         guard let dappPublicKey = try? PublicKey(dappAddress) else {
-            resetSendButton()
             return
         }
         guard let userWalletPublicKey = try? PublicKey(userWalletAddress) else {
-            resetSendButton()
             return
         }
         guard let programId = try? PublicKey(programId) else {
-            resetSendButton()
             return
         }
         guard let inputValue = inputTextField.text,
               inputValue.isEmpty == false,
               let value = UInt32(inputValue) else {
-                  resetSendButton()
+                  handleSetValueError(Error.message("Input not found."))
                   return
               }
         let valueAccountData = ValueAccountData(
             instruction: 0,
             value: value)
         guard let data = try? valueAccountData.serialize() else {
-            resetSendButton()
             return
         }
         let transactionInstruction = TransactionInstruction(
@@ -444,41 +441,225 @@ final class ViewController: UIViewController {
         transaction.add(transactionInstruction)
         transaction.feePayer = userWalletPublicKey
 
-        solanaBloctoSDK.signAndSendTransaction(
+        bloctoSolanaSDK.signAndSendTransaction(
             from: userWalletAddress,
             transaction: transaction) { [weak self] result in
-                self?.resetSendButton()
                 switch result {
                     case let .success(txHsh):
                         self?.setValueResultLabel.text = txHsh
                     case let .failure(error):
-                        self?.handleError(error)
+                        self?.handleSetValueError(error)
+                }
+            }
+    }
+    
+    private func getValue() {
+        guard let dappPublicKey = try? PublicKey(dappAddress) else {
+            return
+        }
+        
+        let connetion = Connection(endpointURL: AppConsts.solanaRPCEndpoint)
+        connetion.getAccountInfo(
+            publicKey: dappPublicKey) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                    case let .success(accountInfo):
+                        guard let data = accountInfo?.data else {
+                            self.handleGetValueError(Error.message("data not found."))
+                        }
+                        var pointer = 0
+                        do {
+                            let valueAccountData = try ValueAccountData(buffer: data, pointer: &pointer)
+                            self.getValueResultLabel.text = "\(valueAccountData.value)"
+                        } catch {
+                            self.handleGetValueError(error)
+                        }
+                    case let .failure(error):
+                        self.handleGetValueError(error)
                 }
             }
     }
 
-    private func handleError(_ error: Swift.Error) {
+    private func partialSign() {
+        guard let userWalletAddress = userWalletAddress else {
+            handlePartialSignTxError(Error.message("User address not found. Please request account first."))
+            return
+        }
+        guard let dappPublicKey = try? PublicKey(dappAddress) else {
+            return
+        }
+        guard let userWalletPublicKey = try? PublicKey(userWalletAddress) else {
+            return
+        }
+        guard let programId = try? PublicKey(programId) else {
+            return
+        }
+        guard let inputValue = inputTextField.text,
+              inputValue.isEmpty == false,
+              let value = UInt32(inputValue) else {
+                  handlePartialSignTxError(Error.message("Input not found."))
+                  return
+              }
+        let valueAccountData = ValueAccountData(
+            instruction: 0,
+            value: value)
+        guard let data = try? valueAccountData.serialize() else {
+            return
+        }
+        let transactionInstruction = TransactionInstruction(
+            keys: [
+                AccountMeta(
+                    publicKey: dappPublicKey,
+                    isSigner: false,
+                    isWritable: true),
+                AccountMeta(
+                    publicKey: userWalletPublicKey,
+                    isSigner: false,
+                    isWritable: true)
+            ],
+            programId: programId,
+            data: data)
+        var transaction = Transaction()
+        transaction.add(transactionInstruction)
+        transaction.feePayer = userWalletPublicKey
+        
+        let connetion = Connection(endpointURL: AppConsts.solanaRPCEndpoint)
+        connetion.getMinimumBalanceForRentExemption(
+            dataLength: 10) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                    case let .success(minBalance):
+                        do {
+                            var newAccount = try Account()
+                            let createAccountInstruction = try SystemProgram.createAccount(
+                                fromPublicKey: userWalletPublicKey,
+                                newAccountPublicKey: newAccount.publicKey,
+                                lamports: minBalance,
+                                space: 10,
+                                programId: programId)
+                            transaction.add(createAccountInstruction)
+                            
+                            self.bloctoSolanaSDK.convertToProgramWalletTransaction(
+                                transaction,
+                                solanaAddress: userWalletAddress) { [weak self] result in
+                                    guard let self = self else { return }
+                                    switch result {
+                                        case let .success(transaction):
+                                            var newTransaction = transaction
+                                            newTransaction.partialSign(signers: [newAccount])
+                                            
+                                            self.bloctoSolanaSDK.signAndSendTransaction(
+                                                from: userWalletAddress,
+                                                transaction: newTransaction) { [weak self] result in
+                                                    guard let self = self else { return }
+                                                    switch result {
+                                                        case let .success(txHash):
+                                                            self.partialSignTxResultLabel.text = txHash
+                                                        case let .failure(error):
+                                                            self.handlePartialSignTxError(error)
+                                                    }
+                                                }
+                                        case let .failure(error):
+                                            self.handlePartialSignTxError(error)
+                                    }
+                                }
+                        } catch {
+                            self.handlePartialSignTxError(error)
+                        }
+                    case let .failure(error):
+                        self.handlePartialSignTxError(error)
+                }
+            }
+    }
+    
+    private func handleRequestAccountError(_ error: Swift.Error) {
         if let error = error as? QueryError {
             switch error {
                 case .userRejected:
-                    errorLabel.text = "user rejected."
+                    requestAccountResultLabel.text = "user rejected."
                 case .forbiddenBlockchain:
-                    errorLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
+                    requestAccountResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
                 case .invalidResponse:
-                    errorLabel.text = "invalid response."
+                    requestAccountResultLabel.text = "invalid response."
                 case .userNotMatch:
-                    errorLabel.text = "user not matched."
+                    requestAccountResultLabel.text = "user not matched."
                 case .other(let code):
-                    errorLabel.text = code
+                    requestAccountResultLabel.text = code
             }
+        } else if let error = error as? Error {
+            requestAccountResultLabel.text = error.message
         } else {
-            errorLabel.text = error.localizedDescription
+            requestAccountResultLabel.text = error.localizedDescription
         }
+        requestAccountResultLabel.textColor = .red
+        requestAccountLoadingIndicator.stopAnimating()
+    }
+
+    private func handleSetValueError(_ error: Swift.Error) {
+        if let error = error as? QueryError {
+            switch error {
+                case .userRejected:
+                    setValueResultLabel.text = "user rejected."
+                case .forbiddenBlockchain:
+                    setValueResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
+                case .invalidResponse:
+                    setValueResultLabel.text = "invalid response."
+                case .userNotMatch:
+                    setValueResultLabel.text = "user not matched."
+                case .other(let code):
+                    setValueResultLabel.text = code
+            }
+        } else if let error = error as? Error {
+            setValueResultLabel.text = error.message
+        } else {
+            setValueResultLabel.text = error.localizedDescription
+        }
+        setValueResultLabel.textColor = .red
+        setValueLoadingIndicator.stopAnimating()
+    }
+    
+    private func handleGetValueError(_ error: Swift.Error) {
+        getValueResultLabel.text = error.localizedDescription
+        getValueResultLabel.textColor = .red
+        getValueLoadingIndicator.stopAnimating()
+    }
+    
+    private func handlePartialSignTxError(_ error: Swift.Error) {
+        if let error = error as? QueryError {
+            switch error {
+                case .userRejected:
+                    partialSignTxResultLabel.text = "user rejected."
+                case .forbiddenBlockchain:
+                    partialSignTxResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
+                case .invalidResponse:
+                    partialSignTxResultLabel.text = "invalid response."
+                case .userNotMatch:
+                    partialSignTxResultLabel.text = "user not matched."
+                case .other(let code):
+                    partialSignTxResultLabel.text = code
+            }
+        } else if let error = error as? Error {
+            partialSignTxResultLabel.text = error.message
+        } else {
+            partialSignTxResultLabel.text = error.localizedDescription
+        }
+        partialSignTxResultLabel.textColor = .red
+        partialSignTxLoadingIndicator.stopAnimating()
     }
 
 }
 
-struct ValueAccountData: BufferLayout {
-    let instruction: UInt8
-    let value: UInt32
+extension ViewController {
+    
+    enum Error: Swift.Error {
+        case message(String)
+        
+        var message: String {
+            switch self {
+                case let .message(message):
+                    return message
+            }
+        }
+    }
+    
 }
