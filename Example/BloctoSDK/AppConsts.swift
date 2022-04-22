@@ -9,7 +9,7 @@
 import Foundation
 
 enum AppConsts {
-    
+
     static var solanaRPCEndpoint: URL {
 #if Production
         URL(string: "https://api.mainnet-beta.solana.com")!
@@ -17,5 +17,5 @@ enum AppConsts {
         URL(string: "https://api.devnet.solana.com")!
 #endif
     }
-    
+
 }

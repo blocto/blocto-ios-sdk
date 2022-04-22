@@ -34,6 +34,7 @@ DEPENDENCIES:
   - RxCocoa
   - RxSwift
   - SnapKit
+  - SolanaWeb3 (from `https://github.com/portto/solana-web3.swift.git`)
 
 SPEC REPOS:
   trunk:
@@ -45,12 +46,18 @@ SPEC REPOS:
     - RxRelay
     - RxSwift
     - SnapKit
-    - SolanaWeb3
     - TweetNacl
 
 EXTERNAL SOURCES:
   BloctoSDK:
     :path: "../"
+  SolanaWeb3:
+    :git: https://github.com/portto/solana-web3.swift.git
+
+CHECKOUT OPTIONS:
+  SolanaWeb3:
+    :commit: 8f38d94e081a91fceefebb63312da703248cdf16
+    :git: https://github.com/portto/solana-web3.swift.git
 
 SPEC CHECKSUMS:
   Alamofire: 0c07058209f211e3d32824f8e0766d7c44ac83b3
@@ -65,6 +72,6 @@ SPEC CHECKSUMS:
   SolanaWeb3: a7b4600f21515450bc91ec71c39c67ba0d08d2f4
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
 
-PODFILE CHECKSUM: edc9401dc7ecc4ae0908c9940c24c27567720ac8
+PODFILE CHECKSUM: 1c6ddf7b81ceb4a17864667b275d852df2275034
 
 COCOAPODS: 1.11.2

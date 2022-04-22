@@ -166,7 +166,7 @@ public class BloctoSolanaSDK {
                                 case let .success(response):
                                     do {
                                         let createTransactionResponse = try JSONDecoder().decode(SolanaCreateTransactionResponse.self, from: response.data)
-                                        
+
                                         let message = try Message(data: createTransactionResponse.rawTx.hexDecodedData)
                                         let convertedTransaction = Transaction(message: message, signatures: [])
                                         let data = createTransactionResponse.rawTx.hexDecodedData.sha1()
