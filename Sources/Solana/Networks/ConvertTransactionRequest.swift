@@ -11,8 +11,7 @@ public struct ConvertTransactionRequest: TargetType {
 
     let solanaAddress: String
     let message: String
-
-    public var baseURL: URL { AppConstants.apiBaseURL }
+    public let baseURL: URL
 
     public var path: String { "/solana/createRawTransaction" }
 
@@ -30,7 +29,7 @@ public struct ConvertTransactionRequest: TargetType {
     public var headers: [String: String]? {
         [
             "blocto-sdk-platform": "iOS",
-            "blocto-sdk-version": AppInfo.appVersion
+            "blocto-sdk-version": SDKInfo.version
         ]
     }
 

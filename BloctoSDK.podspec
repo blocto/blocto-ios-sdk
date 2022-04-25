@@ -25,8 +25,8 @@ Pod::Spec.new do |s|
       ss.source_files = "Sources/Solana/**/*"
       ss.dependency "BloctoSDK/Core"
       ss.dependency "RxSwift", "~> 6.0"
-      ss.dependency "SolanaWeb3"
-      ss.dependency "Moya"
+      ss.dependency "SolanaWeb3", "~> 0.0.2"
+      ss.dependency "Moya", "~> 15.0"
   end
   
   s.subspec "Wallet" do |ss|

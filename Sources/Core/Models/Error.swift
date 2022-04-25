@@ -12,7 +12,6 @@ enum Error: Swift.Error {
     case appIdNotSet
     case encodeToURLFailed
     case webSDKSessionFailed
-    case apiProviderNotFound
 }
 
 public enum QueryError: Swift.Error {

@@ -3,9 +3,9 @@ PODS:
   - BloctoSDK/Core (0.1.0)
   - BloctoSDK/Solana (0.1.0):
     - BloctoSDK/Core
-    - Moya
+    - Moya (~> 15.0)
     - RxSwift (~> 6.0)
-    - SolanaWeb3
+    - SolanaWeb3 (~> 0.0.2)
   - BloctoSDK/Wallet (0.1.0):
     - BloctoSDK/Core
   - CryptoSwift (1.4.3)
@@ -61,7 +61,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Alamofire: 0c07058209f211e3d32824f8e0766d7c44ac83b3
-  BloctoSDK: 546d9234835f092f61057d73a85ec38e241bbaaa
+  BloctoSDK: ea33a38bd696f5efc55478df47df11985eef38d9
   CryptoSwift: a0799ee936271bd2253a006f1e4523df21845000
   Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
   Runtime: 67741bd196fb4ad821c4d259ccc527bf734d8806

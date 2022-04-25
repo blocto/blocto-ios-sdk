@@ -35,11 +35,13 @@ class SignAndSendTransactionTests: XCTestCase {
                 with: appId,
                 window: UIWindow(),
                 logging: false,
+                testnet: true,
                 urlOpening: mockUIApplication)
         } else {
             BloctoSDK.shared.initialize(
                 with: appId,
                 logging: false,
+                testnet: true,
                 urlOpening: mockUIApplication)
         }
 
@@ -91,8 +93,8 @@ class SignAndSendTransactionTests: XCTestCase {
             stubClosure: MoyaProvider.immediatelyStub)
 
         // When:
-
-        let solanaSDK = BloctoSolanaSDK(base: BloctoSDK.shared, apiProvider: apiProvider)
+        let solanaSDK = BloctoSDK.shared.solana
+        solanaSDK.apiProvider = apiProvider
         solanaSDK.signAndSendTransaction(
             uuid: requestId,
             from: userWallet,
@@ -161,12 +163,14 @@ class SignAndSendTransactionTests: XCTestCase {
                 with: appId,
                 window: UIWindow(),
                 logging: false,
+                testnet: true,
                 urlOpening: mockUIApplication,
                 sessioningType: MockAuthenticationSession.self)
         } else {
             BloctoSDK.shared.initialize(
                 with: appId,
                 logging: false,
+                testnet: true,
                 urlOpening: mockUIApplication,
                 sessioningType: MockAuthenticationSession.self)
         }
@@ -196,7 +200,8 @@ class SignAndSendTransactionTests: XCTestCase {
         MockAuthenticationSession.setCallbackURL(components!.url!)
 
         // When:
-        let solanaSDK = BloctoSolanaSDK(base: BloctoSDK.shared, apiProvider: apiProvider)
+        let solanaSDK = BloctoSDK.shared.solana
+        solanaSDK.apiProvider = apiProvider
         solanaSDK.signAndSendTransaction(
             uuid: requestId,
             from: userWallet,

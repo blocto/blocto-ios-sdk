@@ -28,11 +28,13 @@ class AccountRequestTests: XCTestCase {
                 with: appId,
                 window: UIWindow(),
                 logging: false,
+                testnet: true,
                 urlOpening: mockUIApplication)
         } else {
             BloctoSDK.shared.initialize(
                 with: appId,
                 logging: false,
+                testnet: true,
                 urlOpening: mockUIApplication)
         }
 
@@ -71,11 +73,13 @@ class AccountRequestTests: XCTestCase {
                 with: appId,
                 window: UIWindow(),
                 logging: false,
+                testnet: true,
                 urlOpening: mockUIApplication)
         } else {
             BloctoSDK.shared.initialize(
                 with: appId,
                 logging: false,
+                testnet: true,
                 urlOpening: mockUIApplication)
         }
 
@@ -119,12 +123,14 @@ class AccountRequestTests: XCTestCase {
                 with: appId,
                 window: UIWindow(),
                 logging: false,
+                testnet: true,
                 urlOpening: mockUIApplication,
                 sessioningType: MockAuthenticationSession.self)
         } else {
             BloctoSDK.shared.initialize(
                 with: appId,
                 logging: false,
+                testnet: true,
                 urlOpening: mockUIApplication,
                 sessioningType: MockAuthenticationSession.self)
         }

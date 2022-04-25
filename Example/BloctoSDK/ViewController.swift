@@ -281,7 +281,7 @@ final class ViewController: UIViewController {
                         self?.userWalletAddress = address
                         self?.requestAccountResultLabel.text = address
                     case .failure(let error):
-                        self?.handleSetValueError(error)
+                        self?.handleRequestAccountError(error)
                     }
                 }
             })
@@ -448,7 +448,7 @@ final class ViewController: UIViewController {
             return
         }
 
-        let connetion = Connection(endpointURL: AppConsts.solanaRPCEndpoint)
+        let connetion = Connection(cluster: .devnet)
         connetion.getAccountInfo(
             publicKey: dappPublicKey) { [weak self] result in
                 guard let self = self else { return }
@@ -467,6 +467,7 @@ final class ViewController: UIViewController {
                         self.handleGetValueError(error)
                     }
                 case let .failure(error):
+                    debugPrint(error)
                     self.handleGetValueError(error)
                 }
             }
@@ -496,7 +497,7 @@ final class ViewController: UIViewController {
         var transaction = Transaction()
         transaction.feePayer = userWalletPublicKey
 
-        let connetion = Connection(endpointURL: AppConsts.solanaRPCEndpoint)
+        let connetion = Connection(cluster: .devnet)
         connetion.getMinimumBalanceForRentExemption(
             dataLength: 10) { [weak self] result in
                 guard let self = self else { return }

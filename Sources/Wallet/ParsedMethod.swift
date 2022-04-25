@@ -60,10 +60,9 @@ public struct ParsedMethod {
 
 }
 
-#if DEBUG
 extension ParsedMethod {
 
-    public init(
+    init(
         appId: String,
         requestId: String,
         blockchain: Blockchain,
@@ -76,4 +75,3 @@ extension ParsedMethod {
     }
 
 }
-#endif

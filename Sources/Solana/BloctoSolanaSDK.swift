@@ -7,26 +7,57 @@
 
 import SolanaWeb3
 
+private var associateKey: Void?
+
 extension BloctoSDK {
 
     public var solana: BloctoSolanaSDK {
-        BloctoSolanaSDK(base: self)
+        get {
+            if let solanaSDK = objc_getAssociatedObject(self, &associateKey) as? BloctoSolanaSDK {
+                return solanaSDK
+            } else {
+                let solanaSDK = BloctoSolanaSDK(base: self)
+                objc_setAssociatedObject(self, &associateKey, solanaSDK, .OBJC_ASSOCIATION_RETAIN)
+                return solanaSDK
+            }
+        }
     }
 
 }
 
 public class BloctoSolanaSDK {
 
+    lazy var apiProvider: ApiProvider = ApiProvider()
+
     private let base: BloctoSDK
-    private let apiProvider: ApiProvider?
     private var appendTxMap: [String: [String: Data]] = [:]
 
-    init(
-        base: BloctoSDK,
-        apiProvider: ApiProvider? = ApiProvider()
-    ) {
+    private var apiBaseURL: URL {
+        if base.testnet {
+            return URL(string: "https://api-staging.blocto.app")!
+        } else {
+            return URL(string: "https://api.blocto.app")!
+        }
+    }
+
+    private var cluster: Cluster {
+        if base.testnet {
+            return .devnet
+        } else {
+            return .mainnetBeta
+        }
+    }
+
+    private var walletProgramId: String {
+        if base.testnet {
+            return "Ckv4czD7qPmQvy2duKEa45WRp3ybD2XuaJzQAWrhAour"
+        } else {
+            return "JBn9VwAiqpizWieotzn6FjEXrBu4fDe2XFjiFqZwp8Am"
+        }
+    }
+
+    init(base: BloctoSDK) {
         self.base = base
-        self.apiProvider = apiProvider
     }
 
     public func requestAccount(completion: @escaping (Result<String, Swift.Error>) -> Void) {
@@ -57,16 +88,9 @@ public class BloctoSolanaSDK {
                 case .success(let transaction):
                     do {
                         if self.transactionNeedsConvert(transaction) {
-                            guard let apiProvider = self.apiProvider else {
-                                log(
-                                    enable: self.base.logging,
-                                    message: "This transaction needs to convert to wallet program executable one, please provide a api provider to proceed.")
-                                throw Error.apiProviderNotFound
-                            }
                             self.convertToProgramWalletTransaction(
                                 transaction,
-                                solanaAddress: from,
-                                apiProvider: apiProvider) { [weak self] result in
+                                solanaAddress: from) { [weak self] result in
                                     guard let self = self else {
                                         completion(.failure(Error.callbackSelfNotfound))
                                         return
@@ -126,7 +150,7 @@ public class BloctoSolanaSDK {
             completion(.success(transaction))
             return
         }
-        let connection = Connection(endpointURL: AppConstants.solanaRPCEndpoint)
+        let connection = Connection(cluster: cluster)
         connection.getLatestBlockhash(commitment: .confirmed) { result in
             switch result {
             case .success(let blockhashLastValidBlockHeightPair):
@@ -141,17 +165,20 @@ public class BloctoSolanaSDK {
 
     func transactionNeedsConvert(_ transaction: Transaction) -> Bool {
         transaction.instructions.allSatisfy { TransactionInstruction in
-            TransactionInstruction.programId.description != AppConstants.walletProgramIds
+            TransactionInstruction.programId.description != walletProgramId
         }
     }
 
     public func convertToProgramWalletTransaction(
         _ transaction: Transaction,
         solanaAddress: String,
-        apiProvider: ApiProvider = ApiProvider(),
         completion: @escaping (Result<Transaction, Swift.Error>) -> Void
     ) {
-        addRecentBlockhashIfNeeded(transaction) { result in
+        addRecentBlockhashIfNeeded(transaction) { [weak self] result in
+            guard let self = self else {
+                completion(.failure(Error.callbackSelfNotfound))
+                return
+            }
             switch result {
             case let .success(transaction):
                 do {
@@ -159,8 +186,9 @@ public class BloctoSolanaSDK {
                     let serializeMessage = try transaction.serializeMessage()
                     let request = ConvertTransactionRequest(
                         solanaAddress: solanaAddress,
-                        message: serializeMessage.hexString)
-                    _ = apiProvider.request(request) { [weak self] result in
+                        message: serializeMessage.hexString,
+                        baseURL: self.apiBaseURL)
+                    _ = self.apiProvider.request(request) { [weak self] result in
                         switch result {
                         case let .success(response):
                             do {
