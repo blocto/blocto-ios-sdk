@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = 'BloctoSDK'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of BloctoSDK.'
+  s.summary          = 'A SDK to interact with Blockchain through Blocto Wallet App.'
 
   s.description      = <<-DESC
                        Add long description of the pod here.
@@ -14,6 +14,7 @@ Pod::Spec.new do |s|
   s.default_subspec = "Core"
   s.social_media_url = 'https://twitter.com/BloctoApp'
 
+  s.swift_version = '5.0.0'
   s.ios.deployment_target = '12.0'
 
   s.subspec "Core" do |ss|
