@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import BloctoSDK
+@testable import BloctoSDK
 
 class ParsedMethodTests: XCTestCase {
 
@@ -31,7 +31,7 @@ class ParsedMethodTests: XCTestCase {
             appId: appId,
             requestId: requestId,
             blockchain: .solana,
-            method: .requestAccount)
+            methodContentType: .requestAccount)
 
         // When:
         let parsedMethod = ParsedMethod(param: param)
@@ -49,7 +49,7 @@ extension ParsedMethod: Equatable {
         lhs.appId == rhs.appId
         && lhs.requestId == rhs.requestId
         && lhs.blockchain == rhs.blockchain
-        && lhs.method == rhs.method
+        && lhs.methodContentType == rhs.methodContentType
     }
 
 }
@@ -58,19 +58,29 @@ extension MethodContentType: Equatable {
 
     public static func == (lhs: MethodContentType, rhs: MethodContentType) -> Bool {
         switch (lhs, rhs) {
-            case (.requestAccount, .requestAccount):
-                return true
-            case let (.signMessage(lFrom, lMessage), .signMessage(rFrom, rMessage)):
-                return lFrom == rFrom
-                && lMessage == rMessage
-            case let (.signAndSendTransaction(lFrom, lMessage, lIsInvokeWrapped, lExtraPublicKeySignaturePairs), .signAndSendTransaction(rFrom, rMessage, rIsInvokeWrapped, rExtraPublicKeySignaturePairs)):
-                return lFrom == rFrom
-                && lMessage == rMessage
-                && lIsInvokeWrapped == rIsInvokeWrapped
-                && lExtraPublicKeySignaturePairs == rExtraPublicKeySignaturePairs
-            default:
-                return false
+        case (.requestAccount, .requestAccount):
+            return true
+        case let (.signMessage(lFrom, lMessage), .signMessage(rFrom, rMessage)):
+            return lFrom == rFrom
+            && lMessage == rMessage
+        case let (.signAndSendTransaction(lFrom, lIsInvokeWrapped, lTransactionInfo),
+                  .signAndSendTransaction(rFrom, rIsInvokeWrapped, rTransactionInfo)):
+            return lFrom == rFrom
+            && lIsInvokeWrapped == rIsInvokeWrapped
+            && lTransactionInfo == rTransactionInfo
+        default:
+            return false
         }
+    }
+
+}
+
+extension SolanaTransactionInfo: Equatable {
+
+    public static func == (lhs: SolanaTransactionInfo, rhs: SolanaTransactionInfo) -> Bool {
+        lhs.message == rhs.message
+        && lhs.appendTx == rhs.appendTx
+        && lhs.publicKeySignaturePairs == rhs.publicKeySignaturePairs
     }
 
 }

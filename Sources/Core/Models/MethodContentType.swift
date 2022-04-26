@@ -16,18 +16,17 @@ public enum MethodContentType {
 
     case signAndSendTransaction(
         from: String,
-        message: String,
         isInvokeWrapped: Bool,
-        extraPublicKeySignaturePairs: [String: String])
+        transactionInfo: SolanaTransactionInfo)
 
     var rawValue: String {
         switch self {
-            case .requestAccount:
-                return MethodType.requestAccount.rawValue
-            case .signMessage:
-                return MethodType.signMessage.rawValue
-            case .signAndSendTransaction:
-                return MethodType.signAndSendTransaction.rawValue
+        case .requestAccount:
+            return MethodType.requestAccount.rawValue
+        case .signMessage:
+            return MethodType.signMessage.rawValue
+        case .signAndSendTransaction:
+            return MethodType.signAndSendTransaction.rawValue
         }
     }
 }

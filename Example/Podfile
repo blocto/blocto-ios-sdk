@@ -8,6 +8,7 @@ target 'BloctoSDK_Example' do
   pod 'SnapKit'
   pod 'RxSwift'
   pod 'RxCocoa'
+  pod 'SolanaWeb3', :git => 'https://github.com/portto/solana-web3.swift.git'
 
   target 'BloctoSDK_Tests' do
     inherit! :search_paths

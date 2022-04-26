@@ -26,11 +26,13 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             BloctoSDK.shared.initialize(
                 with: bloctoSDKAppId,
                 window: window,
-                logging: true)
+                logging: true,
+                testnet: true)
         } else {
             BloctoSDK.shared.initialize(
                 with: bloctoSDKAppId,
-                logging: true)
+                logging: true,
+                testnet: true)
         }
         return true
     }

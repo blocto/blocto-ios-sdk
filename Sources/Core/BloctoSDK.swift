@@ -24,11 +24,14 @@ public class BloctoSDK {
 
     public static let shared: BloctoSDK = BloctoSDK()
 
-#if DEBUG
-    private let bloctoAssociatedDomain: String = "https://staging.blocto.app/"
-#else
-    private let bloctoAssociatedDomain: String = "https://blocto.app/"
-#endif
+    private var bloctoAssociatedDomain: String {
+        if testnet {
+            return "https://staging.blocto.app/"
+        } else {
+            return "https://blocto.app/"
+        }
+    }
+
     private let webBaseURLString: String = "https://wallet.blocto.app/sdk"
     private let requestPath: String = "sdk"
 
@@ -52,6 +55,8 @@ public class BloctoSDK {
 
     var logging: Bool = true
 
+    var testnet: Bool = false
+
     var urlOpening: URLOpening = UIApplication.shared
 
     var sessioningType: AuthenticationSessioning.Type = ASWebAuthenticationSession.self
@@ -61,6 +66,7 @@ public class BloctoSDK {
     ///   - appId: Registed id in https://developers.blocto.app/
     ///   - window: PresentationContextProvider of web SDK authentication.
     ///   - logging: Enabling log message, default is true.
+    ///   - testnet: Determine which blockchain environment. e.g. testnet (Ethereum testnet, Solana devnet), mainnet (Ethereum mannet, Solana mainnet Beta)
     ///   - urlOpening: Handling url which opened app, default is UIApplication.shared.
     ///   - sessioningType: Type that handles web SDK authentication session, default is ASWebAuthenticationSession.
     @available(iOS 13.0, *)
@@ -68,25 +74,32 @@ public class BloctoSDK {
         with appId: String,
         window: UIWindow,
         logging: Bool = true,
+        testnet: Bool = false,
         urlOpening: URLOpening = UIApplication.shared,
         sessioningType: AuthenticationSessioning.Type = ASWebAuthenticationSession.self
     ) {
         self.appId = appId
         self.window = window
         self.logging = logging
+        self.testnet = testnet
         self.urlOpening = urlOpening
         self.sessioningType = sessioningType
     }
 
-    @available(iOS, introduced: 12.0, obsoleted: 13.0, message: "There is presentationContextProvider in system protocol ASWebAuthenticationSession start from iOS 13. Use initialize with window for webSDK instead.")
+    @available(iOS,
+               introduced: 12.0,
+               obsoleted: 13.0,
+               message: "There is presentationContextProvider in system protocol ASWebAuthenticationSession start from iOS 13. Use initialize with window for webSDK instead.")
     public func initialize(
         with appId: String,
         logging: Bool = true,
+        testnet: Bool = false,
         urlOpening: URLOpening = UIApplication.shared,
         sessioningType: AuthenticationSessioning.Type = ASWebAuthenticationSession.self
     ) {
         self.appId = appId
         self.logging = logging
+        self.testnet = testnet
         self.urlOpening = urlOpening
         self.sessioningType = sessioningType
     }
@@ -106,6 +119,9 @@ public class BloctoSDK {
                 message: "url path should be \(responsePath) rather than \(url.path).")
             return
         }
+        log(
+            enable: logging,
+            message: "App get called by Universal Links: \(url)")
         methodResolve(url: url)
     }
 
@@ -127,6 +143,9 @@ public class BloctoSDK {
                     message: "url scheme should be \(responseScheme) rather than \(String(describing: url.scheme)).")
                 return
             }
+            log(
+                enable: logging,
+                message: "App get called by custom scheme: \(url)")
             methodResolve(url: url)
         } catch {
             log(
@@ -141,7 +160,7 @@ public class BloctoSDK {
             guard let requestURL = try method.encodeToURL(
                 appId: appId,
                 baseURLString: requestBloctoBaseURLString) else {
-                    method.handleError(error: InternalError.encodeToURLFailed)
+                    method.handleError(error: Error.encodeToURLFailed)
                     return
                 }
             uuidToMethod[method.id] = method
@@ -172,7 +191,7 @@ public class BloctoSDK {
     }
 
     private func checkConfigration() throws {
-        guard appId.isEmpty == false else { throw InternalError.appIdNotSet }
+        guard appId.isEmpty == false else { throw Error.appIdNotSet }
     }
 
     private func routeToWebSDK(
@@ -183,7 +202,7 @@ public class BloctoSDK {
             guard let requestURL = try method.encodeToURL(
                 appId: appId,
                 baseURLString: webRequestBloctoBaseURLString) else {
-                    method.handleError(error: InternalError.encodeToURLFailed)
+                    method.handleError(error: Error.encodeToURLFailed)
                     return
                 }
             var session: AuthenticationSessioning?
@@ -213,7 +232,7 @@ public class BloctoSDK {
 
             let startsSuccessfully = session?.start()
             if startsSuccessfully == false {
-                method.handleError(error: InternalError.webSDKSessionFailed)
+                method.handleError(error: Error.webSDKSessionFailed)
             }
         } catch {
             method.handleError(error: error)

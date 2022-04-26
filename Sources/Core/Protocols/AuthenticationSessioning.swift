@@ -16,7 +16,7 @@ public protocol AuthenticationSessioning {
     init(
         url URL: URL,
         callbackURLScheme: String?,
-        completionHandler: @escaping (URL?, Error?) -> Void)
+        completionHandler: @escaping (URL?, Swift.Error?) -> Void)
 
     func start() -> Bool
 

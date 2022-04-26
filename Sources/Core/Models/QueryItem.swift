@@ -52,6 +52,11 @@ public struct QueryItem {
                 .init(
                     name: escape(key),
                     value: escape(boolEncoding.encode(value: bool))))
+        case let data as Data:
+            components.append(
+                .init(
+                    name: escape(key),
+                    value: escape(data.hexString)))
         default:
             components.append(
                 .init(

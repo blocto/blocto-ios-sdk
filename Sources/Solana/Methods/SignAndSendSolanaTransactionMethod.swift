@@ -5,7 +5,7 @@
 //  Created by Andrew Wang on 2022/4/8.
 //
 
-import Foundation
+import SolanaWeb3
 
 public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
     public typealias Response = String
@@ -13,9 +13,8 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
     public let id: UUID
     public let type: MethodType = .signAndSendTransaction
     public let from: String
-    public let message: String
+    public let transactionInfo: SolanaTransactionInfo
     public let isInvokeWrapped: Bool
-    public let publicKeySignaturePairs: [String: String]
     public let callback: Callback
 
     let blockchain: Blockchain
@@ -29,17 +28,15 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
         id: UUID = UUID(),
         blockchain: Blockchain,
         from: String,
-        message: String,
+        transactionInfo: SolanaTransactionInfo,
         isInvokeWrapped: Bool = true,
-        publicKeySignaturePairs: [String: String] = [:],
         callback: @escaping Callback
     ) {
         self.id = id
         self.blockchain = blockchain
         self.from = from
-        self.message = message
+        self.transactionInfo = transactionInfo
         self.isInvokeWrapped = isInvokeWrapped
-        self.publicKeySignaturePairs = publicKeySignaturePairs
         self.callback = callback
     }
 
@@ -54,9 +51,11 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
             blockchain: blockchain,
             method: .signAndSendTransaction(
                 from: from,
-                message: message,
                 isInvokeWrapped: true,
-                extraPublicKeySignaturePairs: publicKeySignaturePairs))
+                transactionInfo: SolanaTransactionInfo(
+                    message: transactionInfo.message,
+                    appendTx: transactionInfo.appendTx,
+                    publicKeySignaturePairs: transactionInfo.publicKeySignaturePairs)))
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }

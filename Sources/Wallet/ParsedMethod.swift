@@ -12,7 +12,7 @@ public struct ParsedMethod {
     public let appId: String
     public let requestId: String
     public let blockchain: Blockchain
-    public let method: MethodContentType
+    public let methodContentType: MethodContentType
 
     public init?(param: [String: String]) {
         guard let appId = param[QueryName.appId.rawValue] else { return nil }
@@ -29,43 +29,49 @@ public struct ParsedMethod {
               let method = MethodType(rawValue: rawMethod) else { return nil }
         switch method {
             case .requestAccount:
-                self.method = .requestAccount
+                self.methodContentType = .requestAccount
             case .signMessage:
                 guard let from = param[QueryName.from.rawValue],
                       let message = param[QueryName.message.rawValue] else { return nil }
-                self.method = .signMessage(from: from, message: message)
+                self.methodContentType = .signMessage(from: from, message: message)
             case .signAndSendTransaction:
                 guard let from = param[QueryName.from.rawValue],
                       let message = param[QueryName.message.rawValue],
                       let isInvokeWrappedString = param[QueryName.isInvokeWrapped.rawValue],
                       let isInvokeWrapped = Bool(isInvokeWrappedString) else { return nil }
-                let extraPublicKeySignaturePairs = QueryDecoding.decodeDictionary(
+
+                let appendTx: [String: Data] = QueryDecoding.decodeDictionary(
                     param: param,
-                    queryName: .extraPublicKeySignaturePairs)
-                self.method = .signAndSendTransaction(
+                    queryName: .appendTx)
+
+                let publicKeySignaturePairs: [String: String] = QueryDecoding.decodeDictionary(
+                    param: param,
+                    queryName: .publicKeySignaturePairs)
+
+                self.methodContentType = .signAndSendTransaction(
                     from: from,
-                    message: message,
                     isInvokeWrapped: isInvokeWrapped,
-                    extraPublicKeySignaturePairs: extraPublicKeySignaturePairs)
+                    transactionInfo: SolanaTransactionInfo(
+                        message: message,
+                        appendTx: appendTx,
+                        publicKeySignaturePairs: publicKeySignaturePairs))
         }
     }
 
 }
 
-#if DEBUG
 extension ParsedMethod {
 
-    public init(
+    init(
         appId: String,
         requestId: String,
         blockchain: Blockchain,
-        method: MethodContentType
+        methodContentType: MethodContentType
     ) {
         self.appId = appId
         self.requestId = requestId
         self.blockchain = blockchain
-        self.method = method
+        self.methodContentType = methodContentType
     }
 
 }
-#endif

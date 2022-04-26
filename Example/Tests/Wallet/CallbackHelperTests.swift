@@ -34,16 +34,22 @@ class CallbackHelperTests: XCTestCase {
         // When:
         MethodCallbackHelper.sendBack(
             urlOpening: mockUIApplication,
-            appId: appId,
-            methodContentType: .requestAccount(
+            routingInfo: RoutingInfo(
+                appId: appId,
                 requestId: requestId,
-                address: address),
-            baseURLString: appUniversalLinkBaseURLString) { opened in
-                receivingOpened = opened
-            }
+                methodContentType: .requestAccount(address: address),
+                baseURLString: appUniversalLinkBaseURLString)) { opened in
+                    receivingOpened = opened
+                }
 
         // Then:
-        XCTAssertEqual(mockUIApplication.url, URL(string: "\(appUniversalLinkBaseURLString)blocto?request_id=\(requestId)&address=\(address)")!)
+        XCTAssertArrayElementsEqual(
+            URLComponents(
+                url: mockUIApplication.url!,
+                resolvingAgainstBaseURL: false)!.queryItems!,
+            URLComponents(
+                url: URL(string: "\(appUniversalLinkBaseURLString)blocto?request_id=\(requestId)&address=\(address)")!,
+                resolvingAgainstBaseURL: false)!.queryItems!)
         // swiftlint:disable force_cast
         XCTAssertEqual(mockUIApplication.lastOptions as! [UIApplication.OpenExternalURLOptionsKey: Bool], [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly: true])
         XCTAssertEqual(receivingOpened, true)
@@ -61,28 +67,31 @@ class CallbackHelperTests: XCTestCase {
         // When:
         MethodCallbackHelper.sendBack(
             urlOpening: mockUIApplication,
-            appId: appId,
-            methodContentType: .requestAccount(
+            routingInfo: RoutingInfo(
+                appId: appId,
                 requestId: requestId,
-                address: address),
-            baseURLString: appUniversalLinkBaseURLString) { opened in
-                receivingOpened = opened
-            }
+                methodContentType: .requestAccount(address: address),
+                baseURLString: appUniversalLinkBaseURLString)) { opened in
+                    receivingOpened = opened
+                }
 
         // Then:
-        XCTAssertEqual(mockUIApplication.url, URL(string: "\(appCustomSchemeBaseURLString)?request_id=\(requestId)&address=\(address)")!)
+        XCTAssertArrayElementsEqual(
+            URLComponents(
+                url: mockUIApplication.url!,
+                resolvingAgainstBaseURL: false)!.queryItems!,
+            URLComponents(
+                url: URL(string: "\(appCustomSchemeBaseURLString)?request_id=\(requestId)&address=\(address)")!,
+                resolvingAgainstBaseURL: false)!.queryItems!)
+
         XCTAssertEqual(receivingOpened!, true)
     }
 
     func testRequestAccountQueryItems() throws {
         // Given:
-        let requestId = UUID().uuidString
         let address = "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv"
-        let callbackMethodContentType: CallbackMethodContentType = .requestAccount(
-            requestId: requestId,
-            address: address)
+        let callbackMethodContentType: CallbackMethodContentType = .requestAccount(address: address)
         let expectResult: [URLQueryItem] = [
-            .init(name: .requestId, value: requestId),
             .init(name: .address, value: address)
         ]
 
