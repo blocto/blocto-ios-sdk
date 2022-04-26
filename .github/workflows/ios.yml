@@ -1,44 +1,46 @@
-name: iOS starter workflow
-
+name: Testing
 on:
   push:
-    branches: [ main ]
+    branches: 
+    - main
   pull_request:
-    branches: [ main ]
-
+    types: 
+    - opened
+    - edited
+    branches:
+    - main
 jobs:
-  build:
-    name: Build and Test default scheme using any available iPhone simulator
-    runs-on: macos-latest
+  test:
+    name: Testing Swift Package and iOS app
+    runs-on: macOS-latest
+    strategy:
+        matrix:
+          swift: ["5.0"]
+          destination: ['platform=iOS Simulator,OS=15.2,name=iPhone 13 Pro']
+          destination2: ['platform=iOS Simulator,OS:12.4, name:iPhone 5s']
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Set Default Scheme
-        run: |
-          scheme_list=$(xcodebuild -list -json | tr -d "\n")
-          default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
-          echo $default | cat >default
-          echo Using default scheme: $default
-      - name: Build
-        env:
-          scheme: ${{ 'default' }}
-          platform: ${{ 'iOS Simulator' }}
-        run: |
-          # xcrun xctrace returns via stderr, not the expected stdout (see https://developer.apple.com/forums/thread/663959)
-          device=`xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}' | sed -e "s/ Simulator$//"`
-          if [ $scheme = default ]; then scheme=$(cat default); fi
-          if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
-          file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
-          xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
-      - name: Test
-        env:
-          scheme: ${{ 'default' }}
-          platform: ${{ 'iOS Simulator' }}
-        run: |
-          # xcrun xctrace returns via stderr, not the expected stdout (see https://developer.apple.com/forums/thread/663959)
-          device=`xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}' | sed -e "s/ Simulator$//"`
-          if [ $scheme = default ]; then scheme=$(cat default); fi
-          if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
-          file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
-          xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
+    - uses: actions/checkout@v1
+
+    - name: Install Dependencies
+      run: |
+        cd Example
+        bundle install
+        bundle exec pod install --repo-update
+      shell: bash
+
+    - name: Get swift version
+      run: swift --version
+
+    - name: start test
+      run: echo start test!
+
+    - name: clean build and test
+      run: xcodebuild clean test -workspace ./Example/BloctoSDK.xcworkspace -scheme "BloctoSDK-Example" -destination "${destination}"
+      env: 
+         destination: ${{ matrix.destination }}
+
+    - name: clean build and test on before iOS 13
+      run: xcodebuild clean test -workspace ./Example/BloctoSDK.xcworkspace -scheme "BloctoSDK-Example" -destination "${destination2}"
+      env: 
+         destination2: ${{ matrix.destination }}
