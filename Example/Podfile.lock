@@ -5,10 +5,10 @@ PODS:
     - BloctoSDK/Core
     - Moya (~> 15.0)
     - RxSwift (~> 6.0)
-    - SolanaWeb3 (~> 0.0.2)
+    - SolanaWeb3 (~> 0.0.3)
   - BloctoSDK/Wallet (0.1.0):
     - BloctoSDK/Core
-  - CryptoSwift (1.4.3)
+  - CryptoSwift (1.5.1)
   - Moya (15.0.0):
     - Moya/Core (= 15.0.0)
   - Moya/Core (15.0.0):
@@ -21,7 +21,7 @@ PODS:
     - RxSwift (= 6.2.0)
   - RxSwift (6.2.0)
   - SnapKit (5.0.1)
-  - SolanaWeb3 (0.0.2):
+  - SolanaWeb3 (0.0.3):
     - Alamofire (~> 5.5)
     - CryptoSwift (~> 1.4)
     - Runtime (~> 2.2)
@@ -56,22 +56,22 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   SolanaWeb3:
-    :commit: 8f38d94e081a91fceefebb63312da703248cdf16
+    :commit: 90a7807e0853fd52f9ae1def757d9668f1a95a4b
     :git: https://github.com/portto/solana-web3.swift.git
 
 SPEC CHECKSUMS:
   Alamofire: 0c07058209f211e3d32824f8e0766d7c44ac83b3
-  BloctoSDK: 338f37ccd9e268e9dac49e7a7fb674d617fe494a
-  CryptoSwift: a0799ee936271bd2253a006f1e4523df21845000
+  BloctoSDK: 220ad4b3ab1cb278f291270c793c141c19d2afc7
+  CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
   Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
   Runtime: 67741bd196fb4ad821c4d259ccc527bf734d8806
   RxCocoa: 4baf94bb35f2c0ab31bc0cb9f1900155f646ba42
   RxRelay: e72dbfd157807478401ef1982e1c61c945c94b2f
   RxSwift: d356ab7bee873611322f134c5f9ef379fa183d8f
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
-  SolanaWeb3: a7b4600f21515450bc91ec71c39c67ba0d08d2f4
+  SolanaWeb3: 788698bb7223b44c8fa62807f3a051e0204751af
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
 
 PODFILE CHECKSUM: 1c6ddf7b81ceb4a17864667b275d852df2275034
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
