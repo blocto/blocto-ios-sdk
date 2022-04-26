@@ -10,7 +10,7 @@ import Foundation
 enum SDKInfo {
 
     static var version: String {
-        Bundle.module?.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
+        Bundle.resouceBundle?.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
     }
 
 }
