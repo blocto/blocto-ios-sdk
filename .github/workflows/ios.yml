@@ -8,7 +8,7 @@ on:
     - opened
     - edited
     branches:
-    - master
+    - main
 jobs:
   test:
     name: Testing Swift Package and iOS app
@@ -18,19 +18,15 @@ jobs:
           swift: ["5.0", "5.1", "5.2", "5.3", "5.4"]
           destination: ['platform=iOS Simulator,OS=15.2,name=iPhone 13 Pro']
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v1
 
     - name: Get swift version
       run: swift --version
 
-    # Runs a single command using the runners shell
     - name: start test
       run: echo start test!
 
-    # Runs a set of commands using the runners shell
     - name: clean build and test
       run: xcodebuild clean test -workspace ./Example/BloctoSDK.xcworkspace -scheme "BloctoSDK-Example" -destination "${destination}"
       env: 
