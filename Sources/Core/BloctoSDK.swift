@@ -236,6 +236,9 @@ public class BloctoSDK {
                 session?.presentationContextProvider = window
             }
 
+            log(
+                enable: logging,
+                message: "About to route to Web SDK \(requestURL).")
             let startsSuccessfully = session?.start()
             if startsSuccessfully == false {
                 method.handleError(error: Error.webSDKSessionFailed)
