@@ -12,6 +12,7 @@ import RxCocoa
 import SnapKit
 import BloctoSDK
 import SolanaWeb3
+import SafariServices
 
 // swiftlint:disable type_body_length
 final class ViewController: UIViewController {
@@ -41,6 +42,8 @@ final class ViewController: UIViewController {
 
         view.addSubview(requestAccountButton)
         view.addSubview(requestAccountResultLabel)
+        view.addSubview(requestAccountCopyButton)
+        view.addSubview(requestAccountExplorerButton)
 
         view.addSubview(separator1)
 
@@ -48,6 +51,7 @@ final class ViewController: UIViewController {
         view.addSubview(inputTextField)
         view.addSubview(setValueButton)
         view.addSubview(setValueResultLabel)
+        view.addSubview(setValueExplorerButton)
 
         view.addSubview(separator2)
 
@@ -60,6 +64,7 @@ final class ViewController: UIViewController {
         view.addSubview(partialSignTxTitleLabel)
         view.addSubview(partialSignTxButton)
         view.addSubview(partialSignTxResultLabel)
+        view.addSubview(partialSignTxExplorerButton)
 
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().inset(30)
@@ -73,7 +78,20 @@ final class ViewController: UIViewController {
 
         requestAccountResultLabel.snp.makeConstraints {
             $0.top.equalTo(requestAccountButton.snp.bottom).offset(20)
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.leading.equalToSuperview().inset(20)
+        }
+
+        requestAccountCopyButton.snp.makeConstraints {
+            $0.centerY.equalTo(requestAccountResultLabel)
+            $0.size.equalTo(40)
+            $0.leading.equalTo(requestAccountResultLabel.snp.trailing).offset(20)
+        }
+
+        requestAccountExplorerButton.snp.makeConstraints {
+            $0.centerY.equalTo(requestAccountCopyButton)
+            $0.size.equalTo(40)
+            $0.leading.equalTo(requestAccountCopyButton.snp.trailing).offset(20)
+            $0.trailing.equalToSuperview().inset(20)
         }
 
         separator1.snp.makeConstraints {
@@ -99,7 +117,14 @@ final class ViewController: UIViewController {
 
         setValueResultLabel.snp.makeConstraints {
             $0.top.equalTo(setValueButton.snp.bottom).offset(20)
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.leading.equalToSuperview().inset(20)
+        }
+
+        setValueExplorerButton.snp.makeConstraints {
+            $0.centerY.equalTo(setValueResultLabel)
+            $0.size.equalTo(40)
+            $0.leading.equalTo(setValueResultLabel.snp.trailing).offset(20)
+            $0.trailing.equalToSuperview().inset(20)
         }
 
         separator2.snp.makeConstraints {
@@ -139,8 +164,15 @@ final class ViewController: UIViewController {
 
         partialSignTxResultLabel.snp.makeConstraints {
             $0.top.equalTo(partialSignTxButton.snp.bottom).offset(20)
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.leading.equalToSuperview().inset(20)
             $0.bottom.equalToSuperview().inset(50)
+        }
+
+        partialSignTxExplorerButton.snp.makeConstraints {
+            $0.centerY.equalTo(partialSignTxResultLabel)
+            $0.size.equalTo(40)
+            $0.leading.equalTo(partialSignTxResultLabel.snp.trailing).offset(20)
+            $0.trailing.equalToSuperview().inset(20)
         }
 
         return view
@@ -168,6 +200,22 @@ final class ViewController: UIViewController {
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
+    }()
+
+    private lazy var requestAccountCopyButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.setImage(UIImage(named: "ic28Copy"), for: .normal)
+        button.contentEdgeInsets = .init(top: 4, left: 4, bottom: 4, right: 4)
+        button.isHidden = true
+        return button
+    }()
+
+    private lazy var requestAccountExplorerButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.setImage(UIImage(named: "ic28Earth"), for: .normal)
+        button.contentEdgeInsets = .init(top: 4, left: 4, bottom: 4, right: 4)
+        button.isHidden = true
+        return button
     }()
 
     private lazy var separator1 = createSeparator()
@@ -204,6 +252,14 @@ final class ViewController: UIViewController {
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
+    }()
+
+    private lazy var setValueExplorerButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.setImage(UIImage(named: "ic28Earth"), for: .normal)
+        button.contentEdgeInsets = .init(top: 4, left: 4, bottom: 4, right: 4)
+        button.isHidden = true
+        return button
     }()
 
     private lazy var separator2 = createSeparator()
@@ -244,6 +300,14 @@ final class ViewController: UIViewController {
         return label
     }()
 
+    private lazy var partialSignTxExplorerButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.setImage(UIImage(named: "ic28Earth"), for: .normal)
+        button.contentEdgeInsets = .init(top: 4, left: 4, bottom: 4, right: 4)
+        button.isHidden = true
+        return button
+    }()
+
     private lazy var disposeBag: DisposeBag = DisposeBag()
 
     override func viewDidLoad() {
@@ -280,10 +344,40 @@ final class ViewController: UIViewController {
                     case .success(let address):
                         self?.userWalletAddress = address
                         self?.requestAccountResultLabel.text = address
+                        self?.requestAccountCopyButton.isHidden = false
+                        self?.requestAccountExplorerButton.isHidden = false
                     case .failure(let error):
                         self?.handleRequestAccountError(error)
                     }
                 }
+            })
+
+        _ = requestAccountCopyButton.rx.tap
+            .throttle(
+                DispatchTimeInterval.milliseconds(500),
+                latest: false,
+                scheduler: MainScheduler.instance)
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self,
+                let address = self.requestAccountResultLabel.text else { return }
+                UIPasteboard.general.string = address
+                self.requestAccountCopyButton.setImage(UIImage(named: "icon20Selected"), for: .normal)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    self.requestAccountCopyButton.setImage(UIImage(named: "ic28Copy"), for: .normal)
+                }
+            })
+
+        _ = requestAccountExplorerButton.rx.tap
+            .throttle(
+                DispatchTimeInterval.milliseconds(500),
+                latest: false,
+                scheduler: MainScheduler.instance)
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self,
+                      let address = self.requestAccountResultLabel.text else { return }
+                self.routeToExplorer(with: .address(address))
             })
 
         _ = setValueButton.rx.tap
@@ -297,6 +391,18 @@ final class ViewController: UIViewController {
                 self.resetSetValueStatus()
                 self.setValueLoadingIndicator.startAnimating()
                 self.sendTransaction()
+            })
+
+        _ = setValueExplorerButton.rx.tap
+            .throttle(
+                DispatchTimeInterval.milliseconds(500),
+                latest: false,
+                scheduler: MainScheduler.instance)
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self,
+                      let hash = self.setValueResultLabel.text else { return }
+                self.routeToExplorer(with: .txhash(hash))
             })
 
         _ = getValueButton.rx.tap
@@ -323,6 +429,18 @@ final class ViewController: UIViewController {
                 self.resetPartialSignTxStatus()
                 self.partialSignTxLoadingIndicator.startAnimating()
                 self.partialSign()
+            })
+
+        _ = partialSignTxExplorerButton.rx.tap
+            .throttle(
+                DispatchTimeInterval.milliseconds(500),
+                latest: false,
+                scheduler: MainScheduler.instance)
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self,
+                      let hash = self.partialSignTxResultLabel.text else { return }
+                self.routeToExplorer(with: .txhash(hash))
             })
     }
 
@@ -374,12 +492,15 @@ final class ViewController: UIViewController {
         requestAccountResultLabel.text = nil
         requestAccountResultLabel.textColor = .black
         requestAccountLoadingIndicator.stopAnimating()
+        requestAccountCopyButton.isHidden = true
+        requestAccountExplorerButton.isHidden = true
     }
 
     private func resetSetValueStatus() {
         setValueResultLabel.text = nil
         setValueResultLabel.textColor = .black
         setValueLoadingIndicator.stopAnimating()
+        setValueExplorerButton.isHidden = true
     }
 
     private func resetGetValueStatus() {
@@ -392,6 +513,7 @@ final class ViewController: UIViewController {
         partialSignTxResultLabel.text = nil
         partialSignTxResultLabel.textColor = .black
         partialSignTxLoadingIndicator.stopAnimating()
+        partialSignTxExplorerButton.isHidden = true
     }
 
     private func sendTransaction() {
@@ -437,6 +559,7 @@ final class ViewController: UIViewController {
                 switch result {
                 case let .success(txHsh):
                     self.setValueResultLabel.text = txHsh
+                    self.setValueExplorerButton.isHidden = false
                 case let .failure(error):
                     self.handleSetValueError(error)
                 }
@@ -532,6 +655,7 @@ final class ViewController: UIViewController {
                                                 switch result {
                                                 case let .success(txHash):
                                                     self.partialSignTxResultLabel.text = txHash
+                                                    self.partialSignTxExplorerButton.isHidden = false
                                                 case let .failure(error):
                                                     self.handlePartialSignTxError(error)
                                                 }
@@ -649,13 +773,42 @@ final class ViewController: UIViewController {
         } else if let error = error as? Error {
             partialSignTxResultLabel.text = error.message
         } else {
+            debugPrint(error)
             partialSignTxResultLabel.text = error.localizedDescription
         }
         partialSignTxResultLabel.textColor = .red
         partialSignTxLoadingIndicator.stopAnimating()
     }
 
+    enum ExplorerURLType {
+        case txhash(String)
+        case address(String)
+
+        func url() -> URL? {
+            switch self {
+            case let .txhash(hash):
+                return URL(string: "https://explorer.solana.com/tx/\(hash)?cluster=devnet")
+            case let .address(address):
+                return URL(string: "https://explorer.solana.com/address/\(address)?cluster=devnet")
+            }
+        }
+    }
+
+    private func routeToExplorer(with type: ExplorerURLType) {
+        guard let url = type.url() else { return }
+        let safariVC = SFSafariViewController(url: url)
+        if #available(iOS 13.0, *) {
+            safariVC.modalPresentationStyle = .automatic
+        } else {
+            safariVC.modalPresentationStyle = .overCurrentContext
+        }
+        safariVC.delegate = self
+        present(safariVC, animated: true, completion: nil)
+    }
+
 }
+
+extension ViewController: SFSafariViewControllerDelegate {}
 
 extension ViewController {
 
