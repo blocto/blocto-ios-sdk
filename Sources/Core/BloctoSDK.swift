@@ -32,7 +32,13 @@ public class BloctoSDK {
         }
     }
 
-    private let webBaseURLString: String = "https://wallet.blocto.app/sdk"
+    private var webBaseURLString: String {
+        if testnet {
+            return "https://wallet-testnet.blocto.app/"
+        } else {
+            return "https://wallet.blocto.app/"
+        }
+    }
     private let requestPath: String = "sdk"
 
     var requestBloctoBaseURLString: String {
