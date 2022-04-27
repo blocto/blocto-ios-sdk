@@ -450,22 +450,16 @@ final class ViewController: UIViewController {
 
         let connetion = Connection(cluster: .devnet)
         connetion.getAccountInfo(
-            publicKey: dappPublicKey) { [weak self] result in
+            publicKey: dappPublicKey) { [weak self] (result: Result<AccountInfo<ValueAccountData>?, Connection.Error>) in
                 guard let self = self else { return }
                 self.resetGetValueStatus()
                 switch result {
-                case let .success(accountInfo):
-                    guard let data = accountInfo?.data else {
+                case let .success(valueAccount):
+                    guard let data = valueAccount?.data else {
                         self.handleGetValueError(Error.message("data not found."))
                         return
                     }
-                    var pointer = 0
-                    do {
-                        let valueAccountData = try ValueAccountData(buffer: data, pointer: &pointer)
-                        self.getValueResultLabel.text = "\(valueAccountData.value)"
-                    } catch {
-                        self.handleGetValueError(error)
-                    }
+                    self.getValueResultLabel.text = "\(data.value)"
                 case let .failure(error):
                     debugPrint(error)
                     self.handleGetValueError(error)
