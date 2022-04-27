@@ -3,10 +3,6 @@ Pod::Spec.new do |s|
   s.version          = '0.1.0'
   s.summary          = 'A SDK to interact with Blockchain through Blocto Wallet App.'
 
-  s.description      = <<-DESC
-                       Add long description of the pod here.
-                       DESC
-
   s.homepage         = 'https://github.com/portto/blocto-ios-sdk'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Dawson' => 'dawson@portto.com', 'Scott' => 'scott@portto.com' }
