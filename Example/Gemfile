@@ -2,4 +2,9 @@
 
 source "https://rubygems.org"
 
-gem "cocoapods"
+gem 'cocoapods'
+gem 'fastlane'
+gem 'dotenv'
+gem 'fastlane-plugin-firebase_app_distribution'
+gem 'danger'
+gem 'danger-swiftlint'

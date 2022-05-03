@@ -16,6 +16,8 @@
 		6D1FC37B27F5973100F7FD5C /* ParsedMethodTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1FC37927F5952300F7FD5C /* ParsedMethodTests.swift */; };
 		6D3D57952808367A00228BBD /* Consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3D57932808365100228BBD /* Consts.swift */; };
 		6D3D57C9281287D600228BBD /* ValueAccountData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3D57C8281287D600228BBD /* ValueAccountData.swift */; };
+		6D4E7DCB28212709003C3B34 /* GoogleService-Info-Staging.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E7DCA28212709003C3B34 /* GoogleService-Info-Staging.plist */; };
+		6D4E7DCD28212752003C3B34 /* GoogleService-Info-Production.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D4E7DCC28212752003C3B34 /* GoogleService-Info-Production.plist */; };
 		6D72112327FDE61200F1EB7F /* QueryItemEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D72112227FDE61200F1EB7F /* QueryItemEncodingTests.swift */; };
 		6DD6F12127EDBF0000B514B1 /* MockUIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F11D27EDBA4600B514B1 /* MockUIApplication.swift */; };
 		6DD6F12227EDBF0300B514B1 /* MockAuthenticationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F11F27EDBB6600B514B1 /* MockAuthenticationSession.swift */; };
@@ -37,10 +39,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C2F6E7A8F6C08F4347AE371 /* Pods-BloctoSDK_Example.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Example.staging.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Example/Pods-BloctoSDK_Example.staging.xcconfig"; sourceTree = "<group>"; };
 		1BFFAE4C7F4B8BD55F9140D2 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		25D1785E7B031B39796A2C37 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		4CA3783EEA551213E2718327 /* Pods-BloctoSDK_Example-BloctoSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Example-BloctoSDK_Tests.debug.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Example-BloctoSDK_Tests/Pods-BloctoSDK_Example-BloctoSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		607FACD01AFB9204008FA782 /* BloctoSDK_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BloctoSDK_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		607FACD01AFB9204008FA782 /* BloctoSDK Example debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BloctoSDK Example debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		607FACD71AFB9204008FA782 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -52,6 +55,8 @@
 		6D1FC37927F5952300F7FD5C /* ParsedMethodTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsedMethodTests.swift; sourceTree = "<group>"; };
 		6D3D57932808365100228BBD /* Consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consts.swift; sourceTree = "<group>"; };
 		6D3D57C8281287D600228BBD /* ValueAccountData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueAccountData.swift; sourceTree = "<group>"; };
+		6D4E7DCA28212709003C3B34 /* GoogleService-Info-Staging.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Staging.plist"; sourceTree = "<group>"; };
+		6D4E7DCC28212752003C3B34 /* GoogleService-Info-Production.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Production.plist"; sourceTree = "<group>"; };
 		6D5954E827E1D44B009F43C9 /* BloctoSDK_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BloctoSDK_Example.entitlements; sourceTree = "<group>"; };
 		6D72112227FDE61200F1EB7F /* QueryItemEncodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryItemEncodingTests.swift; sourceTree = "<group>"; };
 		6DD6F11D27EDBA4600B514B1 /* MockUIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIApplication.swift; sourceTree = "<group>"; };
@@ -64,6 +69,7 @@
 		7B4773D7FF1C314AB322C220 /* Pods-BloctoSDK_Example-BloctoSDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Example-BloctoSDK_Tests.release.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Example-BloctoSDK_Tests/Pods-BloctoSDK_Example-BloctoSDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		7C3079E8801413560944E19A /* Pods_BloctoSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BloctoSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D21171C3979541A14284A0C6 /* BloctoSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = BloctoSDK.podspec; path = ../BloctoSDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		DBE1C45C102E9ACBBF3EE0AD /* Pods-BloctoSDK_Tests.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Tests.staging.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Tests/Pods-BloctoSDK_Tests.staging.xcconfig"; sourceTree = "<group>"; };
 		E4C80BED560E0C1A37A539B6 /* Pods_BloctoSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BloctoSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5DC540626CCE54728D6AFC2 /* Pods-BloctoSDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Tests.release.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Tests/Pods-BloctoSDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		E7B5C4AE7ED73BFAF1EF6F89 /* Pods-BloctoSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Tests.debug.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Tests/Pods-BloctoSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -99,6 +105,8 @@
 				E5DC540626CCE54728D6AFC2 /* Pods-BloctoSDK_Tests.release.xcconfig */,
 				4CA3783EEA551213E2718327 /* Pods-BloctoSDK_Example-BloctoSDK_Tests.debug.xcconfig */,
 				7B4773D7FF1C314AB322C220 /* Pods-BloctoSDK_Example-BloctoSDK_Tests.release.xcconfig */,
+				0C2F6E7A8F6C08F4347AE371 /* Pods-BloctoSDK_Example.staging.xcconfig */,
+				DBE1C45C102E9ACBBF3EE0AD /* Pods-BloctoSDK_Tests.staging.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -119,7 +127,7 @@
 		607FACD11AFB9204008FA782 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				607FACD01AFB9204008FA782 /* BloctoSDK_Example.app */,
+				607FACD01AFB9204008FA782 /* BloctoSDK Example debug.app */,
 				607FACE51AFB9204008FA782 /* BloctoSDK_Tests.xctest */,
 			);
 			name = Products;
@@ -128,6 +136,7 @@
 		607FACD21AFB9204008FA782 /* Example for BloctoSDK */ = {
 			isa = PBXGroup;
 			children = (
+				6D4E7DBF28211EA0003C3B34 /* Resources */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				6D3D57C8281287D600228BBD /* ValueAccountData.swift */,
@@ -206,6 +215,15 @@
 			path = Types;
 			sourceTree = "<group>";
 		};
+		6D4E7DBF28211EA0003C3B34 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				6D4E7DCA28212709003C3B34 /* GoogleService-Info-Staging.plist */,
+				6D4E7DCC28212752003C3B34 /* GoogleService-Info-Production.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		6D72112127FDE5DE00F1EB7F /* QueryItemCoding */ = {
 			isa = PBXGroup;
 			children = (
@@ -252,6 +270,7 @@
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
 				C7D4A374CE814A1C529AE096 /* [CP] Embed Pods Frameworks */,
+				6D4E7DC928212496003C3B34 /* Copy corresponding GoogleServiceInfo.plist */,
 				6DD6F12E27F454F200B514B1 /* Run SwiftLint */,
 			);
 			buildRules = (
@@ -260,7 +279,7 @@
 			);
 			name = BloctoSDK_Example;
 			productName = BloctoSDK;
-			productReference = 607FACD01AFB9204008FA782 /* BloctoSDK_Example.app */;
+			productReference = 607FACD01AFB9204008FA782 /* BloctoSDK Example debug.app */;
 			productType = "com.apple.product-type.application";
 		};
 		607FACE41AFB9204008FA782 /* BloctoSDK_Tests */ = {
@@ -296,10 +315,12 @@
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
 						LastSwiftMigration = 0900;
+						ProvisioningStyle = Manual;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
 						LastSwiftMigration = 0900;
+						ProvisioningStyle = Manual;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
 				};
@@ -330,7 +351,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
+				6D4E7DCD28212752003C3B34 /* GoogleService-Info-Production.plist in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				6D4E7DCB28212709003C3B34 /* GoogleService-Info-Staging.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,6 +408,24 @@
 			shellScript = "
 ";
 		};
+		6D4E7DC928212496003C3B34 /* Copy corresponding GoogleServiceInfo.plist */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy corresponding GoogleServiceInfo.plist";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp \"${PROJECT_DIR}/${GOOGLE_SERVICE_INFO_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\n\n";
+		};
 		6DD6F12E27F454F200B514B1 /* Run SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -435,7 +476,14 @@
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/BloctoSDK/BloctoSDK.framework",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseAppDistribution/FirebaseAppDistribution.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseCore/FirebaseCore.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseCoreDiagnostics/FirebaseCoreDiagnostics.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseInstallations/FirebaseInstallations.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleDataTransport/GoogleDataTransport.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
+				"${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework",
 				"${BUILT_PRODUCTS_DIR}/Runtime/Runtime.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxRelay/RxRelay.framework",
@@ -443,13 +491,21 @@
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SolanaWeb3/SolanaWeb3.framework",
 				"${BUILT_PRODUCTS_DIR}/TweetNacl/TweetNacl.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BloctoSDK.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseAppDistribution.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseCoreDiagnostics.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseInstallations.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleDataTransport.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBLPromises.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Runtime.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRelay.framework",
@@ -457,6 +513,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SolanaWeb3.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TweetNacl.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -618,14 +675,19 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 76106B0491B28F46B323B7EA /* Pods-BloctoSDK_Example.debug.xcconfig */;
 			buildSettings = {
+				APP_NAME = "BloctoSDK Example debug";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BloctoSDK_Example.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				GOOGLE_SERVICE_INFO_PATH = "";
 				INFOPLIST_FILE = BloctoSDK/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "$(APP_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 			};
@@ -635,14 +697,20 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F3C55340010DDCD85710450D /* Pods-BloctoSDK_Example.release.xcconfig */;
 			buildSettings = {
+				APP_NAME = "BloctoSDK Example";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BloctoSDK_Example.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution: portto Co., Ltd. (Y268PJ59QK)";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = Y268PJ59QK;
+				GOOGLE_SERVICE_INFO_PATH = "BloctoSDK/Resources/GoogleService-Info-Production.plist";
 				INFOPLIST_FILE = BloctoSDK/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "$(APP_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc org.cocoapods.demo.BloctoSDK-Example";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 			};
@@ -652,6 +720,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E7B5C4AE7ED73BFAF1EF6F89 /* Pods-BloctoSDK_Tests.debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -665,6 +735,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BloctoSDK_Example.app/BloctoSDK_Example";
@@ -675,6 +747,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E5DC540626CCE54728D6AFC2 /* Pods-BloctoSDK_Tests.release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -684,11 +758,118 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BloctoSDK_Example.app/BloctoSDK_Example";
 			};
 			name = Release;
+		};
+		6D4E7DC2282121F2003C3B34 /* Staging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Staging;
+		};
+		6D4E7DC3282121F2003C3B34 /* Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0C2F6E7A8F6C08F4347AE371 /* Pods-BloctoSDK_Example.staging.xcconfig */;
+			buildSettings = {
+				APP_NAME = "BloctoSDK Example staging";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BloctoSDK_Example.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution: portto Co., Ltd. (Y268PJ59QK)";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = Y268PJ59QK;
+				ENABLE_TESTABILITY = NO;
+				GOOGLE_SERVICE_INFO_PATH = "BloctoSDK/Resources/GoogleService-Info-Staging.plist";
+				INFOPLIST_FILE = BloctoSDK/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MODULE_NAME = ExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(APP_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc org.cocoapods.demo.BloctoSDK-Example-staging";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Staging;
+		};
+		6D4E7DC4282121F2003C3B34 /* Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DBE1C45C102E9ACBBF3EE0AD /* Pods-BloctoSDK_Tests.staging.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_TESTABILITY = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BloctoSDK_Example.app/BloctoSDK_Example";
+			};
+			name = Staging;
 		};
 /* End XCBuildConfiguration section */
 
@@ -697,6 +878,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				607FACED1AFB9204008FA782 /* Debug */,
+				6D4E7DC2282121F2003C3B34 /* Staging */,
 				607FACEE1AFB9204008FA782 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -706,6 +888,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				607FACF01AFB9204008FA782 /* Debug */,
+				6D4E7DC3282121F2003C3B34 /* Staging */,
 				607FACF11AFB9204008FA782 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -715,6 +898,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				607FACF31AFB9204008FA782 /* Debug */,
+				6D4E7DC4282121F2003C3B34 /* Staging */,
 				607FACF41AFB9204008FA782 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;

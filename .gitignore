@@ -43,3 +43,6 @@ Pods/
 *.swp
 *.swo
 *~
+
+# Firebase
+GoogleService-Info*

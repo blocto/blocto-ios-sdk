@@ -1,0 +1,242 @@
+fastlane_require "dotenv"
+
+default_platform(:ios)
+
+username = "ios@portto.com"
+staging_app_identifier = "org.cocoapods.demo.BloctoSDK-Example-staging"
+app_identifier = "org.cocoapods.demo.BloctoSDK-Example"
+
+before_all do
+  setup_circle_ci
+  ensure_bundle_exec
+end
+
+### Build and Release ###
+
+desc "Run unit tests"
+lane :run_unit_tests do
+  scan(
+    scheme: "BloctoSDK-Example",
+    slack_message: "Branch: #{ENV["CIRCLE_BRANCH"]}, Last Commit #: #{last_git_commit[:commit_hash]}",
+    slack_only_on_failure: true
+  )
+end
+
+desc "Build and distribute Staging build to Firebase"
+lane :build_firebase_staging do |options|
+  Dotenv.overload ".env"
+
+  certificates
+
+  gym(
+    workspace: "BloctoSDK.xcworkspace",
+    configuration: "Staging",
+    scheme: "BloctoSDK-Example",
+    clean: true,
+    include_symbols: true,
+    include_bitcode: false,
+    export_method: "ad-hoc"
+  )
+
+  firebase_app_distribution(
+    app: ENV["FIRBASE_STAGING_APP_ID"],
+    release_notes: get_last_5_merge_commit_message()
+  )
+
+end
+
+desc "Build and distribute Staging build to Firebase"
+lane :build_firebase_production do |options|
+  Dotenv.overload ".env"
+
+  certificates
+
+  gym(
+    workspace: "BloctoSDK.xcworkspace",
+    configuration: "Release",
+    scheme: "BloctoSDK-Example",
+    clean: true,
+    include_symbols: true,
+    include_bitcode: false,
+    export_method: "ad-hoc"
+  )
+
+  firebase_app_distribution(
+    app: ENV["FIRBASE_PRODUCTION_APP_ID"],
+    release_notes: get_last_5_merge_commit_message()
+  )
+
+end
+
+### Development tools ###
+
+desc "Run Danger"
+lane :run_danger do
+  danger(
+    danger_id: "Danger",
+    github_api_token: ENV["DANGER_GITHUB_API_TOKEN"],
+    verbose: true
+  )
+end
+
+### Provisioning profile and certificate ###
+
+desc "Register new devices and update certificates and provisioning profile"
+lane :register_devices_and_update do |options|
+  names = options[:names]
+  until names
+    names = UI.input("Please enter the devices' names (separate with ,)")
+  end
+
+  split_names = []
+  if names.split(",").kind_of?(Array)
+    split_names = names.split(",").map { |element| element.strip! || element }
+  end
+
+  uuids = options[:uuids]
+  until uuids
+    uuids = UI.input("Please enter the devices' uuids (separate with ,)")
+  end
+
+  split_uuids = []
+  if uuids.split(",").kind_of?(Array)
+    split_uuids = uuids.split(",").map { |element| element.strip! || element }
+  end
+
+  if split_names.any? && split_uuids.any?
+    name_with_uuid = {}
+    split_names.each_with_index { |name, index| name_with_uuid[name] = split_uuids[index] }
+    register_devices(
+      devices: name_with_uuid
+    )
+    certificates(force_for_new_devices: true)
+  else
+    raise StandardError.new "split_names has no element #{split_names} or split_uuids has no element #{split_uuids}"
+  end
+
+end
+
+desc "Refresh provisioning profiles"
+lane :certificates do |options|
+  for type in ["development", "adhoc"]
+    match(
+      app_identifier: [
+        app_identifier,
+        staging_app_identifier
+      ],
+      type: type,
+      readonly: !options.fetch(:force_for_new_devices, false),
+      git_url: ENV["MATCH_CERTIFICATE_URL"],
+      force_for_new_devices: options.fetch(:force_for_new_devices, false),
+      platform: "ios")
+  end
+end
+
+desc "Upload symbols to firebase"
+lane :upload_symbols_to_firebase do |options|
+  version = options[:version]
+  until version
+    version = UI.input("Please enter blocto's version")
+  end
+
+  build_number = options[:build_number]
+  until build_number
+    build_number = UI.input("Please enter blocto's build number")
+  end
+  upload_symbols(
+    version: version,
+    build_number: build_number)
+end
+
+### CI ###
+
+desc "Build and upload staging to Firebase"
+lane :ci_release_staging do
+  build_firebase(send_slack_when_succeeded: true)
+end
+
+desc "Bump version and build nubmer on release branch"
+lane :bump_version_and_build_number_on_release_or_hotfix do
+  branch_name = git_branch
+  if branch_name.match(/^(release|hotfix)\/[0-9]+\.[0-9]+\.[0-9]+$/)
+    commit_suffix = "[build version]"
+    unless last_git_commit[:message].include? commit_suffix
+      puts "last_git_commit not include #{commit_suffix}"
+
+      version_number = branch_name.delete_prefix("release/")
+      version_number = version_number.delete_prefix("hotfix/")
+      increment_version_number(version_number: version_number)
+      increment_build_number
+
+      build_number = get_build_number(xcodeproj: "Blocto.xcodeproj")
+      commit_version_bump(message: "CI: increment build number: #{build_number} #{commit_suffix}")
+      # due to `Auto-cancel redundant builds` in circle ci leads the current workflow canceled.
+      # which means only commit message contains `commit_suffix` will actually be built.
+      push_to_git_remote
+    end
+  else
+    send_slask_message(
+      message: "Not run on release/* branch",
+      success: false
+    )
+  end
+end
+
+desc "git add build tag"
+lane :git_add_build_tag do
+  add_git_tag(
+    tag: "build-#{get_blocto_sdk_version}-#{get_blocto_sdk_build_number}"
+  )
+  push_git_tags
+end
+
+### Utils ###
+
+desc "send slack message to fastlane channel with options e.g. fastlane send_slask_message message: \"text message\" success:false"
+private_lane :send_slask_message do |options|
+  success = options[:success]
+  slack(
+    message: options[:message],
+    channel: ENV["SLACK_CHANNEL"],  # Optional, by default will post to the default channel configured for the POST URL.
+    success: success, # Optional, defaults to true.
+    default_payloads: [:lane, :git_branch, :git_author, :test_result, :last_git_commit, :last_git_commit_hash],
+    slack_url: ENV["SLACK_IOS_FASTLANE_URL"],
+    fail_on_error: true
+  )
+end
+
+def get_blocto_sdk_build_number
+  build_number = get_build_number(
+    xcodeproj: "BloctoSDK.xcodeproj"
+  )
+  return "#{build_number}"
+end
+
+def get_blocto_sdk_version
+  version = get_version_number(
+    xcodeproj: "BloctoSDK.xcodeproj",
+    target: "BloctoSDK_Example"
+  )
+  return "#{version}"
+end
+
+def get_last_5_merge_commit_message
+  commit_message = changelog_from_git_commits(
+    commits_count: 5,
+    pretty: "%B",
+    date_format: "short",
+    merge_commit_filtering: "only_include_merges"
+  )
+
+  return commit_message.split("\n")
+    .select { |s| !(s.start_with?("Merge pull") || s.start_with?("Merge branch")) }
+    .map { |s| "- #{s}" }
+    .join("\n")
+end
+
+error do |lane, exception, options|
+  send_slask_message(
+    message: "Some thing goes wrong in #{lane.to_s}: #{exception.to_s}",
+    success: false
+  )
+end
