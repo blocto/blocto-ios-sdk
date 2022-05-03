@@ -228,6 +228,8 @@ final class ViewController: UIViewController {
         textField.textColor = .black
         textField.backgroundColor = .lightGray
         textField.text = "5566"
+        textField.returnKeyType = .done
+        textField.delegate = self
         textField.leftViewMode = .always
         textField.layer.cornerRadius = 5
         textField.clipsToBounds = true
@@ -804,6 +806,15 @@ final class ViewController: UIViewController {
         }
         safariVC.delegate = self
         present(safariVC, animated: true, completion: nil)
+    }
+
+}
+
+extension ViewController: UITextFieldDelegate {
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 
 }
