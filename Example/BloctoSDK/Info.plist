@@ -28,6 +28,14 @@
 				<string>blocto64776cec-5953-4a58-8025-772f55a3917b</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>blocto4915cb12-117e-4d9c-99bd-8d82365721cc</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>2</string>

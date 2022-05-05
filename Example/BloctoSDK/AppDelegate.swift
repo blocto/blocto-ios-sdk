@@ -9,10 +9,19 @@
 import UIKit
 import BloctoSDK
 
+var isProduction = false
+
+var bloctoSDKAppId: String {
+    if isProduction {
+        return "4915cb12-117e-4d9c-99bd-8d82365721cc"
+    } else {
+        return "64776cec-5953-4a58-8025-772f55a3917b"
+    }
+}
+
 @UIApplicationMain
 final class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    private let bloctoSDKAppId: String = "64776cec-5953-4a58-8025-772f55a3917b"
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

@@ -18,10 +18,29 @@ import SafariServices
 final class ViewController: UIViewController {
 
     private var userWalletAddress: String?
-    private let dappAddress: String = "4AXy5YYCXpMapaVuzKkz25kVHzrdLDgKN3TiQvtf1Eu8"
-    private let programId: String = "G4YkbRN4nFQGEUg4SXzPsrManWzuk8bNq9JaMhXepnZ6"
+    private var dappAddress: String {
+        isProduction
+        ? "EajAHVxAVvf4yNUu37ZEh8QS7Lk5bw9yahTGiTSL1Rwt"
+        : "4AXy5YYCXpMapaVuzKkz25kVHzrdLDgKN3TiQvtf1Eu8"
+    }
+    private var programId: String {
+        isProduction
+        ? "EN2Ln23fzm4qag1mHfx7FDJwDJog5u4SDgqRY256ZgFt"
+        : "G4YkbRN4nFQGEUg4SXzPsrManWzuk8bNq9JaMhXepnZ6"
+    }
+    private var cluster: Cluster {
+        isProduction
+        ? .mainnetBeta
+        : .devnet
+    }
 
     private lazy var bloctoSolanaSDK = BloctoSDK.shared.solana
+
+    private lazy var segmentedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl(items: ["devnet", "mainnet-beta"])
+        segmentedControl.selectedSegmentIndex = 0
+        return segmentedControl
+    }()
 
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -321,10 +340,17 @@ final class ViewController: UIViewController {
     private func setupViews() {
         view.backgroundColor = .white
 
+        view.addSubview(segmentedControl)
         view.addSubview(scrollView)
 
+        segmentedControl.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(20)
+            $0.centerX.equalToSuperview()
+        }
+
         scrollView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(segmentedControl.snp.bottom).offset(20)
+            $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
 
         contentView.snp.makeConstraints {
@@ -333,6 +359,37 @@ final class ViewController: UIViewController {
     }
 
     private func setupBinding() {
+        _ = segmentedControl.rx.value.changed
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] index in
+                guard let self = self else { return }
+                guard let window = self.view.window else { return }
+                self.resetRequestAccountStatus()
+                self.resetSetValueStatus()
+                self.resetGetValueStatus()
+                self.resetPartialSignTxStatus()
+                switch index {
+                case 0:
+                    isProduction = false
+                case 1:
+                    isProduction = true
+                default:
+                    break
+                }
+                if #available(iOS 13.0, *) {
+                    BloctoSDK.shared.initialize(
+                        with: bloctoSDKAppId,
+                        window: window,
+                        logging: true,
+                        testnet: !isProduction)
+                } else {
+                    BloctoSDK.shared.initialize(
+                        with: bloctoSDKAppId,
+                        logging: true,
+                        testnet: !isProduction)
+                }
+            })
+
         _ = requestAccountButton.rx.tap
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
@@ -573,7 +630,7 @@ final class ViewController: UIViewController {
             return
         }
 
-        let connetion = Connection(cluster: .devnet)
+        let connetion = Connection(cluster: cluster)
         connetion.getAccountInfo(
             publicKey: dappPublicKey) { [weak self] (result: Result<AccountInfo<ValueAccountData>?, Connection.Error>) in
                 guard let self = self else { return }
@@ -789,9 +846,13 @@ final class ViewController: UIViewController {
         func url() -> URL? {
             switch self {
             case let .txhash(hash):
-                return URL(string: "https://explorer.solana.com/tx/\(hash)?cluster=devnet")
+                return isProduction
+                ? URL(string: "https://explorer.solana.com/tx/\(hash)")
+                : URL(string: "https://explorer.solana.com/tx/\(hash)?cluster=devnet")
             case let .address(address):
-                return URL(string: "https://explorer.solana.com/address/\(address)?cluster=devnet")
+                return isProduction
+                ? URL(string: "https://explorer.solana.com/address/\(address)")
+                : URL(string: "https://explorer.solana.com/address/\(address)?cluster=devnet")
             }
         }
     }
