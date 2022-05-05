@@ -60,9 +60,19 @@ public class BloctoSolanaSDK {
         self.base = base
     }
 
-    public func requestAccount(completion: @escaping (Result<String, Swift.Error>) -> Void) {
+    /// To request Solana account address
+    /// - Parameters:
+    ///   - forceWebSDK: Using this flag to force routing to WebSDK even if Blocto Wallet app is Installed, default is false.
+    ///   - completion: completion handler for this methods. Please note this completion might not be called in some circumstances. e.g. SDK version incompatible with Blocto Wallet app.
+    ///   The successful result is address String for Solana.
+    public func requestAccount(
+        forceWebSDK: Bool = false,
+        completion: @escaping (Result<String, Swift.Error>) -> Void
+    ) {
         let method = RequestAccountMethod(blockchain: .solana, callback: completion)
-        base.send(method: method)
+        base.send(
+            method: method,
+            forceWebSDK: forceWebSDK)
     }
 
     /// To sign transaction and then send transaction
@@ -70,12 +80,14 @@ public class BloctoSolanaSDK {
     ///   - uuid: The id to identify this request, you can pass your owned uuid here.
     ///   - from: from which solana account address.
     ///   - transaction: Solana Transaction structure from Web3.
+    ///   - forceWebSDK: Using this flag to force routing to WebSDK even if Blocto Wallet app is Installed, default is false.
     ///   - completion: completion handler for this methods. Please note this completion might not be called in some circumstances. e.g. SDK version incompatible with Blocto Wallet app.
     ///   The successful result is Tx hash of Solana.
     public func signAndSendTransaction(
         uuid: UUID = UUID(),
         from: String,
         transaction: Transaction,
+        forceWebSDK: Bool = false,
         completion: @escaping (Result<String, Swift.Error>) -> Void
     ) {
         addRecentBlockhashIfNeeded(
@@ -131,7 +143,9 @@ public class BloctoSolanaSDK {
                                 isInvokeWrapped: true,
                                 callback: completion)
                             self.appendTxMap[shaString] = nil
-                            self.base.send(method: method)
+                            self.base.send(
+                                method: method,
+                                forceWebSDK: forceWebSDK)
                         }
                     } catch {
                         completion(.failure(error))

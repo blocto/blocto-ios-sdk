@@ -160,7 +160,13 @@ public class BloctoSDK {
         }
     }
 
-    public func send(method: Method) {
+    /// Send pre-defined method
+    /// - Parameter method: Any method which conform to Method protocol
+    /// - Parameter forceWebSDK: Using this flag to force routing to WebSDK even if Blocto Wallet app is Installed, default is false.
+    public func send(
+        method: Method,
+        forceWebSDK: Bool = false
+    ) {
         do {
             try checkConfigration()
             guard let requestURL = try method.encodeToURL(
@@ -170,26 +176,34 @@ public class BloctoSDK {
                     return
                 }
             uuidToMethod[method.id] = method
-            urlOpening.open(
-                requestURL,
-                options: [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly: true],
-                completionHandler: { [weak self] opened in
-                    guard let self = self else { return }
-                    if opened {
-                        log(
-                            enable: self.logging,
-                            message: "open universal link \(requestURL) successfully.")
-                    } else {
-                        log(
-                            enable: self.logging,
-                            message: "can't open universal link \(requestURL).")
-                        if #available(iOS 13.0, *) {
-                            self.routeToWebSDK(window: self.window, method: method)
+            if forceWebSDK {
+                if #available(iOS 13.0, *) {
+                    self.routeToWebSDK(window: self.window, method: method)
+                } else {
+                    self.routeToWebSDK(method: method)
+                }
+            } else {
+                urlOpening.open(
+                    requestURL,
+                    options: [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly: true],
+                    completionHandler: { [weak self] opened in
+                        guard let self = self else { return }
+                        if opened {
+                            log(
+                                enable: self.logging,
+                                message: "open universal link \(requestURL) successfully.")
                         } else {
-                            self.routeToWebSDK(method: method)
+                            log(
+                                enable: self.logging,
+                                message: "can't open universal link \(requestURL).")
+                            if #available(iOS 13.0, *) {
+                                self.routeToWebSDK(window: self.window, method: method)
+                            } else {
+                                self.routeToWebSDK(method: method)
+                            }
                         }
-                    }
-                })
+                    })
+            }
         } catch {
             method.handleError(error: error)
             routeToWebSDK(window: window, method: method)

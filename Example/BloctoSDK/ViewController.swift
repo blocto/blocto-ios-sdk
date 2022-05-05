@@ -34,10 +34,18 @@ final class ViewController: UIViewController {
         : .devnet
     }
 
+    private var forceWebSDK: Bool = false
+
     private lazy var bloctoSolanaSDK = BloctoSDK.shared.solana
 
-    private lazy var segmentedControl: UISegmentedControl = {
+    private lazy var networkSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["devnet", "mainnet-beta"])
+        segmentedControl.selectedSegmentIndex = 0
+        return segmentedControl
+    }()
+
+    private lazy var sdkFlowSegmentedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl(items: ["Blocto Wallet app", "WebSDK"])
         segmentedControl.selectedSegmentIndex = 0
         return segmentedControl
     }()
@@ -340,16 +348,22 @@ final class ViewController: UIViewController {
     private func setupViews() {
         view.backgroundColor = .white
 
-        view.addSubview(segmentedControl)
+        view.addSubview(networkSegmentedControl)
+        view.addSubview(sdkFlowSegmentedControl)
         view.addSubview(scrollView)
 
-        segmentedControl.snp.makeConstraints {
+        networkSegmentedControl.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(20)
             $0.centerX.equalToSuperview()
         }
 
+        sdkFlowSegmentedControl.snp.makeConstraints {
+            $0.top.equalTo(networkSegmentedControl.snp.bottom).offset(20)
+            $0.centerX.equalToSuperview()
+        }
+
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(segmentedControl.snp.bottom).offset(20)
+            $0.top.equalTo(sdkFlowSegmentedControl.snp.bottom).offset(20)
             $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
 
@@ -359,7 +373,7 @@ final class ViewController: UIViewController {
     }
 
     private func setupBinding() {
-        _ = segmentedControl.rx.value.changed
+        _ = networkSegmentedControl.rx.value.changed
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] index in
                 guard let self = self else { return }
@@ -390,6 +404,20 @@ final class ViewController: UIViewController {
                 }
             })
 
+        _ = sdkFlowSegmentedControl.rx.value.changed
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] index in
+                guard let self = self else { return }
+                switch index {
+                case 0:
+                    self.forceWebSDK = false
+                case 1:
+                    self.forceWebSDK = true
+                default:
+                    break
+                }
+            })
+
         _ = requestAccountButton.rx.tap
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
@@ -397,8 +425,9 @@ final class ViewController: UIViewController {
                 scheduler: MainScheduler.instance)
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
-                self?.resetRequestAccountStatus()
-                self?.bloctoSolanaSDK.requestAccount { [weak self] result in
+                guard let self = self else { return }
+                self.resetRequestAccountStatus()
+                self.bloctoSolanaSDK.requestAccount(forceWebSDK: self.forceWebSDK) { [weak self] result in
                     switch result {
                     case .success(let address):
                         self?.userWalletAddress = address
@@ -612,7 +641,8 @@ final class ViewController: UIViewController {
 
         bloctoSolanaSDK.signAndSendTransaction(
             from: userWalletAddress,
-            transaction: transaction) { [weak self] result in
+            transaction: transaction,
+            forceWebSDK: forceWebSDK) { [weak self] result in
                 guard let self = self else { return }
                 self.resetSetValueStatus()
                 switch result {
@@ -708,7 +738,8 @@ final class ViewController: UIViewController {
 
                                         self.bloctoSolanaSDK.signAndSendTransaction(
                                             from: userWalletAddress,
-                                            transaction: newTransaction) { [weak self] result in
+                                            transaction: newTransaction,
+                                            forceWebSDK: self.forceWebSDK) { [weak self] result in
                                                 guard let self = self else { return }
                                                 self.resetPartialSignTxStatus()
                                                 switch result {
