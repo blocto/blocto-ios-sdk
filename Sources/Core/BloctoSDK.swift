@@ -160,6 +160,8 @@ public class BloctoSDK {
         }
     }
 
+    /// Send pre-defined method
+    /// - Parameter method: Any method which conform to Method protocol
     public func send(method: Method) {
         do {
             try checkConfigration()
@@ -172,7 +174,7 @@ public class BloctoSDK {
             uuidToMethod[method.id] = method
             urlOpening.open(
                 requestURL,
-                options: [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly: true],
+                options: [.universalLinksOnly: true],
                 completionHandler: { [weak self] opened in
                     guard let self = self else { return }
                     if opened {

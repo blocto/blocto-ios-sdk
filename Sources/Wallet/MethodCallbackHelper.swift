@@ -39,7 +39,7 @@ public class MethodCallbackHelper {
         }
         urlOpening.open(
             openURL,
-            options: [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly: true]
+            options: [.universalLinksOnly: true]
         ) { opened in
             if opened {
                 completion(true)

@@ -7,12 +7,12 @@
 //
 
 import UIKit
+import SafariServices
 import RxSwift
 import RxCocoa
 import SnapKit
 import BloctoSDK
 import SolanaWeb3
-import SafariServices
 
 // swiftlint:disable type_body_length
 final class ViewController: UIViewController {
@@ -36,7 +36,7 @@ final class ViewController: UIViewController {
 
     private lazy var bloctoSolanaSDK = BloctoSDK.shared.solana
 
-    private lazy var segmentedControl: UISegmentedControl = {
+    private lazy var networkSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["devnet", "mainnet-beta"])
         segmentedControl.selectedSegmentIndex = 0
         return segmentedControl
@@ -340,16 +340,16 @@ final class ViewController: UIViewController {
     private func setupViews() {
         view.backgroundColor = .white
 
-        view.addSubview(segmentedControl)
+        view.addSubview(networkSegmentedControl)
         view.addSubview(scrollView)
 
-        segmentedControl.snp.makeConstraints {
+        networkSegmentedControl.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(20)
             $0.centerX.equalToSuperview()
         }
 
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(segmentedControl.snp.bottom).offset(20)
+            $0.top.equalTo(networkSegmentedControl.snp.bottom).offset(20)
             $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
 
@@ -359,7 +359,7 @@ final class ViewController: UIViewController {
     }
 
     private func setupBinding() {
-        _ = segmentedControl.rx.value.changed
+        _ = networkSegmentedControl.rx.value.changed
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] index in
                 guard let self = self else { return }
@@ -397,8 +397,9 @@ final class ViewController: UIViewController {
                 scheduler: MainScheduler.instance)
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
-                self?.resetRequestAccountStatus()
-                self?.bloctoSolanaSDK.requestAccount { [weak self] result in
+                guard let self = self else { return }
+                self.resetRequestAccountStatus()
+                self.bloctoSolanaSDK.requestAccount { [weak self] result in
                     switch result {
                     case .success(let address):
                         self?.userWalletAddress = address

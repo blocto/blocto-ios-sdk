@@ -60,6 +60,10 @@ public class BloctoSolanaSDK {
         self.base = base
     }
 
+    /// To request Solana account address
+    /// - Parameters:
+    ///   - completion: completion handler for this methods. Please note this completion might not be called in some circumstances. e.g. SDK version incompatible with Blocto Wallet app.
+    ///   The successful result is address String for Solana.
     public func requestAccount(completion: @escaping (Result<String, Swift.Error>) -> Void) {
         let method = RequestAccountMethod(blockchain: .solana, callback: completion)
         base.send(method: method)
