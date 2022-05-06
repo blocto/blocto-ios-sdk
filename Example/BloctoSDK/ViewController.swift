@@ -399,7 +399,7 @@ final class ViewController: UIViewController {
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.resetRequestAccountStatus()
-                self.bloctoSolanaSDK.requestAccount { [weak self] result in
+                BloctoSDK.shared.ethereum.requestAccount { [weak self] result in
                     switch result {
                     case .success(let address):
                         self?.userWalletAddress = address
@@ -410,6 +410,17 @@ final class ViewController: UIViewController {
                         self?.handleRequestAccountError(error)
                     }
                 }
+//                self.bloctoSolanaSDK.requestAccount { [weak self] result in
+//                    switch result {
+//                    case .success(let address):
+//                        self?.userWalletAddress = address
+//                        self?.requestAccountResultLabel.text = address
+//                        self?.requestAccountCopyButton.isHidden = false
+//                        self?.requestAccountExplorerButton.isHidden = false
+//                    case .failure(let error):
+//                        self?.handleRequestAccountError(error)
+//                    }
+//                }
             })
 
         _ = requestAccountCopyButton.rx.tap

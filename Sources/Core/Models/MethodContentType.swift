@@ -12,7 +12,8 @@ public enum MethodContentType {
 
     case signMessage(
         from: String,
-        message: String)
+        message: String,
+        signType: SignType)
 
     case signAndSendTransaction(
         from: String,

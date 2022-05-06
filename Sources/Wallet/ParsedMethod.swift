@@ -28,33 +28,38 @@ public struct ParsedMethod {
         guard let rawMethod = param[QueryName.method.rawValue],
               let method = MethodType(rawValue: rawMethod) else { return nil }
         switch method {
-            case .requestAccount:
-                self.methodContentType = .requestAccount
-            case .signMessage:
-                guard let from = param[QueryName.from.rawValue],
-                      let message = param[QueryName.message.rawValue] else { return nil }
-                self.methodContentType = .signMessage(from: from, message: message)
-            case .signAndSendTransaction:
-                guard let from = param[QueryName.from.rawValue],
-                      let message = param[QueryName.message.rawValue],
-                      let isInvokeWrappedString = param[QueryName.isInvokeWrapped.rawValue],
-                      let isInvokeWrapped = Bool(isInvokeWrappedString) else { return nil }
+        case .requestAccount:
+            self.methodContentType = .requestAccount
+        case .signMessage:
+            guard let from = param[QueryName.from.rawValue],
+                  let message = param[QueryName.message.rawValue],
+                  let rawSignType = param[QueryName.signType.rawValue],
+                  let signType = SignType(rawValue: rawSignType) else { return nil }
+            self.methodContentType = .signMessage(
+                from: from,
+                message: message,
+                signType: signType)
+        case .signAndSendTransaction:
+            guard let from = param[QueryName.from.rawValue],
+                  let message = param[QueryName.message.rawValue],
+                  let isInvokeWrappedString = param[QueryName.isInvokeWrapped.rawValue],
+                  let isInvokeWrapped = Bool(isInvokeWrappedString) else { return nil }
 
-                let appendTx: [String: Data] = QueryDecoding.decodeDictionary(
-                    param: param,
-                    queryName: .appendTx)
+            let appendTx: [String: Data] = QueryDecoding.decodeDictionary(
+                param: param,
+                queryName: .appendTx)
 
-                let publicKeySignaturePairs: [String: String] = QueryDecoding.decodeDictionary(
-                    param: param,
-                    queryName: .publicKeySignaturePairs)
+            let publicKeySignaturePairs: [String: String] = QueryDecoding.decodeDictionary(
+                param: param,
+                queryName: .publicKeySignaturePairs)
 
-                self.methodContentType = .signAndSendTransaction(
-                    from: from,
-                    isInvokeWrapped: isInvokeWrapped,
-                    transactionInfo: SolanaTransactionInfo(
-                        message: message,
-                        appendTx: appendTx,
-                        publicKeySignaturePairs: publicKeySignaturePairs))
+            self.methodContentType = .signAndSendTransaction(
+                from: from,
+                isInvokeWrapped: isInvokeWrapped,
+                transactionInfo: SolanaTransactionInfo(
+                    message: message,
+                    appendTx: appendTx,
+                    publicKeySignaturePairs: publicKeySignaturePairs))
         }
     }
 

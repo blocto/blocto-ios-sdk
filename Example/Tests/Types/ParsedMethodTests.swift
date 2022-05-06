@@ -60,9 +60,10 @@ extension MethodContentType: Equatable {
         switch (lhs, rhs) {
         case (.requestAccount, .requestAccount):
             return true
-        case let (.signMessage(lFrom, lMessage), .signMessage(rFrom, rMessage)):
+        case let (.signMessage(lFrom, lMessage, lSignType), .signMessage(rFrom, rMessage, rSignType)):
             return lFrom == rFrom
             && lMessage == rMessage
+            && lSignType == rSignType
         case let (.signAndSendTransaction(lFrom, lIsInvokeWrapped, lTransactionInfo),
                   .signAndSendTransaction(rFrom, rIsInvokeWrapped, rTransactionInfo)):
             return lFrom == rFrom

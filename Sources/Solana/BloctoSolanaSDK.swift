@@ -146,33 +146,11 @@ public class BloctoSolanaSDK {
             }
     }
 
-    func addRecentBlockhashIfNeeded(
-        _ transaction: Transaction,
-        completion: @escaping (Result<Transaction, Swift.Error>) -> Void
-    ) {
-        guard transaction.recentBlockhash == nil else {
-            completion(.success(transaction))
-            return
-        }
-        let connection = Connection(cluster: cluster)
-        connection.getLatestBlockhash(commitment: .confirmed) { result in
-            switch result {
-            case .success(let blockhashLastValidBlockHeightPair):
-                var newTransaction = transaction
-                newTransaction.recentBlockhash = blockhashLastValidBlockHeightPair.blockhash
-                completion(.success(newTransaction))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-
-    func transactionNeedsConvert(_ transaction: Transaction) -> Bool {
-        transaction.instructions.allSatisfy { TransactionInstruction in
-            TransactionInstruction.programId.description != walletProgramId
-        }
-    }
-
+    /// Convert normal Solana transaction to wallet program executable transaction
+    /// - Parameters:
+    ///   - transaction: Normal Solana transaction.
+    ///   - solanaAddress: Solana address invoke this transaction
+    ///   - completion: Completion handler for this methods.
     public func convertToProgramWalletTransaction(
         _ transaction: Transaction,
         solanaAddress: String,
@@ -218,6 +196,33 @@ public class BloctoSolanaSDK {
             case let .failure(error):
                 completion(.failure(error))
             }
+        }
+    }
+
+    func addRecentBlockhashIfNeeded(
+        _ transaction: Transaction,
+        completion: @escaping (Result<Transaction, Swift.Error>) -> Void
+    ) {
+        guard transaction.recentBlockhash == nil else {
+            completion(.success(transaction))
+            return
+        }
+        let connection = Connection(cluster: cluster)
+        connection.getLatestBlockhash(commitment: .confirmed) { result in
+            switch result {
+            case .success(let blockhashLastValidBlockHeightPair):
+                var newTransaction = transaction
+                newTransaction.recentBlockhash = blockhashLastValidBlockHeightPair.blockhash
+                completion(.success(newTransaction))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+
+    func transactionNeedsConvert(_ transaction: Transaction) -> Bool {
+        transaction.instructions.allSatisfy { TransactionInstruction in
+            TransactionInstruction.programId.description != walletProgramId
         }
     }
 

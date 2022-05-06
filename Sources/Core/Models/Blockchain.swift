@@ -9,4 +9,5 @@ import Foundation
 
 public enum Blockchain: String {
     case solana
+    case ethereum
 }

@@ -24,10 +24,11 @@ public enum URLEncoding {
         switch method {
         case .requestAccount:
             break
-        case let .signMessage(from, message):
+        case let .signMessage(from, message, signType):
             queryItems.append(contentsOf: [
                 QueryItem(name: .from, value: from),
-                QueryItem(name: .message, value: message)
+                QueryItem(name: .message, value: message),
+                QueryItem(name: .signType, value: signType)
             ])
         case let .signAndSendTransaction(from, isInvokeWrapped, transactionInfo):
             queryItems.append(contentsOf: [
