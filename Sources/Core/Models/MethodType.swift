@@ -10,5 +10,6 @@ import Foundation
 public enum MethodType: String {
     case requestAccount = "request_account"
     case signMessage = "sign_message"
-    case signAndSendTransaction = "sign_and_send_transaction"
+    case signAndSendTransaction = "sign_and_send_transaction" // solana only
+    case sendTransaction = "send_transaction"
 }

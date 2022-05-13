@@ -20,6 +20,9 @@ public enum MethodContentType {
         isInvokeWrapped: Bool,
         transactionInfo: SolanaTransactionInfo)
 
+    case sendTransaction(
+        transaction: EVMBaseTransaction)
+
     var rawValue: String {
         switch self {
         case .requestAccount:
@@ -28,6 +31,8 @@ public enum MethodContentType {
             return MethodType.signMessage.rawValue
         case .signAndSendTransaction:
             return MethodType.signAndSendTransaction.rawValue
+        case .sendTransaction:
+            return MethodType.sendTransaction.rawValue
         }
     }
 }

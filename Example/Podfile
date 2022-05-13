@@ -5,10 +5,12 @@ platform :ios, '13.0'
 target 'BloctoSDK_Example' do
   pod 'BloctoSDK/Solana', :path => '../'
   pod 'BloctoSDK/Wallet', :path => '../'
+  pod 'BloctoSDK/EVMBase', :path => '../'
   pod 'SnapKit'
   pod 'RxSwift'
   pod 'RxCocoa'
   pod 'SolanaWeb3', :git => 'https://github.com/portto/solana-web3.swift.git'
+  pod 'web3.swift'
 
   target 'BloctoSDK_Tests' do
     inherit! :search_paths

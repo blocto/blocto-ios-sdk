@@ -1,8 +1,8 @@
 //
-//  BloctoEthereumSDK.swift
-//  Alamofire
+//  BloctoAvalancheSDK.swift
+//  BloctoSDK
 //
-//  Created by Andrew Wang on 2022/5/5.
+//  Created by Andrew Wang on 2022/5/13.
 //
 
 import Foundation
@@ -11,33 +11,23 @@ private var associateKey: Void?
 
 extension BloctoSDK {
 
-    public var ethereum: BloctoEthereumSDK {
+    public var avalanche: BloctoAvalancheSDK {
         get {
-            if let ethereumSDK = objc_getAssociatedObject(self, &associateKey) as? BloctoEthereumSDK {
-                return ethereumSDK
+            if let avalancheSDK = objc_getAssociatedObject(self, &associateKey) as? BloctoAvalancheSDK {
+                return avalancheSDK
             } else {
-                let ethereumSDK = BloctoEthereumSDK(base: self)
-                objc_setAssociatedObject(self, &associateKey, ethereumSDK, .OBJC_ASSOCIATION_RETAIN)
-                return ethereumSDK
+                let avalancheSDK = BloctoAvalancheSDK(base: self)
+                objc_setAssociatedObject(self, &associateKey, avalancheSDK, .OBJC_ASSOCIATION_RETAIN)
+                return avalancheSDK
             }
         }
     }
 
 }
 
-public class BloctoEthereumSDK {
-
-    lazy var apiProvider: ApiProvider = ApiProvider()
+public class BloctoAvalancheSDK {
 
     private let base: BloctoSDK
-
-//    private var network:  {
-//        if base.testnet {
-//            return .devnet
-//        } else {
-//            return .mainnetBeta
-//        }
-//    }
 
     init(base: BloctoSDK) {
         self.base = base
@@ -48,7 +38,7 @@ public class BloctoEthereumSDK {
     ///   - completion: completion handler for this methods. Please note this completion might not be called in some circumstances. e.g. SDK version incompatible with Blocto Wallet app.
     ///   The successful result is address String for Solana.
     public func requestAccount(completion: @escaping (Result<String, Swift.Error>) -> Void) {
-        let method = RequestAccountMethod(blockchain: .ethereum, callback: completion)
+        let method = RequestAccountMethod(blockchain: .avalanche, callback: completion)
         base.send(method: method)
     }
 
@@ -56,17 +46,21 @@ public class BloctoEthereumSDK {
     /// - Parameters:
     ///   - uuid: The id to identify this request, you can pass your owned uuid here.
     ///   - from: from which solana account address.
-    ///   - transaction:
+    ///   - transaction: Custom type EVMBaseTransaction.
     ///   - forceWebSDK: Using this flag to force routing to WebSDK even if Blocto Wallet app is Installed, default is false.
     ///   - completion: completion handler for this methods. Please note this completion might not be called in some circumstances. e.g. SDK version incompatible with Blocto Wallet app.
     ///   The successful result is Tx hash of Ethereum.
-//    public func sendTransaction(
-//        uuid: UUID = UUID(),
-//        from: String,
-//        forceWebSDK: Bool = false,
-//        completion: @escaping (Result<String, Swift.Error>) -> Void
-//    ) {
-//
-//    }
+    public func sendTransaction(
+        uuid: UUID = UUID(),
+        blockchain: Blockchain,
+        transaction: EVMBaseTransaction,
+        completion: @escaping (Result<String, Swift.Error>) -> Void
+    ) {
+        let method = SignAndSendEVMBaseTransactionMethod(
+            blockchain: blockchain,
+            transaction: transaction,
+            callback: completion)
+        base.send(method: method)
+    }
 
 }

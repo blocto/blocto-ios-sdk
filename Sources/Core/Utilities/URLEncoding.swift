@@ -18,7 +18,7 @@ public enum URLEncoding {
         var queryItems = [
             QueryItem(name: .appId, value: appId),
             QueryItem(name: .requestId, value: requestId),
-            QueryItem(name: .blockchain, value: blockchain),
+            QueryItem(name: .blockchain, value: blockchain.rawValue),
             QueryItem(name: .method, value: method.rawValue)
         ]
         switch method {
@@ -44,12 +44,68 @@ public enum URLEncoding {
                         name: .appendTx,
                         value: appendMessages))
             }
+        case let .sendTransaction(transaction):
+            queryItems.append(contentsOf: [
+                QueryItem(name: .from, value: transaction.from),
+                QueryItem(name: .to, value: transaction.to),
+                QueryItem(name: .value, value: String(transaction.value, radix: 16)),
+                QueryItem(name: .data, value: transaction.data)
+            ])
         }
         return queryItems
     }
 
     static func encode(_ queryItems: [QueryItem]) -> [URLQueryItem] {
         queryItems.flatMap { $0.getQueryComponents }
+    }
+
+    static func queryComponents(fromKey key: String, value: Any) -> [URLQueryItem] {
+        var components: [URLQueryItem] = []
+        switch value {
+        case let dictionary as [String: Any]:
+            for (nestedKey, value) in dictionary {
+                components += queryComponents(fromKey: "\(key)[\(nestedKey)]", value: value)
+            }
+        case let array as [Any]:
+            let arrayEncoding = ArrayEncoding()
+            for value in array {
+                components += queryComponents(fromKey: arrayEncoding.encode(key: key), value: value)
+            }
+        case let number as NSNumber:
+            if number.isBool {
+                let boolEncoding = BoolEncoding()
+                components.append(
+                    .init(
+                        name: escape(key),
+                        value: escape(boolEncoding.encode(value: number.boolValue))))
+            } else {
+                components.append(
+                    .init(
+                        name: escape(key),
+                        value: escape("\(number)")))
+            }
+        case let bool as Bool:
+            let boolEncoding = BoolEncoding()
+            components.append(
+                .init(
+                    name: escape(key),
+                    value: escape(boolEncoding.encode(value: bool))))
+        case let data as Data:
+            components.append(
+                .init(
+                    name: escape(key),
+                    value: escape(data.hexString)))
+        default:
+            components.append(
+                .init(
+                    name: escape(key),
+                    value: escape("\(value)")))
+        }
+        return components
+    }
+
+    private static func escape(_ string: String) -> String {
+        QueryEscape.escape(string)
     }
 
 }

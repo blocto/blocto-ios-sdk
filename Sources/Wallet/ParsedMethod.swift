@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import BigInt
 
 public struct ParsedMethod {
 
@@ -60,6 +61,17 @@ public struct ParsedMethod {
                     message: message,
                     appendTx: appendTx,
                     publicKeySignaturePairs: publicKeySignaturePairs))
+        case .sendTransaction:
+            guard let from = param[QueryName.from.rawValue],
+                  let to = param[QueryName.to.rawValue],
+                  let value = param[QueryName.value.rawValue],
+                  let dataString = param[QueryName.data.rawValue] else { return nil }
+            self.methodContentType = .sendTransaction(
+                transaction: EVMBaseTransaction(
+                    to: to,
+                    from: from,
+                    value: BigUInt(value, radix: 16) ?? 0,
+                    data: dataString.hexDecodedData))
         }
     }
 

@@ -5,7 +5,7 @@
 //  Created by Andrew Wang on 2022/4/8.
 //
 
-import SolanaWeb3
+import Foundation
 
 public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
     public typealias Response = String

@@ -14,6 +14,9 @@ public enum QueryName: String {
     case blockchain
     case method
     case from
+    case to
+    case value
+    case data
     case message
     case signType
     case isInvokeWrapped = "is_invoke_wrapped"
