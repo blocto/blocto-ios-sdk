@@ -13,6 +13,8 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* AccountRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* AccountRequestTests.swift */; };
+		6D02E62E283266FA00432971 /* SendTransactionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E62D283266FA00432971 /* SendTransactionTests.swift */; };
+		6D02E63028329A0700432971 /* XCTAssertURLComponentsEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E62F28329A0700432971 /* XCTAssertURLComponentsEqual.swift */; };
 		6D1FC37B27F5973100F7FD5C /* ParsedMethodTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1FC37927F5952300F7FD5C /* ParsedMethodTests.swift */; };
 		6D3D57952808367A00228BBD /* Consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3D57932808365100228BBD /* Consts.swift */; };
 		6D3D57C9281287D600228BBD /* ValueAccountData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3D57C8281287D600228BBD /* ValueAccountData.swift */; };
@@ -55,6 +57,8 @@
 		607FACE51AFB9204008FA782 /* BloctoSDK_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BloctoSDK_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* AccountRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRequestTests.swift; sourceTree = "<group>"; };
+		6D02E62D283266FA00432971 /* SendTransactionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendTransactionTests.swift; sourceTree = "<group>"; };
+		6D02E62F28329A0700432971 /* XCTAssertURLComponentsEqual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTAssertURLComponentsEqual.swift; sourceTree = "<group>"; };
 		6D1FC37927F5952300F7FD5C /* ParsedMethodTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsedMethodTests.swift; sourceTree = "<group>"; };
 		6D3D57932808365100228BBD /* Consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consts.swift; sourceTree = "<group>"; };
 		6D3D57C8281287D600228BBD /* ValueAccountData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueAccountData.swift; sourceTree = "<group>"; };
@@ -211,6 +215,7 @@
 			children = (
 				607FACEB1AFB9204008FA782 /* AccountRequestTests.swift */,
 				6DFA2AF428001EE200F7DA2C /* SignAndSendTransactionTests.swift */,
+				6D02E62D283266FA00432971 /* SendTransactionTests.swift */,
 			);
 			path = Methods;
 			sourceTree = "<group>";
@@ -261,6 +266,7 @@
 			isa = PBXGroup;
 			children = (
 				6DFA2AEF2800193F00F7DA2C /* XCTAssertDictionaryEqual.swift */,
+				6D02E62F28329A0700432971 /* XCTAssertURLComponentsEqual.swift */,
 				6DFA2AF62801601300F7DA2C /* XCTAssertArrayElementsEqual.swift */,
 			);
 			path = Utilities;
@@ -528,7 +534,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D02E62E283266FA00432971 /* SendTransactionTests.swift in Sources */,
 				6DFA2B0B28040E5100F7DA2C /* CallbackHelperTests.swift in Sources */,
+				6D02E63028329A0700432971 /* XCTAssertURLComponentsEqual.swift in Sources */,
 				6D3D57952808367A00228BBD /* Consts.swift in Sources */,
 				6D72112327FDE61200F1EB7F /* QueryItemEncodingTests.swift in Sources */,
 				6DD6F12127EDBF0000B514B1 /* MockUIApplication.swift in Sources */,

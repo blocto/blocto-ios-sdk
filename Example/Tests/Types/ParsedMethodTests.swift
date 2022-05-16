@@ -17,29 +17,29 @@ class ParsedMethodTests: XCTestCase {
         super.setUp()
     }
 
-//    func testParseAccountRequest() {
-//        // Given:
-//        let requestId = UUID().uuidString
-//        let param: [String: String] = [
-//            QueryName.appId.rawValue: appId,
-//            QueryName.requestId.rawValue: requestId,
-//            QueryName.blockchain.rawValue: Blockchain.solana.rawValue,
-//            QueryName.method.rawValue: MethodName.requestAccount.rawValue
-//        ]
-//
-//        let expected = ParsedMethod(
-//            appId: appId,
-//            requestId: requestId,
-//            blockchain: .solana,
-//            methodContentType: .requestAccount)
-//
-//        // When:
-//        let parsedMethod = ParsedMethod(param: param)
-//
-//        // Then:
-//        XCTAssertEqual(parsedMethod, expected)
-//
-//    }
+    func testParseAccountRequest() {
+        // Given:
+        let requestId = UUID().uuidString
+        let param: [String: String] = [
+            QueryName.appId.rawValue: appId,
+            QueryName.requestId.rawValue: requestId,
+            QueryName.blockchain.rawValue: Blockchain.solana.rawValue,
+            QueryName.method.rawValue: MethodName.requestAccount.rawValue
+        ]
+
+        let expected = ParsedMethod(
+            appId: appId,
+            requestId: requestId,
+            blockchain: .solana,
+            methodContentType: .solana(.requestAccount))
+
+        // When:
+        let parsedMethod = ParsedMethod(param: param)
+
+        // Then:
+        XCTAssertEqual(parsedMethod, expected)
+
+    }
 
 }
 

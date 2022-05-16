@@ -50,11 +50,11 @@ public class BloctoBSCSDK {
     ///   The successful result is Tx hash of BSC.
     public func sendTransaction(
         uuid: UUID = UUID(),
-        blockchain: Blockchain,
         transaction: EVMBaseTransaction,
         completion: @escaping (Result<String, Swift.Error>) -> Void
     ) {
         let method = SendEVMBasedTransactionMethod(
+            id: uuid,
             blockchain: .binanceSmartChain,
             transaction: transaction,
             callback: completion)

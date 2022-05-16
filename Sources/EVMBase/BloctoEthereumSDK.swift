@@ -54,6 +54,7 @@ public class BloctoEthereumSDK {
         completion: @escaping (Result<String, Swift.Error>) -> Void
     ) {
         let method = SendEVMBasedTransactionMethod(
+            id: uuid,
             blockchain: .ethereum,
             transaction: transaction,
             callback: completion)

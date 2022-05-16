@@ -32,9 +32,11 @@ Pod::Spec.new do |s|
   end
   
   s.subspec "Wallet" do |ss|
-      ss.source_files = "Sources/Wallet/**/*",
+      ss.source_files = "Sources/Wallet/*",
+      "Sources/Solana/Models/SolanaMethodType.swift",
       "Sources/Solana/Models/SolanaMethodContentType.swift",
       "Sources/Solana/Models/SolanaTransactionInfo.swift",
+      "Sources/EVMBase/Models/EVMBaseMethodType.swift",
       "Sources/EVMBase/Models/EVMBaseMethodContentType.swift",
       "Sources/EVMBase/Models/EVMBaseTransaction.swift",
       "Sources/EVMBase/Models/SignType.swift"

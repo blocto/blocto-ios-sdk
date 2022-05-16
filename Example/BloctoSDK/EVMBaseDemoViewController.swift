@@ -653,7 +653,6 @@ final class EVMBaseDemoViewController: UIViewController {
                 value: "0",
                 data: functionData)
             selectedBlockchain.sdkProvider.sendTransaction(
-                blockchain: selectedBlockchain.blockchain,
                 transaction: evmBaseTransaction
             ) { [weak self] result in
                 guard let self = self else { return }
@@ -716,7 +715,6 @@ final class EVMBaseDemoViewController: UIViewController {
                 value: value,
                 data: functionData)
             selectedBlockchain.sdkProvider.sendTransaction(
-                blockchain: selectedBlockchain.blockchain,
                 transaction: evmBaseTransaction
             ) { [weak self] result in
                 guard let self = self else { return }

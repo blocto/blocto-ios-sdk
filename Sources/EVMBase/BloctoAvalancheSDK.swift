@@ -50,11 +50,11 @@ public class BloctoAvalancheSDK {
     ///   The successful result is Tx hash of Avalanche.
     public func sendTransaction(
         uuid: UUID = UUID(),
-        blockchain: Blockchain,
         transaction: EVMBaseTransaction,
         completion: @escaping (Result<String, Swift.Error>) -> Void
     ) {
         let method = SendEVMBasedTransactionMethod(
+            id: uuid,
             blockchain: .avalanche,
             transaction: transaction,
             callback: completion)
