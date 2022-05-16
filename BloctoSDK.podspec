@@ -22,24 +22,19 @@ Pod::Spec.new do |s|
       ss.source_files = "Sources/Solana/**/*"
       ss.dependency "BloctoSDK/Core"
       ss.dependency "SolanaWeb3", "~> 0.0.4"
-      ss.dependency "Moya", "~> 15.0"
+      ss.dependency "Moya", "~> 14.0.0"
   end
   
   s.subspec "EVMBase" do |ss|
       ss.source_files = "Sources/EVMBase/**/*"
       ss.dependency "BloctoSDK/Core"
-      ss.dependency "BloctoSDK/EVMBaseType"
-  end
-  
-  s.subspec "EVMBaseType" do |ss|
-    ss.source_files = "Sources/EVMBaseType/**/*"
-    ss.dependency "BigInt"
+      ss.dependency "BigInt", "~> 5.0"
   end
   
   s.subspec "Wallet" do |ss|
       ss.source_files = "Sources/Wallet/**/*"
-      ss.dependency "BloctoSDK/Core"
-      ss.dependency "BloctoSDK/EVMBaseType"
+      ss.dependency "BloctoSDK/EVMBase"
+      ss.dependency "BloctoSDK/Solana"
   end
 
 end

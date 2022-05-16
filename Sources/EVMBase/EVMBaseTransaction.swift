@@ -6,7 +6,6 @@
 //  Copyright © 2022 CocoaPods. All rights reserved.
 //
 
-import Foundation
 import BigInt
 
 public struct EVMBaseTransaction {

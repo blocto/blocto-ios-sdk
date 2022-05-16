@@ -11,7 +11,7 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
     public typealias Response = String
 
     public let id: UUID
-    public let type: MethodType = .signAndSendTransaction
+    public let type: String = SolanaMethodType.signAndSendTransaction.rawValue
     public let from: String
     public let transactionInfo: SolanaTransactionInfo
     public let isInvokeWrapped: Bool
@@ -45,17 +45,23 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
                   return nil
               }
-        let queryItems = URLEncoding.queryItems(
+        var queryItems = URLEncoding.queryItems(
             appId: appId,
             requestId: id.uuidString,
-            blockchain: blockchain,
-            method: .signAndSendTransaction(
-                from: from,
-                isInvokeWrapped: true,
-                transactionInfo: SolanaTransactionInfo(
-                    message: transactionInfo.message,
-                    appendTx: transactionInfo.appendTx,
-                    publicKeySignaturePairs: transactionInfo.publicKeySignaturePairs)))
+            blockchain: blockchain)
+        queryItems.append(contentsOf: [
+            QueryItem(name: .method, value: type),
+            QueryItem(name: .from, value: from),
+            QueryItem(name: .isInvokeWrapped, value: isInvokeWrapped),
+            QueryItem(name: .message, value: transactionInfo.message),
+            QueryItem(name: .publicKeySignaturePairs, value: transactionInfo.publicKeySignaturePairs)
+        ])
+        if let appendMessages = transactionInfo.appendTx {
+            queryItems.append(
+                QueryItem(
+                    name: .appendTx,
+                    value: appendMessages))
+        }
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }

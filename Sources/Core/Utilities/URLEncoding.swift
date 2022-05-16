@@ -12,46 +12,13 @@ public enum URLEncoding {
     static func queryItems(
         appId: String,
         requestId: String,
-        blockchain: Blockchain,
-        method: MethodContentType
+        blockchain: Blockchain
     ) -> [QueryItem] {
-        var queryItems = [
+        let queryItems = [
             QueryItem(name: .appId, value: appId),
             QueryItem(name: .requestId, value: requestId),
-            QueryItem(name: .blockchain, value: blockchain.rawValue),
-            QueryItem(name: .method, value: method.rawValue)
+            QueryItem(name: .blockchain, value: blockchain.rawValue)
         ]
-        switch method {
-        case .requestAccount:
-            break
-        case let .signMessage(from, message, signType):
-            queryItems.append(contentsOf: [
-                QueryItem(name: .from, value: from),
-                QueryItem(name: .message, value: message),
-                QueryItem(name: .signType, value: signType)
-            ])
-        case let .signAndSendTransaction(from, isInvokeWrapped, transactionInfo):
-            queryItems.append(contentsOf: [
-                QueryItem(name: .from, value: from),
-                QueryItem(name: .isInvokeWrapped, value: isInvokeWrapped),
-                QueryItem(name: .message, value: transactionInfo.message),
-                QueryItem(name: .appendTx, value: transactionInfo.appendTx ?? [:]),
-                QueryItem(name: .publicKeySignaturePairs, value: transactionInfo.publicKeySignaturePairs)
-            ])
-            if let appendMessages = transactionInfo.appendTx {
-                queryItems.append(
-                    QueryItem(
-                        name: .appendTx,
-                        value: appendMessages))
-            }
-        case let .sendTransaction(transaction):
-            queryItems.append(contentsOf: [
-                QueryItem(name: .from, value: transaction.from),
-                QueryItem(name: .to, value: transaction.to),
-                QueryItem(name: .value, value: String(transaction.value, radix: 16)),
-                QueryItem(name: .data, value: transaction.data)
-            ])
-        }
         return queryItems
     }
 

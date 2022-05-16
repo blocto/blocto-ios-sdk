@@ -82,20 +82,18 @@ enum EVMBase: CaseIterable {
             return isProduction
             ? EthereumClient(url: URL(string: "https://mainnet.infura.io/v3/b2f4b3f635d8425c96854c3d28ba6bb0")!)
             : EthereumClient(url: URL(string: "https://rinkeby.infura.io/v3/b2f4b3f635d8425c96854c3d28ba6bb0")!)
-//        case .bsc:
-//            return isProduction
-//            ? EthereumClient(url: URL(string: "https://mainnet.infura.io/v3/b2f4b3f635d8425c96854c3d28ba6bb0")!)
-//            : EthereumClient(url: URL(string: "https://rinkeby.infura.io/v3/b2f4b3f635d8425c96854c3d28ba6bb0")!)
+        case .bsc:
+            return isProduction
+            ? EthereumClient(url: URL(string: "https://bsc-dataseed.binance.org")!)
+            : EthereumClient(url: URL(string: "https://data-seed-prebsc-1-s1.binance.org:8545")!)
         case .polygon:
             return isProduction
             ? EthereumClient(url: URL(string: "https://polygon-mainnet.infura.io/v3/b2f4b3f635d8425c96854c3d28ba6bb0")!)
             : EthereumClient(url: URL(string: "https://polygon-mumbai.infura.io/v3/b2f4b3f635d8425c96854c3d28ba6bb0")!)
-//        case .avalanche:
-//            return isProduction
-//            ? EthereumClient(url: URL(string: "https://mainnet.infura.io/v3/b2f4b3f635d8425c96854c3d28ba6bb0")!)
-//            : EthereumClient(url: URL(string: "https://rinkeby.infura.io/v3/b2f4b3f635d8425c96854c3d28ba6bb0")!)
-        default:
-            return EthereumClient(url: URL(string: "https://mainnet.infura.io/v3/b2f4b3f635d8425c96854c3d28ba6bb0")!)
+        case .avalanche:
+            return isProduction
+            ? EthereumClient(url: URL(string: "https://api.avax.network/ext/bc/C/rpc")!)
+            : EthereumClient(url: URL(string: "https://api.avax-test.network/ext/bc/C/rpc")!)
         }
     }
 

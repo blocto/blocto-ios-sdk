@@ -5,13 +5,13 @@
 //  Created by Andrew Wang on 2022/5/12.
 //
 
-import Foundation
+import BigInt
 
 public struct SignAndSendEVMBaseTransactionMethod: CallbackMethod {
     public typealias Response = String
 
     public let id: UUID
-    public let type: MethodType = .sendTransaction
+    public let type: String = EVMBaseMethodType.sendTransaction.rawValue
     public let transaction: EVMBaseTransaction
     public let callback: Callback
 
@@ -39,11 +39,17 @@ public struct SignAndSendEVMBaseTransactionMethod: CallbackMethod {
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
                   return nil
               }
-        let queryItems = URLEncoding.queryItems(
+        var queryItems = URLEncoding.queryItems(
             appId: appId,
             requestId: id.uuidString,
-            blockchain: blockchain,
-            method: .sendTransaction(transaction: transaction))
+            blockchain: blockchain)
+        queryItems.append(contentsOf: [
+            QueryItem(name: .method, value: type),
+            QueryItem(name: .from, value: transaction.from),
+            QueryItem(name: .to, value: transaction.to),
+            QueryItem(name: .value, value: String(transaction.value, radix: 16)),
+            QueryItem(name: .data, value: transaction.data)
+        ])
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }

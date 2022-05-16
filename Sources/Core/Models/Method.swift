@@ -9,7 +9,7 @@ import Foundation
 
 public protocol Method {
     var id: UUID { get }
-    var type: MethodType { get }
+    var type: String { get }
 
     func encodeToURL(appId: String, baseURLString: String) throws -> URL?
     func resolve(components: URLComponents, logging: Bool)

@@ -3,22 +3,20 @@ PODS:
   - BigInt (5.0.0)
   - BloctoSDK/Core (0.2.0)
   - BloctoSDK/EVMBase (0.2.0):
+    - BigInt (~> 5.0)
     - BloctoSDK/Core
-    - BloctoSDK/EVMBaseType
-  - BloctoSDK/EVMBaseType (0.2.0):
-    - BigInt
   - BloctoSDK/Solana (0.2.0):
     - BloctoSDK/Core
-    - Moya (~> 15.0)
+    - Moya (~> 14.0.0)
     - SolanaWeb3 (~> 0.0.4)
   - BloctoSDK/Wallet (0.2.0):
-    - BloctoSDK/Core
-    - BloctoSDK/EVMBaseType
+    - BloctoSDK/EVMBase
+    - BloctoSDK/Solana
   - CryptoSwift (1.5.1)
   - GenericJSON (2.0.1)
-  - Moya (15.0.0):
-    - Moya/Core (= 15.0.0)
-  - Moya/Core (15.0.0):
+  - Moya (14.0.0):
+    - Moya/Core (= 14.0.0)
+  - Moya/Core (14.0.0):
     - Alamofire (~> 5.0)
   - Runtime (2.2.2)
   - RxCocoa (6.2.0):
@@ -80,10 +78,10 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Alamofire: 0c07058209f211e3d32824f8e0766d7c44ac83b3
   BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
-  BloctoSDK: 4534d5ad482d502bd47c87e9e082bbd58ddf72ed
+  BloctoSDK: c5816187b84df8c1a460af46d65b416f04d09db0
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
   GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
-  Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
+  Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
   Runtime: 67741bd196fb4ad821c4d259ccc527bf734d8806
   RxCocoa: 4baf94bb35f2c0ab31bc0cb9f1900155f646ba42
   RxRelay: e72dbfd157807478401ef1982e1c61c945c94b2f
