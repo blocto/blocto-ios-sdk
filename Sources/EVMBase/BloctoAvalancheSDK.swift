@@ -45,19 +45,17 @@ public class BloctoAvalancheSDK {
     /// To sign transaction and then send transaction
     /// - Parameters:
     ///   - uuid: The id to identify this request, you can pass your owned uuid here.
-    ///   - from: from which solana account address.
     ///   - transaction: Custom type EVMBaseTransaction.
-    ///   - forceWebSDK: Using this flag to force routing to WebSDK even if Blocto Wallet app is Installed, default is false.
     ///   - completion: completion handler for this methods. Please note this completion might not be called in some circumstances. e.g. SDK version incompatible with Blocto Wallet app.
-    ///   The successful result is Tx hash of Ethereum.
+    ///   The successful result is Tx hash of Avalanche.
     public func sendTransaction(
         uuid: UUID = UUID(),
         blockchain: Blockchain,
         transaction: EVMBaseTransaction,
         completion: @escaping (Result<String, Swift.Error>) -> Void
     ) {
-        let method = SignAndSendEVMBaseTransactionMethod(
-            blockchain: blockchain,
+        let method = SendEVMBasedTransactionMethod(
+            blockchain: .avalanche,
             transaction: transaction,
             callback: completion)
         base.send(method: method)

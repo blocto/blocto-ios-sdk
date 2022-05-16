@@ -10,8 +10,8 @@ PODS:
     - Moya (~> 14.0.0)
     - SolanaWeb3 (~> 0.0.4)
   - BloctoSDK/Wallet (0.2.0):
-    - BloctoSDK/EVMBase
-    - BloctoSDK/Solana
+    - BigInt (~> 5.0)
+    - BloctoSDK/Core (~> 0.2.0)
   - CryptoSwift (1.5.1)
   - GenericJSON (2.0.1)
   - Moya (14.0.0):
@@ -78,7 +78,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Alamofire: 0c07058209f211e3d32824f8e0766d7c44ac83b3
   BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
-  BloctoSDK: c5816187b84df8c1a460af46d65b416f04d09db0
+  BloctoSDK: d80919b0599c56e166689df24664ebd62e2faa62
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
   GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
   Moya: 5b45dacb75adb009f97fde91c204c1e565d31916

@@ -1,5 +1,5 @@
 //
-//  SignAndSendEVMBaseTransactionMethod.swift
+//  SendEVMBasedTransactionMethod.swift
 //  BloctoSDK
 //
 //  Created by Andrew Wang on 2022/5/12.
@@ -7,7 +7,7 @@
 
 import BigInt
 
-public struct SignAndSendEVMBaseTransactionMethod: CallbackMethod {
+public struct SendEVMBasedTransactionMethod: CallbackMethod {
     public typealias Response = String
 
     public let id: UUID
