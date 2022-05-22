@@ -1,39 +1,49 @@
 //
-//  SendEVMBasedTransactionMethod.swift
+//  SignEVMBaseMessageMethod.swift
 //  BloctoSDK
 //
-//  Created by Andrew Wang on 2022/5/12.
+//  Created by Andrew Wang on 2022/5/20.
 //
 
-import BigInt
+import Foundation
 
-public struct SendEVMBasedTransactionMethod: CallbackMethod {
+public struct SignEVMBaseMessageMethod: CallbackMethod {
+    
     public typealias Response = String
-
+    
     public let id: UUID
-    public let type: String = EVMBaseMethodType.sendTransaction.rawValue
+    public let type: String = EVMBaseMethodType.signMessage.rawValue
     public let callback: Callback
-
+    
     let blockchain: Blockchain
-    let transaction: EVMBaseTransaction
+    let from: String
+    let message: String
+    let signType: EVMBaseSignType
 
-    /// initialize request account method
+    /// initialize sign EVMBase message method
     /// - Parameters:
     ///   - id: Used to find a stored callback. No need to pass if there is no specific requirement, for example, testing.
+    ///   - from: send from which address.
+    ///   - message: message needs to be sign in String format.
+    ///   - signType: pre-defined signType in BloctoSDK/EVMBase
     ///   - blockchain: pre-defined blockchain in BloctoSDK
     ///   - callback: callback will be called by either from blocto native app or web SDK after getting account or reject.
     public init(
         id: UUID = UUID(),
+        from: String,
+        message: String,
+        signType: EVMBaseSignType,
         blockchain: Blockchain,
-        transaction: EVMBaseTransaction,
-        callback: @escaping Callback
+        callback: @escaping SignEVMBaseMessageMethod.Callback
     ) {
         self.id = id
+        self.from = from
+        self.message = message
+        self.signType = signType
         self.blockchain = blockchain
-        self.transaction = transaction
         self.callback = callback
     }
-
+    
     public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
         guard let baseURL = URL(string: baseURLString),
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
@@ -45,31 +55,40 @@ public struct SendEVMBasedTransactionMethod: CallbackMethod {
             blockchain: blockchain)
         queryItems.append(contentsOf: [
             QueryItem(name: .method, value: type),
-            QueryItem(name: .from, value: transaction.from),
-            QueryItem(name: .to, value: transaction.to),
-            QueryItem(name: .value, value: String(transaction.value, radix: 16)),
-            QueryItem(name: .data, value: transaction.data)
+            QueryItem(name: .from, value: from),
+            QueryItem(name: .signType, value: signType.rawValue),
+            QueryItem(name: .message, value: message),
         ])
+        let messageValue: String
+        switch signType {
+        case .sign,
+                .personalSign:
+            return message.
+        case .typedSignV3,
+                .typedSignV4,
+                .typedSign:
+            return
+        }
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }
-
+    
     public func resolve(components: URLComponents, logging: Bool) {
         if let errorCode = components.queryItem(for: .error) {
             callback(.failure(QueryError(code: errorCode)))
             return
         }
-        let targetQueryName = QueryName.txHash
-        guard let txHash = components.queryItem(for: targetQueryName) else {
+        let targetQueryName = QueryName.signature
+        guard let signature = components.queryItem(for: targetQueryName) else {
             log(
                 enable: logging,
                 message: "\(targetQueryName.rawValue) not found.")
             callback(.failure(QueryError.invalidResponse))
             return
         }
-        callback(.success(txHash))
+        callback(.success(signature))
     }
-
+    
     public func handleError(error: Swift.Error) {
         callback(.failure(error))
     }

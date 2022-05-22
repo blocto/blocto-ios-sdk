@@ -66,8 +66,15 @@ public struct ParsedMethod {
             case .requestAccount:
                 methodContentType = .evmBase(.requestAccount)
             case .signMessage:
-                // TODO:
-                return nil
+                guard let from = param[QueryName.from.rawValue],
+                      let message = param[QueryName.message.rawValue],
+                      let rawSignType = param[QueryName.signType.rawValue],
+                      let signType = EVMBaseSignType(rawValue: rawSignType) else { return nil }
+                methodContentType = .evmBase(
+                    .signMessage(
+                        from: from,
+                        message: message.removingPercentEncoding ?? message,
+                        signType: signType))
             case .sendTransaction:
                 guard let from = param[QueryName.from.rawValue],
                       let to = param[QueryName.to.rawValue],

@@ -15,7 +15,7 @@ import BloctoSDK
 import web3
 import BigInt
 
-// swiftlint:disable type_body_length
+// swiftlint:disable type_body_length file_length
 final class EVMBaseDemoViewController: UIViewController {
 
     private var userWalletAddress: String?
@@ -23,16 +23,18 @@ final class EVMBaseDemoViewController: UIViewController {
     private lazy var bloctoEthereumSDK = BloctoSDK.shared.ethereum
 
     private var selectedBlockchain: EVMBase = .ethereum
+    private var selectedSigningType: EVMBaseSignType = .sign
 
     private lazy var rpcClient = selectedBlockchain.rpcClient
+
+    private let blockchainSelections: [EVMBase] = EVMBase.allCases
+    private let signingSelections: [EVMBaseSignType] = EVMBaseSignType.allCases
 
     private lazy var networkSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["testnet", "mainnet"])
         segmentedControl.selectedSegmentIndex = 0
         return segmentedControl
     }()
-
-    private let blockchainSelections: [EVMBase] = EVMBase.allCases
 
     private lazy var blockchainSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: blockchainSelections.map { $0.displayString })
@@ -64,19 +66,29 @@ final class EVMBaseDemoViewController: UIViewController {
 
         view.addSubview(separator1)
 
+        view.addSubview(signingTitleLabel)
+        view.addSubview(signingSegmentedControl)
+        view.addSubview(signingTypeDataSegmentedControl)
+        view.addSubview(signingTextView)
+        view.addSubview(signingResultLabel)
+        view.addSubview(signButton)
+        view.addSubview(signingLoadingIndicator)
+
+        view.addSubview(separator2)
+
         view.addSubview(setValueTitleLabel)
         view.addSubview(nomalTxInputTextField)
         view.addSubview(setValueButton)
         view.addSubview(setValueResultLabel)
         view.addSubview(setValueExplorerButton)
 
-        view.addSubview(separator2)
+        view.addSubview(separator3)
 
         view.addSubview(getValueTitleLabel)
         view.addSubview(getValueButton)
         view.addSubview(getValueResultLabel)
 
-        view.addSubview(separator3)
+        view.addSubview(separator4)
 
         view.addSubview(sendValueTxTitleLabel)
         view.addSubview(valueTxInputTextField)
@@ -117,8 +129,47 @@ final class EVMBaseDemoViewController: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
-        setValueTitleLabel.snp.makeConstraints {
+        signingTitleLabel.snp.makeConstraints {
             $0.top.equalTo(separator1.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
+        signingSegmentedControl.snp.makeConstraints {
+            $0.top.equalTo(signingTitleLabel.snp.bottom).offset(20)
+            $0.centerX.equalToSuperview()
+            $0.leading.greaterThanOrEqualToSuperview().inset(20)
+            $0.trailing.lessThanOrEqualToSuperview().inset(20)
+        }
+
+        signingTypeDataSegmentedControl.snp.makeConstraints {
+            $0.top.equalTo(signingSegmentedControl.snp.bottom).offset(10)
+            $0.centerX.equalToSuperview()
+            $0.leading.greaterThanOrEqualToSuperview().inset(20)
+            $0.trailing.lessThanOrEqualToSuperview().inset(20)
+        }
+
+        signingTextView.snp.makeConstraints {
+            $0.top.equalTo(signingTypeDataSegmentedControl.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
+        signingResultLabel.snp.makeConstraints {
+            $0.top.equalTo(signingTextView.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
+        signButton.snp.makeConstraints {
+            $0.top.equalTo(signingResultLabel.snp.bottom).offset(20)
+            $0.leading.equalToSuperview().inset(20)
+        }
+
+        separator2.snp.makeConstraints {
+            $0.top.equalTo(signButton.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
+        setValueTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(separator2.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
@@ -135,7 +186,7 @@ final class EVMBaseDemoViewController: UIViewController {
 
         setValueResultLabel.snp.makeConstraints {
             $0.top.equalTo(setValueButton.snp.bottom).offset(20)
-            $0.leading.equalToSuperview().inset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
         }
 
         setValueExplorerButton.snp.makeConstraints {
@@ -145,13 +196,13 @@ final class EVMBaseDemoViewController: UIViewController {
             $0.trailing.equalToSuperview().inset(20)
         }
 
-        separator2.snp.makeConstraints {
+        separator3.snp.makeConstraints {
             $0.top.equalTo(setValueResultLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
         getValueTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(separator2.snp.bottom).offset(20)
+            $0.top.equalTo(separator3.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
@@ -165,13 +216,13 @@ final class EVMBaseDemoViewController: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
-        separator3.snp.makeConstraints {
+        separator4.snp.makeConstraints {
             $0.top.equalTo(getValueResultLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
         sendValueTxTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(separator3.snp.bottom).offset(20)
+            $0.top.equalTo(separator4.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
@@ -188,7 +239,7 @@ final class EVMBaseDemoViewController: UIViewController {
 
         sendValueTxResultLabel.snp.makeConstraints {
             $0.top.equalTo(sendValueTxButton.snp.bottom).offset(20)
-            $0.leading.equalToSuperview().inset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
             $0.bottom.equalToSuperview().inset(50)
         }
 
@@ -244,6 +295,50 @@ final class EVMBaseDemoViewController: UIViewController {
 
     private lazy var separator1 = createSeparator()
 
+    private lazy var signingTitleLabel: UILabel = createLabel(text: "Signing")
+
+    private lazy var signingSegmentedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl(items: signingSelections.prefix(2).map { $0.rawValue.replacingOccurrences(of: "_", with: " ") })
+        segmentedControl.selectedSegmentIndex = 0
+        return segmentedControl
+    }()
+
+    private lazy var signingTypeDataSegmentedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl(items: signingSelections.dropFirst(2).map { $0.rawValue.replacingOccurrences(of: "_", with: " ") })
+        segmentedControl.selectedSegmentIndex = UISegmentedControl.noSegment
+        return segmentedControl
+    }()
+
+    private lazy var signingTextView: UITextView = {
+        let textView = UITextView()
+        textView.font = UIFont.systemFont(ofSize: 16)
+        textView.textColor = .black
+        textView.backgroundColor = .lightGray
+        textView.text = selectedSigningType.defaultText
+        textView.isScrollEnabled = false
+        textView.returnKeyType = .done
+        textView.layer.cornerRadius = 5
+        textView.clipsToBounds = true
+        return textView
+    }()
+
+    private lazy var signingResultLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .black
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
+
+    private lazy var signButton: UIButton = createButton(
+        text: "Sign",
+        indicator: signingLoadingIndicator)
+
+    private lazy var signingLoadingIndicator = createLoadingIndicator()
+
+    private lazy var separator2 = createSeparator()
+
     private lazy var setValueTitleLabel: UILabel = createLabel(text: "Set a Value")
 
     private lazy var nomalTxInputTextField: UITextField = {
@@ -288,7 +383,7 @@ final class EVMBaseDemoViewController: UIViewController {
         return button
     }()
 
-    private lazy var separator2 = createSeparator()
+    private lazy var separator3 = createSeparator()
 
     private lazy var getValueTitleLabel: UILabel = createLabel(text: "Get a Value from Account's Data")
 
@@ -307,7 +402,7 @@ final class EVMBaseDemoViewController: UIViewController {
         return label
     }()
 
-    private lazy var separator3 = createSeparator()
+    private lazy var separator4 = createSeparator()
 
     private lazy var sendValueTxTitleLabel: UILabel = createLabel(text: "Send transaction with native coin value")
 
@@ -400,7 +495,7 @@ final class EVMBaseDemoViewController: UIViewController {
         }
     }
 
-    // swiftlint:disable cyclomatic_complexity
+    // swiftlint:disable cyclomatic_complexity function_body_length
     private func setupBinding() {
         _ = networkSegmentedControl.rx.value.changed
             .take(until: rx.deallocated)
@@ -443,6 +538,26 @@ final class EVMBaseDemoViewController: UIViewController {
                 self.resetValueTxStatus()
                 self.selectedBlockchain = self.blockchainSelections[index]
                 self.rpcClient = self.selectedBlockchain.rpcClient
+            })
+
+        _ = signingSegmentedControl.rx.value.changed
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] index in
+                guard let self = self else { return }
+                self.resetSignStatus()
+                self.signingTypeDataSegmentedControl.selectedSegmentIndex = UISegmentedControl.noSegment
+                self.selectedSigningType = self.signingSelections[index]
+                self.signingTextView.text = self.selectedSigningType.defaultText
+            })
+
+        _ = signingTypeDataSegmentedControl.rx.value.changed
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] index in
+                guard let self = self else { return }
+                self.resetSignStatus()
+                self.signingSegmentedControl.selectedSegmentIndex = UISegmentedControl.noSegment
+                self.selectedSigningType = Array(self.signingSelections.dropFirst(2))[index]
+                self.signingTextView.text = self.selectedSigningType.defaultText
             })
 
         _ = requestAccountButton.rx.tap
@@ -494,6 +609,17 @@ final class EVMBaseDemoViewController: UIViewController {
                 guard let self = self,
                       let address = self.requestAccountResultLabel.text else { return }
                 self.routeToExplorer(with: .address(address))
+            })
+
+        _ = signButton.rx.tap
+            .throttle(
+                DispatchTimeInterval.milliseconds(500),
+                latest: false,
+                scheduler: MainScheduler.instance)
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.signMessage()
             })
 
         _ = setValueButton.rx.tap
@@ -612,6 +738,12 @@ final class EVMBaseDemoViewController: UIViewController {
         requestAccountExplorerButton.isHidden = true
     }
 
+    private func resetSignStatus() {
+        signingResultLabel.text = nil
+        signingResultLabel.textColor = .black
+        signingLoadingIndicator.stopAnimating()
+    }
+
     private func resetSetValueStatus() {
         setValueResultLabel.text = nil
         setValueResultLabel.textColor = .black
@@ -629,6 +761,30 @@ final class EVMBaseDemoViewController: UIViewController {
         sendValueTxResultLabel.text = nil
         sendValueTxResultLabel.textColor = .black
         sendValueTxLoadingIndicator.stopAnimating()
+    }
+
+    private func signMessage() {
+        guard let userWalletAddress = userWalletAddress else {
+            handleSignError(Error.message("User address not found. Please request account first."))
+            return
+        }
+        guard let message = signingTextView.text else {
+            handleSignError(Error.message("message not found."))
+            return
+        }
+        selectedBlockchain.sdkProvider.signMessage(
+            from: userWalletAddress,
+            message: message,
+            signType: selectedSigningType) { [weak self] result in
+                guard let self = self else { return }
+                self.resetSignStatus()
+                switch result {
+                case let .success(signature):
+                    self.signingResultLabel.text = signature
+                case let .failure(error):
+                    self.handleSignError(error)
+                }
+            }
     }
 
     private func sendTransaction() {
@@ -753,6 +909,29 @@ final class EVMBaseDemoViewController: UIViewController {
         }
         requestAccountResultLabel.textColor = .red
         requestAccountLoadingIndicator.stopAnimating()
+    }
+
+    private func handleSignError(_ error: Swift.Error) {
+        if let error = error as? QueryError {
+            switch error {
+            case .userRejected:
+                signingResultLabel.text = "user rejected."
+            case .forbiddenBlockchain:
+                signingResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
+            case .invalidResponse:
+                signingResultLabel.text = "invalid response."
+            case .userNotMatch:
+                signingResultLabel.text = "user not matched."
+            case .other(let code):
+                signingResultLabel.text = code
+            }
+        } else if let error = error as? Error {
+            signingResultLabel.text = error.message
+        } else {
+            signingResultLabel.text = error.localizedDescription
+        }
+        signingResultLabel.textColor = .red
+        signingLoadingIndicator.stopAnimating()
     }
 
     private func handleSetValueError(_ error: Swift.Error) {

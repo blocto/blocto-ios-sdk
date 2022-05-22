@@ -42,6 +42,30 @@ public class BloctoAvalancheSDK {
         base.send(method: method)
     }
 
+    /// To sign message
+    /// - Parameters:
+    ///   - uuid: The id to identify this request, you can pass your owned uuid here.
+    ///   - from: send from which address.
+    ///   - message: message needs to be sign in String format.
+    ///   - signType: pre-defined signType in BloctoSDK/EVMBase
+    ///   - completion: completion handler for this methods. Please note this completion might not be called in some circumstances. e.g. SDK version incompatible with Blocto Wallet app.
+    public func signMessage(
+        uuid: UUID = UUID(),
+        from: String,
+        message: String,
+        signType: EVMBaseSignType,
+        completion: @escaping (Result<String, Swift.Error>) -> Void
+    ) {
+        let method = SignEVMBaseMessageMethod(
+            id: uuid,
+            from: from,
+            message: message,
+            signType: signType,
+            blockchain: .avalanche,
+            callback: completion)
+        base.send(method: method)
+    }
+
     /// To sign transaction and then send transaction
     /// - Parameters:
     ///   - uuid: The id to identify this request, you can pass your owned uuid here.

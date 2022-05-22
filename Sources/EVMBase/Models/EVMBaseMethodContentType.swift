@@ -14,7 +14,7 @@ public enum EVMBaseMethodContentType {
     case signMessage(
         from: String,
         message: String,
-        signType: SignType)
+        signType: EVMBaseSignType)
 
     case sendTransaction(
         transaction: EVMBaseTransaction)

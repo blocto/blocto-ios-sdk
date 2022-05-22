@@ -12,6 +12,14 @@ protocol EVMBaseSDKProvider {
 
     func requestAccount(completion: @escaping (Result<String, Swift.Error>) -> Void)
 
+    func signMessage(
+        uuid: UUID,
+        from: String,
+        message: String,
+        signType: EVMBaseSignType,
+        completion: @escaping (Result<String, Swift.Error>) -> Void
+    )
+
     func sendTransaction(
         uuid: UUID,
         transaction: EVMBaseTransaction,
@@ -21,6 +29,20 @@ protocol EVMBaseSDKProvider {
 }
 
 extension EVMBaseSDKProvider {
+
+    func signMessage(
+        from: String,
+        message: String,
+        signType: EVMBaseSignType,
+        completion: @escaping (Result<String, Swift.Error>) -> Void
+    ) {
+        signMessage(
+            uuid: UUID(),
+            from: from,
+            message: message,
+            signType: signType,
+            completion: completion)
+    }
 
     func sendTransaction(
         transaction: EVMBaseTransaction,

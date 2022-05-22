@@ -18,7 +18,7 @@ public enum QueryName: String {
     case value
     case data
     case message
-    case signType
+    case signType = "type"
     case isInvokeWrapped = "is_invoke_wrapped"
     case appendTx = "append_tx"
     case publicKeySignaturePairs = "public_key_signature_pairs"

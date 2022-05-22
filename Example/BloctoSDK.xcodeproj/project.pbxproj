@@ -15,6 +15,7 @@
 		607FACEC1AFB9204008FA782 /* AccountRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* AccountRequestTests.swift */; };
 		6D02E62E283266FA00432971 /* SendTransactionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E62D283266FA00432971 /* SendTransactionTests.swift */; };
 		6D02E63028329A0700432971 /* XCTAssertURLComponentsEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E62F28329A0700432971 /* XCTAssertURLComponentsEqual.swift */; };
+		6D02E65628355CF400432971 /* EVMBaseSignTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E65528355CF400432971 /* EVMBaseSignTypeExtension.swift */; };
 		6D1FC37B27F5973100F7FD5C /* ParsedMethodTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1FC37927F5952300F7FD5C /* ParsedMethodTests.swift */; };
 		6D3D57952808367A00228BBD /* Consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3D57932808365100228BBD /* Consts.swift */; };
 		6D3D57C9281287D600228BBD /* ValueAccountData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3D57C8281287D600228BBD /* ValueAccountData.swift */; };
@@ -59,6 +60,7 @@
 		607FACEB1AFB9204008FA782 /* AccountRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRequestTests.swift; sourceTree = "<group>"; };
 		6D02E62D283266FA00432971 /* SendTransactionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendTransactionTests.swift; sourceTree = "<group>"; };
 		6D02E62F28329A0700432971 /* XCTAssertURLComponentsEqual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTAssertURLComponentsEqual.swift; sourceTree = "<group>"; };
+		6D02E65528355CF400432971 /* EVMBaseSignTypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMBaseSignTypeExtension.swift; sourceTree = "<group>"; };
 		6D1FC37927F5952300F7FD5C /* ParsedMethodTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsedMethodTests.swift; sourceTree = "<group>"; };
 		6D3D57932808365100228BBD /* Consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consts.swift; sourceTree = "<group>"; };
 		6D3D57C8281287D600228BBD /* ValueAccountData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueAccountData.swift; sourceTree = "<group>"; };
@@ -144,14 +146,13 @@
 		607FACD21AFB9204008FA782 /* Example for BloctoSDK */ = {
 			isa = PBXGroup;
 			children = (
+				6D02E65428355CDF00432971 /* Extensions */,
 				6DB6665F282E571C0015A6F6 /* Models */,
 				6DB66640282BC8310015A6F6 /* ViewModels */,
+				6D02E65B28378BAD00432971 /* ViewControllers */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
-				607FACD71AFB9204008FA782 /* SolanaDemoViewController.swift */,
-				6DB6663E282BB8150015A6F6 /* EVMBaseDemoViewController.swift */,
 				6DB6665D282E546A0015A6F6 /* ABIFunctions.swift */,
 				6DB66655282E525D0015A6F6 /* EVMBaseSDKProvider.swift */,
-				6DB66641282C01AF0015A6F6 /* MenuViewController.swift */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
@@ -208,6 +209,24 @@
 				E4C80BED560E0C1A37A539B6 /* Pods_BloctoSDK_Tests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6D02E65428355CDF00432971 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6D02E65528355CF400432971 /* EVMBaseSignTypeExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		6D02E65B28378BAD00432971 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				6DB66641282C01AF0015A6F6 /* MenuViewController.swift */,
+				607FACD71AFB9204008FA782 /* SolanaDemoViewController.swift */,
+				6DB6663E282BB8150015A6F6 /* EVMBaseDemoViewController.swift */,
+			);
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		6D1FC37727F594EB00F7FD5C /* Methods */ = {
@@ -524,6 +543,7 @@
 				6DB66642282C01AF0015A6F6 /* MenuViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* SolanaDemoViewController.swift in Sources */,
 				6D3D57C9281287D600228BBD /* ValueAccountData.swift in Sources */,
+				6D02E65628355CF400432971 /* EVMBaseSignTypeExtension.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				6DB66661282E57240015A6F6 /* EVMBase.swift in Sources */,
 				6DB66663282E58690015A6F6 /* ExplorerURLType.swift in Sources */,
