@@ -9,6 +9,10 @@ import CommonCrypto
 
 extension Data {
 
+    public var hexStringWith0xPrefix: String {
+        "0x" + hexString
+    }
+
     /// Returns the hex string representation of the data.
     var hexString: String {
         return map({ String(format: "%02x", $0) }).joined()

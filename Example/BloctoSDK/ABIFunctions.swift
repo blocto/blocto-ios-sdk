@@ -61,3 +61,30 @@ struct DonateABIFunction {
         return data
     }
 }
+
+struct ERC1271ABIFunction: ABIFunction {
+    static let name = "isValidSignature"
+
+    let hash: Data
+    let signature: Data
+
+    var contract: EthereumAddress
+    var from: EthereumAddress?
+    var gasPrice: BigUInt?
+    var gasLimit: BigUInt?
+
+    struct Response: ABIResponse {
+        public static var types: [ABIType.Type] = [Data4.self]
+        public let value: Data
+
+        public init?(values: [ABIDecoder.DecodedValue]) throws {
+            self.value = try values[0].decoded()
+        }
+    }
+
+    func encode(to encoder: ABIFunctionEncoder) throws {
+        try encoder.encode(hash, staticSize: 32)
+        try encoder.encode(signature)
+    }
+
+}

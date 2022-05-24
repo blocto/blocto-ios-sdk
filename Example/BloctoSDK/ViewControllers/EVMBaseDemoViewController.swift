@@ -14,6 +14,7 @@ import SnapKit
 import BloctoSDK
 import web3
 import BigInt
+import WalletCore
 
 // swiftlint:disable type_body_length file_length
 final class EVMBaseDemoViewController: UIViewController {
@@ -71,6 +72,7 @@ final class EVMBaseDemoViewController: UIViewController {
         view.addSubview(signingTypeDataSegmentedControl)
         view.addSubview(signingTextView)
         view.addSubview(signingResultLabel)
+        view.addSubview(signingVerifyButton)
         view.addSubview(signButton)
         view.addSubview(signingLoadingIndicator)
 
@@ -155,7 +157,14 @@ final class EVMBaseDemoViewController: UIViewController {
 
         signingResultLabel.snp.makeConstraints {
             $0.top.equalTo(signingTextView.snp.bottom).offset(20)
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.leading.equalToSuperview().inset(20)
+        }
+
+        signingVerifyButton.snp.makeConstraints {
+            $0.leading.equalTo(signingResultLabel.snp.trailing).offset(20)
+            $0.trailing.equalToSuperview().inset(20)
+            $0.centerY.equalTo(signingResultLabel)
+            $0.size.equalTo(40)
         }
 
         signButton.snp.makeConstraints {
@@ -186,7 +195,7 @@ final class EVMBaseDemoViewController: UIViewController {
 
         setValueResultLabel.snp.makeConstraints {
             $0.top.equalTo(setValueButton.snp.bottom).offset(20)
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.leading.equalToSuperview().inset(20)
         }
 
         setValueExplorerButton.snp.makeConstraints {
@@ -239,7 +248,7 @@ final class EVMBaseDemoViewController: UIViewController {
 
         sendValueTxResultLabel.snp.makeConstraints {
             $0.top.equalTo(sendValueTxButton.snp.bottom).offset(20)
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.leading.equalToSuperview().inset(20)
             $0.bottom.equalToSuperview().inset(50)
         }
 
@@ -330,6 +339,17 @@ final class EVMBaseDemoViewController: UIViewController {
         label.textAlignment = .center
         return label
     }()
+
+    private lazy var signingVerifyButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.setImage(UIImage(named: "icExamination"), for: .normal)
+        button.contentEdgeInsets = .init(top: 4, left: 4, bottom: 4, right: 4)
+        button.isHidden = true
+        button.addSubview(signingVerifyingIndicator)
+        return button
+    }()
+
+    private lazy var signingVerifyingIndicator = createLoadingIndicator()
 
     private lazy var signButton: UIButton = createButton(
         text: "Sign",
@@ -622,6 +642,17 @@ final class EVMBaseDemoViewController: UIViewController {
                 self.signMessage()
             })
 
+        _ = signingVerifyButton.rx.tap
+            .throttle(
+                DispatchTimeInterval.milliseconds(500),
+                latest: false,
+                scheduler: MainScheduler.instance)
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.verifySignature()
+            })
+
         _ = setValueButton.rx.tap
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
@@ -741,7 +772,12 @@ final class EVMBaseDemoViewController: UIViewController {
     private func resetSignStatus() {
         signingResultLabel.text = nil
         signingResultLabel.textColor = .black
+        signingVerifyButton.isHidden = true
         signingLoadingIndicator.stopAnimating()
+    }
+
+    private func resetSignVerifyStatus() {
+        signingVerifyingIndicator.stopAnimating()
     }
 
     private func resetSetValueStatus() {
@@ -781,8 +817,72 @@ final class EVMBaseDemoViewController: UIViewController {
                 switch result {
                 case let .success(signature):
                     self.signingResultLabel.text = signature
+                    self.signingVerifyButton.isHidden = false
                 case let .failure(error):
                     self.handleSignError(error)
+                }
+            }
+    }
+
+    private func verifySignature() {
+        guard let userWalletAddress = userWalletAddress else {
+            handleSignError(Error.message("User address not found. Please request account first."))
+            return
+        }
+        guard let message = signingTextView.text else {
+            handleSignError(Error.message("signature not found."))
+            return
+        }
+        guard let signature = signingResultLabel.text else {
+            handleSignError(Error.message("signature not found."))
+            return
+        }
+        signingVerifyingIndicator.startAnimating()
+
+        let messageData: Data
+        switch selectedSigningType {
+        case .sign:
+            messageData = Data(ethMessage: message)
+        case .personalSign:
+            messageData = Data(ethMessage: message)
+        case .typedSignV3,
+                .typedSignV4,
+                .typedSign:
+            // TODO: replace Data()
+            messageData = Data()
+        }
+
+        let hash = Hash.keccak256(data: messageData)
+
+        let verifySignatureABIFunction = ERC1271ABIFunction(
+            hash: hash,
+            signature: signature.hexDecodedData,
+            contract: EthereumAddress(userWalletAddress))
+
+        // TODO: to be removed
+        let erc1271ValidSignature = "0x1626ba7e"
+
+        verifySignatureABIFunction.call(
+            withClient: rpcClient,
+            responseType: ERC1271ABIFunction.Response.self) { [weak self] error, response in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    if let error = error {
+                        debugPrint(error)
+                        self.signingVerifyButton.setImage(UIImage(named: "error"), for: .normal)
+                    } else {
+                        self.resetSignVerifyStatus()
+                        if let value = response?.value,
+                           value.hexStringWith0xPrefix == erc1271ValidSignature {
+                            self.signingResultLabel.text = signature
+                            self.signingVerifyButton.setImage(UIImage(named: "icon20Selected"), for: .normal)
+                        } else {
+                            self.signingVerifyButton.setImage(UIImage(named: "error"), for: .normal)
+                        }
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        self.signingVerifyButton.setImage(UIImage(named: "icExamination"), for: .normal)
+                    }
                 }
             }
     }

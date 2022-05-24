@@ -32,6 +32,13 @@ PODS:
     - CryptoSwift (~> 1.4)
     - Runtime (~> 2.2)
     - TweetNacl
+  - SwiftProtobuf (1.19.0)
+  - TrustWalletCore (2.7.9):
+    - TrustWalletCore/Core (= 2.7.9)
+  - TrustWalletCore/Core (2.7.9):
+    - TrustWalletCore/Types
+  - TrustWalletCore/Types (2.7.9):
+    - SwiftProtobuf
   - TweetNacl (1.0.2)
   - web3.swift (1.0.0):
     - BigInt (~> 5.0.0)
@@ -46,6 +53,7 @@ DEPENDENCIES:
   - RxSwift
   - SnapKit
   - SolanaWeb3 (from `https://github.com/portto/solana-web3.swift.git`)
+  - TrustWalletCore
   - web3.swift
 
 SPEC REPOS:
@@ -61,6 +69,8 @@ SPEC REPOS:
     - RxSwift
     - secp256k1.swift
     - SnapKit
+    - SwiftProtobuf
+    - TrustWalletCore
     - TweetNacl
     - web3.swift
 
@@ -89,9 +99,11 @@ SPEC CHECKSUMS:
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SolanaWeb3: 518d1fddf72ac8e0f76dd19a01d90079edb5da47
+  SwiftProtobuf: 6ef3f0e422ef90d6605ca20b21a94f6c1324d6b3
+  TrustWalletCore: c68dd80a0c75130c28b1583bd39918447ec9fa0a
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   web3.swift: 109de8d69d82ac5d071d8a43738f7c88c60ea2ea
 
-PODFILE CHECKSUM: 41dae3d9556edd6428e0804c587862d9989e8fb1
+PODFILE CHECKSUM: c0a7bc9f2d149c69cc58ba70b5f3e5fa0bb43af1
 
 COCOAPODS: 1.11.3

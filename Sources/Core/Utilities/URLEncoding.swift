@@ -61,7 +61,7 @@ public enum URLEncoding {
             components.append(
                 .init(
                     name: escape(key),
-                    value: escape(data.hexString)))
+                    value: escape(data.hexStringWith0xPrefix)))
         default:
             components.append(
                 .init(

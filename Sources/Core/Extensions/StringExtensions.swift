@@ -9,6 +9,13 @@ import Foundation
 
 extension String {
 
+    var drop0x: String {
+        if hasPrefix("0x") {
+            return String(dropFirst(2))
+        }
+        return self
+    }
+
     public var hexDecodedData: Data {
         // Convert to a CString and make sure it has an even number of characters (terminating 0 is included, so we
         // check for uneven!)
@@ -25,6 +32,14 @@ extension String {
             result.append(&value, count: MemoryLayout.size(ofValue: value))
         }
         return result
+    }
+
+    public func hexConvertToString() -> String {
+        if prefix(2) == "0x" {
+            return String(data: String(dropFirst(2)).hexDecodedData, encoding: .utf8) ?? self
+        } else {
+            return self
+        }
     }
 
     private func hexCharToByte(_ c: CChar) -> UInt8? {

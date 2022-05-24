@@ -70,10 +70,12 @@ public struct ParsedMethod {
                       let message = param[QueryName.message.rawValue],
                       let rawSignType = param[QueryName.signType.rawValue],
                       let signType = EVMBaseSignType(rawValue: rawSignType) else { return nil }
+                let removingPercentEncodingString = message.removingPercentEncoding ?? message
+                let messageString = removingPercentEncodingString.hexConvertToString()
                 methodContentType = .evmBase(
                     .signMessage(
                         from: from,
-                        message: message.removingPercentEncoding ?? message,
+                        message: messageString,
                         signType: signType))
             case .sendTransaction:
                 guard let from = param[QueryName.from.rawValue],
@@ -86,7 +88,7 @@ public struct ParsedMethod {
                             to: to,
                             from: from,
                             value: BigUInt(value, radix: 16) ?? 0,
-                            data: dataString.hexDecodedData)))
+                            data: dataString.drop0x.hexDecodedData)))
             }
         }
     }

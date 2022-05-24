@@ -8,13 +8,13 @@
 import Foundation
 
 public struct SignEVMBaseMessageMethod: CallbackMethod {
-    
+
     public typealias Response = String
-    
+
     public let id: UUID
     public let type: String = EVMBaseMethodType.signMessage.rawValue
     public let callback: Callback
-    
+
     let blockchain: Blockchain
     let from: String
     let message: String
@@ -43,7 +43,7 @@ public struct SignEVMBaseMessageMethod: CallbackMethod {
         self.blockchain = blockchain
         self.callback = callback
     }
-    
+
     public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
         guard let baseURL = URL(string: baseURLString),
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
@@ -56,23 +56,31 @@ public struct SignEVMBaseMessageMethod: CallbackMethod {
         queryItems.append(contentsOf: [
             QueryItem(name: .method, value: type),
             QueryItem(name: .from, value: from),
-            QueryItem(name: .signType, value: signType.rawValue),
-            QueryItem(name: .message, value: message),
+            QueryItem(name: .signType, value: signType.rawValue)
         ])
         let messageValue: String
         switch signType {
-        case .sign,
-                .personalSign:
-            return message.
+        case .sign:
+            // input might be hexed string or normal string
+            if message.hexDecodedData.isEmpty {
+                messageValue = Data(message.utf8).hexStringWith0xPrefix
+            } else {
+                messageValue = message
+            }
+        case .personalSign:
+            // input is string format
+            messageValue = message
         case .typedSignV3,
                 .typedSignV4,
                 .typedSign:
-            return
+            // input should be json format
+            messageValue = message
         }
+        queryItems.append(QueryItem(name: .message, value: messageValue))
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }
-    
+
     public func resolve(components: URLComponents, logging: Bool) {
         if let errorCode = components.queryItem(for: .error) {
             callback(.failure(QueryError(code: errorCode)))
@@ -88,7 +96,7 @@ public struct SignEVMBaseMessageMethod: CallbackMethod {
         }
         callback(.success(signature))
     }
-    
+
     public func handleError(error: Swift.Error) {
         callback(.failure(error))
     }

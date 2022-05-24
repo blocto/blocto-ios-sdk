@@ -11,6 +11,7 @@ target 'BloctoSDK_Example' do
   pod 'RxCocoa'
   pod 'SolanaWeb3', :git => 'https://github.com/portto/solana-web3.swift.git'
   pod 'web3.swift'
+  pod 'TrustWalletCore'
 
   target 'BloctoSDK_Tests' do
     inherit! :search_paths
