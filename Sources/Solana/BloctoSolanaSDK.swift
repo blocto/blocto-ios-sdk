@@ -115,12 +115,12 @@ public class BloctoSolanaSDK {
 
                             let serializeMessage = try mutateTransaction.serializeMessage()
 
-                            let shaString = serializeMessage.sha1().hexString
+                            let shaString = serializeMessage.sha1().bloctoSDK.hexString
                             let appendTx = self.appendTxMap[shaString]
 
                             let publicKeySignaturePairs = transaction.signatures.reduce([String: String]()) { partialResult, signaturePubkeyPair in
                                 var result = partialResult
-                                result[signaturePubkeyPair.publicKey.description] = signaturePubkeyPair.signature?.hexString
+                                result[signaturePubkeyPair.publicKey.description] = signaturePubkeyPair.signature?.bloctoSDK.hexString
                                 return result
                             }
 
@@ -129,7 +129,7 @@ public class BloctoSolanaSDK {
                                 blockchain: .solana,
                                 from: from,
                                 transactionInfo: SolanaTransactionInfo(
-                                    message: serializeMessage.hexString,
+                                    message: serializeMessage.bloctoSDK.hexString,
                                     appendTx: appendTx,
                                     publicKeySignaturePairs: publicKeySignaturePairs),
                                 isInvokeWrapped: true,
@@ -168,7 +168,7 @@ public class BloctoSolanaSDK {
                     let serializeMessage = try transaction.serializeMessage()
                     let request = ConvertTransactionRequest(
                         solanaAddress: solanaAddress,
-                        message: serializeMessage.hexString,
+                        message: serializeMessage.bloctoSDK.hexString,
                         baseURL: self.apiBaseURL)
                     _ = self.apiProvider.request(request) { [weak self] result in
                         switch result {
@@ -176,11 +176,11 @@ public class BloctoSolanaSDK {
                             do {
                                 let createTransactionResponse = try JSONDecoder().decode(SolanaCreateTransactionResponse.self, from: response.data)
 
-                                let message = try Message(data: createTransactionResponse.rawTx.hexDecodedData)
+                                let message = try Message(data: createTransactionResponse.rawTx.bloctoSDK.hexDecodedData)
                                 var convertedTransaction = Transaction(message: message, signatures: [])
 
                                 let serializeMessage = try convertedTransaction.serializeMessage()
-                                let shaString = serializeMessage.sha1().hexString
+                                let shaString = serializeMessage.sha1().bloctoSDK.hexString
                                 self?.appendTxMap[shaString] = createTransactionResponse.appendTx
                                 completion(.success(convertedTransaction))
                             } catch {

@@ -16,29 +16,9 @@
 		6D02E62E283266FA00432971 /* SendTransactionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E62D283266FA00432971 /* SendTransactionTests.swift */; };
 		6D02E63028329A0700432971 /* XCTAssertURLComponentsEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E62F28329A0700432971 /* XCTAssertURLComponentsEqual.swift */; };
 		6D02E65628355CF400432971 /* EVMBaseSignTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E65528355CF400432971 /* EVMBaseSignTypeExtension.swift */; };
-		6D02E663283BF2E000432971 /* HashingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E662283BF2E000432971 /* HashingTests.swift */; };
 		6D02E665283BFD9000432971 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E664283BFD9000432971 /* DataExtensions.swift */; };
-		6D02E6EA283D4A1200432971 /* ABIEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6DB283D4A1200432971 /* ABIEncoder.swift */; };
-		6D02E6EC283D4A1200432971 /* ABIDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6DD283D4A1200432971 /* ABIDecoder.swift */; };
-		6D02E6EE283D4A1200432971 /* BTABIValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6DF283D4A1200432971 /* BTABIValue.swift */; };
-		6D02E6EF283D4A1200432971 /* BTABITypeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6E0283D4A1200432971 /* BTABITypeParser.swift */; };
-		6D02E6F1283D4A1200432971 /* BTABIType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6E2283D4A1200432971 /* BTABIType.swift */; };
-		6D02E6F3283D4A1200432971 /* BTABIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6E4283D4A1200432971 /* BTABIError.swift */; };
-		6D02E6F4283D4A1200432971 /* BTFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6E5283D4A1200432971 /* BTFunction.swift */; };
-		6D02E6F5283D4A1200432971 /* GenericJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6E7283D4A1200432971 /* GenericJSON.swift */; };
 		6D02E6FB283D4BDB00432971 /* ABIFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6FA283D4BDB00432971 /* ABIFunctions.swift */; };
-		6D02E6FF283DB88900432971 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6F8283D4A6000432971 /* Extensions.swift */; };
-		6D02E717283DBB2E00432971 /* EIP712TypedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E716283DBB2E00432971 /* EIP712TypedData.swift */; };
-		6D02E719283DBBBA00432971 /* GenericJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6E7283D4A1200432971 /* GenericJSON.swift */; };
-		6D02E71A283DBBBA00432971 /* EIP712TypedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E716283DBB2E00432971 /* EIP712TypedData.swift */; };
-		6D02E71B283DBBBE00432971 /* BTABIValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6DF283D4A1200432971 /* BTABIValue.swift */; };
-		6D02E71C283DBBBE00432971 /* ABIEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6DB283D4A1200432971 /* ABIEncoder.swift */; };
-		6D02E71D283DBBBE00432971 /* BTFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6E5283D4A1200432971 /* BTFunction.swift */; };
-		6D02E71E283DBBBE00432971 /* ABIDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6DD283D4A1200432971 /* ABIDecoder.swift */; };
-		6D02E71F283DBBBE00432971 /* BTABITypeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6E0283D4A1200432971 /* BTABITypeParser.swift */; };
-		6D02E720283DBBBE00432971 /* BTABIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6E4283D4A1200432971 /* BTABIError.swift */; };
-		6D02E721283DBBBE00432971 /* BTABIType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6E2283D4A1200432971 /* BTABIType.swift */; };
-		6D02E722283DBBBE00432971 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6F8283D4A6000432971 /* Extensions.swift */; };
+		6D02E729283EA11600432971 /* HashingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E728283EA11600432971 /* HashingTests.swift */; };
 		6D1FC37B27F5973100F7FD5C /* ParsedMethodTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1FC37927F5952300F7FD5C /* ParsedMethodTests.swift */; };
 		6D3D57952808367A00228BBD /* Consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3D57932808365100228BBD /* Consts.swift */; };
 		6D3D57C9281287D600228BBD /* ValueAccountData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3D57C8281287D600228BBD /* ValueAccountData.swift */; };
@@ -83,19 +63,9 @@
 		6D02E62D283266FA00432971 /* SendTransactionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendTransactionTests.swift; sourceTree = "<group>"; };
 		6D02E62F28329A0700432971 /* XCTAssertURLComponentsEqual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTAssertURLComponentsEqual.swift; sourceTree = "<group>"; };
 		6D02E65528355CF400432971 /* EVMBaseSignTypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMBaseSignTypeExtension.swift; sourceTree = "<group>"; };
-		6D02E662283BF2E000432971 /* HashingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashingTests.swift; sourceTree = "<group>"; };
 		6D02E664283BFD9000432971 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
-		6D02E6DB283D4A1200432971 /* ABIEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ABIEncoder.swift; sourceTree = "<group>"; };
-		6D02E6DD283D4A1200432971 /* ABIDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ABIDecoder.swift; sourceTree = "<group>"; };
-		6D02E6DF283D4A1200432971 /* BTABIValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BTABIValue.swift; sourceTree = "<group>"; };
-		6D02E6E0283D4A1200432971 /* BTABITypeParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BTABITypeParser.swift; sourceTree = "<group>"; };
-		6D02E6E2283D4A1200432971 /* BTABIType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BTABIType.swift; sourceTree = "<group>"; };
-		6D02E6E4283D4A1200432971 /* BTABIError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BTABIError.swift; sourceTree = "<group>"; };
-		6D02E6E5283D4A1200432971 /* BTFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BTFunction.swift; sourceTree = "<group>"; };
-		6D02E6E7283D4A1200432971 /* GenericJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericJSON.swift; sourceTree = "<group>"; };
-		6D02E6F8283D4A6000432971 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		6D02E6FA283D4BDB00432971 /* ABIFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ABIFunctions.swift; path = BloctoSDK/ABIFunctions.swift; sourceTree = SOURCE_ROOT; };
-		6D02E716283DBB2E00432971 /* EIP712TypedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIP712TypedData.swift; sourceTree = "<group>"; };
+		6D02E728283EA11600432971 /* HashingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashingTests.swift; sourceTree = "<group>"; };
 		6D1FC37927F5952300F7FD5C /* ParsedMethodTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsedMethodTests.swift; sourceTree = "<group>"; };
 		6D3D57932808365100228BBD /* Consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consts.swift; sourceTree = "<group>"; };
 		6D3D57C8281287D600228BBD /* ValueAccountData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueAccountData.swift; sourceTree = "<group>"; };
@@ -180,7 +150,6 @@
 		607FACD21AFB9204008FA782 /* Example for BloctoSDK */ = {
 			isa = PBXGroup;
 			children = (
-				6D02E6DA283D4A1200432971 /* EthereumABI */,
 				6D02E65428355CDF00432971 /* Extensions */,
 				6DB6665F282E571C0015A6F6 /* Models */,
 				6D02E65B28378BAD00432971 /* ViewControllers */,
@@ -205,7 +174,7 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				6D02E661283BF2CB00432971 /* Hashing */,
+				6D02E727283EA11600432971 /* Hashing */,
 				6DFA2B0928040E2D00F7DA2C /* Wallet */,
 				6DFA2AEE2800192700F7DA2C /* Utilities */,
 				6D72112127FDE5DE00F1EB7F /* QueryItemCoding */,
@@ -264,37 +233,12 @@
 			path = ViewControllers;
 			sourceTree = "<group>";
 		};
-		6D02E661283BF2CB00432971 /* Hashing */ = {
+		6D02E727283EA11600432971 /* Hashing */ = {
 			isa = PBXGroup;
 			children = (
-				6D02E662283BF2E000432971 /* HashingTests.swift */,
+				6D02E728283EA11600432971 /* HashingTests.swift */,
 			);
 			path = Hashing;
-			sourceTree = "<group>";
-		};
-		6D02E6DA283D4A1200432971 /* EthereumABI */ = {
-			isa = PBXGroup;
-			children = (
-				6D02E6F8283D4A6000432971 /* Extensions.swift */,
-				6D02E6DB283D4A1200432971 /* ABIEncoder.swift */,
-				6D02E6DD283D4A1200432971 /* ABIDecoder.swift */,
-				6D02E6DF283D4A1200432971 /* BTABIValue.swift */,
-				6D02E6E0283D4A1200432971 /* BTABITypeParser.swift */,
-				6D02E6E2283D4A1200432971 /* BTABIType.swift */,
-				6D02E6E4283D4A1200432971 /* BTABIError.swift */,
-				6D02E6E5283D4A1200432971 /* BTFunction.swift */,
-				6D02E6E6283D4A1200432971 /* EIP712 */,
-			);
-			path = EthereumABI;
-			sourceTree = "<group>";
-		};
-		6D02E6E6283D4A1200432971 /* EIP712 */ = {
-			isa = PBXGroup;
-			children = (
-				6D02E6E7283D4A1200432971 /* GenericJSON.swift */,
-				6D02E716283DBB2E00432971 /* EIP712TypedData.swift */,
-			);
-			path = EIP712;
 			sourceTree = "<group>";
 		};
 		6D1FC37727F594EB00F7FD5C /* Methods */ = {
@@ -557,6 +501,7 @@
 				"${BUILT_PRODUCTS_DIR}/BigInt/BigInt.framework",
 				"${BUILT_PRODUCTS_DIR}/BloctoSDK/BloctoSDK.framework",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/EthereumSignTypedDataUtil/EthereumSignTypedDataUtil.framework",
 				"${BUILT_PRODUCTS_DIR}/GenericJSON/GenericJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
 				"${BUILT_PRODUCTS_DIR}/Runtime/Runtime.framework",
@@ -565,8 +510,6 @@
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SolanaWeb3/SolanaWeb3.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftProtobuf/SwiftProtobuf.framework",
-				"${BUILT_PRODUCTS_DIR}/TrustWalletCore/WalletCore.framework",
 				"${BUILT_PRODUCTS_DIR}/TweetNacl/TweetNacl.framework",
 				"${BUILT_PRODUCTS_DIR}/secp256k1.swift/secp256k1.framework",
 				"${BUILT_PRODUCTS_DIR}/web3.swift/web3.framework",
@@ -577,6 +520,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BigInt.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BloctoSDK.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EthereumSignTypedDataUtil.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Runtime.framework",
@@ -585,8 +529,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SolanaWeb3.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftProtobuf.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WalletCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TweetNacl.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/secp256k1.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/web3.framework",
@@ -603,27 +545,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6D02E6EA283D4A1200432971 /* ABIEncoder.swift in Sources */,
-				6D02E717283DBB2E00432971 /* EIP712TypedData.swift in Sources */,
 				6DB66656282E525D0015A6F6 /* EVMBaseSDKProvider.swift in Sources */,
-				6D02E6EC283D4A1200432971 /* ABIDecoder.swift in Sources */,
 				6DB6663F282BB8150015A6F6 /* EVMBaseDemoViewController.swift in Sources */,
 				6DB66642282C01AF0015A6F6 /* MenuViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* SolanaDemoViewController.swift in Sources */,
 				6D3D57C9281287D600228BBD /* ValueAccountData.swift in Sources */,
-				6D02E6F1283D4A1200432971 /* BTABIType.swift in Sources */,
-				6D02E6F4283D4A1200432971 /* BTFunction.swift in Sources */,
 				6D02E65628355CF400432971 /* EVMBaseSignTypeExtension.swift in Sources */,
-				6D02E6EF283D4A1200432971 /* BTABITypeParser.swift in Sources */,
-				6D02E6EE283D4A1200432971 /* BTABIValue.swift in Sources */,
-				6D02E6FF283DB88900432971 /* Extensions.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				6D02E665283BFD9000432971 /* DataExtensions.swift in Sources */,
 				6D02E6FB283D4BDB00432971 /* ABIFunctions.swift in Sources */,
 				6DB66661282E57240015A6F6 /* EVMBase.swift in Sources */,
 				6DB66663282E58690015A6F6 /* ExplorerURLType.swift in Sources */,
-				6D02E6F3283D4A1200432971 /* BTABIError.swift in Sources */,
-				6D02E6F5283D4A1200432971 /* GenericJSON.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -631,12 +563,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6D02E722283DBBBE00432971 /* Extensions.swift in Sources */,
-				6D02E721283DBBBE00432971 /* BTABIType.swift in Sources */,
-				6D02E720283DBBBE00432971 /* BTABIError.swift in Sources */,
-				6D02E71E283DBBBE00432971 /* ABIDecoder.swift in Sources */,
 				6D02E62E283266FA00432971 /* SendTransactionTests.swift in Sources */,
-				6D02E719283DBBBA00432971 /* GenericJSON.swift in Sources */,
 				6DFA2B0B28040E5100F7DA2C /* CallbackHelperTests.swift in Sources */,
 				6D02E63028329A0700432971 /* XCTAssertURLComponentsEqual.swift in Sources */,
 				6D3D57952808367A00228BBD /* Consts.swift in Sources */,
@@ -644,14 +571,9 @@
 				6DD6F12127EDBF0000B514B1 /* MockUIApplication.swift in Sources */,
 				6D1FC37B27F5973100F7FD5C /* ParsedMethodTests.swift in Sources */,
 				6DFA2AF72801601300F7DA2C /* XCTAssertArrayElementsEqual.swift in Sources */,
-				6D02E71C283DBBBE00432971 /* ABIEncoder.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* AccountRequestTests.swift in Sources */,
-				6D02E71B283DBBBE00432971 /* BTABIValue.swift in Sources */,
-				6D02E71A283DBBBA00432971 /* EIP712TypedData.swift in Sources */,
-				6D02E71D283DBBBE00432971 /* BTFunction.swift in Sources */,
-				6D02E663283BF2E000432971 /* HashingTests.swift in Sources */,
+				6D02E729283EA11600432971 /* HashingTests.swift in Sources */,
 				6DFA2AF528001EE200F7DA2C /* SignAndSendTransactionTests.swift in Sources */,
-				6D02E71F283DBBBE00432971 /* BTABITypeParser.swift in Sources */,
 				6DFA2AF128001AE700F7DA2C /* XCTAssertDictionaryEqual.swift in Sources */,
 				6DD6F12227EDBF0300B514B1 /* MockAuthenticationSession.swift in Sources */,
 			);

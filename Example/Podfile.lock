@@ -13,6 +13,9 @@ PODS:
     - BigInt (~> 5.0)
     - BloctoSDK/Core (~> 0.2.0)
   - CryptoSwift (1.5.1)
+  - EthereumSignTypedDataUtil (0.1.1):
+    - BigInt (~> 5.0)
+    - CryptoSwift (~> 1.4)
   - GenericJSON (2.0.1)
   - Moya (14.0.0):
     - Moya/Core (= 14.0.0)
@@ -32,13 +35,6 @@ PODS:
     - CryptoSwift (~> 1.4)
     - Runtime (~> 2.2)
     - TweetNacl
-  - SwiftProtobuf (1.19.0)
-  - TrustWalletCore (2.7.9):
-    - TrustWalletCore/Core (= 2.7.9)
-  - TrustWalletCore/Core (2.7.9):
-    - TrustWalletCore/Types
-  - TrustWalletCore/Types (2.7.9):
-    - SwiftProtobuf
   - TweetNacl (1.0.2)
   - web3.swift (0.9.3):
     - BigInt (~> 5)
@@ -49,11 +45,11 @@ DEPENDENCIES:
   - BloctoSDK/EVMBase (from `../`)
   - BloctoSDK/Solana (from `../`)
   - BloctoSDK/Wallet (from `../`)
+  - EthereumSignTypedDataUtil (from `https://github.com/portto/EthereumSignTypedDataUtil.git`)
   - RxCocoa
   - RxSwift
   - SnapKit
   - SolanaWeb3 (from `https://github.com/portto/solana-web3.swift.git`)
-  - TrustWalletCore
   - web3.swift (from `https://github.com/portto/web3.swift.git`, branch `feat/adjust-dependency-version`)
 
 SPEC REPOS:
@@ -69,13 +65,13 @@ SPEC REPOS:
     - RxSwift
     - secp256k1.swift
     - SnapKit
-    - SwiftProtobuf
-    - TrustWalletCore
     - TweetNacl
 
 EXTERNAL SOURCES:
   BloctoSDK:
     :path: "../"
+  EthereumSignTypedDataUtil:
+    :git: https://github.com/portto/EthereumSignTypedDataUtil.git
   SolanaWeb3:
     :git: https://github.com/portto/solana-web3.swift.git
   web3.swift:
@@ -83,6 +79,9 @@ EXTERNAL SOURCES:
     :git: https://github.com/portto/web3.swift.git
 
 CHECKOUT OPTIONS:
+  EthereumSignTypedDataUtil:
+    :commit: 23cdac24550e790548b23d2ac914bbd99dcf49ef
+    :git: https://github.com/portto/EthereumSignTypedDataUtil.git
   SolanaWeb3:
     :commit: 9f430df4ce564d900e41da37821d555b2e644b62
     :git: https://github.com/portto/solana-web3.swift.git
@@ -95,6 +94,7 @@ SPEC CHECKSUMS:
   BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
   BloctoSDK: 21f23ee886a58adf9aebf3b1845bbfde596bb1f1
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
+  EthereumSignTypedDataUtil: 022e24145e1239311b3cc9a4a5766c4db4b0b50a
   GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
   Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
   Runtime: 67741bd196fb4ad821c4d259ccc527bf734d8806
@@ -104,11 +104,9 @@ SPEC CHECKSUMS:
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SolanaWeb3: 518d1fddf72ac8e0f76dd19a01d90079edb5da47
-  SwiftProtobuf: 6ef3f0e422ef90d6605ca20b21a94f6c1324d6b3
-  TrustWalletCore: c68dd80a0c75130c28b1583bd39918447ec9fa0a
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   web3.swift: 4d8b9f69ea92d23c6e87b97c36686f1c541eaef1
 
-PODFILE CHECKSUM: 2d1434cf63c25bb7b40ee4b84b60e00403b3571b
+PODFILE CHECKSUM: 1bc25620b87a58c4a97e6af8f3fb245912e813ef
 
 COCOAPODS: 1.11.3

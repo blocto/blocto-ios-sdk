@@ -74,6 +74,7 @@ struct ERC1271ABIFunction: ABIFunction {
     var gasLimit: BigUInt?
 
     struct Response: ABIResponse {
+        public static let erc1271ValidSignature = "0x1626ba7e"
         public static var types: [ABIType.Type] = [Data4.self]
         public let value: Data
 

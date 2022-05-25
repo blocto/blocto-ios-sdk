@@ -28,7 +28,9 @@ public enum QueryDecoding {
                 if let value = dictionary[queryName.rawValue] as? [String: String] {
                     return value.reduce([String: T]()) { partialResult, value in
                         var result = partialResult
-                        result[value.key] = value.value.drop0x.hexDecodedData as? T
+                        result[value.key] = value.value
+                            .bloctoSDK.drop0x
+                            .bloctoSDK.hexDecodedData as? T
                         return result
                     }
                 } else {

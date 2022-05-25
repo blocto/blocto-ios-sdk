@@ -62,8 +62,8 @@ public struct SignEVMBaseMessageMethod: CallbackMethod {
         switch signType {
         case .sign:
             // input might be hexed string or normal string
-            if message.hexDecodedData.isEmpty {
-                messageValue = Data(message.utf8).hexStringWith0xPrefix
+            if message.bloctoSDK.hexDecodedData.isEmpty {
+                messageValue = Data(message.utf8).bloctoSDK.hexStringWith0xPrefix
             } else {
                 messageValue = message
             }

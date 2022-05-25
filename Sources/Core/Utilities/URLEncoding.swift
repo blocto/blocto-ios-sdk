@@ -61,7 +61,7 @@ public enum URLEncoding {
             components.append(
                 .init(
                     name: escape(key),
-                    value: escape(data.hexStringWith0xPrefix)))
+                    value: escape(data.bloctoSDK.hexStringWith0xPrefix)))
         default:
             components.append(
                 .init(

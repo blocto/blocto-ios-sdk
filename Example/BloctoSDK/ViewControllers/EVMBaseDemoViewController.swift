@@ -14,7 +14,7 @@ import SnapKit
 import BloctoSDK
 import web3
 import BigInt
-import WalletCore
+import EthereumSignTypedDataUtil
 
 // swiftlint:disable type_body_length file_length
 final class EVMBaseDemoViewController: UIViewController {
@@ -841,10 +841,10 @@ final class EVMBaseDemoViewController: UIViewController {
 
         let data: Data
         switch selectedSigningType {
-        case .sign,
-                .personalSign:
-            let messageData = Data(ethMessage: message)
-            data = Hash.keccak256(data: messageData)
+        case .sign:
+            data = Data(ethMessage: message)
+        case .personalSign:
+            data = Data(message.utf8)
         case .typedSignV3,
                 .typedSignV4,
                 .typedSign:
@@ -867,12 +867,9 @@ final class EVMBaseDemoViewController: UIViewController {
         }
 
         let verifySignatureABIFunction = ERC1271ABIFunction(
-            hash: Hash.keccak256(data: data),
-            signature: signature.hexDecodedData,
+            hash: data.sha3(.keccak256),
+            signature: signature.bloctoSDK.hexDecodedData,
             contract: EthereumAddress(userWalletAddress))
-
-        // TODO: to be removed
-        let erc1271ValidSignature = "0x1626ba7e"
 
         verifySignatureABIFunction.call(
             withClient: rpcClient,
@@ -885,7 +882,7 @@ final class EVMBaseDemoViewController: UIViewController {
                     } else {
                         self.resetSignVerifyStatus()
                         if let value = response?.value,
-                           value.hexStringWith0xPrefix == erc1271ValidSignature {
+                           value.bloctoSDK.hexStringWith0xPrefix == ERC1271ABIFunction.Response.erc1271ValidSignature {
                             self.signingResultLabel.text = signature
                             self.signingVerifyButton.setImage(UIImage(named: "icon20Selected"), for: .normal)
                         } else {

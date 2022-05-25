@@ -55,8 +55,8 @@
 
     func testDictionaryDataEncoding() throws {
         // Given:
-        let data1 = "1234".hexDecodedData
-        let data2 = "2345".hexDecodedData
+        let data1 = "1234".bloctoSDK.hexDecodedData
+        let data2 = "2345".bloctoSDK.hexDecodedData
         let queryItem = QueryItem(
             name: QueryName.appendTx,
             value: [
@@ -83,8 +83,8 @@
         ]
 
         let expect: [String: Data] = [
-            "test1": "1234".hexDecodedData,
-            "test2": "2345".hexDecodedData
+            "test1": "1234".bloctoSDK.hexDecodedData,
+            "test2": "2345".bloctoSDK.hexDecodedData
         ]
 
         // When:

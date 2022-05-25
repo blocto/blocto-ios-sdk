@@ -7,19 +7,21 @@
 
 import Foundation
 
-extension String {
+extension String: BloctoSDKCompatible {}
 
-    var drop0x: String {
-        if hasPrefix("0x") {
-            return String(dropFirst(2))
+extension BloctoSDKHelper where Base == String {
+
+    public var drop0x: String {
+        if base.hasPrefix("0x") {
+            return String(base.dropFirst(2))
         }
-        return self
+        return base
     }
 
     public var hexDecodedData: Data {
         // Convert to a CString and make sure it has an even number of characters (terminating 0 is included, so we
         // check for uneven!)
-        guard let cString = self.cString(using: .ascii), (cString.count % 2) == 1 else {
+        guard let cString = base.cString(using: .ascii), (cString.count % 2) == 1 else {
             return Data()
         }
 
@@ -35,10 +37,12 @@ extension String {
     }
 
     public func hexConvertToString() -> String {
-        if prefix(2) == "0x" {
-            return String(data: String(dropFirst(2)).hexDecodedData, encoding: .utf8) ?? self
+        if base.prefix(2) == "0x" {
+            return String(
+                data: String(base.dropFirst(2)).bloctoSDK.hexDecodedData,
+                encoding: .utf8) ?? base
         } else {
-            return self
+            return base
         }
     }
 

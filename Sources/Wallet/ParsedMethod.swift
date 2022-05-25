@@ -71,7 +71,7 @@ public struct ParsedMethod {
                       let rawSignType = param[QueryName.signType.rawValue],
                       let signType = EVMBaseSignType(rawValue: rawSignType) else { return nil }
                 let removingPercentEncodingString = message.removingPercentEncoding ?? message
-                let messageString = removingPercentEncodingString.hexConvertToString()
+                let messageString = removingPercentEncodingString.bloctoSDK.hexConvertToString()
                 methodContentType = .evmBase(
                     .signMessage(
                         from: from,
@@ -88,7 +88,9 @@ public struct ParsedMethod {
                             to: to,
                             from: from,
                             value: BigUInt(value, radix: 16) ?? 0,
-                            data: dataString.drop0x.hexDecodedData)))
+                            data: dataString
+                                .bloctoSDK.drop0x
+                                .bloctoSDK.hexDecodedData)))
             }
         }
     }
