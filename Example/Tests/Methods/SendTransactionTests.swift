@@ -50,7 +50,7 @@ class SendTransactionTests: XCTestCase {
             URLQueryItem(name: .from, value: from),
             URLQueryItem(name: .to, value: to),
             URLQueryItem(name: .value, value: "7b"),
-            URLQueryItem(name: .data, value: dataString)
+            URLQueryItem(name: .data, value: "0x" + dataString)
         ]
 
         // When:

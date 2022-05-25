@@ -64,8 +64,8 @@
                 "test2": data2
             ])
         let expect: [URLQueryItem] = [
-            URLQueryItem(name: QueryName.appendTx.rawValue + "%5Btest1%5D", value: "1234"),
-            URLQueryItem(name: QueryName.appendTx.rawValue + "%5Btest2%5D", value: "2345")
+            URLQueryItem(name: QueryName.appendTx.rawValue + "%5Btest1%5D", value: "0x1234"),
+            URLQueryItem(name: QueryName.appendTx.rawValue + "%5Btest2%5D", value: "0x2345")
         ]
 
         // When:
