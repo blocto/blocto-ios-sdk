@@ -839,23 +839,35 @@ final class EVMBaseDemoViewController: UIViewController {
         }
         signingVerifyingIndicator.startAnimating()
 
-        let messageData: Data
+        let data: Data
         switch selectedSigningType {
-        case .sign:
-            messageData = Data(ethMessage: message)
-        case .personalSign:
-            messageData = Data(ethMessage: message)
+        case .sign,
+                .personalSign:
+            let messageData = Data(ethMessage: message)
+            data = Hash.keccak256(data: messageData)
         case .typedSignV3,
                 .typedSignV4,
                 .typedSign:
-            // TODO: replace Data()
-            messageData = Data()
+            do {
+                let typedData = try JSONDecoder().decode(EIP712TypedData.self, from: Data(message.utf8))
+                let signableHash: Data
+                if case .typedSignV3 = selectedSigningType {
+                    signableHash = try typedData.signableHash(version: .v3)
+                } else {
+                    signableHash = try typedData.signableHash(version: .v4)
+                }
+                data = signableHash
+            } catch {
+                signingVerifyButton.setImage(UIImage(named: "error"), for: .normal)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    self.signingVerifyButton.setImage(UIImage(named: "icExamination"), for: .normal)
+                }
+                return
+            }
         }
 
-        let hash = Hash.keccak256(data: messageData)
-
         let verifySignatureABIFunction = ERC1271ABIFunction(
-            hash: hash,
+            hash: Hash.keccak256(data: data),
             signature: signature.hexDecodedData,
             contract: EthereumAddress(userWalletAddress))
 

@@ -10,7 +10,7 @@ target 'BloctoSDK_Example' do
   pod 'RxSwift'
   pod 'RxCocoa'
   pod 'SolanaWeb3', :git => 'https://github.com/portto/solana-web3.swift.git'
-  pod 'web3.swift'
+  pod 'web3.swift', :git => 'https://github.com/portto/web3.swift.git', :branch => 'feat/adjust-dependency-version'
   pod 'TrustWalletCore'
 
   target 'BloctoSDK_Tests' do
