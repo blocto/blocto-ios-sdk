@@ -158,7 +158,7 @@ public class BloctoSDK {
                 appId: appId,
                 baseURLString: requestBloctoBaseURLString
             ) else {
-                method.handleError(error: InternalError.encodeToURLFailed)
+                method.handleError(error: BloctoSDKError.encodeToURLFailed)
                 return
             }
             uuidToMethod[method.id] = method
@@ -221,7 +221,7 @@ public class BloctoSDK {
                 appId: appId,
                 baseURLString: webRequestBloctoBaseURLString
             ) else {
-                method.handleError(error: InternalError.encodeToURLFailed)
+                method.handleError(error: BloctoSDKError.encodeToURLFailed)
                 return
             }
             var session: AuthenticationSessioning?
@@ -264,7 +264,7 @@ public class BloctoSDK {
             )
             let startsSuccessfully = session?.start()
             if startsSuccessfully == false {
-                method.handleError(error: InternalError.webSDKSessionFailed)
+                method.handleError(error: BloctoSDKError.webSDKSessionFailed)
             }
         } catch {
             method.handleError(error: error)

@@ -1109,36 +1109,7 @@ final class EVMBaseDemoViewController: UIViewController {
     }
 
     private func handleGeneralError(label: UILabel, error: Swift.Error) {
-        if let error = error as? BloctoSDKError {
-            switch error {
-            case .appIdNotSet:
-                label.text = "app id not set."
-            case .userRejected:
-                label.text = "user rejected."
-            case .forbiddenBlockchain:
-                label.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
-            case .invalidResponse:
-                label.text = "invalid response."
-            case .userNotMatch:
-                label.text = "user not matched."
-            case .ethSignInvalidHexString:
-                label.text = "input text should be hex string with 0x prefix."
-            case .userCancel:
-                label.text = "user canceled."
-            case .redirectURLNotFound:
-                label.text = "redirect url not found."
-            case let .sessionError(code):
-                label.text = "ASWebAuthenticationSessionError \(code)"
-            case let .other(code):
-                label.text = code
-            }
-        } else if let error = error as? Error {
-            label.text = error.message
-        } else {
-            debugPrint(error)
-            label.text = error.localizedDescription
-        }
-        label.textColor = .red
+        ErrorHandler.handleGeneralError(label: label, error: error)
     }
 
     private func routeToExplorer(with type: ExplorerURLType) {
@@ -1167,7 +1138,7 @@ extension EVMBaseDemoViewController: SFSafariViewControllerDelegate {}
 
 extension EVMBaseDemoViewController {
 
-    enum Error: Swift.Error {
+    enum Error: Swift.Error, ErrorMessaging {
         case message(String)
 
         var message: String {

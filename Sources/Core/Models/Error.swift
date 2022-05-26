@@ -7,14 +7,15 @@
 
 import Foundation
 
-enum InternalError: Swift.Error {
+public enum BloctoSDKError: Swift.Error {
+    // internal
     case callbackSelfNotfound
     case encodeToURLFailed
     case webSDKSessionFailed
-    case flowScriptInvalid
-}
-
-public enum BloctoSDKError: Swift.Error {
+    case decodeFailed
+    case responseUnexpected
+    case urlNotFound
+    case feePayerNotFound
 
     // info check
     case appIdNotSet
@@ -60,6 +61,20 @@ public enum BloctoSDKError: Swift.Error {
 
     var rawValue: String {
         switch self {
+        case .callbackSelfNotfound:
+            return ""
+        case .encodeToURLFailed:
+            return ""
+        case .webSDKSessionFailed:
+            return ""
+        case .decodeFailed:
+            return ""
+        case .responseUnexpected:
+            return ""
+        case .urlNotFound:
+            return ""
+        case .feePayerNotFound:
+            return ""
         case .appIdNotSet:
             return "app_id_not_set"
         case .userRejected:

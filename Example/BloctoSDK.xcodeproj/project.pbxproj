@@ -24,6 +24,7 @@
 		6D3D57952808367A00228BBD /* Consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3D57932808365100228BBD /* Consts.swift */; };
 		6D3D57C9281287D600228BBD /* ValueAccountData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3D57C8281287D600228BBD /* ValueAccountData.swift */; };
 		6D72112327FDE61200F1EB7F /* QueryItemEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D72112227FDE61200F1EB7F /* QueryItemEncodingTests.swift */; };
+		6DA5E3C928ADFE9F00A06B66 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA5E3C828ADFE9F00A06B66 /* ErrorHandler.swift */; };
 		6DB6663F282BB8150015A6F6 /* EVMBaseDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB6663E282BB8150015A6F6 /* EVMBaseDemoViewController.swift */; };
 		6DB66642282C01AF0015A6F6 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB66641282C01AF0015A6F6 /* MenuViewController.swift */; };
 		6DB66656282E525D0015A6F6 /* EVMBaseSDKProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB66655282E525D0015A6F6 /* EVMBaseSDKProvider.swift */; };
@@ -52,6 +53,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C2F6E7A8F6C08F4347AE371 /* Pods-BloctoSDK_Example.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Example.staging.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Example/Pods-BloctoSDK_Example.staging.xcconfig"; sourceTree = "<group>"; };
 		1BFFAE4C7F4B8BD55F9140D2 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		25D1785E7B031B39796A2C37 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		4CA3783EEA551213E2718327 /* Pods-BloctoSDK_Example-BloctoSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Example-BloctoSDK_Tests.debug.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Example-BloctoSDK_Tests/Pods-BloctoSDK_Example-BloctoSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 		6D3D57C8281287D600228BBD /* ValueAccountData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueAccountData.swift; sourceTree = "<group>"; };
 		6D5954E827E1D44B009F43C9 /* BloctoSDK_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BloctoSDK_Example.entitlements; sourceTree = "<group>"; };
 		6D72112227FDE61200F1EB7F /* QueryItemEncodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryItemEncodingTests.swift; sourceTree = "<group>"; };
+		6DA5E3C828ADFE9F00A06B66 /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
 		6DB6663E282BB8150015A6F6 /* EVMBaseDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMBaseDemoViewController.swift; sourceTree = "<group>"; };
 		6DB66641282C01AF0015A6F6 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		6DB66655282E525D0015A6F6 /* EVMBaseSDKProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMBaseSDKProvider.swift; sourceTree = "<group>"; };
@@ -94,6 +97,7 @@
 		7B4773D7FF1C314AB322C220 /* Pods-BloctoSDK_Example-BloctoSDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Example-BloctoSDK_Tests.release.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Example-BloctoSDK_Tests/Pods-BloctoSDK_Example-BloctoSDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		7C3079E8801413560944E19A /* Pods_BloctoSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BloctoSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D21171C3979541A14284A0C6 /* BloctoSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = BloctoSDK.podspec; path = ../BloctoSDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		DBE1C45C102E9ACBBF3EE0AD /* Pods-BloctoSDK_Tests.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Tests.staging.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Tests/Pods-BloctoSDK_Tests.staging.xcconfig"; sourceTree = "<group>"; };
 		E4C80BED560E0C1A37A539B6 /* Pods_BloctoSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BloctoSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5DC540626CCE54728D6AFC2 /* Pods-BloctoSDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Tests.release.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Tests/Pods-BloctoSDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		E7B5C4AE7ED73BFAF1EF6F89 /* Pods-BloctoSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BloctoSDK_Tests.debug.xcconfig"; path = "Target Support Files/Pods-BloctoSDK_Tests/Pods-BloctoSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -129,6 +133,8 @@
 				E5DC540626CCE54728D6AFC2 /* Pods-BloctoSDK_Tests.release.xcconfig */,
 				4CA3783EEA551213E2718327 /* Pods-BloctoSDK_Example-BloctoSDK_Tests.debug.xcconfig */,
 				7B4773D7FF1C314AB322C220 /* Pods-BloctoSDK_Example-BloctoSDK_Tests.release.xcconfig */,
+				0C2F6E7A8F6C08F4347AE371 /* Pods-BloctoSDK_Example.staging.xcconfig */,
+				DBE1C45C102E9ACBBF3EE0AD /* Pods-BloctoSDK_Tests.staging.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -158,6 +164,7 @@
 		607FACD21AFB9204008FA782 /* Example for BloctoSDK */ = {
 			isa = PBXGroup;
 			children = (
+				6DA5E3C728ADFDF400A06B66 /* Utilities */,
 				6D02E65428355CDF00432971 /* Extensions */,
 				6DB6665F282E571C0015A6F6 /* Models */,
 				6D02E65B28378BAD00432971 /* ViewControllers */,
@@ -276,6 +283,14 @@
 				6D72112227FDE61200F1EB7F /* QueryItemEncodingTests.swift */,
 			);
 			path = QueryItemCoding;
+			sourceTree = "<group>";
+		};
+		6DA5E3C728ADFDF400A06B66 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				6DA5E3C828ADFE9F00A06B66 /* ErrorHandler.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		6DB6665F282E571C0015A6F6 /* Models */ = {
@@ -640,6 +655,7 @@
 				6DB66642282C01AF0015A6F6 /* MenuViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* SolanaDemoViewController.swift in Sources */,
 				6D3D57C9281287D600228BBD /* ValueAccountData.swift in Sources */,
+				6DA5E3C928ADFE9F00A06B66 /* ErrorHandler.swift in Sources */,
 				6D02E65628355CF400432971 /* EVMBaseSignTypeExtension.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				6D28E8F028781BEE0078E8E4 /* FlowDemoViewController.swift in Sources */,
