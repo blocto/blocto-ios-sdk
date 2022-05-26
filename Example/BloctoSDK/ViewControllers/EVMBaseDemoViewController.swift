@@ -317,13 +317,17 @@ final class EVMBaseDemoViewController: UIViewController {
     private lazy var signingTitleLabel: UILabel = createLabel(text: "Signing")
 
     private lazy var signingSegmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: signingSelections.prefix(2).map { $0.rawValue.replacingOccurrences(of: "_", with: " ") })
+        let segmentedControl = UISegmentedControl(
+            items: signingSelections.prefix(2)
+                .map { $0.displayTitle })
         segmentedControl.selectedSegmentIndex = 0
         return segmentedControl
     }()
 
     private lazy var signingTypeDataSegmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: signingSelections.dropFirst(2).map { $0.rawValue.replacingOccurrences(of: "_", with: " ") })
+        let segmentedControl = UISegmentedControl(
+            items: signingSelections.dropFirst(2)
+                .map { $0.displayTitle })
         segmentedControl.selectedSegmentIndex = UISegmentedControl.noSegment
         return segmentedControl
     }()

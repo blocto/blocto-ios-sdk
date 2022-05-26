@@ -14,16 +14,16 @@ enum InternalError: Swift.Error {
 }
 
 public enum BloctoSDKError: Swift.Error {
-    
+
     // info check
     case appIdNotSet
-    
+
     // query
     case userRejected
     case forbiddenBlockchain
     case invalidResponse
     case userNotMatch
-    
+
     // format check
     case ethSignInvalidHexString
 

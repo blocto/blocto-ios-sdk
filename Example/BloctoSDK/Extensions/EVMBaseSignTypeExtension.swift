@@ -10,6 +10,21 @@ import BloctoSDK
 
 extension EVMBaseSignType {
 
+    var displayTitle: String {
+        switch self {
+        case .sign:
+            return "eth_sign"
+        case .personalSign:
+            return "personal sign"
+        case .typedSignV3:
+            return "typedSign v3"
+        case .typedSignV4:
+            return "typedSign v4"
+        case .typedSign:
+            return "latest typedSign"
+        }
+    }
+
     var defaultText: String {
         switch self {
         case .sign:

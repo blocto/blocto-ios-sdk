@@ -17,7 +17,7 @@ extension BloctoSDKHelper where Base == String {
         }
         return base
     }
-    
+
     public var add0x: String {
         if base.hasPrefix("0x") {
             return base
