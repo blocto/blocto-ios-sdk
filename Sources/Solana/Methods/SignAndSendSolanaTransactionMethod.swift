@@ -68,7 +68,7 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
 
     public func resolve(components: URLComponents, logging: Bool) {
         if let errorCode = components.queryItem(for: .error) {
-            callback(.failure(QueryError(code: errorCode)))
+            callback(.failure(BloctoSDKError(code: errorCode)))
             return
         }
         let targetQueryName = QueryName.txHash
@@ -76,7 +76,7 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
             log(
                 enable: logging,
                 message: "\(targetQueryName.rawValue) not found.")
-            callback(.failure(QueryError.invalidResponse))
+            callback(.failure(BloctoSDKError.invalidResponse))
             return
         }
         callback(.success(txHash))

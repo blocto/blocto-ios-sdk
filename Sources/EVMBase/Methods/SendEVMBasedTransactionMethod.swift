@@ -47,7 +47,7 @@ public struct SendEVMBasedTransactionMethod: CallbackMethod {
             QueryItem(name: .method, value: type),
             QueryItem(name: .from, value: transaction.from),
             QueryItem(name: .to, value: transaction.to),
-            QueryItem(name: .value, value: String(transaction.value, radix: 16)),
+            QueryItem(name: .value, value: String(transaction.value, radix: 16).bloctoSDK.add0x),
             QueryItem(name: .data, value: transaction.data)
         ])
         components.queryItems = URLEncoding.encode(queryItems)
@@ -56,7 +56,7 @@ public struct SendEVMBasedTransactionMethod: CallbackMethod {
 
     public func resolve(components: URLComponents, logging: Bool) {
         if let errorCode = components.queryItem(for: .error) {
-            callback(.failure(QueryError(code: errorCode)))
+            callback(.failure(BloctoSDKError(code: errorCode)))
             return
         }
         let targetQueryName = QueryName.txHash
@@ -64,7 +64,7 @@ public struct SendEVMBasedTransactionMethod: CallbackMethod {
             log(
                 enable: logging,
                 message: "\(targetQueryName.rawValue) not found.")
-            callback(.failure(QueryError.invalidResponse))
+            callback(.failure(BloctoSDKError.invalidResponse))
             return
         }
         callback(.success(txHash))

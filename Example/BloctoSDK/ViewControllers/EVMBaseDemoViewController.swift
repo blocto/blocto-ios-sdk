@@ -833,7 +833,7 @@ final class EVMBaseDemoViewController: UIViewController {
             handleSignError(Error.message("signature not found."))
             return
         }
-        guard let signature = signingResultLabel.text else {
+        guard let signature = signingResultLabel.text?.bloctoSDK.drop0x else {
             handleSignError(Error.message("signature not found."))
             return
         }
@@ -883,7 +883,6 @@ final class EVMBaseDemoViewController: UIViewController {
                         self.resetSignVerifyStatus()
                         if let value = response?.value,
                            value.bloctoSDK.hexStringWith0xPrefix == ERC1271ABIFunction.Response.erc1271ValidSignature {
-                            self.signingResultLabel.text = signature
                             self.signingVerifyButton.setImage(UIImage(named: "icon20Selected"), for: .normal)
                         } else {
                             self.signingVerifyButton.setImage(UIImage(named: "error"), for: .normal)
@@ -998,71 +997,17 @@ final class EVMBaseDemoViewController: UIViewController {
     }
 
     private func handleRequestAccountError(_ error: Swift.Error) {
-        if let error = error as? QueryError {
-            switch error {
-            case .userRejected:
-                requestAccountResultLabel.text = "user rejected."
-            case .forbiddenBlockchain:
-                requestAccountResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
-            case .invalidResponse:
-                requestAccountResultLabel.text = "invalid response."
-            case .userNotMatch:
-                requestAccountResultLabel.text = "user not matched."
-            case .other(let code):
-                requestAccountResultLabel.text = code
-            }
-        } else if let error = error as? Error {
-            requestAccountResultLabel.text = error.message
-        } else {
-            requestAccountResultLabel.text = error.localizedDescription
-        }
-        requestAccountResultLabel.textColor = .red
+        handleGeneralError(label: requestAccountResultLabel, error: error)
         requestAccountLoadingIndicator.stopAnimating()
     }
 
     private func handleSignError(_ error: Swift.Error) {
-        if let error = error as? QueryError {
-            switch error {
-            case .userRejected:
-                signingResultLabel.text = "user rejected."
-            case .forbiddenBlockchain:
-                signingResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
-            case .invalidResponse:
-                signingResultLabel.text = "invalid response."
-            case .userNotMatch:
-                signingResultLabel.text = "user not matched."
-            case .other(let code):
-                signingResultLabel.text = code
-            }
-        } else if let error = error as? Error {
-            signingResultLabel.text = error.message
-        } else {
-            signingResultLabel.text = error.localizedDescription
-        }
-        signingResultLabel.textColor = .red
+        handleGeneralError(label: signingResultLabel, error: error)
         signingLoadingIndicator.stopAnimating()
     }
 
     private func handleSetValueError(_ error: Swift.Error) {
-        if let error = error as? QueryError {
-            switch error {
-            case .userRejected:
-                setValueResultLabel.text = "user rejected."
-            case .forbiddenBlockchain:
-                setValueResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
-            case .invalidResponse:
-                setValueResultLabel.text = "invalid response."
-            case .userNotMatch:
-                setValueResultLabel.text = "user not matched."
-            case .other(let code):
-                setValueResultLabel.text = code
-            }
-        } else if let error = error as? Error {
-            setValueResultLabel.text = error.message
-        } else {
-            setValueResultLabel.text = error.localizedDescription
-        }
-        setValueResultLabel.textColor = .red
+        handleGeneralError(label: setValueResultLabel, error: error)
         setValueLoadingIndicator.stopAnimating()
     }
 
@@ -1073,26 +1018,35 @@ final class EVMBaseDemoViewController: UIViewController {
     }
 
     private func handleValueTxError(_ error: Swift.Error) {
-        if let error = error as? QueryError {
+        handleGeneralError(label: sendValueTxResultLabel, error: error)
+        sendValueTxLoadingIndicator.stopAnimating()
+    }
+
+    private func handleGeneralError(label: UILabel, error: Swift.Error) {
+        if let error = error as? BloctoSDKError {
             switch error {
+            case .appIdNotSet:
+                label.text = "app id not set."
             case .userRejected:
-                sendValueTxResultLabel.text = "user rejected."
+                label.text = "user rejected."
             case .forbiddenBlockchain:
-                sendValueTxResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
+                label.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
             case .invalidResponse:
-                sendValueTxResultLabel.text = "invalid response."
+                label.text = "invalid response."
             case .userNotMatch:
-                sendValueTxResultLabel.text = "user not matched."
+                label.text = "user not matched."
+            case .ethSignInvalidHexString:
+                label.text = "input text should be hex string with 0x prefix."
             case .other(let code):
-                sendValueTxResultLabel.text = code
+                label.text = code
             }
         } else if let error = error as? Error {
-            sendValueTxResultLabel.text = error.message
+            label.text = error.message
         } else {
-            sendValueTxResultLabel.text = error.localizedDescription
+            debugPrint(error)
+            label.text = error.localizedDescription
         }
-        sendValueTxResultLabel.textColor = .red
-        sendValueTxLoadingIndicator.stopAnimating()
+        label.textColor = .red
     }
 
     private func routeToExplorer(with type: ExplorerURLType) {

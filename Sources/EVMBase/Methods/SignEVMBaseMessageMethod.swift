@@ -62,10 +62,13 @@ public struct SignEVMBaseMessageMethod: CallbackMethod {
         switch signType {
         case .sign:
             // input might be hexed string or normal string
-            if message.bloctoSDK.hexDecodedData.isEmpty {
-                messageValue = Data(message.utf8).bloctoSDK.hexStringWith0xPrefix
+            if message.hasPrefix("0x"),
+               message
+                .bloctoSDK.drop0x
+                .bloctoSDK.hexDecodedData.isEmpty == false {
+                messageValue = message.bloctoSDK.add0x
             } else {
-                messageValue = message
+                throw BloctoSDKError.ethSignInvalidHexString
             }
         case .personalSign:
             // input is string format
@@ -83,7 +86,7 @@ public struct SignEVMBaseMessageMethod: CallbackMethod {
 
     public func resolve(components: URLComponents, logging: Bool) {
         if let errorCode = components.queryItem(for: .error) {
-            callback(.failure(QueryError(code: errorCode)))
+            callback(.failure(BloctoSDKError(code: errorCode)))
             return
         }
         let targetQueryName = QueryName.signature
@@ -91,7 +94,7 @@ public struct SignEVMBaseMessageMethod: CallbackMethod {
             log(
                 enable: logging,
                 message: "\(targetQueryName.rawValue) not found.")
-            callback(.failure(QueryError.invalidResponse))
+            callback(.failure(BloctoSDKError.invalidResponse))
             return
         }
         callback(.success(signature))

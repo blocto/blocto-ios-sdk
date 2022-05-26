@@ -167,7 +167,7 @@ class SendTransactionTests: XCTestCase {
                 case let .success(receivedtxHash):
                     txHash = receivedtxHash
                 case let .failure(error):
-                    XCTAssert(false, error.localizedDescription)
+                    XCTFail(error.localizedDescription)
                 }
             }
 

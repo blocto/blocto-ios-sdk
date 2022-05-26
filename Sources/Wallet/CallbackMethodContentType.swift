@@ -15,6 +15,6 @@ public enum CallbackMethodContentType {
 
     case signAndSendTransaction(txHash: String)
 
-    case error(error: QueryError)
+    case error(error: BloctoSDKError)
 
 }
