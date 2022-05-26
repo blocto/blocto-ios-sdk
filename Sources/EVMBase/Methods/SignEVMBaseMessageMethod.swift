@@ -66,7 +66,7 @@ public struct SignEVMBaseMessageMethod: CallbackMethod {
                message
                 .bloctoSDK.drop0x
                 .bloctoSDK.hexDecodedData.isEmpty == false {
-                messageValue = message.bloctoSDK.add0x
+                messageValue = message
             } else {
                 throw BloctoSDKError.ethSignInvalidHexString
             }
