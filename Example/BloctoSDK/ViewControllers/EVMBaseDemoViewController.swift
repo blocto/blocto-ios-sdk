@@ -367,6 +367,10 @@ final class EVMBaseDemoViewController: UIViewController {
         button.contentEdgeInsets = .init(top: 4, left: 4, bottom: 4, right: 4)
         button.isHidden = true
         button.addSubview(signingVerifyingIndicator)
+        signingVerifyingIndicator.color = .gray
+        signingVerifyingIndicator.snp.makeConstraints {
+            $0.center.equalToSuperview()
+        }
         return button
     }()
 
