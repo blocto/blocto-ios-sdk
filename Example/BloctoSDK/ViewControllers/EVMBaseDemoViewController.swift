@@ -31,6 +31,8 @@ final class EVMBaseDemoViewController: UIViewController {
     private let blockchainSelections: [EVMBase] = EVMBase.allCases
     private let signingSelections: [EVMBaseSignType] = EVMBaseSignType.allCases
 
+    private var signingTextViewHeightContraint: Constraint?
+
     private lazy var networkSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["testnet", "mainnet"])
         segmentedControl.selectedSegmentIndex = 0
@@ -70,6 +72,7 @@ final class EVMBaseDemoViewController: UIViewController {
         view.addSubview(signingTitleLabel)
         view.addSubview(signingSegmentedControl)
         view.addSubview(signingTypeDataSegmentedControl)
+        view.addSubview(expandSignTextButton)
         view.addSubview(signingTextView)
         view.addSubview(signingResultLabel)
         view.addSubview(signingVerifyButton)
@@ -150,9 +153,16 @@ final class EVMBaseDemoViewController: UIViewController {
             $0.trailing.lessThanOrEqualToSuperview().inset(20)
         }
 
-        signingTextView.snp.makeConstraints {
+        expandSignTextButton.snp.makeConstraints {
             $0.top.equalTo(signingTypeDataSegmentedControl.snp.bottom).offset(20)
+            $0.height.equalTo(30)
+        }
+
+        signingTextView.snp.makeConstraints {
+            $0.top.equalTo(expandSignTextButton.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview().inset(20)
+            $0.trailing.equalTo(expandSignTextButton)
+            signingTextViewHeightContraint = $0.height.equalTo(70).constraint
         }
 
         signingResultLabel.snp.makeConstraints {
@@ -318,13 +328,24 @@ final class EVMBaseDemoViewController: UIViewController {
         return segmentedControl
     }()
 
+    private lazy var expandSignTextButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.setTitle("expand text", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        button.backgroundColor = .gray
+        button.contentEdgeInsets = .init(top: 12, left: 10, bottom: 12, right: 10)
+        button.layer.cornerRadius = 10
+        button.clipsToBounds = true
+        return button
+    }()
+
     private lazy var signingTextView: UITextView = {
         let textView = UITextView()
         textView.font = UIFont.systemFont(ofSize: 16)
         textView.textColor = .black
         textView.backgroundColor = .lightGray
         textView.text = selectedSigningType.defaultText
-        textView.isScrollEnabled = false
         textView.returnKeyType = .done
         textView.layer.cornerRadius = 5
         textView.clipsToBounds = true
@@ -629,6 +650,33 @@ final class EVMBaseDemoViewController: UIViewController {
                 guard let self = self,
                       let address = self.requestAccountResultLabel.text else { return }
                 self.routeToExplorer(with: .address(address))
+            })
+
+        _ = expandSignTextButton.rx.tap
+            .throttle(
+                DispatchTimeInterval.milliseconds(500),
+                latest: false,
+                scheduler: MainScheduler.instance)
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                if self.expandSignTextButton.isSelected {
+                    self.expandSignTextButton.isSelected = false
+                    self.expandSignTextButton.backgroundColor = .gray
+                    let text = self.signingTextView.text
+                    self.signingTextView.text = ""
+                    self.signingTextView.isScrollEnabled = true
+                    self.signingTextView.text = text
+                    self.signingTextViewHeightContraint?.isActive = true
+                } else {
+                    self.expandSignTextButton.isSelected = true
+                    self.expandSignTextButton.backgroundColor = .blue
+                    let text = self.signingTextView.text
+                    self.signingTextView.text = ""
+                    self.signingTextView.isScrollEnabled = false
+                    self.signingTextView.text = text
+                    self.signingTextViewHeightContraint?.isActive = false
+                }
             })
 
         _ = signButton.rx.tap
