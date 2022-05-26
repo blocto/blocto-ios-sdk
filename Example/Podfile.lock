@@ -13,7 +13,7 @@ PODS:
     - BigInt (~> 5.0)
     - BloctoSDK/Core (~> 0.2.0)
   - CryptoSwift (1.5.1)
-  - EthereumSignTypedDataUtil (0.1.1):
+  - EthereumSignTypedDataUtil (0.1.2):
     - BigInt (~> 5.0)
     - CryptoSwift (~> 1.4)
   - GenericJSON (2.0.1)
@@ -80,7 +80,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   EthereumSignTypedDataUtil:
-    :commit: 23cdac24550e790548b23d2ac914bbd99dcf49ef
+    :commit: 1970ba172c5dc5285f16ed8fb2c18adf953134c8
     :git: https://github.com/portto/EthereumSignTypedDataUtil.git
   SolanaWeb3:
     :commit: 9f430df4ce564d900e41da37821d555b2e644b62
@@ -94,7 +94,7 @@ SPEC CHECKSUMS:
   BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
   BloctoSDK: 21f23ee886a58adf9aebf3b1845bbfde596bb1f1
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
-  EthereumSignTypedDataUtil: 022e24145e1239311b3cc9a4a5766c4db4b0b50a
+  EthereumSignTypedDataUtil: ae4e33b21e51ee046a86a65b02843090b8bbd3f9
   GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
   Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
   Runtime: 67741bd196fb4ad821c4d259ccc527bf734d8806
