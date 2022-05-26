@@ -1,23 +1,21 @@
 //
-//  SignAndSendSolanaTransactionMethod.swift
+//  SendEVMBasedTransactionMethod.swift
 //  BloctoSDK
 //
-//  Created by Andrew Wang on 2022/4/8.
+//  Created by Andrew Wang on 2022/5/12.
 //
 
-import Foundation
+import BigInt
 
-public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
+public struct SendEVMBasedTransactionMethod: CallbackMethod {
     public typealias Response = String
 
     public let id: UUID
-    public let type: String = SolanaMethodType.signAndSendTransaction.rawValue
-    public let from: String
-    public let transactionInfo: SolanaTransactionInfo
-    public let isInvokeWrapped: Bool
+    public let type: String = EVMBaseMethodType.sendTransaction.rawValue
     public let callback: Callback
 
     let blockchain: Blockchain
+    let transaction: EVMBaseTransaction
 
     /// initialize request account method
     /// - Parameters:
@@ -27,16 +25,12 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
     public init(
         id: UUID = UUID(),
         blockchain: Blockchain,
-        from: String,
-        transactionInfo: SolanaTransactionInfo,
-        isInvokeWrapped: Bool = true,
+        transaction: EVMBaseTransaction,
         callback: @escaping Callback
     ) {
         self.id = id
         self.blockchain = blockchain
-        self.from = from
-        self.transactionInfo = transactionInfo
-        self.isInvokeWrapped = isInvokeWrapped
+        self.transaction = transaction
         self.callback = callback
     }
 
@@ -51,17 +45,11 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
             blockchain: blockchain)
         queryItems.append(contentsOf: [
             QueryItem(name: .method, value: type),
-            QueryItem(name: .from, value: from),
-            QueryItem(name: .isInvokeWrapped, value: isInvokeWrapped),
-            QueryItem(name: .message, value: transactionInfo.message),
-            QueryItem(name: .publicKeySignaturePairs, value: transactionInfo.publicKeySignaturePairs)
+            QueryItem(name: .from, value: transaction.from),
+            QueryItem(name: .to, value: transaction.to),
+            QueryItem(name: .value, value: String(transaction.value, radix: 16)),
+            QueryItem(name: .data, value: transaction.data)
         ])
-        if let appendMessages = transactionInfo.appendTx {
-            queryItems.append(
-                QueryItem(
-                    name: .appendTx,
-                    value: appendMessages))
-        }
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }

@@ -11,7 +11,7 @@ public struct RequestAccountMethod: CallbackMethod {
     public typealias Response = String
 
     public let id: UUID
-    public let type: MethodType = .requestAccount
+    public let type: String = MethodName.requestAccount.rawValue
     public let callback: Callback
 
     let blockchain: Blockchain
@@ -36,11 +36,11 @@ public struct RequestAccountMethod: CallbackMethod {
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
                   return nil
               }
-        let queryItems = URLEncoding.queryItems(
+        var queryItems = URLEncoding.queryItems(
             appId: appId,
             requestId: id.uuidString,
-            blockchain: blockchain,
-            method: .requestAccount)
+            blockchain: blockchain)
+        queryItems.append(QueryItem(name: .method, value: type))
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }

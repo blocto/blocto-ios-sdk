@@ -12,43 +12,67 @@ public enum URLEncoding {
     static func queryItems(
         appId: String,
         requestId: String,
-        blockchain: Blockchain,
-        method: MethodContentType
+        blockchain: Blockchain
     ) -> [QueryItem] {
-        var queryItems = [
+        let queryItems = [
             QueryItem(name: .appId, value: appId),
             QueryItem(name: .requestId, value: requestId),
-            QueryItem(name: .blockchain, value: blockchain),
-            QueryItem(name: .method, value: method.rawValue)
+            QueryItem(name: .blockchain, value: blockchain.rawValue)
         ]
-        switch method {
-        case .requestAccount:
-            break
-        case let .signMessage(from, message):
-            queryItems.append(contentsOf: [
-                QueryItem(name: .from, value: from),
-                QueryItem(name: .message, value: message)
-            ])
-        case let .signAndSendTransaction(from, isInvokeWrapped, transactionInfo):
-            queryItems.append(contentsOf: [
-                QueryItem(name: .from, value: from),
-                QueryItem(name: .isInvokeWrapped, value: isInvokeWrapped),
-                QueryItem(name: .message, value: transactionInfo.message),
-                QueryItem(name: .appendTx, value: transactionInfo.appendTx ?? [:]),
-                QueryItem(name: .publicKeySignaturePairs, value: transactionInfo.publicKeySignaturePairs)
-            ])
-            if let appendMessages = transactionInfo.appendTx {
-                queryItems.append(
-                    QueryItem(
-                        name: .appendTx,
-                        value: appendMessages))
-            }
-        }
         return queryItems
     }
 
     static func encode(_ queryItems: [QueryItem]) -> [URLQueryItem] {
         queryItems.flatMap { $0.getQueryComponents }
+    }
+
+    static func queryComponents(fromKey key: String, value: Any) -> [URLQueryItem] {
+        var components: [URLQueryItem] = []
+        switch value {
+        case let dictionary as [String: Any]:
+            for (nestedKey, value) in dictionary {
+                components += queryComponents(fromKey: "\(key)[\(nestedKey)]", value: value)
+            }
+        case let array as [Any]:
+            let arrayEncoding = ArrayEncoding()
+            for value in array {
+                components += queryComponents(fromKey: arrayEncoding.encode(key: key), value: value)
+            }
+        case let number as NSNumber:
+            if number.isBool {
+                let boolEncoding = BoolEncoding()
+                components.append(
+                    .init(
+                        name: escape(key),
+                        value: escape(boolEncoding.encode(value: number.boolValue))))
+            } else {
+                components.append(
+                    .init(
+                        name: escape(key),
+                        value: escape("\(number)")))
+            }
+        case let bool as Bool:
+            let boolEncoding = BoolEncoding()
+            components.append(
+                .init(
+                    name: escape(key),
+                    value: escape(boolEncoding.encode(value: bool))))
+        case let data as Data:
+            components.append(
+                .init(
+                    name: escape(key),
+                    value: escape(data.bloctoSDK.hexStringWith0xPrefix)))
+        default:
+            components.append(
+                .init(
+                    name: escape(key),
+                    value: escape("\(value)")))
+        }
+        return components
+    }
+
+    private static func escape(_ string: String) -> String {
+        QueryEscape.escape(string)
     }
 
 }

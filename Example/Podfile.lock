@@ -1,17 +1,25 @@
 PODS:
   - Alamofire (5.6.0)
-  - BloctoSDK/Core (0.1.0)
-  - BloctoSDK/Solana (0.1.0):
+  - BigInt (5.0.0)
+  - BloctoSDK/Core (0.2.0)
+  - BloctoSDK/EVMBase (0.2.0):
+    - BigInt (~> 5.0)
     - BloctoSDK/Core
-    - Moya (~> 15.0)
-    - RxSwift (~> 6.0)
+  - BloctoSDK/Solana (0.2.0):
+    - BloctoSDK/Core
+    - Moya (~> 14.0.0)
     - SolanaWeb3 (~> 0.0.4)
-  - BloctoSDK/Wallet (0.1.0):
-    - BloctoSDK/Core
+  - BloctoSDK/Wallet (0.2.0):
+    - BigInt (~> 5.0)
+    - BloctoSDK/Core (~> 0.2.0)
   - CryptoSwift (1.5.1)
-  - Moya (15.0.0):
-    - Moya/Core (= 15.0.0)
-  - Moya/Core (15.0.0):
+  - EthereumSignTypedDataUtil (0.1.1):
+    - BigInt (~> 5.0)
+    - CryptoSwift (~> 1.4)
+  - GenericJSON (2.0.1)
+  - Moya (14.0.0):
+    - Moya/Core (= 14.0.0)
+  - Moya/Core (14.0.0):
     - Alamofire (~> 5.0)
   - Runtime (2.2.2)
   - RxCocoa (6.2.0):
@@ -20,6 +28,7 @@ PODS:
   - RxRelay (6.2.0):
     - RxSwift (= 6.2.0)
   - RxSwift (6.2.0)
+  - secp256k1.swift (0.1.4)
   - SnapKit (5.0.1)
   - SolanaWeb3 (0.0.4):
     - Alamofire (~> 5.5)
@@ -27,51 +36,77 @@ PODS:
     - Runtime (~> 2.2)
     - TweetNacl
   - TweetNacl (1.0.2)
+  - web3.swift (0.9.3):
+    - BigInt (~> 5)
+    - GenericJSON (~> 2.0)
+    - secp256k1.swift (~> 0.1)
 
 DEPENDENCIES:
+  - BloctoSDK/EVMBase (from `../`)
   - BloctoSDK/Solana (from `../`)
   - BloctoSDK/Wallet (from `../`)
+  - EthereumSignTypedDataUtil (from `https://github.com/portto/EthereumSignTypedDataUtil.git`)
   - RxCocoa
   - RxSwift
   - SnapKit
   - SolanaWeb3 (from `https://github.com/portto/solana-web3.swift.git`)
+  - web3.swift (from `https://github.com/portto/web3.swift.git`, branch `feat/adjust-dependency-version`)
 
 SPEC REPOS:
   trunk:
     - Alamofire
+    - BigInt
     - CryptoSwift
+    - GenericJSON
     - Moya
     - Runtime
     - RxCocoa
     - RxRelay
     - RxSwift
+    - secp256k1.swift
     - SnapKit
     - TweetNacl
 
 EXTERNAL SOURCES:
   BloctoSDK:
     :path: "../"
+  EthereumSignTypedDataUtil:
+    :git: https://github.com/portto/EthereumSignTypedDataUtil.git
   SolanaWeb3:
     :git: https://github.com/portto/solana-web3.swift.git
+  web3.swift:
+    :branch: feat/adjust-dependency-version
+    :git: https://github.com/portto/web3.swift.git
 
 CHECKOUT OPTIONS:
+  EthereumSignTypedDataUtil:
+    :commit: 23cdac24550e790548b23d2ac914bbd99dcf49ef
+    :git: https://github.com/portto/EthereumSignTypedDataUtil.git
   SolanaWeb3:
     :commit: 9f430df4ce564d900e41da37821d555b2e644b62
     :git: https://github.com/portto/solana-web3.swift.git
+  web3.swift:
+    :commit: 6a9d8d655fde7e8300d011e3781bb7176b34a9ed
+    :git: https://github.com/portto/web3.swift.git
 
 SPEC CHECKSUMS:
   Alamofire: 0c07058209f211e3d32824f8e0766d7c44ac83b3
-  BloctoSDK: f8ee22ccdb6e858bb9bef8219d92032ef55e6102
+  BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
+  BloctoSDK: 21f23ee886a58adf9aebf3b1845bbfde596bb1f1
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
-  Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
+  EthereumSignTypedDataUtil: 022e24145e1239311b3cc9a4a5766c4db4b0b50a
+  GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
+  Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
   Runtime: 67741bd196fb4ad821c4d259ccc527bf734d8806
   RxCocoa: 4baf94bb35f2c0ab31bc0cb9f1900155f646ba42
   RxRelay: e72dbfd157807478401ef1982e1c61c945c94b2f
   RxSwift: d356ab7bee873611322f134c5f9ef379fa183d8f
+  secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SolanaWeb3: 518d1fddf72ac8e0f76dd19a01d90079edb5da47
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
+  web3.swift: 4d8b9f69ea92d23c6e87b97c36686f1c541eaef1
 
-PODFILE CHECKSUM: 1c6ddf7b81ceb4a17864667b275d852df2275034
+PODFILE CHECKSUM: 1bc25620b87a58c4a97e6af8f3fb245912e813ef
 
 COCOAPODS: 1.11.3

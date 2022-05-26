@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'BloctoSDK'
-  s.version          = '0.1.0'
+  s.version          = '0.2.0'
   s.summary          = 'A SDK to interact with Blockchain through Blocto Wallet App.'
 
   s.homepage         = 'https://github.com/portto/blocto-ios-sdk'
@@ -21,14 +21,27 @@ Pod::Spec.new do |s|
   s.subspec "Solana" do |ss|
       ss.source_files = "Sources/Solana/**/*"
       ss.dependency "BloctoSDK/Core"
-      ss.dependency "RxSwift", "~> 6.0"
       ss.dependency "SolanaWeb3", "~> 0.0.4"
-      ss.dependency "Moya", "~> 15.0"
+      ss.dependency "Moya", "~> 14.0.0"
+  end
+  
+  s.subspec "EVMBase" do |ss|
+      ss.source_files = "Sources/EVMBase/**/*"
+      ss.dependency "BloctoSDK/Core"
+      ss.dependency "BigInt", "~> 5.0"
   end
   
   s.subspec "Wallet" do |ss|
-    ss.source_files = "Sources/Wallet/**/*"
-    ss.dependency "BloctoSDK/Core"
+      ss.source_files = "Sources/Wallet/*",
+      "Sources/Solana/Models/SolanaMethodType.swift",
+      "Sources/Solana/Models/SolanaMethodContentType.swift",
+      "Sources/Solana/Models/SolanaTransactionInfo.swift",
+      "Sources/EVMBase/Models/EVMBaseMethodType.swift",
+      "Sources/EVMBase/Models/EVMBaseMethodContentType.swift",
+      "Sources/EVMBase/Models/EVMBaseTransaction.swift",
+      "Sources/EVMBase/Models/SignType.swift"
+      ss.dependency "BloctoSDK/Core", "~> 0.2.0"
+      ss.dependency "BigInt", "~> 5.0"
   end
 
 end

@@ -24,14 +24,14 @@ class ParsedMethodTests: XCTestCase {
             QueryName.appId.rawValue: appId,
             QueryName.requestId.rawValue: requestId,
             QueryName.blockchain.rawValue: Blockchain.solana.rawValue,
-            QueryName.method.rawValue: MethodType.requestAccount.rawValue
+            QueryName.method.rawValue: MethodName.requestAccount.rawValue
         ]
 
         let expected = ParsedMethod(
             appId: appId,
             requestId: requestId,
             blockchain: .solana,
-            methodContentType: .requestAccount)
+            methodContentType: .solana(.requestAccount))
 
         // When:
         let parsedMethod = ParsedMethod(param: param)
@@ -54,20 +54,61 @@ extension ParsedMethod: Equatable {
 
 }
 
-extension MethodContentType: Equatable {
+extension GeneralMethodContentType: Equatable {
 
-    public static func == (lhs: MethodContentType, rhs: MethodContentType) -> Bool {
+    public static func == (lhs: GeneralMethodContentType, rhs: GeneralMethodContentType) -> Bool {
+        switch (lhs, rhs) {
+        case let (.solana(lSolanaMethodContentType), .solana(rSolanaMethodContentType)):
+            return lSolanaMethodContentType == rSolanaMethodContentType
+        case let (.evmBase(lEVMBaseMethodContentType), .evmBase(rEVMBaseMethodContentType)):
+            return lEVMBaseMethodContentType == rEVMBaseMethodContentType
+        default:
+            return false
+        }
+    }
+
+}
+
+extension SolanaMethodContentType: Equatable {
+
+    public static func == (lhs: SolanaMethodContentType, rhs: SolanaMethodContentType) -> Bool {
         switch (lhs, rhs) {
         case (.requestAccount, .requestAccount):
             return true
-        case let (.signMessage(lFrom, lMessage), .signMessage(rFrom, rMessage)):
-            return lFrom == rFrom
-            && lMessage == rMessage
-        case let (.signAndSendTransaction(lFrom, lIsInvokeWrapped, lTransactionInfo),
-                  .signAndSendTransaction(rFrom, rIsInvokeWrapped, rTransactionInfo)):
+        case let (.signAndSendTransaction(lFrom,
+                                          lIsInvokeWrapped,
+                                          lTransactionInfo),
+                  .signAndSendTransaction(rFrom,
+                                          rIsInvokeWrapped,
+                                          rTransactionInfo)):
             return lFrom == rFrom
             && lIsInvokeWrapped == rIsInvokeWrapped
             && lTransactionInfo == rTransactionInfo
+        default:
+            return false
+        }
+    }
+
+}
+
+extension EVMBaseMethodContentType: Equatable {
+
+    public static func == (lhs: EVMBaseMethodContentType, rhs: EVMBaseMethodContentType) -> Bool {
+        switch (lhs, rhs) {
+        case (.requestAccount, .requestAccount):
+            return true
+        case let (.signMessage(lFrom,
+                               lMessage,
+                               lSignType),
+                  .signMessage(rFrom,
+                               rMessage,
+                               rSignType)):
+            return lFrom == rFrom
+            && lMessage == rMessage
+            && lSignType == rSignType
+        case let (.sendTransaction(lTransaction),
+                  .sendTransaction(rTransaction)):
+            return lTransaction == rTransaction
         default:
             return false
         }
@@ -81,6 +122,17 @@ extension SolanaTransactionInfo: Equatable {
         lhs.message == rhs.message
         && lhs.appendTx == rhs.appendTx
         && lhs.publicKeySignaturePairs == rhs.publicKeySignaturePairs
+    }
+
+}
+
+extension EVMBaseTransaction: Equatable {
+
+    public static func == (lhs: EVMBaseTransaction, rhs: EVMBaseTransaction) -> Bool {
+        lhs.to == rhs.to
+        && lhs.from == rhs.from
+        && lhs.value == rhs.value
+        && lhs.data == rhs.data
     }
 
 }

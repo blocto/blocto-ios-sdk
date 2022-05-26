@@ -9,14 +9,25 @@
 /* Begin PBXBuildFile section */
 		4F707DA1A5D83DF13F8A7216 /* Pods_BloctoSDK_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C80BED560E0C1A37A539B6 /* Pods_BloctoSDK_Tests.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
-		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
+		607FACD81AFB9204008FA782 /* SolanaDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* SolanaDemoViewController.swift */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* AccountRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* AccountRequestTests.swift */; };
+		6D02E62E283266FA00432971 /* SendTransactionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E62D283266FA00432971 /* SendTransactionTests.swift */; };
+		6D02E63028329A0700432971 /* XCTAssertURLComponentsEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E62F28329A0700432971 /* XCTAssertURLComponentsEqual.swift */; };
+		6D02E65628355CF400432971 /* EVMBaseSignTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E65528355CF400432971 /* EVMBaseSignTypeExtension.swift */; };
+		6D02E665283BFD9000432971 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E664283BFD9000432971 /* DataExtensions.swift */; };
+		6D02E6FB283D4BDB00432971 /* ABIFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6FA283D4BDB00432971 /* ABIFunctions.swift */; };
+		6D02E729283EA11600432971 /* HashingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E728283EA11600432971 /* HashingTests.swift */; };
 		6D1FC37B27F5973100F7FD5C /* ParsedMethodTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1FC37927F5952300F7FD5C /* ParsedMethodTests.swift */; };
 		6D3D57952808367A00228BBD /* Consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3D57932808365100228BBD /* Consts.swift */; };
 		6D3D57C9281287D600228BBD /* ValueAccountData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3D57C8281287D600228BBD /* ValueAccountData.swift */; };
 		6D72112327FDE61200F1EB7F /* QueryItemEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D72112227FDE61200F1EB7F /* QueryItemEncodingTests.swift */; };
+		6DB6663F282BB8150015A6F6 /* EVMBaseDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB6663E282BB8150015A6F6 /* EVMBaseDemoViewController.swift */; };
+		6DB66642282C01AF0015A6F6 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB66641282C01AF0015A6F6 /* MenuViewController.swift */; };
+		6DB66656282E525D0015A6F6 /* EVMBaseSDKProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB66655282E525D0015A6F6 /* EVMBaseSDKProvider.swift */; };
+		6DB66661282E57240015A6F6 /* EVMBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB66660282E57240015A6F6 /* EVMBase.swift */; };
+		6DB66663282E58690015A6F6 /* ExplorerURLType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB66662282E58690015A6F6 /* ExplorerURLType.swift */; };
 		6DD6F12127EDBF0000B514B1 /* MockUIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F11D27EDBA4600B514B1 /* MockUIApplication.swift */; };
 		6DD6F12227EDBF0300B514B1 /* MockAuthenticationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F11F27EDBB6600B514B1 /* MockAuthenticationSession.swift */; };
 		6DFA2AF128001AE700F7DA2C /* XCTAssertDictionaryEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFA2AEF2800193F00F7DA2C /* XCTAssertDictionaryEqual.swift */; };
@@ -43,17 +54,28 @@
 		607FACD01AFB9204008FA782 /* BloctoSDK_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BloctoSDK_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		607FACD71AFB9204008FA782 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		607FACD71AFB9204008FA782 /* SolanaDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolanaDemoViewController.swift; sourceTree = "<group>"; };
 		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* BloctoSDK_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BloctoSDK_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* AccountRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRequestTests.swift; sourceTree = "<group>"; };
+		6D02E62D283266FA00432971 /* SendTransactionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendTransactionTests.swift; sourceTree = "<group>"; };
+		6D02E62F28329A0700432971 /* XCTAssertURLComponentsEqual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTAssertURLComponentsEqual.swift; sourceTree = "<group>"; };
+		6D02E65528355CF400432971 /* EVMBaseSignTypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMBaseSignTypeExtension.swift; sourceTree = "<group>"; };
+		6D02E664283BFD9000432971 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
+		6D02E6FA283D4BDB00432971 /* ABIFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ABIFunctions.swift; path = BloctoSDK/ABIFunctions.swift; sourceTree = SOURCE_ROOT; };
+		6D02E728283EA11600432971 /* HashingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashingTests.swift; sourceTree = "<group>"; };
 		6D1FC37927F5952300F7FD5C /* ParsedMethodTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsedMethodTests.swift; sourceTree = "<group>"; };
 		6D3D57932808365100228BBD /* Consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consts.swift; sourceTree = "<group>"; };
 		6D3D57C8281287D600228BBD /* ValueAccountData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueAccountData.swift; sourceTree = "<group>"; };
 		6D5954E827E1D44B009F43C9 /* BloctoSDK_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BloctoSDK_Example.entitlements; sourceTree = "<group>"; };
 		6D72112227FDE61200F1EB7F /* QueryItemEncodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryItemEncodingTests.swift; sourceTree = "<group>"; };
+		6DB6663E282BB8150015A6F6 /* EVMBaseDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMBaseDemoViewController.swift; sourceTree = "<group>"; };
+		6DB66641282C01AF0015A6F6 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		6DB66655282E525D0015A6F6 /* EVMBaseSDKProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMBaseSDKProvider.swift; sourceTree = "<group>"; };
+		6DB66660282E57240015A6F6 /* EVMBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMBase.swift; sourceTree = "<group>"; };
+		6DB66662282E58690015A6F6 /* ExplorerURLType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplorerURLType.swift; sourceTree = "<group>"; };
 		6DD6F11D27EDBA4600B514B1 /* MockUIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIApplication.swift; sourceTree = "<group>"; };
 		6DD6F11F27EDBB6600B514B1 /* MockAuthenticationSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthenticationSession.swift; sourceTree = "<group>"; };
 		6DFA2AEF2800193F00F7DA2C /* XCTAssertDictionaryEqual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTAssertDictionaryEqual.swift; sourceTree = "<group>"; };
@@ -128,9 +150,11 @@
 		607FACD21AFB9204008FA782 /* Example for BloctoSDK */ = {
 			isa = PBXGroup;
 			children = (
+				6D02E65428355CDF00432971 /* Extensions */,
+				6DB6665F282E571C0015A6F6 /* Models */,
+				6D02E65B28378BAD00432971 /* ViewControllers */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
-				607FACD71AFB9204008FA782 /* ViewController.swift */,
-				6D3D57C8281287D600228BBD /* ValueAccountData.swift */,
+				6DB66655282E525D0015A6F6 /* EVMBaseSDKProvider.swift */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
@@ -150,6 +174,7 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				6D02E727283EA11600432971 /* Hashing */,
 				6DFA2B0928040E2D00F7DA2C /* Wallet */,
 				6DFA2AEE2800192700F7DA2C /* Utilities */,
 				6D72112127FDE5DE00F1EB7F /* QueryItemCoding */,
@@ -189,11 +214,39 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		6D02E65428355CDF00432971 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6D02E65528355CF400432971 /* EVMBaseSignTypeExtension.swift */,
+				6D02E664283BFD9000432971 /* DataExtensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		6D02E65B28378BAD00432971 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				6DB66641282C01AF0015A6F6 /* MenuViewController.swift */,
+				607FACD71AFB9204008FA782 /* SolanaDemoViewController.swift */,
+				6DB6663E282BB8150015A6F6 /* EVMBaseDemoViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		6D02E727283EA11600432971 /* Hashing */ = {
+			isa = PBXGroup;
+			children = (
+				6D02E728283EA11600432971 /* HashingTests.swift */,
+			);
+			path = Hashing;
+			sourceTree = "<group>";
+		};
 		6D1FC37727F594EB00F7FD5C /* Methods */ = {
 			isa = PBXGroup;
 			children = (
 				607FACEB1AFB9204008FA782 /* AccountRequestTests.swift */,
 				6DFA2AF428001EE200F7DA2C /* SignAndSendTransactionTests.swift */,
+				6D02E62D283266FA00432971 /* SendTransactionTests.swift */,
 			);
 			path = Methods;
 			sourceTree = "<group>";
@@ -214,6 +267,17 @@
 			path = QueryItemCoding;
 			sourceTree = "<group>";
 		};
+		6DB6665F282E571C0015A6F6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				6D02E6FA283D4BDB00432971 /* ABIFunctions.swift */,
+				6DB66660282E57240015A6F6 /* EVMBase.swift */,
+				6DB66662282E58690015A6F6 /* ExplorerURLType.swift */,
+				6D3D57C8281287D600228BBD /* ValueAccountData.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		6DD6F11C27EDBA3600B514B1 /* Mock */ = {
 			isa = PBXGroup;
 			children = (
@@ -227,6 +291,7 @@
 			isa = PBXGroup;
 			children = (
 				6DFA2AEF2800193F00F7DA2C /* XCTAssertDictionaryEqual.swift */,
+				6D02E62F28329A0700432971 /* XCTAssertURLComponentsEqual.swift */,
 				6DFA2AF62801601300F7DA2C /* XCTAssertArrayElementsEqual.swift */,
 			);
 			path = Utilities;
@@ -433,8 +498,11 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BloctoSDK_Example/Pods-BloctoSDK_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/BigInt/BigInt.framework",
 				"${BUILT_PRODUCTS_DIR}/BloctoSDK/BloctoSDK.framework",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/EthereumSignTypedDataUtil/EthereumSignTypedDataUtil.framework",
+				"${BUILT_PRODUCTS_DIR}/GenericJSON/GenericJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
 				"${BUILT_PRODUCTS_DIR}/Runtime/Runtime.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
@@ -443,12 +511,17 @@
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SolanaWeb3/SolanaWeb3.framework",
 				"${BUILT_PRODUCTS_DIR}/TweetNacl/TweetNacl.framework",
+				"${BUILT_PRODUCTS_DIR}/secp256k1.swift/secp256k1.framework",
+				"${BUILT_PRODUCTS_DIR}/web3.swift/web3.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BigInt.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BloctoSDK.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EthereumSignTypedDataUtil.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Runtime.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
@@ -457,6 +530,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SolanaWeb3.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TweetNacl.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/secp256k1.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/web3.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -470,9 +545,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
+				6DB66656282E525D0015A6F6 /* EVMBaseSDKProvider.swift in Sources */,
+				6DB6663F282BB8150015A6F6 /* EVMBaseDemoViewController.swift in Sources */,
+				6DB66642282C01AF0015A6F6 /* MenuViewController.swift in Sources */,
+				607FACD81AFB9204008FA782 /* SolanaDemoViewController.swift in Sources */,
 				6D3D57C9281287D600228BBD /* ValueAccountData.swift in Sources */,
+				6D02E65628355CF400432971 /* EVMBaseSignTypeExtension.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				6D02E665283BFD9000432971 /* DataExtensions.swift in Sources */,
+				6D02E6FB283D4BDB00432971 /* ABIFunctions.swift in Sources */,
+				6DB66661282E57240015A6F6 /* EVMBase.swift in Sources */,
+				6DB66663282E58690015A6F6 /* ExplorerURLType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,13 +563,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D02E62E283266FA00432971 /* SendTransactionTests.swift in Sources */,
 				6DFA2B0B28040E5100F7DA2C /* CallbackHelperTests.swift in Sources */,
+				6D02E63028329A0700432971 /* XCTAssertURLComponentsEqual.swift in Sources */,
 				6D3D57952808367A00228BBD /* Consts.swift in Sources */,
 				6D72112327FDE61200F1EB7F /* QueryItemEncodingTests.swift in Sources */,
 				6DD6F12127EDBF0000B514B1 /* MockUIApplication.swift in Sources */,
 				6D1FC37B27F5973100F7FD5C /* ParsedMethodTests.swift in Sources */,
 				6DFA2AF72801601300F7DA2C /* XCTAssertArrayElementsEqual.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* AccountRequestTests.swift in Sources */,
+				6D02E729283EA11600432971 /* HashingTests.swift in Sources */,
 				6DFA2AF528001EE200F7DA2C /* SignAndSendTransactionTests.swift in Sources */,
 				6DFA2AF128001AE700F7DA2C /* XCTAssertDictionaryEqual.swift in Sources */,
 				6DD6F12227EDBF0300B514B1 /* MockAuthenticationSession.swift in Sources */,

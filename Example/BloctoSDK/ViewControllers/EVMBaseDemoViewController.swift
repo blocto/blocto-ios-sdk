@@ -1,9 +1,9 @@
 //
-//  ViewController.swift
-//  BloctoSDK
+//  EVMBaseDemoViewController.swift
+//  BloctoSDK_Example
 //
-//  Created by scottphc on 01/12/2022.
-//  Copyright (c) 2022 scottphc. All rights reserved.
+//  Created by Andrew Wang on 2022/5/11.
+//  Copyright © 2022 CocoaPods. All rights reserved.
 //
 
 import UIKit
@@ -12,32 +12,33 @@ import RxSwift
 import RxCocoa
 import SnapKit
 import BloctoSDK
-import SolanaWeb3
+import web3
+import BigInt
+import EthereumSignTypedDataUtil
 
-// swiftlint:disable type_body_length
-final class ViewController: UIViewController {
+// swiftlint:disable type_body_length file_length
+final class EVMBaseDemoViewController: UIViewController {
 
     private var userWalletAddress: String?
-    private var dappAddress: String {
-        isProduction
-        ? "EajAHVxAVvf4yNUu37ZEh8QS7Lk5bw9yahTGiTSL1Rwt"
-        : "4AXy5YYCXpMapaVuzKkz25kVHzrdLDgKN3TiQvtf1Eu8"
-    }
-    private var programId: String {
-        isProduction
-        ? "EN2Ln23fzm4qag1mHfx7FDJwDJog5u4SDgqRY256ZgFt"
-        : "G4YkbRN4nFQGEUg4SXzPsrManWzuk8bNq9JaMhXepnZ6"
-    }
-    private var cluster: Cluster {
-        isProduction
-        ? .mainnetBeta
-        : .devnet
-    }
 
-    private lazy var bloctoSolanaSDK = BloctoSDK.shared.solana
+    private lazy var bloctoEthereumSDK = BloctoSDK.shared.ethereum
+
+    private var selectedBlockchain: EVMBase = .ethereum
+    private var selectedSigningType: EVMBaseSignType = .sign
+
+    private lazy var rpcClient = selectedBlockchain.rpcClient
+
+    private let blockchainSelections: [EVMBase] = EVMBase.allCases
+    private let signingSelections: [EVMBaseSignType] = EVMBaseSignType.allCases
 
     private lazy var networkSegmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: ["devnet", "mainnet-beta"])
+        let segmentedControl = UISegmentedControl(items: ["testnet", "mainnet"])
+        segmentedControl.selectedSegmentIndex = 0
+        return segmentedControl
+    }()
+
+    private lazy var blockchainSegmentedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl(items: blockchainSelections.map { $0.displayString })
         segmentedControl.selectedSegmentIndex = 0
         return segmentedControl
     }()
@@ -66,24 +67,36 @@ final class ViewController: UIViewController {
 
         view.addSubview(separator1)
 
+        view.addSubview(signingTitleLabel)
+        view.addSubview(signingSegmentedControl)
+        view.addSubview(signingTypeDataSegmentedControl)
+        view.addSubview(signingTextView)
+        view.addSubview(signingResultLabel)
+        view.addSubview(signingVerifyButton)
+        view.addSubview(signButton)
+        view.addSubview(signingLoadingIndicator)
+
+        view.addSubview(separator2)
+
         view.addSubview(setValueTitleLabel)
-        view.addSubview(inputTextField)
+        view.addSubview(nomalTxInputTextField)
         view.addSubview(setValueButton)
         view.addSubview(setValueResultLabel)
         view.addSubview(setValueExplorerButton)
 
-        view.addSubview(separator2)
+        view.addSubview(separator3)
 
         view.addSubview(getValueTitleLabel)
         view.addSubview(getValueButton)
         view.addSubview(getValueResultLabel)
 
-        view.addSubview(separator3)
+        view.addSubview(separator4)
 
-        view.addSubview(partialSignTxTitleLabel)
-        view.addSubview(partialSignTxButton)
-        view.addSubview(partialSignTxResultLabel)
-        view.addSubview(partialSignTxExplorerButton)
+        view.addSubview(sendValueTxTitleLabel)
+        view.addSubview(valueTxInputTextField)
+        view.addSubview(sendValueTxButton)
+        view.addSubview(sendValueTxResultLabel)
+        view.addSubview(sendValueTxExplorerButton)
 
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().inset(30)
@@ -118,19 +131,65 @@ final class ViewController: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
-        setValueTitleLabel.snp.makeConstraints {
+        signingTitleLabel.snp.makeConstraints {
             $0.top.equalTo(separator1.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
-        inputTextField.snp.makeConstraints {
+        signingSegmentedControl.snp.makeConstraints {
+            $0.top.equalTo(signingTitleLabel.snp.bottom).offset(20)
+            $0.centerX.equalToSuperview()
+            $0.leading.greaterThanOrEqualToSuperview().inset(20)
+            $0.trailing.lessThanOrEqualToSuperview().inset(20)
+        }
+
+        signingTypeDataSegmentedControl.snp.makeConstraints {
+            $0.top.equalTo(signingSegmentedControl.snp.bottom).offset(10)
+            $0.centerX.equalToSuperview()
+            $0.leading.greaterThanOrEqualToSuperview().inset(20)
+            $0.trailing.lessThanOrEqualToSuperview().inset(20)
+        }
+
+        signingTextView.snp.makeConstraints {
+            $0.top.equalTo(signingTypeDataSegmentedControl.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
+        signingResultLabel.snp.makeConstraints {
+            $0.top.equalTo(signingTextView.snp.bottom).offset(20)
+            $0.leading.equalToSuperview().inset(20)
+        }
+
+        signingVerifyButton.snp.makeConstraints {
+            $0.leading.equalTo(signingResultLabel.snp.trailing).offset(20)
+            $0.trailing.equalToSuperview().inset(20)
+            $0.centerY.equalTo(signingResultLabel)
+            $0.size.equalTo(40)
+        }
+
+        signButton.snp.makeConstraints {
+            $0.top.equalTo(signingResultLabel.snp.bottom).offset(20)
+            $0.leading.equalToSuperview().inset(20)
+        }
+
+        separator2.snp.makeConstraints {
+            $0.top.equalTo(signButton.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
+        setValueTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(separator2.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
+        nomalTxInputTextField.snp.makeConstraints {
             $0.top.equalTo(setValueTitleLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(35)
         }
 
         setValueButton.snp.makeConstraints {
-            $0.top.equalTo(inputTextField.snp.bottom).offset(20)
+            $0.top.equalTo(nomalTxInputTextField.snp.bottom).offset(20)
             $0.leading.equalToSuperview().inset(20)
         }
 
@@ -146,13 +205,13 @@ final class ViewController: UIViewController {
             $0.trailing.equalToSuperview().inset(20)
         }
 
-        separator2.snp.makeConstraints {
+        separator3.snp.makeConstraints {
             $0.top.equalTo(setValueResultLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
         getValueTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(separator2.snp.bottom).offset(20)
+            $0.top.equalTo(separator3.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
@@ -166,31 +225,37 @@ final class ViewController: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
-        separator3.snp.makeConstraints {
+        separator4.snp.makeConstraints {
             $0.top.equalTo(getValueResultLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
-        partialSignTxTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(separator3.snp.bottom).offset(20)
+        sendValueTxTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(separator4.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
-        partialSignTxButton.snp.makeConstraints {
-            $0.top.equalTo(partialSignTxTitleLabel.snp.bottom).offset(20)
+        valueTxInputTextField.snp.makeConstraints {
+            $0.top.equalTo(sendValueTxTitleLabel.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(35)
+        }
+
+        sendValueTxButton.snp.makeConstraints {
+            $0.top.equalTo(valueTxInputTextField.snp.bottom).offset(20)
             $0.leading.equalToSuperview().inset(20)
         }
 
-        partialSignTxResultLabel.snp.makeConstraints {
-            $0.top.equalTo(partialSignTxButton.snp.bottom).offset(20)
+        sendValueTxResultLabel.snp.makeConstraints {
+            $0.top.equalTo(sendValueTxButton.snp.bottom).offset(20)
             $0.leading.equalToSuperview().inset(20)
             $0.bottom.equalToSuperview().inset(50)
         }
 
-        partialSignTxExplorerButton.snp.makeConstraints {
-            $0.centerY.equalTo(partialSignTxResultLabel)
+        sendValueTxExplorerButton.snp.makeConstraints {
+            $0.centerY.equalTo(sendValueTxResultLabel)
             $0.size.equalTo(40)
-            $0.leading.equalTo(partialSignTxResultLabel.snp.trailing).offset(20)
+            $0.leading.equalTo(sendValueTxResultLabel.snp.trailing).offset(20)
             $0.trailing.equalToSuperview().inset(20)
         }
 
@@ -239,9 +304,64 @@ final class ViewController: UIViewController {
 
     private lazy var separator1 = createSeparator()
 
+    private lazy var signingTitleLabel: UILabel = createLabel(text: "Signing")
+
+    private lazy var signingSegmentedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl(items: signingSelections.prefix(2).map { $0.rawValue.replacingOccurrences(of: "_", with: " ") })
+        segmentedControl.selectedSegmentIndex = 0
+        return segmentedControl
+    }()
+
+    private lazy var signingTypeDataSegmentedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl(items: signingSelections.dropFirst(2).map { $0.rawValue.replacingOccurrences(of: "_", with: " ") })
+        segmentedControl.selectedSegmentIndex = UISegmentedControl.noSegment
+        return segmentedControl
+    }()
+
+    private lazy var signingTextView: UITextView = {
+        let textView = UITextView()
+        textView.font = UIFont.systemFont(ofSize: 16)
+        textView.textColor = .black
+        textView.backgroundColor = .lightGray
+        textView.text = selectedSigningType.defaultText
+        textView.isScrollEnabled = false
+        textView.returnKeyType = .done
+        textView.layer.cornerRadius = 5
+        textView.clipsToBounds = true
+        return textView
+    }()
+
+    private lazy var signingResultLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .black
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
+
+    private lazy var signingVerifyButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.setImage(UIImage(named: "icExamination"), for: .normal)
+        button.contentEdgeInsets = .init(top: 4, left: 4, bottom: 4, right: 4)
+        button.isHidden = true
+        button.addSubview(signingVerifyingIndicator)
+        return button
+    }()
+
+    private lazy var signingVerifyingIndicator = createLoadingIndicator()
+
+    private lazy var signButton: UIButton = createButton(
+        text: "Sign",
+        indicator: signingLoadingIndicator)
+
+    private lazy var signingLoadingIndicator = createLoadingIndicator()
+
+    private lazy var separator2 = createSeparator()
+
     private lazy var setValueTitleLabel: UILabel = createLabel(text: "Set a Value")
 
-    private lazy var inputTextField: UITextField = {
+    private lazy var nomalTxInputTextField: UITextField = {
         let textField = UITextField()
         textField.font = UIFont.systemFont(ofSize: 16)
         textField.textColor = .black
@@ -283,7 +403,7 @@ final class ViewController: UIViewController {
         return button
     }()
 
-    private lazy var separator2 = createSeparator()
+    private lazy var separator3 = createSeparator()
 
     private lazy var getValueTitleLabel: UILabel = createLabel(text: "Get a Value from Account's Data")
 
@@ -302,17 +422,43 @@ final class ViewController: UIViewController {
         return label
     }()
 
-    private lazy var separator3 = createSeparator()
+    private lazy var separator4 = createSeparator()
 
-    private lazy var partialSignTxTitleLabel: UILabel = createLabel(text: "Create Account/Send Transaction (partialSign)")
+    private lazy var sendValueTxTitleLabel: UILabel = createLabel(text: "Send transaction with native coin value")
 
-    private lazy var partialSignTxButton: UIButton = createButton(
-        text: "Send partial sign tx",
-        indicator: partialSignTxLoadingIndicator)
+    private lazy var valueTxInputTextField: UITextField = {
+        let textField = UITextField()
+        textField.font = UIFont.systemFont(ofSize: 16)
+        textField.textColor = .black
+        textField.backgroundColor = .lightGray
+        textField.text = "100"
+        textField.returnKeyType = .done
+        textField.delegate = self
+        textField.leftViewMode = .always
+        textField.rightViewMode = .always
+        textField.layer.cornerRadius = 5
+        textField.clipsToBounds = true
+        let leftView = UIView()
 
-    private lazy var partialSignTxLoadingIndicator = createLoadingIndicator()
+        leftView.snp.makeConstraints {
+            $0.size.equalTo(10)
+        }
 
-    private lazy var partialSignTxResultLabel: UILabel = {
+        let rightView = UILabel()
+        rightView.text = "wei   "
+
+        textField.leftView = leftView
+        textField.rightView = rightView
+        return textField
+    }()
+
+    private lazy var sendValueTxButton: UIButton = createButton(
+        text: "Send Tx with value",
+        indicator: sendValueTxLoadingIndicator)
+
+    private lazy var sendValueTxLoadingIndicator = createLoadingIndicator()
+
+    private lazy var sendValueTxResultLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
         label.textColor = .black
@@ -321,7 +467,7 @@ final class ViewController: UIViewController {
         return label
     }()
 
-    private lazy var partialSignTxExplorerButton: UIButton = {
+    private lazy var sendValueTxExplorerButton: UIButton = {
         let button: UIButton = UIButton()
         button.setImage(UIImage(named: "ic28Earth"), for: .normal)
         button.contentEdgeInsets = .init(top: 4, left: 4, bottom: 4, right: 4)
@@ -335,21 +481,32 @@ final class ViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         setupBinding()
+        title = "EVM Base"
     }
 
     private func setupViews() {
         view.backgroundColor = .white
 
         view.addSubview(networkSegmentedControl)
+        view.addSubview(blockchainSegmentedControl)
         view.addSubview(scrollView)
 
         networkSegmentedControl.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(20)
             $0.centerX.equalToSuperview()
+            $0.leading.greaterThanOrEqualToSuperview().inset(20)
+            $0.trailing.lessThanOrEqualToSuperview().inset(20)
+        }
+
+        blockchainSegmentedControl.snp.makeConstraints {
+            $0.top.equalTo(networkSegmentedControl.snp.bottom).offset(20)
+            $0.centerX.equalToSuperview()
+            $0.leading.greaterThanOrEqualToSuperview().inset(20)
+            $0.trailing.lessThanOrEqualToSuperview().inset(20)
         }
 
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(networkSegmentedControl.snp.bottom).offset(20)
+            $0.top.equalTo(blockchainSegmentedControl.snp.bottom).offset(20)
             $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
 
@@ -358,6 +515,7 @@ final class ViewController: UIViewController {
         }
     }
 
+    // swiftlint:disable cyclomatic_complexity function_body_length
     private func setupBinding() {
         _ = networkSegmentedControl.rx.value.changed
             .take(until: rx.deallocated)
@@ -367,7 +525,7 @@ final class ViewController: UIViewController {
                 self.resetRequestAccountStatus()
                 self.resetSetValueStatus()
                 self.resetGetValueStatus()
-                self.resetPartialSignTxStatus()
+                self.resetValueTxStatus()
                 switch index {
                 case 0:
                     isProduction = false
@@ -390,6 +548,38 @@ final class ViewController: UIViewController {
                 }
             })
 
+        _ = blockchainSegmentedControl.rx.value.changed
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] index in
+                guard let self = self else { return }
+                self.resetRequestAccountStatus()
+                self.resetSetValueStatus()
+                self.resetGetValueStatus()
+                self.resetValueTxStatus()
+                self.selectedBlockchain = self.blockchainSelections[index]
+                self.rpcClient = self.selectedBlockchain.rpcClient
+            })
+
+        _ = signingSegmentedControl.rx.value.changed
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] index in
+                guard let self = self else { return }
+                self.resetSignStatus()
+                self.signingTypeDataSegmentedControl.selectedSegmentIndex = UISegmentedControl.noSegment
+                self.selectedSigningType = self.signingSelections[index]
+                self.signingTextView.text = self.selectedSigningType.defaultText
+            })
+
+        _ = signingTypeDataSegmentedControl.rx.value.changed
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] index in
+                guard let self = self else { return }
+                self.resetSignStatus()
+                self.signingSegmentedControl.selectedSegmentIndex = UISegmentedControl.noSegment
+                self.selectedSigningType = Array(self.signingSelections.dropFirst(2))[index]
+                self.signingTextView.text = self.selectedSigningType.defaultText
+            })
+
         _ = requestAccountButton.rx.tap
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
@@ -399,7 +589,8 @@ final class ViewController: UIViewController {
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.resetRequestAccountStatus()
-                self.bloctoSolanaSDK.requestAccount { [weak self] result in
+
+                self.selectedBlockchain.sdkProvider.requestAccount { [weak self] result in
                     switch result {
                     case .success(let address):
                         self?.userWalletAddress = address
@@ -420,7 +611,7 @@ final class ViewController: UIViewController {
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self,
-                let address = self.requestAccountResultLabel.text else { return }
+                      let address = self.requestAccountResultLabel.text else { return }
                 UIPasteboard.general.string = address
                 self.requestAccountCopyButton.setImage(UIImage(named: "icon20Selected"), for: .normal)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
@@ -438,6 +629,28 @@ final class ViewController: UIViewController {
                 guard let self = self,
                       let address = self.requestAccountResultLabel.text else { return }
                 self.routeToExplorer(with: .address(address))
+            })
+
+        _ = signButton.rx.tap
+            .throttle(
+                DispatchTimeInterval.milliseconds(500),
+                latest: false,
+                scheduler: MainScheduler.instance)
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.signMessage()
+            })
+
+        _ = signingVerifyButton.rx.tap
+            .throttle(
+                DispatchTimeInterval.milliseconds(500),
+                latest: false,
+                scheduler: MainScheduler.instance)
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.verifySignature()
             })
 
         _ = setValueButton.rx.tap
@@ -478,7 +691,7 @@ final class ViewController: UIViewController {
                 self.getValue()
             })
 
-        _ = partialSignTxButton.rx.tap
+        _ = sendValueTxButton.rx.tap
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
@@ -486,12 +699,12 @@ final class ViewController: UIViewController {
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.resetPartialSignTxStatus()
-                self.partialSignTxLoadingIndicator.startAnimating()
-                self.partialSign()
+                self.resetValueTxStatus()
+                self.sendValueTxLoadingIndicator.startAnimating()
+                self.sendTransactionWithValue()
             })
 
-        _ = partialSignTxExplorerButton.rx.tap
+        _ = sendValueTxExplorerButton.rx.tap
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
@@ -499,7 +712,7 @@ final class ViewController: UIViewController {
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self,
-                      let hash = self.partialSignTxResultLabel.text else { return }
+                      let hash = self.sendValueTxResultLabel.text else { return }
                 self.routeToExplorer(with: .txhash(hash))
             })
     }
@@ -556,6 +769,17 @@ final class ViewController: UIViewController {
         requestAccountExplorerButton.isHidden = true
     }
 
+    private func resetSignStatus() {
+        signingResultLabel.text = nil
+        signingResultLabel.textColor = .black
+        signingVerifyButton.isHidden = true
+        signingLoadingIndicator.stopAnimating()
+    }
+
+    private func resetSignVerifyStatus() {
+        signingVerifyingIndicator.stopAnimating()
+    }
+
     private func resetSetValueStatus() {
         setValueResultLabel.text = nil
         setValueResultLabel.textColor = .black
@@ -569,11 +793,107 @@ final class ViewController: UIViewController {
         getValueLoadingIndicator.stopAnimating()
     }
 
-    private func resetPartialSignTxStatus() {
-        partialSignTxResultLabel.text = nil
-        partialSignTxResultLabel.textColor = .black
-        partialSignTxLoadingIndicator.stopAnimating()
-        partialSignTxExplorerButton.isHidden = true
+    private func resetValueTxStatus() {
+        sendValueTxResultLabel.text = nil
+        sendValueTxResultLabel.textColor = .black
+        sendValueTxLoadingIndicator.stopAnimating()
+    }
+
+    private func signMessage() {
+        guard let userWalletAddress = userWalletAddress else {
+            handleSignError(Error.message("User address not found. Please request account first."))
+            return
+        }
+        guard let message = signingTextView.text else {
+            handleSignError(Error.message("message not found."))
+            return
+        }
+        selectedBlockchain.sdkProvider.signMessage(
+            from: userWalletAddress,
+            message: message,
+            signType: selectedSigningType) { [weak self] result in
+                guard let self = self else { return }
+                self.resetSignStatus()
+                switch result {
+                case let .success(signature):
+                    self.signingResultLabel.text = signature
+                    self.signingVerifyButton.isHidden = false
+                case let .failure(error):
+                    self.handleSignError(error)
+                }
+            }
+    }
+
+    private func verifySignature() {
+        guard let userWalletAddress = userWalletAddress else {
+            handleSignError(Error.message("User address not found. Please request account first."))
+            return
+        }
+        guard let message = signingTextView.text else {
+            handleSignError(Error.message("signature not found."))
+            return
+        }
+        guard let signature = signingResultLabel.text else {
+            handleSignError(Error.message("signature not found."))
+            return
+        }
+        signingVerifyingIndicator.startAnimating()
+
+        let data: Data
+        switch selectedSigningType {
+        case .sign:
+            data = Data(ethMessage: message)
+        case .personalSign:
+            data = Data(message.utf8)
+        case .typedSignV3,
+                .typedSignV4,
+                .typedSign:
+            do {
+                let typedData = try JSONDecoder().decode(EIP712TypedData.self, from: Data(message.utf8))
+                let signableHash: Data
+                if case .typedSignV3 = selectedSigningType {
+                    signableHash = try typedData.signableHash(version: .v3)
+                } else {
+                    signableHash = try typedData.signableHash(version: .v4)
+                }
+                data = signableHash
+            } catch {
+                signingVerifyButton.setImage(UIImage(named: "error"), for: .normal)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    self.signingVerifyButton.setImage(UIImage(named: "icExamination"), for: .normal)
+                }
+                return
+            }
+        }
+
+        let verifySignatureABIFunction = ERC1271ABIFunction(
+            hash: data.sha3(.keccak256),
+            signature: signature.bloctoSDK.hexDecodedData,
+            contract: EthereumAddress(userWalletAddress))
+
+        verifySignatureABIFunction.call(
+            withClient: rpcClient,
+            responseType: ERC1271ABIFunction.Response.self) { [weak self] error, response in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    if let error = error {
+                        debugPrint(error)
+                        self.signingVerifyButton.setImage(UIImage(named: "error"), for: .normal)
+                    } else {
+                        self.resetSignVerifyStatus()
+                        if let value = response?.value,
+                           value.bloctoSDK.hexStringWith0xPrefix == ERC1271ABIFunction.Response.erc1271ValidSignature {
+                            self.signingResultLabel.text = signature
+                            self.signingVerifyButton.setImage(UIImage(named: "icon20Selected"), for: .normal)
+                        } else {
+                            self.signingVerifyButton.setImage(UIImage(named: "error"), for: .normal)
+                        }
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        self.signingVerifyButton.setImage(UIImage(named: "icExamination"), for: .normal)
+                    }
+                }
+            }
     }
 
     private func sendTransaction() {
@@ -581,39 +901,25 @@ final class ViewController: UIViewController {
             handleSetValueError(Error.message("User address not found. Please request account first."))
             return
         }
-        guard let dappPublicKey = try? PublicKey(dappAddress) else {
-            return
-        }
-        guard let userWalletPublicKey = try? PublicKey(userWalletAddress) else {
-            return
-        }
-        guard let programId = try? PublicKey(programId) else {
-            return
-        }
-        guard let inputValue = inputTextField.text,
+        guard let inputValue = nomalTxInputTextField.text,
               inputValue.isEmpty == false,
-              let value = UInt32(inputValue) else {
+              let value = BigUInt(inputValue) else {
                   handleSetValueError(Error.message("Input not found."))
                   return
               }
+        let setValueABIFunction = SetValueABIFunction(value: value)
 
-        var transaction = Transaction()
         do {
-            let setValueInstruction = try createSetValueInstruction(
-                dappPublicKey: dappPublicKey,
-                userWalletPublicKey: userWalletPublicKey,
-                programId: programId,
-                value: value)
-            transaction.add(setValueInstruction)
-        } catch {
-            handleSetValueError(Error.message("Create set value instruction failed."))
-            return
-        }
-        transaction.feePayer = userWalletPublicKey
+            let functionData = try setValueABIFunction.functionData()
 
-        bloctoSolanaSDK.signAndSendTransaction(
-            from: userWalletAddress,
-            transaction: transaction) { [weak self] result in
+            let evmBaseTransaction = EVMBaseTransaction(
+                to: selectedBlockchain.dappAddress,
+                from: userWalletAddress,
+                value: "0",
+                data: functionData)
+            selectedBlockchain.sdkProvider.sendTransaction(
+                transaction: evmBaseTransaction
+            ) { [weak self] result in
                 guard let self = self else { return }
                 self.resetSetValueStatus()
                 switch result {
@@ -624,144 +930,71 @@ final class ViewController: UIViewController {
                     self.handleSetValueError(error)
                 }
             }
+        } catch {
+            debugPrint(error)
+        }
     }
 
     private func getValue() {
-        guard let dappPublicKey = try? PublicKey(dappAddress) else {
-            return
-        }
+        let getValueABIFunction = GetValueABIFunction(
+            contract: EthereumAddress(selectedBlockchain.dappAddress),
+            from: nil,
+            gasPrice: nil,
+            gasLimit: nil)
 
-        let connetion = Connection(cluster: cluster)
-        connetion.getAccountInfo(
-            publicKey: dappPublicKey) { [weak self] (result: Result<AccountInfo<ValueAccountData>?, Connection.Error>) in
+        getValueABIFunction.call(
+            withClient: rpcClient,
+            responseType: GetValueABIFunction.Response.self) { [weak self] error, response in
                 guard let self = self else { return }
-                self.resetGetValueStatus()
-                switch result {
-                case let .success(valueAccount):
-                    guard let data = valueAccount?.data else {
-                        self.handleGetValueError(Error.message("data not found."))
-                        return
+                DispatchQueue.main.async {
+                    self.resetGetValueStatus()
+                    if let error = error {
+                        debugPrint(error)
+                        self.handleGetValueError(error)
+                    } else {
+                        self.getValueResultLabel.text = response?.value.description
                     }
-                    self.getValueResultLabel.text = "\(data.value)"
-                case let .failure(error):
-                    debugPrint(error)
-                    self.handleGetValueError(error)
                 }
             }
     }
 
-    private func partialSign() {
+    private func sendTransactionWithValue() {
         guard let userWalletAddress = userWalletAddress else {
-            handlePartialSignTxError(Error.message("User address not found. Please request account first."))
+            handleValueTxError(Error.message("User address not found. Please request account first."))
             return
         }
-        guard let dappPublicKey = try? PublicKey(dappAddress) else {
-            return
-        }
-        guard let userWalletPublicKey = try? PublicKey(userWalletAddress) else {
-            return
-        }
-        guard let programId = try? PublicKey(programId) else {
-            return
-        }
-        guard let inputValue = inputTextField.text,
+        guard let inputValue = valueTxInputTextField.text,
               inputValue.isEmpty == false,
-              let value = UInt32(inputValue) else {
-                  handlePartialSignTxError(Error.message("Input not found."))
+              let value = BigUInt(inputValue) else {
+                  handleValueTxError(Error.message("Input not found."))
                   return
               }
+        let donateABIFunction = DonateABIFunction(message: "lalala")
 
-        var transaction = Transaction()
-        transaction.feePayer = userWalletPublicKey
+        do {
+            let functionData = try donateABIFunction.functionData()
 
-        let connetion = Connection(cluster: .devnet)
-        connetion.getMinimumBalanceForRentExemption(
-            dataLength: 10) { [weak self] result in
+            let evmBaseTransaction = EVMBaseTransaction(
+                to: selectedBlockchain.dappAddress,
+                from: userWalletAddress,
+                value: value,
+                data: functionData)
+            selectedBlockchain.sdkProvider.sendTransaction(
+                transaction: evmBaseTransaction
+            ) { [weak self] result in
                 guard let self = self else { return }
+                self.resetValueTxStatus()
                 switch result {
-                case let .success(minBalance):
-                    do {
-                        let newAccount = try Account()
-                        let createAccountInstruction = try SystemProgram.createAccount(
-                            fromPublicKey: userWalletPublicKey,
-                            newAccountPublicKey: newAccount.publicKey,
-                            lamports: minBalance,
-                            space: 10,
-                            programId: programId)
-                        transaction.add(createAccountInstruction)
-
-                        let setValueInstruction = try self.createSetValueInstruction(
-                            dappPublicKey: dappPublicKey,
-                            userWalletPublicKey: userWalletPublicKey,
-                            programId: programId,
-                            value: value)
-                        transaction.add(setValueInstruction)
-
-                        self.bloctoSolanaSDK.convertToProgramWalletTransaction(
-                            transaction,
-                            solanaAddress: userWalletAddress) { [weak self] result in
-                                guard let self = self else { return }
-                                switch result {
-                                case let .success(transaction):
-                                    do {
-                                        var newTransaction = transaction
-                                        try newTransaction.partialSign(signers: [newAccount])
-
-                                        self.bloctoSolanaSDK.signAndSendTransaction(
-                                            from: userWalletAddress,
-                                            transaction: newTransaction) { [weak self] result in
-                                                guard let self = self else { return }
-                                                self.resetPartialSignTxStatus()
-                                                switch result {
-                                                case let .success(txHash):
-                                                    self.partialSignTxResultLabel.text = txHash
-                                                    self.partialSignTxExplorerButton.isHidden = false
-                                                case let .failure(error):
-                                                    self.handlePartialSignTxError(error)
-                                                }
-                                            }
-                                    } catch {
-                                        self.handlePartialSignTxError(error)
-                                    }
-                                case let .failure(error):
-                                    self.handlePartialSignTxError(error)
-                                }
-                            }
-                    } catch {
-                        self.handlePartialSignTxError(error)
-                    }
+                case let .success(txHsh):
+                    self.sendValueTxResultLabel.text = txHsh
+                    self.sendValueTxExplorerButton.isHidden = false
                 case let .failure(error):
-                    self.handlePartialSignTxError(error)
+                    self.handleValueTxError(error)
                 }
             }
-    }
-
-    private func createSetValueInstruction(
-        dappPublicKey: PublicKey,
-        userWalletPublicKey: PublicKey,
-        programId: PublicKey,
-        value: UInt32
-    ) throws -> TransactionInstruction {
-        let valueAccountData = ValueAccountData(
-            instruction: 0,
-            value: value)
-        guard let data = try? valueAccountData.serialize() else {
-            throw Error.message("valueAccountData serialize failed.")
+        } catch {
+            debugPrint(error)
         }
-        let transactionInstruction = TransactionInstruction(
-            keys: [
-                AccountMeta(
-                    publicKey: dappPublicKey,
-                    isSigner: false,
-                    isWritable: true),
-                AccountMeta(
-                    publicKey: userWalletPublicKey,
-                    isSigner: false,
-                    isWritable: true)
-            ],
-            programId: programId,
-            data: data)
-        return transactionInstruction
     }
 
     private func handleRequestAccountError(_ error: Swift.Error) {
@@ -785,6 +1018,29 @@ final class ViewController: UIViewController {
         }
         requestAccountResultLabel.textColor = .red
         requestAccountLoadingIndicator.stopAnimating()
+    }
+
+    private func handleSignError(_ error: Swift.Error) {
+        if let error = error as? QueryError {
+            switch error {
+            case .userRejected:
+                signingResultLabel.text = "user rejected."
+            case .forbiddenBlockchain:
+                signingResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
+            case .invalidResponse:
+                signingResultLabel.text = "invalid response."
+            case .userNotMatch:
+                signingResultLabel.text = "user not matched."
+            case .other(let code):
+                signingResultLabel.text = code
+            }
+        } else if let error = error as? Error {
+            signingResultLabel.text = error.message
+        } else {
+            signingResultLabel.text = error.localizedDescription
+        }
+        signingResultLabel.textColor = .red
+        signingLoadingIndicator.stopAnimating()
     }
 
     private func handleSetValueError(_ error: Swift.Error) {
@@ -816,50 +1072,31 @@ final class ViewController: UIViewController {
         getValueLoadingIndicator.stopAnimating()
     }
 
-    private func handlePartialSignTxError(_ error: Swift.Error) {
+    private func handleValueTxError(_ error: Swift.Error) {
         if let error = error as? QueryError {
             switch error {
             case .userRejected:
-                partialSignTxResultLabel.text = "user rejected."
+                sendValueTxResultLabel.text = "user rejected."
             case .forbiddenBlockchain:
-                partialSignTxResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
+                sendValueTxResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
             case .invalidResponse:
-                partialSignTxResultLabel.text = "invalid response."
+                sendValueTxResultLabel.text = "invalid response."
             case .userNotMatch:
-                partialSignTxResultLabel.text = "user not matched."
+                sendValueTxResultLabel.text = "user not matched."
             case .other(let code):
-                partialSignTxResultLabel.text = code
+                sendValueTxResultLabel.text = code
             }
         } else if let error = error as? Error {
-            partialSignTxResultLabel.text = error.message
+            sendValueTxResultLabel.text = error.message
         } else {
-            debugPrint(error)
-            partialSignTxResultLabel.text = error.localizedDescription
+            sendValueTxResultLabel.text = error.localizedDescription
         }
-        partialSignTxResultLabel.textColor = .red
-        partialSignTxLoadingIndicator.stopAnimating()
-    }
-
-    enum ExplorerURLType {
-        case txhash(String)
-        case address(String)
-
-        func url() -> URL? {
-            switch self {
-            case let .txhash(hash):
-                return isProduction
-                ? URL(string: "https://explorer.solana.com/tx/\(hash)")
-                : URL(string: "https://explorer.solana.com/tx/\(hash)?cluster=devnet")
-            case let .address(address):
-                return isProduction
-                ? URL(string: "https://explorer.solana.com/address/\(address)")
-                : URL(string: "https://explorer.solana.com/address/\(address)?cluster=devnet")
-            }
-        }
+        sendValueTxResultLabel.textColor = .red
+        sendValueTxLoadingIndicator.stopAnimating()
     }
 
     private func routeToExplorer(with type: ExplorerURLType) {
-        guard let url = type.url() else { return }
+        guard let url = selectedBlockchain.explorerURL(type: type) else { return }
         let safariVC = SFSafariViewController(url: url)
         if #available(iOS 13.0, *) {
             safariVC.modalPresentationStyle = .automatic
@@ -872,7 +1109,7 @@ final class ViewController: UIViewController {
 
 }
 
-extension ViewController: UITextFieldDelegate {
+extension EVMBaseDemoViewController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -881,9 +1118,9 @@ extension ViewController: UITextFieldDelegate {
 
 }
 
-extension ViewController: SFSafariViewControllerDelegate {}
+extension EVMBaseDemoViewController: SFSafariViewControllerDelegate {}
 
-extension ViewController {
+extension EVMBaseDemoViewController {
 
     enum Error: Swift.Error {
         case message(String)

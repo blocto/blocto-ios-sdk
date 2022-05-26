@@ -6,10 +6,11 @@
 //  Copyright © 2022 CocoaPods. All rights reserved.
 //
 
-import XCTest
-@testable import BloctoSDK
+ import XCTest
+ @testable import BloctoSDK
+ import BigInt
 
-class QueryItemEncodingTests: XCTestCase {
+ class QueryItemEncodingTests: XCTestCase {
 
     func testDictionaryEncoding() throws {
         // Given:
@@ -54,8 +55,8 @@ class QueryItemEncodingTests: XCTestCase {
 
     func testDictionaryDataEncoding() throws {
         // Given:
-        let data1 = "1234".hexDecodedData
-        let data2 = "2345".hexDecodedData
+        let data1 = "1234".bloctoSDK.hexDecodedData
+        let data2 = "2345".bloctoSDK.hexDecodedData
         let queryItem = QueryItem(
             name: QueryName.appendTx,
             value: [
@@ -63,8 +64,8 @@ class QueryItemEncodingTests: XCTestCase {
                 "test2": data2
             ])
         let expect: [URLQueryItem] = [
-            URLQueryItem(name: QueryName.appendTx.rawValue + "%5Btest1%5D", value: "1234"),
-            URLQueryItem(name: QueryName.appendTx.rawValue + "%5Btest2%5D", value: "2345")
+            URLQueryItem(name: QueryName.appendTx.rawValue + "%5Btest1%5D", value: "0x1234"),
+            URLQueryItem(name: QueryName.appendTx.rawValue + "%5Btest2%5D", value: "0x2345")
         ]
 
         // When:
@@ -82,8 +83,8 @@ class QueryItemEncodingTests: XCTestCase {
         ]
 
         let expect: [String: Data] = [
-            "test1": "1234".hexDecodedData,
-            "test2": "2345".hexDecodedData
+            "test1": "1234".bloctoSDK.hexDecodedData,
+            "test2": "2345".bloctoSDK.hexDecodedData
         ]
 
         // When:
@@ -95,4 +96,4 @@ class QueryItemEncodingTests: XCTestCase {
         XCTAssertDictionaryEqual(dictionary, expect)
     }
 
-}
+ }

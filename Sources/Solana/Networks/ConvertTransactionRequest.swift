@@ -8,7 +8,6 @@
 import Moya
 
 public struct ConvertTransactionRequest: TargetType {
-
     let solanaAddress: String
     let message: String
     public let baseURL: URL
@@ -25,6 +24,8 @@ public struct ConvertTransactionRequest: TargetType {
             ],
             encoding: JSONEncoding.default)
     }
+
+    public var sampleData: Data { Data() }
 
     public var headers: [String: String]? {
         [

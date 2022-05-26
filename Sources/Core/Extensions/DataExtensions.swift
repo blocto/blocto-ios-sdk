@@ -5,14 +5,10 @@
 //  Created by Andrew Wang on 2022/4/15.
 //
 
+import Foundation
 import CommonCrypto
 
 extension Data {
-
-    /// Returns the hex string representation of the data.
-    var hexString: String {
-        return map({ String(format: "%02x", $0) }).joined()
-    }
 
     public init?(hexString: String) {
         let string: String
@@ -54,12 +50,23 @@ extension Data {
 
 }
 
-extension Data {
+extension Data: BloctoSDKCompatible {}
 
-    var sha256: Data {
+extension BloctoSDKHelper where Base == Data {
+
+    public var hexStringWith0xPrefix: String {
+        "0x" + hexString
+    }
+
+    /// Returns the hex string representation of the data.
+    public var hexString: String {
+        return base.map({ String(format: "%02x", $0) }).joined()
+    }
+
+    public var sha256: Data {
         var hash = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
 
-        withUnsafeBytes { buffer in
+        base.withUnsafeBytes { buffer in
             _ = CC_SHA256(buffer.baseAddress, CC_LONG(buffer.count), &hash)
         }
 

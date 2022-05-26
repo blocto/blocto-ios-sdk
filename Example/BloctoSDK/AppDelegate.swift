@@ -28,8 +28,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let window = UIWindow()
         self.window = window
-        let viewController = ViewController()
-        window.rootViewController = viewController
+        let menuViewController = MenuViewController()
+        let navigationController = UINavigationController(rootViewController: menuViewController)
+        window.rootViewController = navigationController
         window.makeKeyAndVisible()
         if #available(iOS 13.0, *) {
             BloctoSDK.shared.initialize(

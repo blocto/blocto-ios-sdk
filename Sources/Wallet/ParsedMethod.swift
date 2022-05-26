@@ -6,13 +6,14 @@
 //
 
 import Foundation
+import BigInt
 
 public struct ParsedMethod {
 
     public let appId: String
     public let requestId: String
     public let blockchain: Blockchain
-    public let methodContentType: MethodContentType
+    public let methodContentType: GeneralMethodContentType
 
     public init?(param: [String: String]) {
         guard let appId = param[QueryName.appId.rawValue] else { return nil }
@@ -25,15 +26,14 @@ public struct ParsedMethod {
               let blockchain = Blockchain(rawValue: rawBlockchain) else { return nil }
         self.blockchain = blockchain
 
-        guard let rawMethod = param[QueryName.method.rawValue],
-              let method = MethodType(rawValue: rawMethod) else { return nil }
-        switch method {
+        guard let rawMethod = param[QueryName.method.rawValue] else { return nil }
+
+        switch blockchain {
+        case .solana:
+            guard let methodType = SolanaMethodType(rawValue: rawMethod) else { return nil }
+            switch methodType {
             case .requestAccount:
-                self.methodContentType = .requestAccount
-            case .signMessage:
-                guard let from = param[QueryName.from.rawValue],
-                      let message = param[QueryName.message.rawValue] else { return nil }
-                self.methodContentType = .signMessage(from: from, message: message)
+                methodContentType = .solana(SolanaMethodContentType.requestAccount)
             case .signAndSendTransaction:
                 guard let from = param[QueryName.from.rawValue],
                       let message = param[QueryName.message.rawValue],
@@ -48,13 +48,50 @@ public struct ParsedMethod {
                     param: param,
                     queryName: .publicKeySignaturePairs)
 
-                self.methodContentType = .signAndSendTransaction(
-                    from: from,
-                    isInvokeWrapped: isInvokeWrapped,
-                    transactionInfo: SolanaTransactionInfo(
-                        message: message,
-                        appendTx: appendTx,
-                        publicKeySignaturePairs: publicKeySignaturePairs))
+                methodContentType = .solana(
+                    SolanaMethodContentType.signAndSendTransaction(
+                        from: from,
+                        isInvokeWrapped: isInvokeWrapped,
+                        transactionInfo: .init(
+                            message: message,
+                            appendTx: appendTx,
+                            publicKeySignaturePairs: publicKeySignaturePairs)))
+            }
+        case .ethereum,
+                .binanceSmartChain,
+                .polygon,
+                .avalanche:
+            guard let methodType = EVMBaseMethodType(rawValue: rawMethod) else { return nil }
+            switch methodType {
+            case .requestAccount:
+                methodContentType = .evmBase(.requestAccount)
+            case .signMessage:
+                guard let from = param[QueryName.from.rawValue],
+                      let message = param[QueryName.message.rawValue],
+                      let rawSignType = param[QueryName.signType.rawValue],
+                      let signType = EVMBaseSignType(rawValue: rawSignType) else { return nil }
+                let removingPercentEncodingString = message.removingPercentEncoding ?? message
+                let messageString = removingPercentEncodingString.bloctoSDK.hexConvertToString()
+                methodContentType = .evmBase(
+                    .signMessage(
+                        from: from,
+                        message: messageString,
+                        signType: signType))
+            case .sendTransaction:
+                guard let from = param[QueryName.from.rawValue],
+                      let to = param[QueryName.to.rawValue],
+                      let value = param[QueryName.value.rawValue],
+                      let dataString = param[QueryName.data.rawValue] else { return nil }
+                methodContentType = .evmBase(
+                    .sendTransaction(
+                        transaction: EVMBaseTransaction(
+                            to: to,
+                            from: from,
+                            value: BigUInt(value, radix: 16) ?? 0,
+                            data: dataString
+                                .bloctoSDK.drop0x
+                                .bloctoSDK.hexDecodedData)))
+            }
         }
     }
 
@@ -66,7 +103,7 @@ extension ParsedMethod {
         appId: String,
         requestId: String,
         blockchain: Blockchain,
-        methodContentType: MethodContentType
+        methodContentType: GeneralMethodContentType
     ) {
         self.appId = appId
         self.requestId = requestId

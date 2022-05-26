@@ -14,7 +14,11 @@ public enum QueryName: String {
     case blockchain
     case method
     case from
+    case to
+    case value
+    case data
     case message
+    case signType = "type"
     case isInvokeWrapped = "is_invoke_wrapped"
     case appendTx = "append_tx"
     case publicKeySignaturePairs = "public_key_signature_pairs"

@@ -1,42 +1,46 @@
 //
-//  SignAndSendSolanaTransactionMethod.swift
+//  SignEVMBaseMessageMethod.swift
 //  BloctoSDK
 //
-//  Created by Andrew Wang on 2022/4/8.
+//  Created by Andrew Wang on 2022/5/20.
 //
 
 import Foundation
 
-public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
+public struct SignEVMBaseMessageMethod: CallbackMethod {
+
     public typealias Response = String
 
     public let id: UUID
-    public let type: String = SolanaMethodType.signAndSendTransaction.rawValue
-    public let from: String
-    public let transactionInfo: SolanaTransactionInfo
-    public let isInvokeWrapped: Bool
+    public let type: String = EVMBaseMethodType.signMessage.rawValue
     public let callback: Callback
 
     let blockchain: Blockchain
+    let from: String
+    let message: String
+    let signType: EVMBaseSignType
 
-    /// initialize request account method
+    /// initialize sign EVMBase message method
     /// - Parameters:
     ///   - id: Used to find a stored callback. No need to pass if there is no specific requirement, for example, testing.
+    ///   - from: send from which address.
+    ///   - message: message needs to be sign in String format.
+    ///   - signType: pre-defined signType in BloctoSDK/EVMBase
     ///   - blockchain: pre-defined blockchain in BloctoSDK
     ///   - callback: callback will be called by either from blocto native app or web SDK after getting account or reject.
     public init(
         id: UUID = UUID(),
-        blockchain: Blockchain,
         from: String,
-        transactionInfo: SolanaTransactionInfo,
-        isInvokeWrapped: Bool = true,
-        callback: @escaping Callback
+        message: String,
+        signType: EVMBaseSignType,
+        blockchain: Blockchain,
+        callback: @escaping SignEVMBaseMessageMethod.Callback
     ) {
         self.id = id
-        self.blockchain = blockchain
         self.from = from
-        self.transactionInfo = transactionInfo
-        self.isInvokeWrapped = isInvokeWrapped
+        self.message = message
+        self.signType = signType
+        self.blockchain = blockchain
         self.callback = callback
     }
 
@@ -52,16 +56,27 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
         queryItems.append(contentsOf: [
             QueryItem(name: .method, value: type),
             QueryItem(name: .from, value: from),
-            QueryItem(name: .isInvokeWrapped, value: isInvokeWrapped),
-            QueryItem(name: .message, value: transactionInfo.message),
-            QueryItem(name: .publicKeySignaturePairs, value: transactionInfo.publicKeySignaturePairs)
+            QueryItem(name: .signType, value: signType.rawValue)
         ])
-        if let appendMessages = transactionInfo.appendTx {
-            queryItems.append(
-                QueryItem(
-                    name: .appendTx,
-                    value: appendMessages))
+        let messageValue: String
+        switch signType {
+        case .sign:
+            // input might be hexed string or normal string
+            if message.bloctoSDK.hexDecodedData.isEmpty {
+                messageValue = Data(message.utf8).bloctoSDK.hexStringWith0xPrefix
+            } else {
+                messageValue = message
+            }
+        case .personalSign:
+            // input is string format
+            messageValue = message
+        case .typedSignV3,
+                .typedSignV4,
+                .typedSign:
+            // input should be json format
+            messageValue = message
         }
+        queryItems.append(QueryItem(name: .message, value: messageValue))
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }
@@ -71,15 +86,15 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
             callback(.failure(QueryError(code: errorCode)))
             return
         }
-        let targetQueryName = QueryName.txHash
-        guard let txHash = components.queryItem(for: targetQueryName) else {
+        let targetQueryName = QueryName.signature
+        guard let signature = components.queryItem(for: targetQueryName) else {
             log(
                 enable: logging,
                 message: "\(targetQueryName.rawValue) not found.")
             callback(.failure(QueryError.invalidResponse))
             return
         }
-        callback(.success(txHash))
+        callback(.success(signature))
     }
 
     public func handleError(error: Swift.Error) {

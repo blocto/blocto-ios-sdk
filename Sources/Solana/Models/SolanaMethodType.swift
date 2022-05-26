@@ -1,14 +1,13 @@
 //
-//  MethodType.swift
+//  SolanaMethodType.swift
 //  BloctoSDK
 //
-//  Created by Andrew Wang on 2022/3/14.
+//  Created by Andrew Wang on 2022/5/16.
 //
 
 import Foundation
 
-public enum MethodType: String {
+public enum SolanaMethodType: String {
     case requestAccount = "request_account"
-    case signMessage = "sign_message"
     case signAndSendTransaction = "sign_and_send_transaction"
 }
