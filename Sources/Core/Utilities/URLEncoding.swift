@@ -70,6 +70,17 @@ public enum URLEncoding {
         }
         return components
     }
+    
+    static func solanaAppendMessagesQueryItems(dictionary: [String: Data]) -> [URLQueryItem] {
+        var components: [URLQueryItem] = []
+        for (nestedKey, value) in dictionary {
+            components.append(
+                .init(
+                    name: escape("\(QueryName.appendTx.rawValue)[\(nestedKey)]"),
+                    value: escape(value.bloctoSDK.hexString)))
+        }
+        return components
+    }
 
     private static func escape(_ string: String) -> String {
         QueryEscape.escape(string)
