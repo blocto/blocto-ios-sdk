@@ -39,6 +39,11 @@ final class SolanaDemoViewController: UIViewController {
     private lazy var networkSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["devnet", "mainnet-beta"])
         segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+        if #available(iOS 13.0, *) {
+            segmentedControl.selectedSegmentTintColor = .blue
+        }
         return segmentedControl
     }()
 

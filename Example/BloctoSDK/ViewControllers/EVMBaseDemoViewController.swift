@@ -36,12 +36,22 @@ final class EVMBaseDemoViewController: UIViewController {
     private lazy var networkSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["testnet", "mainnet"])
         segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+        if #available(iOS 13.0, *) {
+            segmentedControl.selectedSegmentTintColor = .blue
+        }
         return segmentedControl
     }()
 
     private lazy var blockchainSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: blockchainSelections.map { $0.displayString })
         segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+        if #available(iOS 13.0, *) {
+            segmentedControl.selectedSegmentTintColor = .blue
+        }
         return segmentedControl
     }()
 
@@ -321,6 +331,11 @@ final class EVMBaseDemoViewController: UIViewController {
             items: signingSelections.prefix(2)
                 .map { $0.displayTitle })
         segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+        if #available(iOS 13.0, *) {
+            segmentedControl.selectedSegmentTintColor = .blue
+        }
         return segmentedControl
     }()
 
@@ -329,6 +344,11 @@ final class EVMBaseDemoViewController: UIViewController {
             items: signingSelections.dropFirst(2)
                 .map { $0.displayTitle })
         segmentedControl.selectedSegmentIndex = UISegmentedControl.noSegment
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+        if #available(iOS 13.0, *) {
+            segmentedControl.selectedSegmentTintColor = .blue
+        }
         return segmentedControl
     }()
 

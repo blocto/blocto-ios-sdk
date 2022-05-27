@@ -30,6 +30,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = window
         let menuViewController = MenuViewController()
         let navigationController = UINavigationController(rootViewController: menuViewController)
+        navigationController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
         if #available(iOS 13.0, *) {
