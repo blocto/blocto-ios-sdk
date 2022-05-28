@@ -14,7 +14,7 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* AccountRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* AccountRequestTests.swift */; };
 		6D02E62E283266FA00432971 /* SendTransactionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E62D283266FA00432971 /* SendTransactionTests.swift */; };
-		6D02E63028329A0700432971 /* XCTAssertURLComponentsEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E62F28329A0700432971 /* XCTAssertURLComponentsEqual.swift */; };
+		6D02E63028329A0700432971 /* XCTAssertURLEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E62F28329A0700432971 /* XCTAssertURLEqual.swift */; };
 		6D02E65628355CF400432971 /* EVMBaseSignTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E65528355CF400432971 /* EVMBaseSignTypeExtension.swift */; };
 		6D02E665283BFD9000432971 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E664283BFD9000432971 /* DataExtensions.swift */; };
 		6D02E6FB283D4BDB00432971 /* ABIFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02E6FA283D4BDB00432971 /* ABIFunctions.swift */; };
@@ -30,6 +30,9 @@
 		6DB66663282E58690015A6F6 /* ExplorerURLType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB66662282E58690015A6F6 /* ExplorerURLType.swift */; };
 		6DD6F12127EDBF0000B514B1 /* MockUIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F11D27EDBA4600B514B1 /* MockUIApplication.swift */; };
 		6DD6F12227EDBF0300B514B1 /* MockAuthenticationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F11F27EDBB6600B514B1 /* MockAuthenticationSession.swift */; };
+		6DECCF7C28421CD90084C9E8 /* SolanaMethodURLEncodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DECCF7B28421CD90084C9E8 /* SolanaMethodURLEncodeTests.swift */; };
+		6DECCF7E28421DC00084C9E8 /* EVMBaseMethodURLEncodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DECCF7D28421DC00084C9E8 /* EVMBaseMethodURLEncodeTests.swift */; };
+		6DECCF83284242C20084C9E8 /* QueryEscapeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DECCF82284242C20084C9E8 /* QueryEscapeTests.swift */; };
 		6DFA2AF128001AE700F7DA2C /* XCTAssertDictionaryEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFA2AEF2800193F00F7DA2C /* XCTAssertDictionaryEqual.swift */; };
 		6DFA2AF528001EE200F7DA2C /* SignAndSendTransactionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFA2AF428001EE200F7DA2C /* SignAndSendTransactionTests.swift */; };
 		6DFA2AF72801601300F7DA2C /* XCTAssertArrayElementsEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFA2AF62801601300F7DA2C /* XCTAssertArrayElementsEqual.swift */; };
@@ -61,7 +64,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* AccountRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRequestTests.swift; sourceTree = "<group>"; };
 		6D02E62D283266FA00432971 /* SendTransactionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendTransactionTests.swift; sourceTree = "<group>"; };
-		6D02E62F28329A0700432971 /* XCTAssertURLComponentsEqual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTAssertURLComponentsEqual.swift; sourceTree = "<group>"; };
+		6D02E62F28329A0700432971 /* XCTAssertURLEqual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTAssertURLEqual.swift; sourceTree = "<group>"; };
 		6D02E65528355CF400432971 /* EVMBaseSignTypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMBaseSignTypeExtension.swift; sourceTree = "<group>"; };
 		6D02E664283BFD9000432971 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		6D02E6FA283D4BDB00432971 /* ABIFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ABIFunctions.swift; path = BloctoSDK/ABIFunctions.swift; sourceTree = SOURCE_ROOT; };
@@ -78,6 +81,9 @@
 		6DB66662282E58690015A6F6 /* ExplorerURLType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplorerURLType.swift; sourceTree = "<group>"; };
 		6DD6F11D27EDBA4600B514B1 /* MockUIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIApplication.swift; sourceTree = "<group>"; };
 		6DD6F11F27EDBB6600B514B1 /* MockAuthenticationSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthenticationSession.swift; sourceTree = "<group>"; };
+		6DECCF7B28421CD90084C9E8 /* SolanaMethodURLEncodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolanaMethodURLEncodeTests.swift; sourceTree = "<group>"; };
+		6DECCF7D28421DC00084C9E8 /* EVMBaseMethodURLEncodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMBaseMethodURLEncodeTests.swift; sourceTree = "<group>"; };
+		6DECCF82284242C20084C9E8 /* QueryEscapeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryEscapeTests.swift; sourceTree = "<group>"; };
 		6DFA2AEF2800193F00F7DA2C /* XCTAssertDictionaryEqual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTAssertDictionaryEqual.swift; sourceTree = "<group>"; };
 		6DFA2AF428001EE200F7DA2C /* SignAndSendTransactionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignAndSendTransactionTests.swift; sourceTree = "<group>"; };
 		6DFA2AF62801601300F7DA2C /* XCTAssertArrayElementsEqual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTAssertArrayElementsEqual.swift; sourceTree = "<group>"; };
@@ -174,10 +180,12 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				6DECCF81284242AC0084C9E8 /* QueryEscape */,
 				6D02E727283EA11600432971 /* Hashing */,
 				6DFA2B0928040E2D00F7DA2C /* Wallet */,
 				6DFA2AEE2800192700F7DA2C /* Utilities */,
 				6D72112127FDE5DE00F1EB7F /* QueryItemCoding */,
+				6DECCF7A28421CA00084C9E8 /* URLEncode */,
 				6D1FC37827F5950100F7FD5C /* Types */,
 				6D1FC37727F594EB00F7FD5C /* Methods */,
 				6DD6F11C27EDBA3600B514B1 /* Mock */,
@@ -287,11 +295,28 @@
 			path = Mock;
 			sourceTree = "<group>";
 		};
+		6DECCF7A28421CA00084C9E8 /* URLEncode */ = {
+			isa = PBXGroup;
+			children = (
+				6DECCF7B28421CD90084C9E8 /* SolanaMethodURLEncodeTests.swift */,
+				6DECCF7D28421DC00084C9E8 /* EVMBaseMethodURLEncodeTests.swift */,
+			);
+			path = URLEncode;
+			sourceTree = "<group>";
+		};
+		6DECCF81284242AC0084C9E8 /* QueryEscape */ = {
+			isa = PBXGroup;
+			children = (
+				6DECCF82284242C20084C9E8 /* QueryEscapeTests.swift */,
+			);
+			path = QueryEscape;
+			sourceTree = "<group>";
+		};
 		6DFA2AEE2800192700F7DA2C /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
 				6DFA2AEF2800193F00F7DA2C /* XCTAssertDictionaryEqual.swift */,
-				6D02E62F28329A0700432971 /* XCTAssertURLComponentsEqual.swift */,
+				6D02E62F28329A0700432971 /* XCTAssertURLEqual.swift */,
 				6DFA2AF62801601300F7DA2C /* XCTAssertArrayElementsEqual.swift */,
 			);
 			path = Utilities;
@@ -562,15 +587,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DECCF7C28421CD90084C9E8 /* SolanaMethodURLEncodeTests.swift in Sources */,
 				6D02E62E283266FA00432971 /* SendTransactionTests.swift in Sources */,
 				6DFA2B0B28040E5100F7DA2C /* CallbackHelperTests.swift in Sources */,
-				6D02E63028329A0700432971 /* XCTAssertURLComponentsEqual.swift in Sources */,
+				6D02E63028329A0700432971 /* XCTAssertURLEqual.swift in Sources */,
 				6D3D57952808367A00228BBD /* Consts.swift in Sources */,
 				6D72112327FDE61200F1EB7F /* QueryItemEncodingTests.swift in Sources */,
 				6DD6F12127EDBF0000B514B1 /* MockUIApplication.swift in Sources */,
 				6D1FC37B27F5973100F7FD5C /* ParsedMethodTests.swift in Sources */,
 				6DFA2AF72801601300F7DA2C /* XCTAssertArrayElementsEqual.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* AccountRequestTests.swift in Sources */,
+				6DECCF7E28421DC00084C9E8 /* EVMBaseMethodURLEncodeTests.swift in Sources */,
+				6DECCF83284242C20084C9E8 /* QueryEscapeTests.swift in Sources */,
 				6D02E729283EA11600432971 /* HashingTests.swift in Sources */,
 				6DFA2AF528001EE200F7DA2C /* SignAndSendTransactionTests.swift in Sources */,
 				6DFA2AF128001AE700F7DA2C /* XCTAssertDictionaryEqual.swift in Sources */,
