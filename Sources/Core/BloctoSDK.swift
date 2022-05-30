@@ -168,7 +168,7 @@ public class BloctoSDK {
             guard let requestURL = try method.encodeToURL(
                 appId: appId,
                 baseURLString: requestBloctoBaseURLString) else {
-                    method.handleError(error: Error.encodeToURLFailed)
+                    method.handleError(error: InternalError.encodeToURLFailed)
                     return
                 }
             uuidToMethod[method.id] = method
@@ -199,7 +199,7 @@ public class BloctoSDK {
     }
 
     private func checkConfigration() throws {
-        guard appId.isEmpty == false else { throw Error.appIdNotSet }
+        guard appId.isEmpty == false else { throw BloctoSDKError.appIdNotSet }
     }
 
     private func routeToWebSDK(
@@ -210,7 +210,7 @@ public class BloctoSDK {
             guard let requestURL = try method.encodeToURL(
                 appId: appId,
                 baseURLString: webRequestBloctoBaseURLString) else {
-                    method.handleError(error: Error.encodeToURLFailed)
+                    method.handleError(error: InternalError.encodeToURLFailed)
                     return
                 }
             var session: AuthenticationSessioning?
@@ -243,7 +243,7 @@ public class BloctoSDK {
                 message: "About to route to Web SDK \(requestURL).")
             let startsSuccessfully = session?.start()
             if startsSuccessfully == false {
-                method.handleError(error: Error.webSDKSessionFailed)
+                method.handleError(error: InternalError.webSDKSessionFailed)
             }
         } catch {
             method.handleError(error: error)

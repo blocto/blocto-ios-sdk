@@ -45,7 +45,7 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
                   return nil
               }
-        var queryItems = URLEncoding.queryItems(
+        var queryItems: [QueryItem] = URLEncoding.queryItems(
             appId: appId,
             requestId: id.uuidString,
             blockchain: blockchain)
@@ -56,19 +56,18 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
             QueryItem(name: .message, value: transactionInfo.message),
             QueryItem(name: .publicKeySignaturePairs, value: transactionInfo.publicKeySignaturePairs)
         ])
-        if let appendMessages = transactionInfo.appendTx {
-            queryItems.append(
-                QueryItem(
-                    name: .appendTx,
-                    value: appendMessages))
-        }
-        components.queryItems = URLEncoding.encode(queryItems)
+        
+        let appendMessageQuryItems: [URLQueryItem] = URLEncoding.solanaAppendMessagesQueryItems(dictionary: transactionInfo.appendTx ?? [:])
+        var urlQueryItems: [URLQueryItem] = []
+        urlQueryItems.append(contentsOf: appendMessageQuryItems)
+        urlQueryItems.append(contentsOf: URLEncoding.encode(queryItems))
+        components.queryItems = urlQueryItems
         return components.url
     }
 
     public func resolve(components: URLComponents, logging: Bool) {
         if let errorCode = components.queryItem(for: .error) {
-            callback(.failure(QueryError(code: errorCode)))
+            callback(.failure(BloctoSDKError(code: errorCode)))
             return
         }
         let targetQueryName = QueryName.txHash
@@ -76,7 +75,7 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
             log(
                 enable: logging,
                 message: "\(targetQueryName.rawValue) not found.")
-            callback(.failure(QueryError.invalidResponse))
+            callback(.failure(BloctoSDKError.invalidResponse))
             return
         }
         callback(.success(txHash))

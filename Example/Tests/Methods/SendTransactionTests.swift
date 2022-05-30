@@ -49,7 +49,7 @@ class SendTransactionTests: XCTestCase {
             URLQueryItem(name: .method, value: EVMBaseMethodType.sendTransaction.rawValue),
             URLQueryItem(name: .from, value: from),
             URLQueryItem(name: .to, value: to),
-            URLQueryItem(name: .value, value: "7b"),
+            URLQueryItem(name: .value, value: "0x7b"),
             URLQueryItem(name: .data, value: "0x" + dataString)
         ]
 
@@ -57,11 +57,9 @@ class SendTransactionTests: XCTestCase {
         let url = try sendTransactionMethod.encodeToURL(
             appId: appId,
             baseURLString: baseURLString)
-        let urlComponents = URLComponents(url: url!, resolvingAgainstBaseURL: false)!
 
         // Then:
-        XCTAssert(urlComponents == expectedURLComponents!, "URLComponent should be \(expectedURLComponents!) rather then \(urlComponents)")
-
+        XCTAssertURLEqual(url, expectedURLComponents?.url, "URL should be \(expectedURLComponents?.url?.absoluteString ?? "") rather then \(url?.absoluteString ?? "")")
     }
 
     func testOpenNativeAppWhenInstalled() throws {
@@ -167,7 +165,7 @@ class SendTransactionTests: XCTestCase {
                 case let .success(receivedtxHash):
                     txHash = receivedtxHash
                 case let .failure(error):
-                    XCTAssert(false, error.localizedDescription)
+                    XCTFail(error.localizedDescription)
                 }
             }
 

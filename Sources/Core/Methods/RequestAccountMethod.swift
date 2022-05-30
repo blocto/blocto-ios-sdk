@@ -47,7 +47,7 @@ public struct RequestAccountMethod: CallbackMethod {
 
     public func resolve(components: URLComponents, logging: Bool) {
         if let errorCode = components.queryItem(for: .error) {
-            callback(.failure(QueryError(code: errorCode)))
+            callback(.failure(BloctoSDKError(code: errorCode)))
             return
         }
         let targetQueryName = QueryName.address
@@ -55,7 +55,7 @@ public struct RequestAccountMethod: CallbackMethod {
             log(
                 enable: logging,
                 message: "\(targetQueryName.rawValue) not found.")
-            callback(.failure(QueryError.invalidResponse))
+            callback(.failure(BloctoSDKError.invalidResponse))
             return
         }
         callback(.success(address))

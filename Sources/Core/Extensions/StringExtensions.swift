@@ -18,6 +18,13 @@ extension BloctoSDKHelper where Base == String {
         return base
     }
 
+    public var add0x: String {
+        if base.hasPrefix("0x") {
+            return base
+        }
+        return "0x" + base
+    }
+
     public var hexDecodedData: Data {
         // Convert to a CString and make sure it has an even number of characters (terminating 0 is included, so we
         // check for uneven!)

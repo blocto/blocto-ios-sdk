@@ -39,6 +39,11 @@ final class SolanaDemoViewController: UIViewController {
     private lazy var networkSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["devnet", "mainnet-beta"])
         segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+        if #available(iOS 13.0, *) {
+            segmentedControl.selectedSegmentTintColor = .blue
+        }
         return segmentedControl
     }()
 
@@ -766,48 +771,12 @@ final class SolanaDemoViewController: UIViewController {
     }
 
     private func handleRequestAccountError(_ error: Swift.Error) {
-        if let error = error as? QueryError {
-            switch error {
-            case .userRejected:
-                requestAccountResultLabel.text = "user rejected."
-            case .forbiddenBlockchain:
-                requestAccountResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
-            case .invalidResponse:
-                requestAccountResultLabel.text = "invalid response."
-            case .userNotMatch:
-                requestAccountResultLabel.text = "user not matched."
-            case .other(let code):
-                requestAccountResultLabel.text = code
-            }
-        } else if let error = error as? Error {
-            requestAccountResultLabel.text = error.message
-        } else {
-            requestAccountResultLabel.text = error.localizedDescription
-        }
-        requestAccountResultLabel.textColor = .red
+        handleGeneralError(label: requestAccountResultLabel, error: error)
         requestAccountLoadingIndicator.stopAnimating()
     }
 
     private func handleSetValueError(_ error: Swift.Error) {
-        if let error = error as? QueryError {
-            switch error {
-            case .userRejected:
-                setValueResultLabel.text = "user rejected."
-            case .forbiddenBlockchain:
-                setValueResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
-            case .invalidResponse:
-                setValueResultLabel.text = "invalid response."
-            case .userNotMatch:
-                setValueResultLabel.text = "user not matched."
-            case .other(let code):
-                setValueResultLabel.text = code
-            }
-        } else if let error = error as? Error {
-            setValueResultLabel.text = error.message
-        } else {
-            setValueResultLabel.text = error.localizedDescription
-        }
-        setValueResultLabel.textColor = .red
+        handleGeneralError(label: setValueResultLabel, error: error)
         setValueLoadingIndicator.stopAnimating()
     }
 
@@ -818,27 +787,35 @@ final class SolanaDemoViewController: UIViewController {
     }
 
     private func handlePartialSignTxError(_ error: Swift.Error) {
-        if let error = error as? QueryError {
+        handleGeneralError(label: partialSignTxResultLabel, error: error)
+        partialSignTxLoadingIndicator.stopAnimating()
+    }
+
+    private func handleGeneralError(label: UILabel, error: Swift.Error) {
+        if let error = error as? BloctoSDKError {
             switch error {
+            case .appIdNotSet:
+                label.text = "app id not set."
             case .userRejected:
-                partialSignTxResultLabel.text = "user rejected."
+                label.text = "user rejected."
             case .forbiddenBlockchain:
-                partialSignTxResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
+                label.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
             case .invalidResponse:
-                partialSignTxResultLabel.text = "invalid response."
+                label.text = "invalid response."
             case .userNotMatch:
-                partialSignTxResultLabel.text = "user not matched."
+                label.text = "user not matched."
+            case .ethSignInvalidHexString:
+                label.text = "input text should be hex string with 0x prefix."
             case .other(let code):
-                partialSignTxResultLabel.text = code
+                label.text = code
             }
         } else if let error = error as? Error {
-            partialSignTxResultLabel.text = error.message
+            label.text = error.message
         } else {
             debugPrint(error)
-            partialSignTxResultLabel.text = error.localizedDescription
+            label.text = error.localizedDescription
         }
-        partialSignTxResultLabel.textColor = .red
-        partialSignTxLoadingIndicator.stopAnimating()
+        label.textColor = .red
     }
 
     enum ExplorerURLType {

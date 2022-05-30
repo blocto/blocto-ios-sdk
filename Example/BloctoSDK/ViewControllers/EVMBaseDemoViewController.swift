@@ -31,15 +31,27 @@ final class EVMBaseDemoViewController: UIViewController {
     private let blockchainSelections: [EVMBase] = EVMBase.allCases
     private let signingSelections: [EVMBaseSignType] = EVMBaseSignType.allCases
 
+    private var signingTextViewHeightContraint: Constraint?
+
     private lazy var networkSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["testnet", "mainnet"])
         segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+        if #available(iOS 13.0, *) {
+            segmentedControl.selectedSegmentTintColor = .blue
+        }
         return segmentedControl
     }()
 
     private lazy var blockchainSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: blockchainSelections.map { $0.displayString })
         segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+        if #available(iOS 13.0, *) {
+            segmentedControl.selectedSegmentTintColor = .blue
+        }
         return segmentedControl
     }()
 
@@ -70,6 +82,7 @@ final class EVMBaseDemoViewController: UIViewController {
         view.addSubview(signingTitleLabel)
         view.addSubview(signingSegmentedControl)
         view.addSubview(signingTypeDataSegmentedControl)
+        view.addSubview(expandSignTextButton)
         view.addSubview(signingTextView)
         view.addSubview(signingResultLabel)
         view.addSubview(signingVerifyButton)
@@ -150,9 +163,16 @@ final class EVMBaseDemoViewController: UIViewController {
             $0.trailing.lessThanOrEqualToSuperview().inset(20)
         }
 
-        signingTextView.snp.makeConstraints {
+        expandSignTextButton.snp.makeConstraints {
             $0.top.equalTo(signingTypeDataSegmentedControl.snp.bottom).offset(20)
+            $0.height.equalTo(30)
+        }
+
+        signingTextView.snp.makeConstraints {
+            $0.top.equalTo(expandSignTextButton.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview().inset(20)
+            $0.trailing.equalTo(expandSignTextButton)
+            signingTextViewHeightContraint = $0.height.equalTo(70).constraint
         }
 
         signingResultLabel.snp.makeConstraints {
@@ -307,15 +327,41 @@ final class EVMBaseDemoViewController: UIViewController {
     private lazy var signingTitleLabel: UILabel = createLabel(text: "Signing")
 
     private lazy var signingSegmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: signingSelections.prefix(2).map { $0.rawValue.replacingOccurrences(of: "_", with: " ") })
+        let segmentedControl = UISegmentedControl(
+            items: signingSelections.prefix(2)
+                .map { $0.displayTitle })
         segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+        if #available(iOS 13.0, *) {
+            segmentedControl.selectedSegmentTintColor = .blue
+        }
         return segmentedControl
     }()
 
     private lazy var signingTypeDataSegmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: signingSelections.dropFirst(2).map { $0.rawValue.replacingOccurrences(of: "_", with: " ") })
+        let segmentedControl = UISegmentedControl(
+            items: signingSelections.dropFirst(2)
+                .map { $0.displayTitle })
         segmentedControl.selectedSegmentIndex = UISegmentedControl.noSegment
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+        if #available(iOS 13.0, *) {
+            segmentedControl.selectedSegmentTintColor = .blue
+        }
         return segmentedControl
+    }()
+
+    private lazy var expandSignTextButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.setTitle("expand text", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        button.backgroundColor = .gray
+        button.contentEdgeInsets = .init(top: 12, left: 10, bottom: 12, right: 10)
+        button.layer.cornerRadius = 10
+        button.clipsToBounds = true
+        return button
     }()
 
     private lazy var signingTextView: UITextView = {
@@ -324,7 +370,6 @@ final class EVMBaseDemoViewController: UIViewController {
         textView.textColor = .black
         textView.backgroundColor = .lightGray
         textView.text = selectedSigningType.defaultText
-        textView.isScrollEnabled = false
         textView.returnKeyType = .done
         textView.layer.cornerRadius = 5
         textView.clipsToBounds = true
@@ -346,6 +391,10 @@ final class EVMBaseDemoViewController: UIViewController {
         button.contentEdgeInsets = .init(top: 4, left: 4, bottom: 4, right: 4)
         button.isHidden = true
         button.addSubview(signingVerifyingIndicator)
+        signingVerifyingIndicator.color = .gray
+        signingVerifyingIndicator.snp.makeConstraints {
+            $0.center.equalToSuperview()
+        }
         return button
     }()
 
@@ -631,6 +680,33 @@ final class EVMBaseDemoViewController: UIViewController {
                 self.routeToExplorer(with: .address(address))
             })
 
+        _ = expandSignTextButton.rx.tap
+            .throttle(
+                DispatchTimeInterval.milliseconds(500),
+                latest: false,
+                scheduler: MainScheduler.instance)
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                if self.expandSignTextButton.isSelected {
+                    self.expandSignTextButton.isSelected = false
+                    self.expandSignTextButton.backgroundColor = .gray
+                    let text = self.signingTextView.text
+                    self.signingTextView.text = ""
+                    self.signingTextView.isScrollEnabled = true
+                    self.signingTextView.text = text
+                    self.signingTextViewHeightContraint?.isActive = true
+                } else {
+                    self.expandSignTextButton.isSelected = true
+                    self.expandSignTextButton.backgroundColor = .blue
+                    let text = self.signingTextView.text
+                    self.signingTextView.text = ""
+                    self.signingTextView.isScrollEnabled = false
+                    self.signingTextView.text = text
+                    self.signingTextViewHeightContraint?.isActive = false
+                }
+            })
+
         _ = signButton.rx.tap
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
@@ -833,7 +909,7 @@ final class EVMBaseDemoViewController: UIViewController {
             handleSignError(Error.message("signature not found."))
             return
         }
-        guard let signature = signingResultLabel.text else {
+        guard let signature = signingResultLabel.text?.bloctoSDK.drop0x else {
             handleSignError(Error.message("signature not found."))
             return
         }
@@ -883,7 +959,6 @@ final class EVMBaseDemoViewController: UIViewController {
                         self.resetSignVerifyStatus()
                         if let value = response?.value,
                            value.bloctoSDK.hexStringWith0xPrefix == ERC1271ABIFunction.Response.erc1271ValidSignature {
-                            self.signingResultLabel.text = signature
                             self.signingVerifyButton.setImage(UIImage(named: "icon20Selected"), for: .normal)
                         } else {
                             self.signingVerifyButton.setImage(UIImage(named: "error"), for: .normal)
@@ -998,71 +1073,17 @@ final class EVMBaseDemoViewController: UIViewController {
     }
 
     private func handleRequestAccountError(_ error: Swift.Error) {
-        if let error = error as? QueryError {
-            switch error {
-            case .userRejected:
-                requestAccountResultLabel.text = "user rejected."
-            case .forbiddenBlockchain:
-                requestAccountResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
-            case .invalidResponse:
-                requestAccountResultLabel.text = "invalid response."
-            case .userNotMatch:
-                requestAccountResultLabel.text = "user not matched."
-            case .other(let code):
-                requestAccountResultLabel.text = code
-            }
-        } else if let error = error as? Error {
-            requestAccountResultLabel.text = error.message
-        } else {
-            requestAccountResultLabel.text = error.localizedDescription
-        }
-        requestAccountResultLabel.textColor = .red
+        handleGeneralError(label: requestAccountResultLabel, error: error)
         requestAccountLoadingIndicator.stopAnimating()
     }
 
     private func handleSignError(_ error: Swift.Error) {
-        if let error = error as? QueryError {
-            switch error {
-            case .userRejected:
-                signingResultLabel.text = "user rejected."
-            case .forbiddenBlockchain:
-                signingResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
-            case .invalidResponse:
-                signingResultLabel.text = "invalid response."
-            case .userNotMatch:
-                signingResultLabel.text = "user not matched."
-            case .other(let code):
-                signingResultLabel.text = code
-            }
-        } else if let error = error as? Error {
-            signingResultLabel.text = error.message
-        } else {
-            signingResultLabel.text = error.localizedDescription
-        }
-        signingResultLabel.textColor = .red
+        handleGeneralError(label: signingResultLabel, error: error)
         signingLoadingIndicator.stopAnimating()
     }
 
     private func handleSetValueError(_ error: Swift.Error) {
-        if let error = error as? QueryError {
-            switch error {
-            case .userRejected:
-                setValueResultLabel.text = "user rejected."
-            case .forbiddenBlockchain:
-                setValueResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
-            case .invalidResponse:
-                setValueResultLabel.text = "invalid response."
-            case .userNotMatch:
-                setValueResultLabel.text = "user not matched."
-            case .other(let code):
-                setValueResultLabel.text = code
-            }
-        } else if let error = error as? Error {
-            setValueResultLabel.text = error.message
-        } else {
-            setValueResultLabel.text = error.localizedDescription
-        }
-        setValueResultLabel.textColor = .red
+        handleGeneralError(label: setValueResultLabel, error: error)
         setValueLoadingIndicator.stopAnimating()
     }
 
@@ -1073,26 +1094,35 @@ final class EVMBaseDemoViewController: UIViewController {
     }
 
     private func handleValueTxError(_ error: Swift.Error) {
-        if let error = error as? QueryError {
+        handleGeneralError(label: sendValueTxResultLabel, error: error)
+        sendValueTxLoadingIndicator.stopAnimating()
+    }
+
+    private func handleGeneralError(label: UILabel, error: Swift.Error) {
+        if let error = error as? BloctoSDKError {
             switch error {
+            case .appIdNotSet:
+                label.text = "app id not set."
             case .userRejected:
-                sendValueTxResultLabel.text = "user rejected."
+                label.text = "user rejected."
             case .forbiddenBlockchain:
-                sendValueTxResultLabel.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
+                label.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
             case .invalidResponse:
-                sendValueTxResultLabel.text = "invalid response."
+                label.text = "invalid response."
             case .userNotMatch:
-                sendValueTxResultLabel.text = "user not matched."
+                label.text = "user not matched."
+            case .ethSignInvalidHexString:
+                label.text = "input text should be hex string with 0x prefix."
             case .other(let code):
-                sendValueTxResultLabel.text = code
+                label.text = code
             }
         } else if let error = error as? Error {
-            sendValueTxResultLabel.text = error.message
+            label.text = error.message
         } else {
-            sendValueTxResultLabel.text = error.localizedDescription
+            debugPrint(error)
+            label.text = error.localizedDescription
         }
-        sendValueTxResultLabel.textColor = .red
-        sendValueTxLoadingIndicator.stopAnimating()
+        label.textColor = .red
     }
 
     private func routeToExplorer(with type: ExplorerURLType) {

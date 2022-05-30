@@ -7,31 +7,42 @@
 
 import Foundation
 
-enum Error: Swift.Error {
+enum InternalError: Swift.Error {
     case callbackSelfNotfound
-    case appIdNotSet
     case encodeToURLFailed
     case webSDKSessionFailed
 }
 
-public enum QueryError: Swift.Error {
+public enum BloctoSDKError: Swift.Error {
 
+    // info check
+    case appIdNotSet
+
+    // query
     case userRejected
     case forbiddenBlockchain
     case invalidResponse
     case userNotMatch
+
+    // format check
+    case ethSignInvalidHexString
+
     case other(code: String)
 
     init(code: String) {
         switch code {
-        case QueryError.userRejected.rawValue:
+        case Self.appIdNotSet.rawValue:
+            self = .appIdNotSet
+        case Self.userRejected.rawValue:
             self = .userRejected
-        case QueryError.forbiddenBlockchain.rawValue:
+        case Self.forbiddenBlockchain.rawValue:
             self = .forbiddenBlockchain
-        case QueryError.invalidResponse.rawValue:
+        case Self.invalidResponse.rawValue:
             self = .invalidResponse
-        case QueryError.userNotMatch.rawValue:
+        case Self.userNotMatch.rawValue:
             self = .userNotMatch
+        case Self.ethSignInvalidHexString.rawValue:
+            self = .ethSignInvalidHexString
         default:
             self = .other(code: code)
         }
@@ -39,6 +50,8 @@ public enum QueryError: Swift.Error {
 
     var rawValue: String {
         switch self {
+        case .appIdNotSet:
+            return "app_id_not_set"
         case .userRejected:
             return "user_rejected"
         case .forbiddenBlockchain:
@@ -47,6 +60,8 @@ public enum QueryError: Swift.Error {
             return "invalid_response"
         case .userNotMatch:
             return "user_not_match"
+        case .ethSignInvalidHexString:
+            return "eth_sign_invalid_hex_string"
         case .other(let code):
             return code
         }
