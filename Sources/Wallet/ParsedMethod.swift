@@ -87,7 +87,7 @@ public struct ParsedMethod {
                         transaction: EVMBaseTransaction(
                             to: to,
                             from: from,
-                            value: BigUInt(value, radix: 16) ?? 0,
+                            value: BigUInt(value.bloctoSDK.drop0x, radix: 16) ?? 0,
                             data: dataString
                                 .bloctoSDK.drop0x
                                 .bloctoSDK.hexDecodedData)))
