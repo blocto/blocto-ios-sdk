@@ -88,8 +88,8 @@ enum EVMBase: CaseIterable {
             : EthereumClient(url: URL(string: "https://data-seed-prebsc-1-s1.binance.org:8545")!)
         case .polygon:
             return isProduction
-            ? EthereumClient(url: URL(string: "https://polygon-mainnet.infura.io/v3/b2f4b3f635d8425c96854c3d28ba6bb0")!)
-            : EthereumClient(url: URL(string: "https://polygon-mumbai.infura.io/v3/b2f4b3f635d8425c96854c3d28ba6bb0")!)
+            ? EthereumClient(url: URL(string: "https://polygon-rpc.com/")!)
+            : EthereumClient(url: URL(string: "https://rpc-mumbai.matic.today")!)
         case .avalanche:
             return isProduction
             ? EthereumClient(url: URL(string: "https://api.avax.network/ext/bc/C/rpc")!)
