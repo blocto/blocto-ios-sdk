@@ -806,6 +806,12 @@ final class SolanaDemoViewController: UIViewController {
                 label.text = "user not matched."
             case .ethSignInvalidHexString:
                 label.text = "input text should be hex string with 0x prefix."
+            case .userCancel:
+                label.text = "user canceled."
+            case .redirectURLNotFound:
+                label.text = "redirect url not found."
+            case .sessionError(let code):
+                label.text = "ASWebAuthenticationSessionError \(code)"
             case .other(let code):
                 label.text = code
             }

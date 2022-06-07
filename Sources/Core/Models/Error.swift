@@ -26,6 +26,11 @@ public enum BloctoSDKError: Swift.Error {
 
     // format check
     case ethSignInvalidHexString
+    
+    // web SDK
+    case userCancel
+    case redirectURLNotFound
+    case sessionError(code: Int)
 
     case other(code: String)
 
@@ -43,6 +48,10 @@ public enum BloctoSDKError: Swift.Error {
             self = .userNotMatch
         case Self.ethSignInvalidHexString.rawValue:
             self = .ethSignInvalidHexString
+        case Self.userCancel.rawValue:
+            self = .userCancel
+        case Self.redirectURLNotFound.rawValue:
+            self = .redirectURLNotFound
         default:
             self = .other(code: code)
         }
@@ -62,6 +71,12 @@ public enum BloctoSDKError: Swift.Error {
             return "user_not_match"
         case .ethSignInvalidHexString:
             return "eth_sign_invalid_hex_string"
+        case .userCancel:
+            return "webSDK_user_cancel"
+        case .redirectURLNotFound:
+            return "webSDK_redirect_url_not_found"
+        case .sessionError(let code):
+            return "webSDK_session_error_\(code)"
         case .other(let code):
             return code
         }
