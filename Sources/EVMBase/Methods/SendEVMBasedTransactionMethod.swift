@@ -5,6 +5,7 @@
 //  Created by Andrew Wang on 2022/5/12.
 //
 
+import Foundation
 import BigInt
 
 public struct SendEVMBasedTransactionMethod: CallbackMethod {

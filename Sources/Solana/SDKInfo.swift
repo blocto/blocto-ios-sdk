@@ -10,7 +10,11 @@ import Foundation
 enum SDKInfo {
 
     static var version: String {
-        Bundle.resouceBundle?.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
+#if COCOAPODS
+        return Bundle.resouceBundle?.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
+#else
+        return "0.2.1"
+#endif
     }
 
 }

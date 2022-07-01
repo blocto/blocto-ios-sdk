@@ -13,7 +13,7 @@ extension Bundle {
 #if COCOAPODS
         return Bundle(identifier: "org.cocoapods.BloctoSDK")
 #elseif SWIFT_PACKAGE
-        return Bundle.module
+        return nil
 #else
         return nil
 #endif

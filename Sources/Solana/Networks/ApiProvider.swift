@@ -5,6 +5,7 @@
 //  Created by Andrew Wang on 2022/4/15.
 //
 
+import Foundation
 import Moya
 
 final public class ApiProvider: MoyaProvider<ConvertTransactionRequest> {

@@ -5,18 +5,14 @@ import PackageDescription
 
 let package = Package(
     name: "BloctoSDK",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v13),
     ],
     products: [
         .library(
             name: "BloctoSDK",
-            targets: [
-                "BloctoSDK",
-                "Solana",
-                "EVMBase",
-                "Wallet"
-            ]
+            targets: ["BloctoSDK"]
         ),
     ],
     dependencies: [
@@ -27,32 +23,13 @@ let package = Package(
     targets: [
         .target(
             name: "BloctoSDK",
-            path: "Sources/Core"
-        ),
-        .target(
-            name: "Solana",
             dependencies: [
-                "BloctoSDK",
+                "BigInt",
                 "Moya",
                 .product(name: "SolanaWeb3", package: "solana-web3.swift"),
             ],
-            path: "Sources/Solana"
-        ),
-        .target(
-            name: "EVMBase",
-            dependencies: [
-                "BloctoSDK",
-                "BigInt",
-            ],
-            path: "Sources/EVMBase"
-        ),
-        .target(
-            name: "Wallet",
-            dependencies: [
-                "BloctoSDK",
-                "BigInt",
-            ],
-            path: "Sources/Wallet"
+            path: "Sources",
+            exclude: ["../Example"]
         ),
     ]
 )
