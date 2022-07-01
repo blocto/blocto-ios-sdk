@@ -5,7 +5,6 @@ import PackageDescription
 
 let package = Package(
     name: "BloctoSDK",
-    defaultLocalization: "en",
     platforms: [
         .iOS(.v13),
     ],
@@ -28,8 +27,7 @@ let package = Package(
                 "Moya",
                 .product(name: "SolanaWeb3", package: "solana-web3.swift"),
             ],
-            path: "Sources",
-            exclude: ["../Example"]
+            path: "Sources"
         ),
     ]
 )
