@@ -5,6 +5,7 @@
 //  Created by Andrew Wang on 2022/4/18.
 //
 
+import Foundation
 import Moya
 
 public struct ConvertTransactionRequest: TargetType {
