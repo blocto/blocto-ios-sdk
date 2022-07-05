@@ -1,15 +1,15 @@
 PODS:
   - Alamofire (5.6.0)
   - BigInt (5.0.0)
-  - BloctoSDK/Core (0.2.1)
-  - BloctoSDK/EVMBase (0.2.1):
+  - BloctoSDK/Core (0.2.2)
+  - BloctoSDK/EVMBase (0.2.2):
     - BigInt (~> 5.0)
     - BloctoSDK/Core
-  - BloctoSDK/Solana (0.2.1):
+  - BloctoSDK/Solana (0.2.2):
     - BloctoSDK/Core
     - Moya (~> 14.0.0)
     - SolanaWeb3 (~> 0.0.4)
-  - BloctoSDK/Wallet (0.2.1):
+  - BloctoSDK/Wallet (0.2.2):
     - BigInt (~> 5.0)
     - BloctoSDK/Core (~> 0.2.0)
   - CryptoSwift (1.5.1)
@@ -88,7 +88,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Alamofire: 0c07058209f211e3d32824f8e0766d7c44ac83b3
   BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
-  BloctoSDK: a930c53c33edd42cccaf01694af42be88554925e
+  BloctoSDK: ef40ab850335ae77226e4983e3e739c9c92d60bc
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
   EthereumSignTypedDataUtil: ae4e33b21e51ee046a86a65b02843090b8bbd3f9
   GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
