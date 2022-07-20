@@ -227,7 +227,7 @@ DEPENDENCIES:
   - BloctoSDK/Wallet (from `../`)
   - "Cadence (from `git@github.com:portto/flow-swift-sdk.git`)"
   - EthereumSignTypedDataUtil
-  - FCL (from `../../FCL`)
+  - "FCL (from `git@github.com:portto/fcl-swift.git`, branch `feat/verifySignature`)"
   - "FlowSDK (from `git@github.com:portto/flow-swift-sdk.git`)"
   - RxCocoa
   - RxSwift
@@ -285,7 +285,8 @@ EXTERNAL SOURCES:
   Cadence:
     :git: "git@github.com:portto/flow-swift-sdk.git"
   FCL:
-    :path: "../../FCL"
+    :branch: feat/verifySignature
+    :git: "git@github.com:portto/fcl-swift.git"
   FlowSDK:
     :git: "git@github.com:portto/flow-swift-sdk.git"
   SolanaWeb3:
@@ -298,6 +299,9 @@ CHECKOUT OPTIONS:
   Cadence:
     :commit: b09a64cb6d49c464db617577a37802cce7c2b09e
     :git: "git@github.com:portto/flow-swift-sdk.git"
+  FCL:
+    :commit: f1ba18566cf4e2bad62c2d95ff4f3964f2987883
+    :git: "git@github.com:portto/fcl-swift.git"
   FlowSDK:
     :commit: b09a64cb6d49c464db617577a37802cce7c2b09e
     :git: "git@github.com:portto/flow-swift-sdk.git"
@@ -357,6 +361,6 @@ SPEC CHECKSUMS:
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   web3.swift: 4d8b9f69ea92d23c6e87b97c36686f1c541eaef1
 
-PODFILE CHECKSUM: 169e9ee0709469e52c392abdeb5e9df410466242
+PODFILE CHECKSUM: 2e47835a0820c257da3ae954fcb1b8cfa662b5c0
 
 COCOAPODS: 1.11.3
