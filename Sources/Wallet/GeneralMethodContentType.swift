@@ -10,4 +10,5 @@ import Foundation
 public enum GeneralMethodContentType {
     case solana(SolanaMethodContentType)
     case evmBase(EVMBaseMethodContentType)
+    case flow(FlowMethodContentType)
 }

@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.social_media_url = 'https://twitter.com/BloctoApp'
 
   s.swift_version = '5.0.0'
-  s.ios.deployment_target = '12.0'
+  s.ios.deployment_target = '13.0'
 
   s.subspec "Core" do |ss|
       ss.source_files  = "Sources/Core/**/*"
@@ -31,6 +31,11 @@ Pod::Spec.new do |s|
       ss.dependency "BigInt", "~> 5.0"
   end
   
+  s.subspec "Flow" do |ss|
+      ss.source_files = "Sources/Flow/**/*"
+      ss.dependency "BloctoSDK/Core"
+  end
+  
   s.subspec "Wallet" do |ss|
       ss.source_files = "Sources/Wallet/*",
       "Sources/Solana/Models/SolanaMethodType.swift",
@@ -39,7 +44,12 @@ Pod::Spec.new do |s|
       "Sources/EVMBase/Models/EVMBaseMethodType.swift",
       "Sources/EVMBase/Models/EVMBaseMethodContentType.swift",
       "Sources/EVMBase/Models/EVMBaseTransaction.swift",
-      "Sources/EVMBase/Models/SignType.swift"
+      "Sources/EVMBase/Models/SignType.swift",
+      "Sources/Flow/Models/FlowMethodType.swift",
+      "Sources/Flow/Models/FlowMethodContentType.swift",
+      "Sources/Flow/Models/CompositeSignature.swift",
+      "Sources/Flow/Models/AccountProofData.swift",
+      "Sources/Flow/Models/FlowSignatureType.swift"
       ss.dependency "BloctoSDK/Core", "~> 0.2.0"
       ss.dependency "BigInt", "~> 5.0"
   end

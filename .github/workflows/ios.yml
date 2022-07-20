@@ -17,7 +17,6 @@ jobs:
         matrix:
           swift: ["5.0"]
           destination: ['platform=iOS Simulator,OS=15.2,name=iPhone 13 Pro']
-          destination2: ['platform=iOS Simulator,OS:12.4, name:iPhone 5s']
 
     steps:
     - uses: actions/checkout@v1
@@ -39,8 +38,3 @@ jobs:
       run: xcodebuild clean test -workspace ./Example/BloctoSDK.xcworkspace -scheme "BloctoSDK-Example" -destination "${destination}"
       env: 
          destination: ${{ matrix.destination }}
-
-    - name: clean build and test on before iOS 13
-      run: xcodebuild clean test -workspace ./Example/BloctoSDK.xcworkspace -scheme "BloctoSDK-Example" -destination "${destination2}"
-      env: 
-         destination2: ${{ matrix.destination }}

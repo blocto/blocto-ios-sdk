@@ -32,12 +32,14 @@ class SendTransactionTests: XCTestCase {
             to: to,
             from: from,
             value: value,
-            data: dataString.bloctoSDK.hexDecodedData)
+            data: dataString.bloctoSDK.hexDecodedData
+        )
 
         let sendTransactionMethod = SendEVMBasedTransactionMethod(
             id: requestId,
             blockchain: .ethereum,
-            transaction: evmBaseTransaction) { _ in }
+            transaction: evmBaseTransaction
+        ) { _ in }
 
         let baseURLString = BloctoSDK.shared.requestBloctoBaseURLString
 
@@ -56,7 +58,8 @@ class SendTransactionTests: XCTestCase {
         // When:
         let url = try sendTransactionMethod.encodeToURL(
             appId: appId,
-            baseURLString: baseURLString)
+            baseURLString: baseURLString
+        )
 
         // Then:
         XCTAssertURLEqual(url, expectedURLComponents?.url, "URL should be \(expectedURLComponents?.url?.absoluteString ?? "") rather then \(url?.absoluteString ?? "")")
@@ -67,20 +70,13 @@ class SendTransactionTests: XCTestCase {
         let requestId = UUID()
         var txHash: String?
         let expectedTxHash: String = "0xe608645ba741c8064a2990c16b395c5b1377c7e1f8683b9319052560f89d279e"
-        if #available(iOS 13.0, *) {
-            BloctoSDK.shared.initialize(
-                with: appId,
-                window: UIWindow(),
-                logging: false,
-                testnet: true,
-                urlOpening: mockUIApplication)
-        } else {
-            BloctoSDK.shared.initialize(
-                with: appId,
-                logging: false,
-                testnet: true,
-                urlOpening: mockUIApplication)
-        }
+        BloctoSDK.shared.initialize(
+            with: appId,
+            window: UIWindow(),
+            logging: false,
+            testnet: true,
+            urlOpening: mockUIApplication
+        )
 
         mockUIApplication.setup(openedOrder: [true])
 
@@ -88,20 +84,22 @@ class SendTransactionTests: XCTestCase {
             to: "0x58F385777aa6699b81f741Dd0d5B272A34C1c774",
             from: "0xC823994cDDdaE5cb4bD1ADFe5AfD03f8E06Bc7ef",
             value: 100,
-            data: "b5aebc80000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000066c616c616c610000000000000000000000000000000000000000000000000000".bloctoSDK.hexDecodedData)
+            data: "b5aebc80000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000066c616c616c610000000000000000000000000000000000000000000000000000".bloctoSDK.hexDecodedData
+        )
 
         // When:
         let ethereumSDK = BloctoSDK.shared.ethereum
         ethereumSDK.sendTransaction(
             uuid: requestId,
-            transaction: evmBaseTransaction) { result in
-                switch result {
-                case let .success(receivedtxHash):
-                    txHash = receivedtxHash
-                case let .failure(error):
-                    XCTAssert(false, error.localizedDescription)
-                }
+            transaction: evmBaseTransaction
+        ) { result in
+            switch result {
+            case let .success(receivedtxHash):
+                txHash = receivedtxHash
+            case let .failure(error):
+                XCTAssert(false, error.localizedDescription)
             }
+        }
 
         var components = URLComponents(string: appCustomSchemeBaseURLString)
         components?.queryItems = [
@@ -111,7 +109,8 @@ class SendTransactionTests: XCTestCase {
         BloctoSDK.shared.application(
             UIApplication.shared,
             open: components!.url!,
-            options: [:])
+            options: [:]
+        )
 
         // Then:
         XCTAssert(txHash == expectedTxHash, "txHash should be \(expectedTxHash) rather then \(txHash!)")
@@ -124,22 +123,14 @@ class SendTransactionTests: XCTestCase {
         var txHash: String?
         let expectedTxHash: String = "0xe608645ba741c8064a2990c16b395c5b1377c7e1f8683b9319052560f89d279e"
 
-        if #available(iOS 13.0, *) {
-            BloctoSDK.shared.initialize(
-                with: appId,
-                window: UIWindow(),
-                logging: false,
-                testnet: true,
-                urlOpening: mockUIApplication,
-                sessioningType: MockAuthenticationSession.self)
-        } else {
-            BloctoSDK.shared.initialize(
-                with: appId,
-                logging: false,
-                testnet: true,
-                urlOpening: mockUIApplication,
-                sessioningType: MockAuthenticationSession.self)
-        }
+        BloctoSDK.shared.initialize(
+            with: appId,
+            window: UIWindow(),
+            logging: false,
+            testnet: true,
+            urlOpening: mockUIApplication,
+            sessioningType: MockAuthenticationSession.self
+        )
 
         mockUIApplication.setup(openedOrder: [false])
 
@@ -147,7 +138,8 @@ class SendTransactionTests: XCTestCase {
             to: "0x58F385777aa6699b81f741Dd0d5B272A34C1c774",
             from: "0xC823994cDDdaE5cb4bD1ADFe5AfD03f8E06Bc7ef",
             value: 100,
-            data: "b5aebc80000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000066c616c616c610000000000000000000000000000000000000000000000000000".bloctoSDK.hexDecodedData)
+            data: "b5aebc80000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000066c616c616c610000000000000000000000000000000000000000000000000000".bloctoSDK.hexDecodedData
+        )
 
         var components = URLComponents(string: webRedirectBaseURLString)
         components?.queryItems = [
@@ -160,14 +152,15 @@ class SendTransactionTests: XCTestCase {
         let ethereumSDK = BloctoSDK.shared.ethereum
         ethereumSDK.sendTransaction(
             uuid: requestId,
-            transaction: evmBaseTransaction) { result in
-                switch result {
-                case let .success(receivedtxHash):
-                    txHash = receivedtxHash
-                case let .failure(error):
-                    XCTFail(error.localizedDescription)
-                }
+            transaction: evmBaseTransaction
+        ) { result in
+            switch result {
+            case let .success(receivedtxHash):
+                txHash = receivedtxHash
+            case let .failure(error):
+                XCTFail(error.localizedDescription)
             }
+        }
 
         // Then:
         XCTAssert(txHash == expectedTxHash, "txHash should be \(expectedTxHash) rather then \(txHash!)")

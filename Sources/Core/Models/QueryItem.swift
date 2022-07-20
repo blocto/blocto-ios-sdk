@@ -9,16 +9,21 @@ import Foundation
 
 public struct QueryItem {
 
-    let name: QueryName
+    let name: String
     let value: Any
 
     init(name: QueryName, value: Any) {
-        self.name = name
+        self.name = name.rawValue
+        self.value = value
+    }
+    
+    init(nameString: String, value: Any) {
+        self.name = nameString
         self.value = value
     }
 
     var getQueryComponents: [URLQueryItem] {
-        URLEncoding.queryComponents(fromKey: name.rawValue, value: value)
+        URLEncoding.queryComponents(fromKey: name, value: value)
     }
 
 }

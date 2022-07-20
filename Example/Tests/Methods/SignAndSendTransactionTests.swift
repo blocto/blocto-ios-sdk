@@ -30,20 +30,13 @@ class SignAndSendTransactionTests: XCTestCase {
         let requestId = UUID()
         var txHash: String?
         let expectedTxHash: String = "65ZG7Retj1acmX2DXv9YdU12JJ53a5sKgBmmDGHVexTyDnFq8C3inKMMvcdMXi5NvZCLSueThdSNNHJBWdw7neUC"
-        if #available(iOS 13.0, *) {
-            BloctoSDK.shared.initialize(
-                with: appId,
-                window: UIWindow(),
-                logging: false,
-                testnet: true,
-                urlOpening: mockUIApplication)
-        } else {
-            BloctoSDK.shared.initialize(
-                with: appId,
-                logging: false,
-                testnet: true,
-                urlOpening: mockUIApplication)
-        }
+        BloctoSDK.shared.initialize(
+            with: appId,
+            window: UIWindow(),
+            logging: false,
+            testnet: true,
+            urlOpening: mockUIApplication
+        )
 
         mockUIApplication.setup(openedOrder: [true])
 
@@ -57,7 +50,8 @@ class SignAndSendTransactionTests: XCTestCase {
 
         let valueAccountData = ValueAccountData(
             instruction: 0,
-            value: "1")
+            value: "1"
+        )
         let data = try valueAccountData.serialize()
 
         let transactionInstruction = TransactionInstruction(
@@ -65,14 +59,17 @@ class SignAndSendTransactionTests: XCTestCase {
                 AccountMeta(
                     publicKey: dappPublicKey,
                     isSigner: false,
-                    isWritable: true),
+                    isWritable: true
+                ),
                 AccountMeta(
                     publicKey: userWalletPublicKey,
                     isSigner: false,
-                    isWritable: true)
+                    isWritable: true
+                )
             ],
             programId: programPublicKey,
-            data: data)
+            data: data
+        )
         var transaction = Transaction(recentBlockhash: recentBlockhash)
         transaction.add(transactionInstruction)
         transaction.feePayer = userWalletPublicKey
@@ -85,12 +82,14 @@ class SignAndSendTransactionTests: XCTestCase {
                 sampleResponseClosure: { .networkResponse(200, response) },
                 method: target.method,
                 task: target.task,
-                httpHeaderFields: target.headers)
+                httpHeaderFields: target.headers
+            )
         }
 
         let apiProvider = ApiProvider(
             endpointClosure: stubEndpointClosure,
-            stubClosure: MoyaProvider.immediatelyStub)
+            stubClosure: MoyaProvider.immediatelyStub
+        )
 
         // When:
         let solanaSDK = BloctoSDK.shared.solana
@@ -98,14 +97,15 @@ class SignAndSendTransactionTests: XCTestCase {
         solanaSDK.signAndSendTransaction(
             uuid: requestId,
             from: userWallet,
-            transaction: transaction) { result in
-                switch result {
-                case let .success(receivedtxHash):
-                    txHash = receivedtxHash
-                case let .failure(error):
-                    XCTAssert(false, error.localizedDescription)
-                }
+            transaction: transaction
+        ) { result in
+            switch result {
+            case let .success(receivedtxHash):
+                txHash = receivedtxHash
+            case let .failure(error):
+                XCTAssert(false, error.localizedDescription)
             }
+        }
 
         var components = URLComponents(string: appCustomSchemeBaseURLString)
         components?.queryItems = [
@@ -115,7 +115,8 @@ class SignAndSendTransactionTests: XCTestCase {
         BloctoSDK.shared.application(
             UIApplication.shared,
             open: components!.url!,
-            options: [:])
+            options: [:]
+        )
 
         // Then:
         XCTAssert(txHash == expectedTxHash, "txHash should be \(expectedTxHash) rather then \(txHash!)")
@@ -138,7 +139,8 @@ class SignAndSendTransactionTests: XCTestCase {
 
         let valueAccountData = ValueAccountData(
             instruction: 0,
-            value: "1")
+            value: "1"
+        )
         let data = try valueAccountData.serialize()
 
         let transactionInstruction = TransactionInstruction(
@@ -146,34 +148,29 @@ class SignAndSendTransactionTests: XCTestCase {
                 AccountMeta(
                     publicKey: dappPublicKey,
                     isSigner: false,
-                    isWritable: true),
+                    isWritable: true
+                ),
                 AccountMeta(
                     publicKey: userWalletPublicKey,
                     isSigner: false,
-                    isWritable: true)
+                    isWritable: true
+                )
             ],
             programId: programPublicKey,
-            data: data)
+            data: data
+        )
         var transaction = Transaction(recentBlockhash: recentBlockhash)
         transaction.add(transactionInstruction)
         transaction.feePayer = userWalletPublicKey
 
-        if #available(iOS 13.0, *) {
-            BloctoSDK.shared.initialize(
-                with: appId,
-                window: UIWindow(),
-                logging: false,
-                testnet: true,
-                urlOpening: mockUIApplication,
-                sessioningType: MockAuthenticationSession.self)
-        } else {
-            BloctoSDK.shared.initialize(
-                with: appId,
-                logging: false,
-                testnet: true,
-                urlOpening: mockUIApplication,
-                sessioningType: MockAuthenticationSession.self)
-        }
+        BloctoSDK.shared.initialize(
+            with: appId,
+            window: UIWindow(),
+            logging: false,
+            testnet: true,
+            urlOpening: mockUIApplication,
+            sessioningType: MockAuthenticationSession.self
+        )
 
         mockUIApplication.setup(openedOrder: [false])
 
@@ -185,12 +182,14 @@ class SignAndSendTransactionTests: XCTestCase {
                 sampleResponseClosure: { .networkResponse(200, response) },
                 method: target.method,
                 task: target.task,
-                httpHeaderFields: target.headers)
+                httpHeaderFields: target.headers
+            )
         }
 
         let apiProvider = ApiProvider(
             endpointClosure: stubEndpointClosure,
-            stubClosure: MoyaProvider.immediatelyStub)
+            stubClosure: MoyaProvider.immediatelyStub
+        )
 
         var components = URLComponents(string: webRedirectBaseURLString)
         components?.queryItems = [
@@ -205,14 +204,15 @@ class SignAndSendTransactionTests: XCTestCase {
         solanaSDK.signAndSendTransaction(
             uuid: requestId,
             from: userWallet,
-            transaction: transaction) { result in
-                switch result {
-                case let .success(receivedtxHash):
-                    txHash = receivedtxHash
-                case let .failure(error):
-                    XCTAssert(false, error.localizedDescription)
-                }
+            transaction: transaction
+        ) { result in
+            switch result {
+            case let .success(receivedtxHash):
+                txHash = receivedtxHash
+            case let .failure(error):
+                XCTAssert(false, error.localizedDescription)
             }
+        }
 
         // Then:
         XCTAssert(txHash == expectedTxHash, "txHash should be \(expectedTxHash) rather then \(txHash!)")

@@ -38,20 +38,16 @@ final class EVMBaseDemoViewController: UIViewController {
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
-        if #available(iOS 13.0, *) {
-            segmentedControl.selectedSegmentTintColor = .blue
-        }
+        segmentedControl.selectedSegmentTintColor = .blue
         return segmentedControl
     }()
 
     private lazy var blockchainSegmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: blockchainSelections.map { $0.displayString })
+        let segmentedControl = UISegmentedControl(items: blockchainSelections.map(\.displayString))
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
-        if #available(iOS 13.0, *) {
-            segmentedControl.selectedSegmentTintColor = .blue
-        }
+        segmentedControl.selectedSegmentTintColor = .blue
         return segmentedControl
     }()
 
@@ -293,7 +289,8 @@ final class EVMBaseDemoViewController: UIViewController {
 
     private lazy var requestAccountButton: UIButton = createButton(
         text: "Request account",
-        indicator: requestAccountLoadingIndicator)
+        indicator: requestAccountLoadingIndicator
+    )
 
     private lazy var requestAccountLoadingIndicator = createLoadingIndicator()
 
@@ -329,26 +326,22 @@ final class EVMBaseDemoViewController: UIViewController {
     private lazy var signingSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(
             items: signingSelections.prefix(2)
-                .map { $0.displayTitle })
+                .map(\.displayTitle))
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
-        if #available(iOS 13.0, *) {
-            segmentedControl.selectedSegmentTintColor = .blue
-        }
+        segmentedControl.selectedSegmentTintColor = .blue
         return segmentedControl
     }()
 
     private lazy var signingTypeDataSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(
             items: signingSelections.dropFirst(2)
-                .map { $0.displayTitle })
+                .map(\.displayTitle))
         segmentedControl.selectedSegmentIndex = UISegmentedControl.noSegment
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
-        if #available(iOS 13.0, *) {
-            segmentedControl.selectedSegmentTintColor = .blue
-        }
+        segmentedControl.selectedSegmentTintColor = .blue
         return segmentedControl
     }()
 
@@ -402,7 +395,8 @@ final class EVMBaseDemoViewController: UIViewController {
 
     private lazy var signButton: UIButton = createButton(
         text: "Sign",
-        indicator: signingLoadingIndicator)
+        indicator: signingLoadingIndicator
+    )
 
     private lazy var signingLoadingIndicator = createLoadingIndicator()
 
@@ -431,7 +425,8 @@ final class EVMBaseDemoViewController: UIViewController {
 
     private lazy var setValueButton: UIButton = createButton(
         text: "Send transaction",
-        indicator: setValueLoadingIndicator)
+        indicator: setValueLoadingIndicator
+    )
 
     private lazy var setValueLoadingIndicator = createLoadingIndicator()
 
@@ -458,7 +453,8 @@ final class EVMBaseDemoViewController: UIViewController {
 
     private lazy var getValueButton: UIButton = createButton(
         text: "Get Value",
-        indicator: getValueLoadingIndicator)
+        indicator: getValueLoadingIndicator
+    )
 
     private lazy var getValueLoadingIndicator = createLoadingIndicator()
 
@@ -503,7 +499,8 @@ final class EVMBaseDemoViewController: UIViewController {
 
     private lazy var sendValueTxButton: UIButton = createButton(
         text: "Send Tx with value",
-        indicator: sendValueTxLoadingIndicator)
+        indicator: sendValueTxLoadingIndicator
+    )
 
     private lazy var sendValueTxLoadingIndicator = createLoadingIndicator()
 
@@ -583,18 +580,12 @@ final class EVMBaseDemoViewController: UIViewController {
                 default:
                     break
                 }
-                if #available(iOS 13.0, *) {
-                    BloctoSDK.shared.initialize(
-                        with: bloctoSDKAppId,
-                        window: window,
-                        logging: true,
-                        testnet: !isProduction)
-                } else {
-                    BloctoSDK.shared.initialize(
-                        with: bloctoSDKAppId,
-                        logging: true,
-                        testnet: !isProduction)
-                }
+                BloctoSDK.shared.initialize(
+                    with: bloctoSDKAppId,
+                    window: window,
+                    logging: true,
+                    testnet: !isProduction
+                )
             })
 
         _ = blockchainSegmentedControl.rx.value.changed
@@ -633,7 +624,8 @@ final class EVMBaseDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
@@ -641,12 +633,12 @@ final class EVMBaseDemoViewController: UIViewController {
 
                 self.selectedBlockchain.sdkProvider.requestAccount { [weak self] result in
                     switch result {
-                    case .success(let address):
+                    case let .success(address):
                         self?.userWalletAddress = address
                         self?.requestAccountResultLabel.text = address
                         self?.requestAccountCopyButton.isHidden = false
                         self?.requestAccountExplorerButton.isHidden = false
-                    case .failure(let error):
+                    case let .failure(error):
                         self?.handleRequestAccountError(error)
                     }
                 }
@@ -656,7 +648,8 @@ final class EVMBaseDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self,
@@ -672,7 +665,8 @@ final class EVMBaseDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self,
@@ -684,7 +678,8 @@ final class EVMBaseDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
@@ -711,7 +706,8 @@ final class EVMBaseDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
@@ -722,7 +718,8 @@ final class EVMBaseDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
@@ -733,7 +730,8 @@ final class EVMBaseDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
@@ -746,7 +744,8 @@ final class EVMBaseDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self,
@@ -758,7 +757,8 @@ final class EVMBaseDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
@@ -771,7 +771,8 @@ final class EVMBaseDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
@@ -784,7 +785,8 @@ final class EVMBaseDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self,
@@ -887,17 +889,18 @@ final class EVMBaseDemoViewController: UIViewController {
         selectedBlockchain.sdkProvider.signMessage(
             from: userWalletAddress,
             message: message,
-            signType: selectedSigningType) { [weak self] result in
-                guard let self = self else { return }
-                self.resetSignStatus()
-                switch result {
-                case let .success(signature):
-                    self.signingResultLabel.text = signature
-                    self.signingVerifyButton.isHidden = false
-                case let .failure(error):
-                    self.handleSignError(error)
-                }
+            signType: selectedSigningType
+        ) { [weak self] result in
+            guard let self = self else { return }
+            self.resetSignStatus()
+            switch result {
+            case let .success(signature):
+                self.signingResultLabel.text = signature
+                self.signingVerifyButton.isHidden = false
+            case let .failure(error):
+                self.handleSignError(error)
             }
+        }
     }
 
     private func verifySignature() {
@@ -922,8 +925,8 @@ final class EVMBaseDemoViewController: UIViewController {
         case .personalSign:
             data = Data(message.utf8)
         case .typedSignV3,
-                .typedSignV4,
-                .typedSign:
+             .typedSignV4,
+             .typedSign:
             do {
                 let typedData = try JSONDecoder().decode(EIP712TypedData.self, from: Data(message.utf8))
                 let signableHash: Data
@@ -945,30 +948,32 @@ final class EVMBaseDemoViewController: UIViewController {
         let verifySignatureABIFunction = ERC1271ABIFunction(
             hash: data.sha3(.keccak256),
             signature: signature.bloctoSDK.hexDecodedData,
-            contract: EthereumAddress(userWalletAddress))
+            contract: EthereumAddress(userWalletAddress)
+        )
 
         verifySignatureABIFunction.call(
             withClient: rpcClient,
-            responseType: ERC1271ABIFunction.Response.self) { [weak self] error, response in
-                guard let self = self else { return }
-                DispatchQueue.main.async {
-                    if let error = error {
-                        debugPrint(error)
-                        self.signingVerifyButton.setImage(UIImage(named: "error"), for: .normal)
+            responseType: ERC1271ABIFunction.Response.self
+        ) { [weak self] error, response in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                if let error = error {
+                    debugPrint(error)
+                    self.signingVerifyButton.setImage(UIImage(named: "error"), for: .normal)
+                } else {
+                    self.resetSignVerifyStatus()
+                    if let value = response?.value,
+                       value.bloctoSDK.hexStringWith0xPrefix == ERC1271ABIFunction.Response.erc1271ValidSignature {
+                        self.signingVerifyButton.setImage(UIImage(named: "icon20Selected"), for: .normal)
                     } else {
-                        self.resetSignVerifyStatus()
-                        if let value = response?.value,
-                           value.bloctoSDK.hexStringWith0xPrefix == ERC1271ABIFunction.Response.erc1271ValidSignature {
-                            self.signingVerifyButton.setImage(UIImage(named: "icon20Selected"), for: .normal)
-                        } else {
-                            self.signingVerifyButton.setImage(UIImage(named: "error"), for: .normal)
-                        }
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                        self.signingVerifyButton.setImage(UIImage(named: "icExamination"), for: .normal)
+                        self.signingVerifyButton.setImage(UIImage(named: "error"), for: .normal)
                     }
                 }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    self.signingVerifyButton.setImage(UIImage(named: "icExamination"), for: .normal)
+                }
             }
+        }
     }
 
     private func sendTransaction() {
@@ -979,9 +984,9 @@ final class EVMBaseDemoViewController: UIViewController {
         guard let inputValue = nomalTxInputTextField.text,
               inputValue.isEmpty == false,
               let value = BigUInt(inputValue) else {
-                  handleSetValueError(Error.message("Input not found."))
-                  return
-              }
+            handleSetValueError(Error.message("Input not found."))
+            return
+        }
         let setValueABIFunction = SetValueABIFunction(value: value)
 
         do {
@@ -991,7 +996,8 @@ final class EVMBaseDemoViewController: UIViewController {
                 to: selectedBlockchain.dappAddress,
                 from: userWalletAddress,
                 value: "0",
-                data: functionData)
+                data: functionData
+            )
             selectedBlockchain.sdkProvider.sendTransaction(
                 transaction: evmBaseTransaction
             ) { [weak self] result in
@@ -1015,22 +1021,24 @@ final class EVMBaseDemoViewController: UIViewController {
             contract: EthereumAddress(selectedBlockchain.dappAddress),
             from: nil,
             gasPrice: nil,
-            gasLimit: nil)
+            gasLimit: nil
+        )
 
         getValueABIFunction.call(
             withClient: rpcClient,
-            responseType: GetValueABIFunction.Response.self) { [weak self] error, response in
-                guard let self = self else { return }
-                DispatchQueue.main.async {
-                    self.resetGetValueStatus()
-                    if let error = error {
-                        debugPrint(error)
-                        self.handleGetValueError(error)
-                    } else {
-                        self.getValueResultLabel.text = response?.value.description
-                    }
+            responseType: GetValueABIFunction.Response.self
+        ) { [weak self] error, response in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.resetGetValueStatus()
+                if let error = error {
+                    debugPrint(error)
+                    self.handleGetValueError(error)
+                } else {
+                    self.getValueResultLabel.text = response?.value.description
                 }
             }
+        }
     }
 
     private func sendTransactionWithValue() {
@@ -1041,9 +1049,9 @@ final class EVMBaseDemoViewController: UIViewController {
         guard let inputValue = valueTxInputTextField.text,
               inputValue.isEmpty == false,
               let value = BigUInt(inputValue) else {
-                  handleValueTxError(Error.message("Input not found."))
-                  return
-              }
+            handleValueTxError(Error.message("Input not found."))
+            return
+        }
         let donateABIFunction = DonateABIFunction(message: "lalala")
 
         do {
@@ -1053,7 +1061,8 @@ final class EVMBaseDemoViewController: UIViewController {
                 to: selectedBlockchain.dappAddress,
                 from: userWalletAddress,
                 value: value,
-                data: functionData)
+                data: functionData
+            )
             selectedBlockchain.sdkProvider.sendTransaction(
                 transaction: evmBaseTransaction
             ) { [weak self] result in
@@ -1113,7 +1122,7 @@ final class EVMBaseDemoViewController: UIViewController {
                 label.text = "user not matched."
             case .ethSignInvalidHexString:
                 label.text = "input text should be hex string with 0x prefix."
-            case .other(let code):
+            case let .other(code):
                 label.text = code
             }
         } else if let error = error as? Error {
@@ -1128,16 +1137,13 @@ final class EVMBaseDemoViewController: UIViewController {
     private func routeToExplorer(with type: ExplorerURLType) {
         guard let url = selectedBlockchain.explorerURL(type: type) else { return }
         let safariVC = SFSafariViewController(url: url)
-        if #available(iOS 13.0, *) {
-            safariVC.modalPresentationStyle = .automatic
-        } else {
-            safariVC.modalPresentationStyle = .overCurrentContext
-        }
         safariVC.delegate = self
         present(safariVC, animated: true, completion: nil)
     }
 
 }
+
+// MARK: - UITextFieldDelegate
 
 extension EVMBaseDemoViewController: UITextFieldDelegate {
 
@@ -1147,6 +1153,8 @@ extension EVMBaseDemoViewController: UITextFieldDelegate {
     }
 
 }
+
+// MARK: - SFSafariViewControllerDelegate
 
 extension EVMBaseDemoViewController: SFSafariViewControllerDelegate {}
 

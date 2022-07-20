@@ -1,49 +1,65 @@
 //
-//  RequestAccountMethod.swift
+//  AuthenticateMethod.swift
 //  BloctoSDK
 //
-//  Created by Andrew Wang on 2022/3/14.
+//  Created by Andrew Wang on 2022/7/7.
 //
 
 import Foundation
+import BigInt
 
-public struct RequestAccountMethod: CallbackMethod {
-    public typealias Response = String
+public struct AuthenticateMethod: CallbackMethod {
+    public typealias Response = (address: String, accountProof: [CompositeSignature])
 
     public let id: UUID
-    public let type: String = MethodName.requestAccount.rawValue
+    public let type: String = FlowMethodType.authenticate.rawValue
     public let callback: Callback
 
-    let blockchain: Blockchain
+    let blockchain: Blockchain = .flow
+    let accountProofData: AccountProofData?
 
     /// initialize request account method
     /// - Parameters:
     ///   - id: Used to find a stored callback. No need to pass if there is no specific requirement, for example, testing.
-    ///   - blockchain: pre-defined blockchain in BloctoSDK
     ///   - callback: callback will be called by either from blocto native app or web SDK after getting account or reject.
-    ///
-    /// Supports for request account only in Flow Blockchain.
-    /// For receiving account proof along with request account use AuthenticateMethod instead.
     public init(
         id: UUID = UUID(),
-        blockchain: Blockchain,
+        accountProofData: AccountProofData?,
         callback: @escaping Callback
     ) {
         self.id = id
-        self.blockchain = blockchain
+        self.accountProofData = accountProofData
         self.callback = callback
     }
 
     public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
         guard let baseURL = URL(string: baseURLString),
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
-                  return nil
-              }
+            return nil
+        }
         var queryItems = URLEncoding.queryItems(
             appId: appId,
             requestId: id.uuidString,
-            blockchain: blockchain)
-        queryItems.append(QueryItem(name: .method, value: type))
+            blockchain: blockchain
+        )
+        queryItems.append(
+            QueryItem(
+                name: .method,
+                value: type
+            )
+        )
+        if let accountProofData = accountProofData {
+            queryItems.append(contentsOf: [
+                QueryItem(
+                    name: .flowAppId,
+                    value: accountProofData.appId
+                ),
+                QueryItem(
+                    name: .flowNonce,
+                    value: accountProofData.nonce
+                ),
+            ])
+        }
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }
@@ -57,11 +73,13 @@ public struct RequestAccountMethod: CallbackMethod {
         guard let address = components.queryItem(for: targetQueryName) else {
             log(
                 enable: logging,
-                message: "\(targetQueryName.rawValue) not found.")
+                message: "\(targetQueryName.rawValue) not found."
+            )
             callback(.failure(BloctoSDKError.invalidResponse))
             return
         }
-        callback(.success(address))
+        let signatures = components.getSignatures(type: .accountProof)
+        callback(.success((address: address, accountProof: signatures)))
     }
 
     public func handleError(error: Swift.Error) {

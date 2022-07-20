@@ -23,34 +23,29 @@ class AccountRequestTests: XCTestCase {
         let requestId = UUID()
         var address: String?
         let expectedAddress: String = "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv"
-        if #available(iOS 13.0, *) {
-            BloctoSDK.shared.initialize(
-                with: appId,
-                window: UIWindow(),
-                logging: false,
-                testnet: true,
-                urlOpening: mockUIApplication)
-        } else {
-            BloctoSDK.shared.initialize(
-                with: appId,
-                logging: false,
-                testnet: true,
-                urlOpening: mockUIApplication)
-        }
+
+        BloctoSDK.shared.initialize(
+            with: appId,
+            window: UIWindow(),
+            logging: false,
+            testnet: true,
+            urlOpening: mockUIApplication
+        )
 
         mockUIApplication.setup(openedOrder: [true])
 
         // When:
         let requestAccountMethod = RequestAccountMethod(
             id: requestId,
-            blockchain: Blockchain.solana) { result in
-                switch result {
-                case let .success(receivedAddress):
-                    address = receivedAddress
-                case let .failure(error):
-                    XCTFail(error.localizedDescription)
-                }
+            blockchain: Blockchain.solana
+        ) { result in
+            switch result {
+            case let .success(receivedAddress):
+                address = receivedAddress
+            case let .failure(error):
+                XCTFail(error.localizedDescription)
             }
+        }
         BloctoSDK.shared.send(method: requestAccountMethod)
 
         let userActivity = NSUserActivity(activityType: "NSUserActivityTypeBrowsingWeb")
@@ -68,34 +63,28 @@ class AccountRequestTests: XCTestCase {
         let requestId = UUID()
         var address: String?
         let expectedAddress: String = "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv"
-        if #available(iOS 13.0, *) {
-            BloctoSDK.shared.initialize(
-                with: appId,
-                window: UIWindow(),
-                logging: false,
-                testnet: true,
-                urlOpening: mockUIApplication)
-        } else {
-            BloctoSDK.shared.initialize(
-                with: appId,
-                logging: false,
-                testnet: true,
-                urlOpening: mockUIApplication)
-        }
+        BloctoSDK.shared.initialize(
+            with: appId,
+            window: UIWindow(),
+            logging: false,
+            testnet: true,
+            urlOpening: mockUIApplication
+        )
 
         mockUIApplication.setup(openedOrder: [true])
 
         // When:
         let requestAccountMethod = RequestAccountMethod(
             id: requestId,
-            blockchain: Blockchain.solana) { result in
-                switch result {
-                case let .success(receivedAddress):
-                    address = receivedAddress
-                case let .failure(error):
-                    XCTFail(error.localizedDescription)
-                }
+            blockchain: Blockchain.solana
+        ) { result in
+            switch result {
+            case let .success(receivedAddress):
+                address = receivedAddress
+            case let .failure(error):
+                XCTFail(error.localizedDescription)
             }
+        }
         BloctoSDK.shared.send(method: requestAccountMethod)
 
         var components = URLComponents(string: appCustomSchemeBaseURLString)
@@ -106,7 +95,8 @@ class AccountRequestTests: XCTestCase {
         BloctoSDK.shared.application(
             UIApplication.shared,
             open: components!.url!,
-            options: [:])
+            options: [:]
+        )
 
         // Then:
         XCTAssert(address == expectedAddress, "address should be \(expectedAddress) rather then \(address!)")
@@ -118,22 +108,14 @@ class AccountRequestTests: XCTestCase {
         let requestId = UUID()
         var address: String?
         let expectedAddress: String = "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv"
-        if #available(iOS 13.0, *) {
-            BloctoSDK.shared.initialize(
-                with: appId,
-                window: UIWindow(),
-                logging: false,
-                testnet: true,
-                urlOpening: mockUIApplication,
-                sessioningType: MockAuthenticationSession.self)
-        } else {
-            BloctoSDK.shared.initialize(
-                with: appId,
-                logging: false,
-                testnet: true,
-                urlOpening: mockUIApplication,
-                sessioningType: MockAuthenticationSession.self)
-        }
+        BloctoSDK.shared.initialize(
+            with: appId,
+            window: UIWindow(),
+            logging: false,
+            testnet: true,
+            urlOpening: mockUIApplication,
+            sessioningType: MockAuthenticationSession.self
+        )
 
         mockUIApplication.setup(openedOrder: [false])
 
@@ -147,14 +129,15 @@ class AccountRequestTests: XCTestCase {
         // When:
         let requestAccountMethod = RequestAccountMethod(
             id: requestId,
-            blockchain: Blockchain.solana) { result in
-                switch result {
-                case let .success(receivedAddress):
-                    address = receivedAddress
-                case let .failure(error):
-                    XCTFail(error.localizedDescription)
-                }
+            blockchain: Blockchain.solana
+        ) { result in
+            switch result {
+            case let .success(receivedAddress):
+                address = receivedAddress
+            case let .failure(error):
+                XCTFail(error.localizedDescription)
             }
+        }
         BloctoSDK.shared.send(method: requestAccountMethod)
 
         // Then:
