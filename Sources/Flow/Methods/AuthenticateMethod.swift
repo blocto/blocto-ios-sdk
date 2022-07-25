@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import BigInt
 
 public struct AuthenticateMethod: CallbackMethod {
     public typealias Response = (address: String, accountProof: [CompositeSignature])
