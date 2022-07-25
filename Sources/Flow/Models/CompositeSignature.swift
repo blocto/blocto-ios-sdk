@@ -11,7 +11,7 @@ public struct CompositeSignature: Decodable {
 
     public let address: String
     public let keyId: Int
-    // hex string
+    /// hex string
     public let signature: String
 
     public init(
