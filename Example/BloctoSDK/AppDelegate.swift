@@ -33,18 +33,12 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
-        if #available(iOS 13.0, *) {
-            BloctoSDK.shared.initialize(
-                with: bloctoSDKAppId,
-                window: window,
-                logging: true,
-                testnet: true)
-        } else {
-            BloctoSDK.shared.initialize(
-                with: bloctoSDKAppId,
-                logging: true,
-                testnet: true)
-        }
+        BloctoSDK.shared.initialize(
+            with: bloctoSDKAppId,
+            window: window,
+            logging: true,
+            testnet: true
+        )
         return true
     }
 
@@ -56,7 +50,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         BloctoSDK.shared.application(
             app,
             open: url,
-            options: options)
+            options: options
+        )
         return true
     }
 

@@ -11,7 +11,6 @@ import AuthenticationServices
 
 class MockAuthenticationSession: AuthenticationSessioning {
 
-    @available(iOS 13.0, *)
     var presentationContextProvider: ASWebAuthenticationPresentationContextProviding? {
         get {
             return nil

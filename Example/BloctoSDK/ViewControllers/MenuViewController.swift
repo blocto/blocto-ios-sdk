@@ -31,6 +31,15 @@ final class MenuViewController: UIViewController {
         return button
     }()
 
+    private var flowButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.setTitle("Flow Demo", for: .normal)
+        button.setTitleColor(.darkGray, for: .normal)
+        button.setTitleColor(.gray, for: .highlighted)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        return button
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
@@ -43,6 +52,7 @@ final class MenuViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubview(solanaButton)
         view.addSubview(evmBaseButton)
+        view.addSubview(flowButton)
 
         solanaButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(50)
@@ -51,6 +61,11 @@ final class MenuViewController: UIViewController {
 
         evmBaseButton.snp.makeConstraints {
             $0.top.equalTo(solanaButton.snp.bottom).offset(20)
+            $0.centerX.equalToSuperview()
+        }
+
+        flowButton.snp.makeConstraints {
+            $0.top.equalTo(evmBaseButton.snp.bottom).offset(20)
             $0.centerX.equalToSuperview()
         }
     }
@@ -79,6 +94,19 @@ final class MenuViewController: UIViewController {
                 let evmBaseDemoViewController = EVMBaseDemoViewController()
                 self?.navigationController?.pushViewController(
                     evmBaseDemoViewController,
+                    animated: true)
+            })
+
+        _ = flowButton.rx.tap
+            .throttle(
+                DispatchTimeInterval.milliseconds(500),
+                latest: false,
+                scheduler: MainScheduler.instance)
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                let flowDemoViewController = FlowDemoViewController()
+                self?.navigationController?.pushViewController(
+                    flowDemoViewController,
                     animated: true)
             })
     }

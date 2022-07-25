@@ -33,7 +33,7 @@ public struct ParsedMethod {
             guard let methodType = SolanaMethodType(rawValue: rawMethod) else { return nil }
             switch methodType {
             case .requestAccount:
-                methodContentType = .solana(SolanaMethodContentType.requestAccount)
+                self.methodContentType = .solana(SolanaMethodContentType.requestAccount)
             case .signAndSendTransaction:
                 guard let from = param[QueryName.from.rawValue],
                       let message = param[QueryName.message.rawValue],
@@ -42,29 +42,33 @@ public struct ParsedMethod {
 
                 let appendTx: [String: Data] = QueryDecoding.decodeDictionary(
                     param: param,
-                    queryName: .appendTx)
+                    queryName: .appendTx
+                )
 
                 let publicKeySignaturePairs: [String: String] = QueryDecoding.decodeDictionary(
                     param: param,
-                    queryName: .publicKeySignaturePairs)
+                    queryName: .publicKeySignaturePairs
+                )
 
-                methodContentType = .solana(
+                self.methodContentType = .solana(
                     SolanaMethodContentType.signAndSendTransaction(
                         from: from,
                         isInvokeWrapped: isInvokeWrapped,
                         transactionInfo: .init(
                             message: message,
                             appendTx: appendTx,
-                            publicKeySignaturePairs: publicKeySignaturePairs)))
+                            publicKeySignaturePairs: publicKeySignaturePairs
+                        )
+                    ))
             }
         case .ethereum,
-                .binanceSmartChain,
-                .polygon,
-                .avalanche:
+             .binanceSmartChain,
+             .polygon,
+             .avalanche:
             guard let methodType = EVMBaseMethodType(rawValue: rawMethod) else { return nil }
             switch methodType {
             case .requestAccount:
-                methodContentType = .evmBase(.requestAccount)
+                self.methodContentType = .evmBase(.requestAccount)
             case .signMessage:
                 guard let from = param[QueryName.from.rawValue],
                       let message = param[QueryName.message.rawValue],
@@ -72,17 +76,18 @@ public struct ParsedMethod {
                       let signType = EVMBaseSignType(rawValue: rawSignType) else { return nil }
                 let removingPercentEncodingString = message.removingPercentEncoding ?? message
                 let messageString = removingPercentEncodingString.bloctoSDK.hexConvertToString()
-                methodContentType = .evmBase(
+                self.methodContentType = .evmBase(
                     .signMessage(
                         from: from,
                         message: messageString,
-                        signType: signType))
+                        signType: signType
+                    ))
             case .sendTransaction:
                 guard let from = param[QueryName.from.rawValue],
                       let to = param[QueryName.to.rawValue],
                       let value = param[QueryName.value.rawValue],
                       let dataString = param[QueryName.data.rawValue] else { return nil }
-                methodContentType = .evmBase(
+                self.methodContentType = .evmBase(
                     .sendTransaction(
                         transaction: EVMBaseTransaction(
                             to: to,
@@ -90,7 +95,41 @@ public struct ParsedMethod {
                             value: BigUInt(value.bloctoSDK.drop0x, radix: 16) ?? 0,
                             data: dataString
                                 .bloctoSDK.drop0x
-                                .bloctoSDK.hexDecodedData)))
+                                .bloctoSDK.hexDecodedData
+                        )))
+            }
+        case .flow:
+            guard let methodType = FlowMethodType(rawValue: rawMethod) else { return nil }
+            switch methodType {
+            case .requestAccount:
+                self.methodContentType = .flow(
+                    .authenticate(
+                        accountProofData: nil
+                    )
+                )
+            case .authenticate:
+                var accountProofData: AccountProofData?
+                if let accountProofAppId = param[QueryName.flowAppId.rawValue],
+                   let nonce = param[QueryName.flowNonce.rawValue] {
+                    accountProofData = AccountProofData(
+                        appId: accountProofAppId,
+                        nonce: nonce
+                    )
+                }
+
+                self.methodContentType = .flow(
+                    .authenticate(
+                        accountProofData: accountProofData
+                    )
+                )
+            case .userSignature:
+                guard let from = param[QueryName.from.rawValue],
+                      let message = param[QueryName.message.rawValue] else { return nil }
+                let removingPercentEncodingString = message.removingPercentEncoding ?? message
+
+                self.methodContentType = .flow(
+                    .userSignature(from: from, message: removingPercentEncodingString)
+                )
             }
         }
     }

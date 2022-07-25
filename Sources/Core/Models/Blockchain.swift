@@ -13,4 +13,5 @@ public enum Blockchain: String {
     case binanceSmartChain = "bsc"
     case polygon
     case avalanche
+    case flow
 }

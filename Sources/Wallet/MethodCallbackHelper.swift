@@ -7,9 +7,9 @@
 
 import Foundation
 
-public class MethodCallbackHelper {
+public enum MethodCallbackHelper {
 
-    static public func sendBack(
+    public static func sendBack(
         urlOpening: URLOpening,
         routingInfo: RoutingInfo,
         completion: @escaping (_ opened: Bool) -> Void
@@ -26,14 +26,16 @@ public class MethodCallbackHelper {
         guard let components = components else {
             log(
                 enable: true,
-                message: "components not found.")
+                message: "components not found."
+            )
             completion(false)
             return
         }
         guard let openURL = components.url else {
             log(
                 enable: true,
-                message: "components's url not found.")
+                message: "components's url not found."
+            )
             completion(false)
             return
         }
@@ -48,7 +50,8 @@ public class MethodCallbackHelper {
                     urlOpening: urlOpening,
                     appId: routingInfo.appId,
                     urlComponents: components,
-                    completion: completion)
+                    completion: completion
+                )
             }
         }
     }
@@ -66,7 +69,8 @@ public class MethodCallbackHelper {
         guard let openURL = components.url else {
             log(
                 enable: true,
-                message: "components's url not found.")
+                message: "components's url not found."
+            )
             completion(false)
             return
         }
@@ -78,13 +82,15 @@ public class MethodCallbackHelper {
             if opened {
                 log(
                     enable: true,
-                    message: "opened with custom scheme \(openURL).")
+                    message: "opened with custom scheme \(openURL)."
+                )
                 completion(true)
                 return
             } else {
                 log(
                     enable: true,
-                    message: "can't open with custom scheme \(openURL).")
+                    message: "can't open with custom scheme \(openURL)."
+                )
                 completion(false)
                 return
             }
@@ -93,22 +99,61 @@ public class MethodCallbackHelper {
 
     static func queryItems(from methodContentType: CallbackMethodContentType) -> [URLQueryItem] {
         switch methodContentType {
-            case let .requestAccount(address):
-                return [
-                    .init(name: .address, value: address)
+        case let .requestAccount(address):
+            return [
+                .init(name: .address, value: address),
+            ]
+        case let .signMessage(signature):
+            return [
+                .init(name: .signature, value: signature),
+            ]
+        case let .signAndSendTransaction(txHash):
+            return [
+                .init(name: .txHash, value: txHash),
+            ]
+        case let .authanticate(address, accountProof):
+            let queryItems: [QueryItem] = [
+                QueryItem(name: .address, value: address),
+            ]
+            + accountProof.enumerated().flatMap {
+                    [
+                        QueryItem(
+                            nameString: QueryName.accountProof.rawValue + "[\(String($0))]" + "[\(QueryName.address.rawValue)]",
+                            value: $1.address
+                        ),
+                        QueryItem(
+                            nameString: QueryName.accountProof.rawValue + "[\(String($0))]" + "[\(QueryName.keyId.rawValue)]",
+                            value: String($1.keyId)
+                        ),
+                        QueryItem(
+                            nameString: QueryName.accountProof.rawValue + "[\(String($0))]" + "[\(QueryName.signature.rawValue)]",
+                            value: $1.signature
+                        ),
+                    ]
+                }
+            return URLEncoding.encode(queryItems)
+        case let .flowSignMessage(signatures):
+            let queryItems: [QueryItem] = signatures.enumerated().flatMap {
+                [
+                    QueryItem(
+                        nameString: QueryName.userSignature.rawValue + "[\(String($0))]" + "[\(QueryName.address.rawValue)]",
+                        value: $1.address
+                    ),
+                    QueryItem(
+                        nameString: QueryName.userSignature.rawValue + "[\(String($0))]" + "[\(QueryName.keyId.rawValue)]",
+                        value: String($1.keyId)
+                    ),
+                    QueryItem(
+                        nameString: QueryName.userSignature.rawValue + "[\(String($0))]" + "[\(QueryName.signature.rawValue)]",
+                        value: $1.signature
+                    ),
                 ]
-            case let .signMessage(signature):
-                return [
-                    .init(name: .signature, value: signature)
-                ]
-            case let .signAndSendTransaction(txHash):
-                return [
-                    .init(name: .txHash, value: txHash)
-                ]
-            case let .error(error):
-                return [
-                    .init(name: .error, value: error.rawValue)
-                ]
+            }
+            return URLEncoding.encode(queryItems)
+        case let .error(error):
+            return [
+                .init(name: .error, value: error.rawValue),
+            ]
         }
     }
 

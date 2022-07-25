@@ -14,24 +14,26 @@ import SnapKit
 import BloctoSDK
 import SolanaWeb3
 
-// swiftlint:disable type_body_length
+// swiftlint:disable type_body_length file_length
 final class SolanaDemoViewController: UIViewController {
 
     private var userWalletAddress: String?
     private var dappAddress: String {
         isProduction
-        ? "EajAHVxAVvf4yNUu37ZEh8QS7Lk5bw9yahTGiTSL1Rwt"
-        : "4AXy5YYCXpMapaVuzKkz25kVHzrdLDgKN3TiQvtf1Eu8"
+            ? "EajAHVxAVvf4yNUu37ZEh8QS7Lk5bw9yahTGiTSL1Rwt"
+            : "4AXy5YYCXpMapaVuzKkz25kVHzrdLDgKN3TiQvtf1Eu8"
     }
+
     private var programId: String {
         isProduction
-        ? "EN2Ln23fzm4qag1mHfx7FDJwDJog5u4SDgqRY256ZgFt"
-        : "G4YkbRN4nFQGEUg4SXzPsrManWzuk8bNq9JaMhXepnZ6"
+            ? "EN2Ln23fzm4qag1mHfx7FDJwDJog5u4SDgqRY256ZgFt"
+            : "G4YkbRN4nFQGEUg4SXzPsrManWzuk8bNq9JaMhXepnZ6"
     }
+
     private var cluster: Cluster {
         isProduction
-        ? .mainnetBeta
-        : .devnet
+            ? .mainnetBeta
+            : .devnet
     }
 
     private lazy var bloctoSolanaSDK = BloctoSDK.shared.solana
@@ -41,9 +43,7 @@ final class SolanaDemoViewController: UIViewController {
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
-        if #available(iOS 13.0, *) {
-            segmentedControl.selectedSegmentTintColor = .blue
-        }
+        segmentedControl.selectedSegmentTintColor = .blue
         return segmentedControl
     }()
 
@@ -213,7 +213,8 @@ final class SolanaDemoViewController: UIViewController {
 
     private lazy var requestAccountButton: UIButton = createButton(
         text: "Request account",
-        indicator: requestAccountLoadingIndicator)
+        indicator: requestAccountLoadingIndicator
+    )
 
     private lazy var requestAccountLoadingIndicator = createLoadingIndicator()
 
@@ -267,7 +268,8 @@ final class SolanaDemoViewController: UIViewController {
 
     private lazy var setValueButton: UIButton = createButton(
         text: "Send transaction",
-        indicator: setValueLoadingIndicator)
+        indicator: setValueLoadingIndicator
+    )
 
     private lazy var setValueLoadingIndicator = createLoadingIndicator()
 
@@ -294,7 +296,8 @@ final class SolanaDemoViewController: UIViewController {
 
     private lazy var getValueButton: UIButton = createButton(
         text: "Get Value",
-        indicator: getValueLoadingIndicator)
+        indicator: getValueLoadingIndicator
+    )
 
     private lazy var getValueLoadingIndicator = createLoadingIndicator()
 
@@ -313,7 +316,8 @@ final class SolanaDemoViewController: UIViewController {
 
     private lazy var partialSignTxButton: UIButton = createButton(
         text: "Send partial sign tx",
-        indicator: partialSignTxLoadingIndicator)
+        indicator: partialSignTxLoadingIndicator
+    )
 
     private lazy var partialSignTxLoadingIndicator = createLoadingIndicator()
 
@@ -364,6 +368,7 @@ final class SolanaDemoViewController: UIViewController {
         }
     }
 
+    // swiftlint:disable cyclomatic_complexity
     private func setupBinding() {
         _ = networkSegmentedControl.rx.value.changed
             .take(until: rx.deallocated)
@@ -382,37 +387,32 @@ final class SolanaDemoViewController: UIViewController {
                 default:
                     break
                 }
-                if #available(iOS 13.0, *) {
-                    BloctoSDK.shared.initialize(
-                        with: bloctoSDKAppId,
-                        window: window,
-                        logging: true,
-                        testnet: !isProduction)
-                } else {
-                    BloctoSDK.shared.initialize(
-                        with: bloctoSDKAppId,
-                        logging: true,
-                        testnet: !isProduction)
-                }
+                BloctoSDK.shared.initialize(
+                    with: bloctoSDKAppId,
+                    window: window,
+                    logging: true,
+                    testnet: !isProduction
+                )
             })
 
         _ = requestAccountButton.rx.tap
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.resetRequestAccountStatus()
                 self.bloctoSolanaSDK.requestAccount { [weak self] result in
                     switch result {
-                    case .success(let address):
+                    case let .success(address):
                         self?.userWalletAddress = address
                         self?.requestAccountResultLabel.text = address
                         self?.requestAccountCopyButton.isHidden = false
                         self?.requestAccountExplorerButton.isHidden = false
-                    case .failure(let error):
+                    case let .failure(error):
                         self?.handleRequestAccountError(error)
                     }
                 }
@@ -422,11 +422,12 @@ final class SolanaDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self,
-                let address = self.requestAccountResultLabel.text else { return }
+                      let address = self.requestAccountResultLabel.text else { return }
                 UIPasteboard.general.string = address
                 self.requestAccountCopyButton.setImage(UIImage(named: "icon20Selected"), for: .normal)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
@@ -438,7 +439,8 @@ final class SolanaDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self,
@@ -450,7 +452,8 @@ final class SolanaDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
@@ -463,7 +466,8 @@ final class SolanaDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self,
@@ -475,7 +479,8 @@ final class SolanaDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
@@ -488,7 +493,8 @@ final class SolanaDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
@@ -501,7 +507,8 @@ final class SolanaDemoViewController: UIViewController {
             .throttle(
                 DispatchTimeInterval.milliseconds(500),
                 latest: false,
-                scheduler: MainScheduler.instance)
+                scheduler: MainScheduler.instance
+            )
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self,
@@ -599,9 +606,9 @@ final class SolanaDemoViewController: UIViewController {
         guard let inputValue = inputTextField.text,
               inputValue.isEmpty == false,
               let value = UInt32(inputValue) else {
-                  handleSetValueError(Error.message("Input not found."))
-                  return
-              }
+            handleSetValueError(Error.message("Input not found."))
+            return
+        }
 
         var transaction = Transaction()
         do {
@@ -609,7 +616,8 @@ final class SolanaDemoViewController: UIViewController {
                 dappPublicKey: dappPublicKey,
                 userWalletPublicKey: userWalletPublicKey,
                 programId: programId,
-                value: value)
+                value: value
+            )
             transaction.add(setValueInstruction)
         } catch {
             handleSetValueError(Error.message("Create set value instruction failed."))
@@ -619,17 +627,18 @@ final class SolanaDemoViewController: UIViewController {
 
         bloctoSolanaSDK.signAndSendTransaction(
             from: userWalletAddress,
-            transaction: transaction) { [weak self] result in
-                guard let self = self else { return }
-                self.resetSetValueStatus()
-                switch result {
-                case let .success(txHsh):
-                    self.setValueResultLabel.text = txHsh
-                    self.setValueExplorerButton.isHidden = false
-                case let .failure(error):
-                    self.handleSetValueError(error)
-                }
+            transaction: transaction
+        ) { [weak self] result in
+            guard let self = self else { return }
+            self.resetSetValueStatus()
+            switch result {
+            case let .success(txHsh):
+                self.setValueResultLabel.text = txHsh
+                self.setValueExplorerButton.isHidden = false
+            case let .failure(error):
+                self.handleSetValueError(error)
             }
+        }
     }
 
     private func getValue() {
@@ -673,9 +682,9 @@ final class SolanaDemoViewController: UIViewController {
         guard let inputValue = inputTextField.text,
               inputValue.isEmpty == false,
               let value = UInt32(inputValue) else {
-                  handlePartialSignTxError(Error.message("Input not found."))
-                  return
-              }
+            handlePartialSignTxError(Error.message("Input not found."))
+            return
+        }
 
         var transaction = Transaction()
         transaction.feePayer = userWalletPublicKey
@@ -693,46 +702,50 @@ final class SolanaDemoViewController: UIViewController {
                             newAccountPublicKey: newAccount.publicKey,
                             lamports: minBalance,
                             space: 10,
-                            programId: programId)
+                            programId: programId
+                        )
                         transaction.add(createAccountInstruction)
 
                         let setValueInstruction = try self.createSetValueInstruction(
                             dappPublicKey: dappPublicKey,
                             userWalletPublicKey: userWalletPublicKey,
                             programId: programId,
-                            value: value)
+                            value: value
+                        )
                         transaction.add(setValueInstruction)
 
                         self.bloctoSolanaSDK.convertToProgramWalletTransaction(
                             transaction,
-                            solanaAddress: userWalletAddress) { [weak self] result in
-                                guard let self = self else { return }
-                                switch result {
-                                case let .success(transaction):
-                                    do {
-                                        var newTransaction = transaction
-                                        try newTransaction.partialSign(signers: [newAccount])
+                            solanaAddress: userWalletAddress
+                        ) { [weak self] result in
+                            guard let self = self else { return }
+                            switch result {
+                            case let .success(transaction):
+                                do {
+                                    var newTransaction = transaction
+                                    try newTransaction.partialSign(signers: [newAccount])
 
-                                        self.bloctoSolanaSDK.signAndSendTransaction(
-                                            from: userWalletAddress,
-                                            transaction: newTransaction) { [weak self] result in
-                                                guard let self = self else { return }
-                                                self.resetPartialSignTxStatus()
-                                                switch result {
-                                                case let .success(txHash):
-                                                    self.partialSignTxResultLabel.text = txHash
-                                                    self.partialSignTxExplorerButton.isHidden = false
-                                                case let .failure(error):
-                                                    self.handlePartialSignTxError(error)
-                                                }
-                                            }
-                                    } catch {
-                                        self.handlePartialSignTxError(error)
+                                    self.bloctoSolanaSDK.signAndSendTransaction(
+                                        from: userWalletAddress,
+                                        transaction: newTransaction
+                                    ) { [weak self] result in
+                                        guard let self = self else { return }
+                                        self.resetPartialSignTxStatus()
+                                        switch result {
+                                        case let .success(txHash):
+                                            self.partialSignTxResultLabel.text = txHash
+                                            self.partialSignTxExplorerButton.isHidden = false
+                                        case let .failure(error):
+                                            self.handlePartialSignTxError(error)
+                                        }
                                     }
-                                case let .failure(error):
+                                } catch {
                                     self.handlePartialSignTxError(error)
                                 }
+                            case let .failure(error):
+                                self.handlePartialSignTxError(error)
                             }
+                        }
                     } catch {
                         self.handlePartialSignTxError(error)
                     }
@@ -750,7 +763,8 @@ final class SolanaDemoViewController: UIViewController {
     ) throws -> TransactionInstruction {
         let valueAccountData = ValueAccountData(
             instruction: 0,
-            value: value)
+            value: value
+        )
         guard let data = try? valueAccountData.serialize() else {
             throw Error.message("valueAccountData serialize failed.")
         }
@@ -759,14 +773,17 @@ final class SolanaDemoViewController: UIViewController {
                 AccountMeta(
                     publicKey: dappPublicKey,
                     isSigner: false,
-                    isWritable: true),
+                    isWritable: true
+                ),
                 AccountMeta(
                     publicKey: userWalletPublicKey,
                     isSigner: false,
-                    isWritable: true)
+                    isWritable: true
+                )
             ],
             programId: programId,
-            data: data)
+            data: data
+        )
         return transactionInstruction
     }
 
@@ -806,7 +823,7 @@ final class SolanaDemoViewController: UIViewController {
                 label.text = "user not matched."
             case .ethSignInvalidHexString:
                 label.text = "input text should be hex string with 0x prefix."
-            case .other(let code):
+            case let .other(code):
                 label.text = code
             }
         } else if let error = error as? Error {
@@ -826,12 +843,12 @@ final class SolanaDemoViewController: UIViewController {
             switch self {
             case let .txhash(hash):
                 return isProduction
-                ? URL(string: "https://explorer.solana.com/tx/\(hash)")
-                : URL(string: "https://explorer.solana.com/tx/\(hash)?cluster=devnet")
+                    ? URL(string: "https://explorer.solana.com/tx/\(hash)")
+                    : URL(string: "https://explorer.solana.com/tx/\(hash)?cluster=devnet")
             case let .address(address):
                 return isProduction
-                ? URL(string: "https://explorer.solana.com/address/\(address)")
-                : URL(string: "https://explorer.solana.com/address/\(address)?cluster=devnet")
+                    ? URL(string: "https://explorer.solana.com/address/\(address)")
+                    : URL(string: "https://explorer.solana.com/address/\(address)?cluster=devnet")
             }
         }
     }
@@ -839,16 +856,13 @@ final class SolanaDemoViewController: UIViewController {
     private func routeToExplorer(with type: ExplorerURLType) {
         guard let url = type.url() else { return }
         let safariVC = SFSafariViewController(url: url)
-        if #available(iOS 13.0, *) {
-            safariVC.modalPresentationStyle = .automatic
-        } else {
-            safariVC.modalPresentationStyle = .overCurrentContext
-        }
         safariVC.delegate = self
         present(safariVC, animated: true, completion: nil)
     }
 
 }
+
+// MARK: - UITextFieldDelegate
 
 extension SolanaDemoViewController: UITextFieldDelegate {
 
@@ -858,6 +872,8 @@ extension SolanaDemoViewController: UITextFieldDelegate {
     }
 
 }
+
+// MARK: - SFSafariViewControllerDelegate
 
 extension SolanaDemoViewController: SFSafariViewControllerDelegate {}
 

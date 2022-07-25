@@ -33,10 +33,10 @@ public class BloctoEthereumSDK {
         self.base = base
     }
 
-    /// To request Solana account address
+    /// To request Ethereum account address
     /// - Parameters:
     ///   - completion: completion handler for this methods. Please note this completion might not be called in some circumstances. e.g. SDK version incompatible with Blocto Wallet app.
-    ///   The successful result is address String for Solana.
+    ///   The successful result is address String for Ethereum.
     public func requestAccount(completion: @escaping (Result<String, Swift.Error>) -> Void) {
         let method = RequestAccountMethod(blockchain: .ethereum, callback: completion)
         base.send(method: method)

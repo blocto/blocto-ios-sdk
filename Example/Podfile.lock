@@ -1,9 +1,14 @@
 PODS:
+  - _NIODataStructures (2.40.0)
   - Alamofire (5.6.0)
-  - BigInt (5.0.0)
+  - BigInt (5.2.0)
+  - BloctoSDK (0.2.2):
+    - BloctoSDK/Core (= 0.2.2)
   - BloctoSDK/Core (0.2.2)
   - BloctoSDK/EVMBase (0.2.2):
     - BigInt (~> 5.0)
+    - BloctoSDK/Core
+  - BloctoSDK/Flow (0.2.2):
     - BloctoSDK/Core
   - BloctoSDK/Solana (0.2.2):
     - BloctoSDK/Core
@@ -12,11 +17,50 @@ PODS:
   - BloctoSDK/Wallet (0.2.2):
     - BigInt (~> 5.0)
     - BloctoSDK/Core (~> 0.2.0)
+  - Cadence (0.1.0):
+    - BigInt (~> 5.2.0)
+    - CryptoSwift (~> 1.5.1)
+  - CGRPCZlib (1.7.3)
+  - CNIOAtomics (2.40.0)
+  - CNIOBoringSSL (2.19.0)
+  - CNIOBoringSSLShims (2.19.0):
+    - CNIOBoringSSL (= 2.19.0)
+  - CNIODarwin (2.40.0)
+  - CNIOHTTPParser (2.40.0)
+  - CNIOLinux (2.40.0)
+  - CNIOWindows (2.40.0)
   - CryptoSwift (1.5.1)
   - EthereumSignTypedDataUtil (0.1.2):
     - BigInt (~> 5.0)
     - CryptoSwift (~> 1.4)
+  - FCL (0.1.0):
+    - BloctoSDK
+    - FlowSDK
+    - SwiftyJSON
+  - FlowSDK (0.1.3):
+    - FlowSDK/FlowSDK (= 0.1.3)
+  - FlowSDK/Crypto (0.1.3):
+    - CryptoSwift (~> 1.5.1)
+    - secp256k1Swift (~> 0.7.4)
+  - FlowSDK/FlowSDK (0.1.3):
+    - BigInt (~> 5.2.0)
+    - Cadence (~> 0.1.0)
+    - CryptoSwift (~> 1.5.1)
+    - FlowSDK/Crypto
+    - FlowSDK/Protobuf
+  - FlowSDK/Protobuf (0.1.3):
+    - gRPC-Swift (~> 1.7.3)
   - GenericJSON (2.0.1)
+  - gRPC-Swift (1.7.3):
+    - CGRPCZlib (= 1.7.3)
+    - Logging (< 2.0.0, >= 1.4.0)
+    - SwiftNIO (< 3.0.0, >= 2.32.0)
+    - SwiftNIOExtras (< 2.0.0, >= 1.4.0)
+    - SwiftNIOHTTP2 (< 2.0.0, >= 1.19.2)
+    - SwiftNIOSSL (< 3.0.0, >= 2.14.0)
+    - SwiftNIOTransportServices (< 2.0.0, >= 1.11.1)
+    - SwiftProtobuf (< 2.0.0, >= 1.9.0)
+  - Logging (1.4.0)
   - Moya (14.0.0):
     - Moya/Core (= 14.0.0)
   - Moya/Core (14.0.0):
@@ -29,12 +73,147 @@ PODS:
     - RxSwift (= 6.2.0)
   - RxSwift (6.2.0)
   - secp256k1.swift (0.1.4)
+  - secp256k1Swift (0.7.4):
+    - secp256k1Wrapper (~> 0.0.5)
+  - secp256k1Wrapper (0.0.5)
   - SnapKit (5.0.1)
   - SolanaWeb3 (0.0.4):
     - Alamofire (~> 5.5)
     - CryptoSwift (~> 1.4)
     - Runtime (~> 2.2)
     - TweetNacl
+  - SwiftNIO (2.40.0):
+    - _NIODataStructures (= 2.40.0)
+    - CNIOAtomics (= 2.40.0)
+    - CNIODarwin (= 2.40.0)
+    - CNIOLinux (= 2.40.0)
+    - CNIOWindows (= 2.40.0)
+    - SwiftNIOConcurrencyHelpers (= 2.40.0)
+    - SwiftNIOCore (= 2.40.0)
+    - SwiftNIOEmbedded (= 2.40.0)
+    - SwiftNIOPosix (= 2.40.0)
+  - SwiftNIOConcurrencyHelpers (2.40.0):
+    - CNIOAtomics (= 2.40.0)
+  - SwiftNIOCore (2.40.0):
+    - CNIOAtomics (= 2.40.0)
+    - CNIOLinux (= 2.40.0)
+    - SwiftNIOConcurrencyHelpers (= 2.40.0)
+  - SwiftNIOEmbedded (2.40.0):
+    - _NIODataStructures (= 2.40.0)
+    - CNIOAtomics (= 2.40.0)
+    - CNIOLinux (= 2.40.0)
+    - SwiftNIOConcurrencyHelpers (= 2.40.0)
+    - SwiftNIOCore (= 2.40.0)
+  - SwiftNIOExtras (1.11.0):
+    - _NIODataStructures (< 3, >= 2.32.0)
+    - CNIOAtomics (< 3, >= 2.32.0)
+    - CNIODarwin (< 3, >= 2.32.0)
+    - CNIOLinux (< 3, >= 2.32.0)
+    - CNIOWindows (< 3, >= 2.32.0)
+    - SwiftNIO (< 3, >= 2.32.0)
+    - SwiftNIOConcurrencyHelpers (< 3, >= 2.32.0)
+    - SwiftNIOCore (< 3, >= 2.32.0)
+    - SwiftNIOEmbedded (< 3, >= 2.32.0)
+    - SwiftNIOPosix (< 3, >= 2.32.0)
+  - SwiftNIOFoundationCompat (2.40.0):
+    - _NIODataStructures (= 2.40.0)
+    - CNIOAtomics (= 2.40.0)
+    - CNIODarwin (= 2.40.0)
+    - CNIOLinux (= 2.40.0)
+    - CNIOWindows (= 2.40.0)
+    - SwiftNIO (= 2.40.0)
+    - SwiftNIOConcurrencyHelpers (= 2.40.0)
+    - SwiftNIOCore (= 2.40.0)
+    - SwiftNIOEmbedded (= 2.40.0)
+    - SwiftNIOPosix (= 2.40.0)
+  - SwiftNIOHPACK (1.22.0):
+    - _NIODataStructures (< 3, >= 2.35.0)
+    - CNIOAtomics (< 3, >= 2.35.0)
+    - CNIODarwin (< 3, >= 2.35.0)
+    - CNIOHTTPParser (< 3, >= 2.35.0)
+    - CNIOLinux (< 3, >= 2.35.0)
+    - CNIOWindows (< 3, >= 2.35.0)
+    - SwiftNIO (< 3, >= 2.35.0)
+    - SwiftNIOConcurrencyHelpers (< 3, >= 2.35.0)
+    - SwiftNIOCore (< 3, >= 2.35.0)
+    - SwiftNIOEmbedded (< 3, >= 2.35.0)
+    - SwiftNIOHTTP1 (< 3, >= 2.35.0)
+    - SwiftNIOPosix (< 3, >= 2.35.0)
+  - SwiftNIOHTTP1 (2.40.0):
+    - _NIODataStructures (= 2.40.0)
+    - CNIOAtomics (= 2.40.0)
+    - CNIODarwin (= 2.40.0)
+    - CNIOHTTPParser (= 2.40.0)
+    - CNIOLinux (= 2.40.0)
+    - CNIOWindows (= 2.40.0)
+    - SwiftNIO (= 2.40.0)
+    - SwiftNIOConcurrencyHelpers (= 2.40.0)
+    - SwiftNIOCore (= 2.40.0)
+    - SwiftNIOEmbedded (= 2.40.0)
+    - SwiftNIOPosix (= 2.40.0)
+  - SwiftNIOHTTP2 (1.22.0):
+    - _NIODataStructures (< 3, >= 2.35.0)
+    - CNIOAtomics (< 3, >= 2.35.0)
+    - CNIODarwin (< 3, >= 2.35.0)
+    - CNIOHTTPParser (< 3, >= 2.35.0)
+    - CNIOLinux (< 3, >= 2.35.0)
+    - CNIOWindows (< 3, >= 2.35.0)
+    - SwiftNIO (< 3, >= 2.35.0)
+    - SwiftNIOConcurrencyHelpers (< 3, >= 2.35.0)
+    - SwiftNIOCore (< 3, >= 2.35.0)
+    - SwiftNIOEmbedded (< 3, >= 2.35.0)
+    - SwiftNIOHPACK (= 1.22.0)
+    - SwiftNIOHTTP1 (< 3, >= 2.35.0)
+    - SwiftNIOPosix (< 3, >= 2.35.0)
+    - SwiftNIOTLS (< 3, >= 2.35.0)
+  - SwiftNIOPosix (2.40.0):
+    - _NIODataStructures (= 2.40.0)
+    - CNIOAtomics (= 2.40.0)
+    - CNIODarwin (= 2.40.0)
+    - CNIOLinux (= 2.40.0)
+    - CNIOWindows (= 2.40.0)
+    - SwiftNIOConcurrencyHelpers (= 2.40.0)
+    - SwiftNIOCore (= 2.40.0)
+  - SwiftNIOSSL (2.19.0):
+    - _NIODataStructures (< 3, >= 2.32.0)
+    - CNIOAtomics (< 3, >= 2.32.0)
+    - CNIOBoringSSL (= 2.19.0)
+    - CNIOBoringSSLShims (= 2.19.0)
+    - CNIODarwin (< 3, >= 2.32.0)
+    - CNIOLinux (< 3, >= 2.32.0)
+    - CNIOWindows (< 3, >= 2.32.0)
+    - SwiftNIO (< 3, >= 2.32.0)
+    - SwiftNIOConcurrencyHelpers (< 3, >= 2.32.0)
+    - SwiftNIOCore (< 3, >= 2.32.0)
+    - SwiftNIOEmbedded (< 3, >= 2.32.0)
+    - SwiftNIOPosix (< 3, >= 2.32.0)
+    - SwiftNIOTLS (< 3, >= 2.32.0)
+  - SwiftNIOTLS (2.40.0):
+    - _NIODataStructures (= 2.40.0)
+    - CNIOAtomics (= 2.40.0)
+    - CNIODarwin (= 2.40.0)
+    - CNIOLinux (= 2.40.0)
+    - CNIOWindows (= 2.40.0)
+    - SwiftNIO (= 2.40.0)
+    - SwiftNIOConcurrencyHelpers (= 2.40.0)
+    - SwiftNIOCore (= 2.40.0)
+    - SwiftNIOEmbedded (= 2.40.0)
+    - SwiftNIOPosix (= 2.40.0)
+  - SwiftNIOTransportServices (1.12.0):
+    - _NIODataStructures (< 3, >= 2.32.0)
+    - CNIOAtomics (< 3, >= 2.32.0)
+    - CNIODarwin (< 3, >= 2.32.0)
+    - CNIOLinux (< 3, >= 2.32.0)
+    - CNIOWindows (< 3, >= 2.32.0)
+    - SwiftNIO (< 3, >= 2.32.0)
+    - SwiftNIOConcurrencyHelpers (< 3, >= 2.32.0)
+    - SwiftNIOCore (< 3, >= 2.32.0)
+    - SwiftNIOEmbedded (< 3, >= 2.32.0)
+    - SwiftNIOFoundationCompat (< 3, >= 2.32.0)
+    - SwiftNIOPosix (< 3, >= 2.32.0)
+    - SwiftNIOTLS (< 3, >= 2.32.0)
+  - SwiftProtobuf (1.19.0)
+  - SwiftyJSON (5.0.1)
   - TweetNacl (1.0.2)
   - web3.swift (0.9.3):
     - BigInt (~> 5)
@@ -43,9 +222,13 @@ PODS:
 
 DEPENDENCIES:
   - BloctoSDK/EVMBase (from `../`)
+  - BloctoSDK/Flow (from `../`)
   - BloctoSDK/Solana (from `../`)
   - BloctoSDK/Wallet (from `../`)
+  - "Cadence (from `git@github.com:portto/flow-swift-sdk.git`)"
   - EthereumSignTypedDataUtil
+  - "FCL (from `git@github.com:portto/fcl-swift.git`, branch `feat/verifySignature`)"
+  - "FlowSDK (from `git@github.com:portto/flow-swift-sdk.git`)"
   - RxCocoa
   - RxSwift
   - SnapKit
@@ -54,23 +237,58 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - _NIODataStructures
     - Alamofire
     - BigInt
+    - CGRPCZlib
+    - CNIOAtomics
+    - CNIOBoringSSL
+    - CNIOBoringSSLShims
+    - CNIODarwin
+    - CNIOHTTPParser
+    - CNIOLinux
+    - CNIOWindows
     - CryptoSwift
     - EthereumSignTypedDataUtil
     - GenericJSON
+    - gRPC-Swift
+    - Logging
     - Moya
     - Runtime
     - RxCocoa
     - RxRelay
     - RxSwift
     - secp256k1.swift
+    - secp256k1Swift
+    - secp256k1Wrapper
     - SnapKit
+    - SwiftNIO
+    - SwiftNIOConcurrencyHelpers
+    - SwiftNIOCore
+    - SwiftNIOEmbedded
+    - SwiftNIOExtras
+    - SwiftNIOFoundationCompat
+    - SwiftNIOHPACK
+    - SwiftNIOHTTP1
+    - SwiftNIOHTTP2
+    - SwiftNIOPosix
+    - SwiftNIOSSL
+    - SwiftNIOTLS
+    - SwiftNIOTransportServices
+    - SwiftProtobuf
+    - SwiftyJSON
     - TweetNacl
 
 EXTERNAL SOURCES:
   BloctoSDK:
     :path: "../"
+  Cadence:
+    :git: "git@github.com:portto/flow-swift-sdk.git"
+  FCL:
+    :branch: feat/verifySignature
+    :git: "git@github.com:portto/fcl-swift.git"
+  FlowSDK:
+    :git: "git@github.com:portto/flow-swift-sdk.git"
   SolanaWeb3:
     :git: https://github.com/portto/solana-web3.swift.git
   web3.swift:
@@ -78,6 +296,15 @@ EXTERNAL SOURCES:
     :git: https://github.com/portto/web3.swift.git
 
 CHECKOUT OPTIONS:
+  Cadence:
+    :commit: b09a64cb6d49c464db617577a37802cce7c2b09e
+    :git: "git@github.com:portto/flow-swift-sdk.git"
+  FCL:
+    :commit: f1ba18566cf4e2bad62c2d95ff4f3964f2987883
+    :git: "git@github.com:portto/fcl-swift.git"
+  FlowSDK:
+    :commit: b09a64cb6d49c464db617577a37802cce7c2b09e
+    :git: "git@github.com:portto/flow-swift-sdk.git"
   SolanaWeb3:
     :commit: 9f430df4ce564d900e41da37821d555b2e644b62
     :git: https://github.com/portto/solana-web3.swift.git
@@ -86,23 +313,54 @@ CHECKOUT OPTIONS:
     :git: https://github.com/portto/web3.swift.git
 
 SPEC CHECKSUMS:
+  _NIODataStructures: 3d45d8e70a1d17a15b1dc59d102c63dbc0525ffd
   Alamofire: 0c07058209f211e3d32824f8e0766d7c44ac83b3
-  BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
-  BloctoSDK: ef40ab850335ae77226e4983e3e739c9c92d60bc
+  BigInt: f668a80089607f521586bbe29513d708491ef2f7
+  BloctoSDK: 23d2914e1e7fa6774905b7d55c1f046ac9528b96
+  Cadence: ff2731409024d088baae129d0a7884e9e245d4c1
+  CGRPCZlib: 30d7ed7cd286bf929605052dd64075a694d86d0c
+  CNIOAtomics: 8edf08644e5e6fa0f021c239be9e8beb1cd9ef18
+  CNIOBoringSSL: 2c9c96c2e95f15e83fb8d26b9738d939cc39ae33
+  CNIOBoringSSLShims: c5c9346e7bbd1040f4f8793a35441dda7487539a
+  CNIODarwin: 93850990d29f2626b05306c6c9309f9be0d74c2f
+  CNIOHTTPParser: 8ce395236fa1d09ac3b4f4bcfba79b849b2ac684
+  CNIOLinux: 62e3505f50de558c393dc2f273dde71dcce518da
+  CNIOWindows: 3047f2d8165848a3936a0a755fee27c6b5ee479b
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
   EthereumSignTypedDataUtil: ae4e33b21e51ee046a86a65b02843090b8bbd3f9
+  FCL: efc90af6f9d64622effce7c4340bfa5f5b15cc8b
+  FlowSDK: 2f1dea1ee5efa6d1ef2f19f8becbd6447a11e7f0
   GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
+  gRPC-Swift: 910b685f0527f496c39751d1f1add981287e8b9d
+  Logging: beeb016c9c80cf77042d62e83495816847ef108b
   Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
   Runtime: 67741bd196fb4ad821c4d259ccc527bf734d8806
   RxCocoa: 4baf94bb35f2c0ab31bc0cb9f1900155f646ba42
   RxRelay: e72dbfd157807478401ef1982e1c61c945c94b2f
   RxSwift: d356ab7bee873611322f134c5f9ef379fa183d8f
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
+  secp256k1Swift: ea49d2b06724444a03cf7938a2d3fc7acc4c0f08
+  secp256k1Wrapper: 0378417cd06d51187bbc9e178ec318e7902e2120
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SolanaWeb3: 518d1fddf72ac8e0f76dd19a01d90079edb5da47
+  SwiftNIO: 829958aab300642625091f82fc2f49cb7cf4ef24
+  SwiftNIOConcurrencyHelpers: 697370136789b1074e4535eaae75cbd7f900370e
+  SwiftNIOCore: 473fdfe746534d7aa25766916459eeaf6f92ef49
+  SwiftNIOEmbedded: ffcb5147db67d9686c8366b7f8427b36132f2c8a
+  SwiftNIOExtras: 481f74d6bf0b0ef699905ed66439cb019c4975c9
+  SwiftNIOFoundationCompat: b9cdbea4806e4a12e9f66d9696fa3b98c4c3232b
+  SwiftNIOHPACK: e7d3ff5bd671528adfb11cd4e0c84ddfdc3c4453
+  SwiftNIOHTTP1: ef56706550a1dc135ea69d65215b9941e643c23b
+  SwiftNIOHTTP2: cc81d7a6ba70d2ddc5376f471904b27ef5d2b7b8
+  SwiftNIOPosix: b49af4bdbecaadfadd5c93dfe28594d6722b75e4
+  SwiftNIOSSL: d153c5a6fc5b2301b0519b4c4d037a9414212da6
+  SwiftNIOTLS: 598af547490133e9aac52aed0c23c4a90c31dcfc
+  SwiftNIOTransportServices: 0b2b407819d82eb63af558c5396e33c945759503
+  SwiftProtobuf: 6ef3f0e422ef90d6605ca20b21a94f6c1324d6b3
+  SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   web3.swift: 4d8b9f69ea92d23c6e87b97c36686f1c541eaef1
 
-PODFILE CHECKSUM: 3ac5ddae242104410f320091d090e7a9330b7019
+PODFILE CHECKSUM: 2e47835a0820c257da3ae954fcb1b8cfa662b5c0
 
 COCOAPODS: 1.11.3
