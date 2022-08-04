@@ -38,7 +38,7 @@ Pod::Spec.new do |s|
   end
   
   s.subspec "Wallet" do |ss|
-      ss.source_files = "Sources/Wallet/*",
+      ss.source_files = "Sources/Wallet/**/*",
       "Sources/Solana/Models/SolanaMethodType.swift",
       "Sources/Solana/Models/SolanaMethodContentType.swift",
       "Sources/Solana/Models/SolanaTransactionInfo.swift",
@@ -47,7 +47,7 @@ Pod::Spec.new do |s|
       "Sources/EVMBase/Models/EVMBaseTransaction.swift",
       "Sources/EVMBase/Models/SignType.swift",
       "Sources/Flow/Utilities/QueryDecodingExtension.swift",
-      "Sources/Flow/Models/*"
+      "Sources/Flow/Models/**/*"
       ss.dependency "BloctoSDK/Core", "~> 0.2.0"
       ss.dependency "BigInt", "~> 5.0"
   end
