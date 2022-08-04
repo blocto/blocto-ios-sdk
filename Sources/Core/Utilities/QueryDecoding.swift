@@ -8,6 +8,43 @@
 import Foundation
 
 public enum QueryDecoding {
+    
+    static func decodeArray<T>(
+        param: [String: String],
+        queryName: QueryName
+    ) -> [T] {
+        do {
+            let array = try decodeArray(
+                param: param,
+                target: queryName.rawValue)
+            switch T.self {
+            case is String.Type:
+                if let value = array as? [T] {
+                    return value
+                } else {
+                    return [T]()
+                }
+            case is Data.Type:
+                if let value = array as? [String] {
+                    return value.reduce([T]()) { partialResult, value in
+                        var result = partialResult
+                        if let data = value
+                            .bloctoSDK.drop0x
+                            .bloctoSDK.hexDecodedData as? T {
+                            result.append(data)
+                        }
+                        return result
+                    }
+                } else {
+                    return [T]()
+                }
+            default:
+                return [T]()
+            }
+        } catch {
+            return [T]()
+        }
+    }
 
     static func decodeDictionary<T>(
         param: [String: String],
@@ -42,6 +79,23 @@ public enum QueryDecoding {
         } catch {
             return [String: T]()
         }
+    }
+    
+    private static func decodeArray(
+        param: [String: String],
+        target: String
+    ) throws -> [String] {
+        let leftBrackets = QueryEscape.escape("[")
+        let rightBrackets = QueryEscape.escape("]")
+        let array: [String] = param.reduce([], {
+            if $1.key == (target + leftBrackets + rightBrackets) {
+                var copied = $0
+                copied.append($1.value)
+                return copied
+            }
+            return $0
+        })
+        return array
     }
 
     private static func decodeDictionary(

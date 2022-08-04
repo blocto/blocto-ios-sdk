@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import FlowSDK
+import Cadence
 
 private var associateKey: Void?
 
@@ -39,13 +41,14 @@ public class BloctoFlowSDK {
     /// - Completion: The successful result is a tuple of address String with accountProof for Flow.
     public func authanticate(
         id: UUID = UUID(),
-        accountProofData: AccountProofData?,
-        completion: @escaping (Result<(address: String, accountProof: [CompositeSignature]), Swift.Error>) -> Void
+        accountProofData: FlowAccountProofData?,
+        completion: @escaping (Result<(address: String, accountProof: [FlowCompositeSignature]), Swift.Error>) -> Void
     ) {
         let method = AuthenticateMethod(
             id: id,
             accountProofData: accountProofData,
-            callback: completion)
+            callback: completion
+        )
         base.send(method: method)
     }
 
@@ -60,28 +63,52 @@ public class BloctoFlowSDK {
         uuid: UUID = UUID(),
         from: String,
         message: String,
-        completion: @escaping (Result<[CompositeSignature], Swift.Error>) -> Void
+        completion: @escaping (Result<[FlowCompositeSignature], Swift.Error>) -> Void
     ) {
         let method = SignFlowMessageMethod(
             id: uuid,
             from: from,
             message: message,
-            callback: completion)
+            callback: completion
+        )
         base.send(method: method)
     }
 
-    /// To sign transaction and then send transaction
+    /// To sign Flow transaction and then send transaction.
     /// - Parameters:
     ///   - uuid: The id to identify this request, you can pass your owned uuid here.
-    ///   - transaction: Custom type EVMBaseTransaction.
+    ///   - from: Send from which address.
+    ///   - transaction: Pre-defined Flow Transaction.
     ///   - completion: completion handler for this methods. Please note this completion might not be called in some circumstances. e.g. SDK version incompatible with Blocto Wallet app.
-    ///   The successful result is Tx hash of Avalanche.
-//    public func sendTransaction(
-//        uuid: UUID = UUID(),
-//        transaction: Transaction,
-//        completion: @escaping (Result<String, Swift.Error>) -> Void
-//    ) {
-//        // TODO: implementation
-//    }
+    ///   The successful result is Tx hash of Flow.
+    public func sendTransaction(
+        uuid: UUID = UUID(),
+        from: Cadence.Address,
+        transaction: Transaction,
+        completion: @escaping (Result<String, Swift.Error>) -> Void
+    ) {
+        guard let scriptString = String(data: transaction.script, encoding: .utf8) else {
+            completion(.failure(InternalError.flowScriptInvalid))
+            return
+        }
+        var message = DomainTag.transaction.rightPaddedData
+        message.append(transaction.payloadMessage())
+        let payloadHash = message.sha3(.sha256).bloctoSDK.hexString
+        let transactionInfo = FlowTransactionInfo(
+            script: scriptString,
+            arguments: transaction.arguments.map(\.bloctoSDK.hexString),
+            rawPayload: transaction.payloadMessage().bloctoSDK.hexString,
+            hash: payloadHash,
+            address: from.hexStringWithPrefix,
+            gasLimit: transaction.gasLimit
+        )
+        let method = SendFlowTransactionMethod(
+            id: uuid,
+            from: from,
+            transactionInfo: transactionInfo,
+            callback: completion
+        )
+        base.send(method: method)
+    }
 
 }

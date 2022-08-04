@@ -1,5 +1,5 @@
 //
-//  AccountProofData.swift
+//  FlowAccountProofData.swift
 //  BloctoSDK
 //
 //  Created by Andrew Wang on 2022/7/7.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct AccountProofData {
+public struct FlowAccountProofData {
     
     /// A human-readable string e.g. "Blocto", "NBA Top Shot"
     public let appId: String

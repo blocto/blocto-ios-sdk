@@ -1,5 +1,5 @@
 //
-//  CompositeSignature.swift
+//  FlowCompositeSignature.swift
 //  BloctoSDK
 //
 //  Created by Andrew Wang on 2022/7/7.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct CompositeSignature: Decodable {
+public struct FlowCompositeSignature: Decodable {
 
     public let address: String
     public let keyId: Int
@@ -25,7 +25,7 @@ public struct CompositeSignature: Decodable {
     }
 }
 
-extension CompositeSignature {
+extension FlowCompositeSignature {
 
     init?(param: [String: String]) {
         guard let address = param["address"] else {

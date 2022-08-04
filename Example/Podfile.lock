@@ -10,6 +10,7 @@ PODS:
     - BloctoSDK/Core
   - BloctoSDK/Flow (0.2.2):
     - BloctoSDK/Core
+    - FlowSDK
   - BloctoSDK/Solana (0.2.2):
     - BloctoSDK/Core
     - Moya (~> 14.0.0)
@@ -17,10 +18,10 @@ PODS:
   - BloctoSDK/Wallet (0.2.2):
     - BigInt (~> 5.0)
     - BloctoSDK/Core (~> 0.2.0)
-  - Cadence (0.1.0):
+  - Cadence (0.2.0):
     - BigInt (~> 5.2.0)
     - CryptoSwift (~> 1.5.1)
-  - CGRPCZlib (1.7.3)
+  - CGRPCZlibp (1.8.2)
   - CNIOAtomics (2.40.0)
   - CNIOBoringSSL (2.19.0)
   - CNIOBoringSSLShims (2.19.0):
@@ -37,26 +38,21 @@ PODS:
     - BloctoSDK
     - FlowSDK
     - SwiftyJSON
-  - FlowSDK (0.1.3):
-    - FlowSDK/FlowSDK (= 0.1.3)
-  - FlowSDK/Crypto (0.1.3):
-    - CryptoSwift (~> 1.5.1)
-    - secp256k1Swift (~> 0.7.4)
-  - FlowSDK/FlowSDK (0.1.3):
+  - FlowSDK (0.2.0):
+    - FlowSDK/FlowSDK (= 0.2.0)
+  - FlowSDK/FlowSDK (0.2.0):
     - BigInt (~> 5.2.0)
-    - Cadence (~> 0.1.0)
+    - Cadence (~> 0.2.0)
     - CryptoSwift (~> 1.5.1)
-    - FlowSDK/Crypto
-    - FlowSDK/Protobuf
-  - FlowSDK/Protobuf (0.1.3):
-    - gRPC-Swift (~> 1.7.3)
+    - gRPC-Swiftp (~> 1.8.2)
+    - secp256k1Swift (~> 0.7.4)
   - GenericJSON (2.0.1)
-  - gRPC-Swift (1.7.3):
-    - CGRPCZlib (= 1.7.3)
+  - gRPC-Swiftp (1.8.2):
+    - CGRPCZlibp (= 1.8.2)
     - Logging (< 2.0.0, >= 1.4.0)
     - SwiftNIO (< 3.0.0, >= 2.32.0)
     - SwiftNIOExtras (< 2.0.0, >= 1.4.0)
-    - SwiftNIOHTTP2 (< 2.0.0, >= 1.19.2)
+    - SwiftNIOHTTP2 (< 2.0.0, >= 1.18.2)
     - SwiftNIOSSL (< 3.0.0, >= 2.14.0)
     - SwiftNIOTransportServices (< 2.0.0, >= 1.11.1)
     - SwiftProtobuf (< 2.0.0, >= 1.9.0)
@@ -227,7 +223,7 @@ DEPENDENCIES:
   - BloctoSDK/Wallet (from `../`)
   - "Cadence (from `git@github.com:portto/flow-swift-sdk.git`)"
   - EthereumSignTypedDataUtil
-  - "FCL (from `git@github.com:portto/fcl-swift.git`, branch `feat/verifySignature`)"
+  - "FCL (from `git@github.com:portto/fcl-swift.git`, branch `feat/transaction`)"
   - "FlowSDK (from `git@github.com:portto/flow-swift-sdk.git`)"
   - RxCocoa
   - RxSwift
@@ -240,7 +236,7 @@ SPEC REPOS:
     - _NIODataStructures
     - Alamofire
     - BigInt
-    - CGRPCZlib
+    - CGRPCZlibp
     - CNIOAtomics
     - CNIOBoringSSL
     - CNIOBoringSSLShims
@@ -251,7 +247,7 @@ SPEC REPOS:
     - CryptoSwift
     - EthereumSignTypedDataUtil
     - GenericJSON
-    - gRPC-Swift
+    - gRPC-Swiftp
     - Logging
     - Moya
     - Runtime
@@ -285,7 +281,7 @@ EXTERNAL SOURCES:
   Cadence:
     :git: "git@github.com:portto/flow-swift-sdk.git"
   FCL:
-    :branch: feat/verifySignature
+    :branch: feat/transaction
     :git: "git@github.com:portto/fcl-swift.git"
   FlowSDK:
     :git: "git@github.com:portto/flow-swift-sdk.git"
@@ -297,13 +293,13 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Cadence:
-    :commit: b09a64cb6d49c464db617577a37802cce7c2b09e
+    :commit: afd9af0db4a901b1b94d25a6cf9058d418489836
     :git: "git@github.com:portto/flow-swift-sdk.git"
   FCL:
-    :commit: f1ba18566cf4e2bad62c2d95ff4f3964f2987883
+    :commit: ba533431db5419ce2741f1bd9a3356448bdf3379
     :git: "git@github.com:portto/fcl-swift.git"
   FlowSDK:
-    :commit: b09a64cb6d49c464db617577a37802cce7c2b09e
+    :commit: afd9af0db4a901b1b94d25a6cf9058d418489836
     :git: "git@github.com:portto/flow-swift-sdk.git"
   SolanaWeb3:
     :commit: 9f430df4ce564d900e41da37821d555b2e644b62
@@ -316,9 +312,9 @@ SPEC CHECKSUMS:
   _NIODataStructures: 3d45d8e70a1d17a15b1dc59d102c63dbc0525ffd
   Alamofire: 0c07058209f211e3d32824f8e0766d7c44ac83b3
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  BloctoSDK: 23d2914e1e7fa6774905b7d55c1f046ac9528b96
-  Cadence: ff2731409024d088baae129d0a7884e9e245d4c1
-  CGRPCZlib: 30d7ed7cd286bf929605052dd64075a694d86d0c
+  BloctoSDK: e6b4c16a73907b163b32d5e3366d6c50357b642e
+  Cadence: f50b816003d13e342da4373ba0ac5d1cb91449ee
+  CGRPCZlibp: 2f3e1e7a6d6cb481d4d1a26d3ec09aefacf09cbb
   CNIOAtomics: 8edf08644e5e6fa0f021c239be9e8beb1cd9ef18
   CNIOBoringSSL: 2c9c96c2e95f15e83fb8d26b9738d939cc39ae33
   CNIOBoringSSLShims: c5c9346e7bbd1040f4f8793a35441dda7487539a
@@ -329,9 +325,9 @@ SPEC CHECKSUMS:
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
   EthereumSignTypedDataUtil: ae4e33b21e51ee046a86a65b02843090b8bbd3f9
   FCL: efc90af6f9d64622effce7c4340bfa5f5b15cc8b
-  FlowSDK: 2f1dea1ee5efa6d1ef2f19f8becbd6447a11e7f0
+  FlowSDK: c36bf3b2246a1d3e8a7c2c80a61ba374a9b0e9a4
   GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
-  gRPC-Swift: 910b685f0527f496c39751d1f1add981287e8b9d
+  gRPC-Swiftp: 1f5a05ce5b544bff3dce93223e72829daac26113
   Logging: beeb016c9c80cf77042d62e83495816847ef108b
   Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
   Runtime: 67741bd196fb4ad821c4d259ccc527bf734d8806
@@ -361,6 +357,6 @@ SPEC CHECKSUMS:
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   web3.swift: 4d8b9f69ea92d23c6e87b97c36686f1c541eaef1
 
-PODFILE CHECKSUM: 2e47835a0820c257da3ae954fcb1b8cfa662b5c0
+PODFILE CHECKSUM: 3518bb46ce0e97f33ca819eb5194781897c6cabf
 
 COCOAPODS: 1.11.3

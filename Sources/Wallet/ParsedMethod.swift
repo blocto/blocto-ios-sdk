@@ -108,10 +108,10 @@ public struct ParsedMethod {
                     )
                 )
             case .authenticate:
-                var accountProofData: AccountProofData?
+                var accountProofData: FlowAccountProofData?
                 if let accountProofAppId = param[QueryName.flowAppId.rawValue],
                    let nonce = param[QueryName.flowNonce.rawValue] {
-                    accountProofData = AccountProofData(
+                    accountProofData = FlowAccountProofData(
                         appId: accountProofAppId,
                         nonce: nonce
                     )
@@ -129,6 +129,31 @@ public struct ParsedMethod {
 
                 self.methodContentType = .flow(
                     .userSignature(from: from, message: removingPercentEncodingString)
+                )
+            case .sendTransaction:
+                guard let from = param[QueryName.from.rawValue],
+                      let script = param[QueryName.script.rawValue],
+                      let rawPayload = param[QueryName.rawPayload.rawValue],
+                      let hash = param[QueryName.payloadHash.rawValue],
+                      let gasLimitString = param[QueryName.gasLimit.rawValue],
+                      let gasLimit = UInt64(gasLimitString) else { return nil }
+
+                let arguments: [String] = QueryDecoding.decodeArray(
+                    param: param,
+                    queryName: .arguments
+                )
+
+                let transactionInfo = FlowTransactionInfo(
+                    script: script.removingPercentEncoding ?? script,
+                    arguments: arguments,
+                    rawPayload: rawPayload,
+                    hash: hash,
+                    address: from,
+                    gasLimit: gasLimit
+                )
+
+                self.methodContentType = .flow(
+                    .sendTransaction(transactionInfo: transactionInfo)
                 )
             }
         }
