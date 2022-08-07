@@ -7,6 +7,7 @@
 
 import Foundation
 import BigInt
+import FlowSDK
 
 public struct ParsedMethod {
 
@@ -132,28 +133,14 @@ public struct ParsedMethod {
                 )
             case .sendTransaction:
                 guard let from = param[QueryName.from.rawValue],
-                      let script = param[QueryName.script.rawValue],
-                      let rawPayload = param[QueryName.rawPayload.rawValue],
-                      let hash = param[QueryName.payloadHash.rawValue],
-                      let gasLimitString = param[QueryName.gasLimit.rawValue],
-                      let gasLimit = UInt64(gasLimitString) else { return nil }
+                      let transactionDataHex = param[QueryName.flowTransaction.rawValue] else { return nil }
 
-                let arguments: [String] = QueryDecoding.decodeArray(
-                    param: param,
-                    queryName: .arguments
-                )
-
-                let transactionInfo = FlowTransactionInfo(
-                    script: script.removingPercentEncoding ?? script,
-                    arguments: arguments,
-                    rawPayload: rawPayload,
-                    hash: hash,
-                    address: from,
-                    gasLimit: gasLimit
-                )
+                guard let transaction = try? Transaction(rlpData: transactionDataHex.bloctoSDK.hexDecodedData) else {
+                    return nil
+                }
 
                 self.methodContentType = .flow(
-                    .sendTransaction(transactionInfo: transactionInfo)
+                    .sendTransaction(from: from, transaction: transaction)
                 )
             }
         }

@@ -87,25 +87,10 @@ public class BloctoFlowSDK {
         transaction: Transaction,
         completion: @escaping (Result<String, Swift.Error>) -> Void
     ) {
-        guard let scriptString = String(data: transaction.script, encoding: .utf8) else {
-            completion(.failure(InternalError.flowScriptInvalid))
-            return
-        }
-        var message = DomainTag.transaction.rightPaddedData
-        message.append(transaction.payloadMessage())
-        let payloadHash = message.sha3(.sha256).bloctoSDK.hexString
-        let transactionInfo = FlowTransactionInfo(
-            script: scriptString,
-            arguments: transaction.arguments.map(\.bloctoSDK.hexString),
-            rawPayload: transaction.payloadMessage().bloctoSDK.hexString,
-            hash: payloadHash,
-            address: from.hexStringWithPrefix,
-            gasLimit: transaction.gasLimit
-        )
         let method = SendFlowTransactionMethod(
             id: uuid,
             from: from,
-            transactionInfo: transactionInfo,
+            transaction: transaction,
             callback: completion
         )
         base.send(method: method)

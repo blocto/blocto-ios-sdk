@@ -28,14 +28,7 @@ public enum QueryName: String {
     case flowNonce = "flow_nonce"
     case accountProof = "account_proof"
     case userSignature = "user_signature"
-    case flowTransactionInfo = "flow_transaction_info"
-    
-    // flow transaction info key
-    case script
-    case arguments
-    case rawPayload = "raw_payload"
-    case payloadHash = "payload_hash"
-    case gasLimit = "gas_limit"
+    case flowTransaction = "flow_transaction"
 
     // response
     case address

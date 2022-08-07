@@ -7,6 +7,7 @@
 
 import Foundation
 import Cadence
+import FlowSDK
 
 public struct SendFlowTransactionMethod: CallbackMethod {
     public typealias Response = String
@@ -14,7 +15,7 @@ public struct SendFlowTransactionMethod: CallbackMethod {
     public let id: UUID
     public let type: String = FlowMethodType.sendTransaction.rawValue
     public let from: Address
-    public let transactionInfo: FlowTransactionInfo
+    public let transaction: Transaction
     public let callback: Callback
 
     let blockchain: Blockchain = .flow
@@ -28,12 +29,12 @@ public struct SendFlowTransactionMethod: CallbackMethod {
     public init(
         id: UUID = UUID(),
         from: Address,
-        transactionInfo: FlowTransactionInfo,
+        transaction: Transaction,
         callback: @escaping Callback
     ) {
         self.id = id
         self.from = from
-        self.transactionInfo = transactionInfo
+        self.transaction = transaction
         self.callback = callback
     }
 
@@ -48,14 +49,12 @@ public struct SendFlowTransactionMethod: CallbackMethod {
             blockchain: blockchain
         )
 
+        let transactionDataHex = transaction.encode().bloctoSDK.hexString
+
         queryItems.append(contentsOf: [
             QueryItem(name: .method, value: type),
             QueryItem(name: .from, value: from.hexStringWithPrefix),
-            QueryItem(name: .script, value: transactionInfo.script),
-            QueryItem(name: .arguments, value: transactionInfo.arguments),
-            QueryItem(name: .rawPayload, value: transactionInfo.rawPayload),
-            QueryItem(name: .payloadHash, value: transactionInfo.hash),
-            QueryItem(name: .gasLimit, value: transactionInfo.gasLimit)
+            QueryItem(name: .flowTransaction, value: transactionDataHex)
         ])
 
         components.queryItems = URLEncoding.encode(queryItems)

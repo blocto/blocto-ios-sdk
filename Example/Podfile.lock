@@ -208,7 +208,7 @@ PODS:
     - SwiftNIOFoundationCompat (< 3, >= 2.32.0)
     - SwiftNIOPosix (< 3, >= 2.32.0)
     - SwiftNIOTLS (< 3, >= 2.32.0)
-  - SwiftProtobuf (1.19.0)
+  - SwiftProtobuf (1.19.1)
   - SwiftyJSON (5.0.1)
   - TweetNacl (1.0.2)
   - web3.swift (0.9.3):
@@ -293,13 +293,13 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Cadence:
-    :commit: afd9af0db4a901b1b94d25a6cf9058d418489836
+    :commit: 43e671f9113c5d937eb1dcd2ab44271fda6ded74
     :git: "git@github.com:portto/flow-swift-sdk.git"
   FCL:
     :commit: ba533431db5419ce2741f1bd9a3356448bdf3379
     :git: "git@github.com:portto/fcl-swift.git"
   FlowSDK:
-    :commit: afd9af0db4a901b1b94d25a6cf9058d418489836
+    :commit: 43e671f9113c5d937eb1dcd2ab44271fda6ded74
     :git: "git@github.com:portto/flow-swift-sdk.git"
   SolanaWeb3:
     :commit: 9f430df4ce564d900e41da37821d555b2e644b62
@@ -312,7 +312,7 @@ SPEC CHECKSUMS:
   _NIODataStructures: 3d45d8e70a1d17a15b1dc59d102c63dbc0525ffd
   Alamofire: 0c07058209f211e3d32824f8e0766d7c44ac83b3
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  BloctoSDK: e6b4c16a73907b163b32d5e3366d6c50357b642e
+  BloctoSDK: 0619c534ee0428faf022ed6b18cb11ee5a2e97ae
   Cadence: f50b816003d13e342da4373ba0ac5d1cb91449ee
   CGRPCZlibp: 2f3e1e7a6d6cb481d4d1a26d3ec09aefacf09cbb
   CNIOAtomics: 8edf08644e5e6fa0f021c239be9e8beb1cd9ef18
@@ -352,7 +352,7 @@ SPEC CHECKSUMS:
   SwiftNIOSSL: d153c5a6fc5b2301b0519b4c4d037a9414212da6
   SwiftNIOTLS: 598af547490133e9aac52aed0c23c4a90c31dcfc
   SwiftNIOTransportServices: 0b2b407819d82eb63af558c5396e33c945759503
-  SwiftProtobuf: 6ef3f0e422ef90d6605ca20b21a94f6c1324d6b3
+  SwiftProtobuf: 59d9ea2eb5f84b509f32d170a65f3348ae758f1e
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   web3.swift: 4d8b9f69ea92d23c6e87b97c36686f1c541eaef1

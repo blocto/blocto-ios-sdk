@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FlowSDK
 
 public enum FlowMethodContentType {
 
@@ -13,6 +14,6 @@ public enum FlowMethodContentType {
 
     case userSignature(from: String, message: String)
 
-    case sendTransaction(transactionInfo: FlowTransactionInfo)
+    case sendTransaction(from: String, transaction: Transaction)
 
 }
