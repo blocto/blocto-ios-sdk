@@ -46,7 +46,6 @@ Pod::Spec.new do |s|
       "Sources/EVMBase/Models/EVMBaseMethodContentType.swift",
       "Sources/EVMBase/Models/EVMBaseTransaction.swift",
       "Sources/EVMBase/Models/SignType.swift",
-      "Sources/Flow/Utilities/QueryDecodingExtension.swift",
       "Sources/Flow/Models/**/*"
       ss.dependency "BloctoSDK/Core", "~> 0.2.0"
       ss.dependency "BigInt", "~> 5.0"

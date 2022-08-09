@@ -49,7 +49,10 @@ public class BloctoFlowSDK {
             accountProofData: accountProofData,
             callback: completion
         )
-        base.send(method: method)
+        base.send(
+            method: method,
+            fallbackToWebSDK: false
+        )
     }
 
     /// To sign Flow message
@@ -71,7 +74,10 @@ public class BloctoFlowSDK {
             message: message,
             callback: completion
         )
-        base.send(method: method)
+        base.send(
+            method: method,
+            fallbackToWebSDK: false
+        )
     }
 
     /// To sign Flow transaction and then send transaction.
@@ -93,7 +99,10 @@ public class BloctoFlowSDK {
             transaction: transaction,
             callback: completion
         )
-        base.send(method: method)
+        base.send(
+            method: method,
+            fallbackToWebSDK: false
+        )
     }
 
 }

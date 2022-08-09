@@ -147,10 +147,15 @@ public class BloctoSDK {
             )
         }
     }
-
+    
     /// Send pre-defined method
-    /// - Parameter method: Any method which conform to Method protocol
-    public func send(method: Method) {
+    /// - Parameters:
+    ///   - method: Any method which conform to Method protocol
+    ///   - fallbackToWebSDK: Whether to fallback to WebSDK if native Blocto app not install.
+    public func send(
+        method: Method,
+        fallbackToWebSDK: Bool = true
+    ) {
         do {
             try checkConfigration()
             guard let requestURL = try method.encodeToURL(
@@ -176,7 +181,14 @@ public class BloctoSDK {
                             enable: self.logging,
                             message: "can't open universal link \(requestURL)."
                         )
-                        self.routeToWebSDK(window: self.window, method: method)
+                        if fallbackToWebSDK {
+                            self.routeToWebSDK(window: self.window, method: method)
+                        } else {
+                            log(
+                                enable: self.logging,
+                                message: "Not fallback to WebSDK for \(method.type)."
+                            )
+                        }
                     }
                 }
             )
