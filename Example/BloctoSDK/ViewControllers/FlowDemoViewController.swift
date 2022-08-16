@@ -19,13 +19,29 @@ import FCL_SDK
 // swiftlint:disable type_body_length file_length
 final class FlowDemoViewController: UIViewController {
 
-    private var nonce = "75f8587e5bd5f9dcc9909d0dae1f0ac5814458b2ae129620502cb936fde7120a"
+    private var nonce = "this is demo app"
 
     var flowAPIClient: Client {
         if isProduction {
             return Client(network: Network.mainnet)
         } else {
             return Client(network: Network.testnet)
+        }
+    }
+
+    private var bloctoContract: String {
+        if isProduction {
+            return "0xdb6b70764af4ff68"
+        } else {
+            return "0x5b250a8a85b44a67"
+        }
+    }
+
+    private var valueDappContract: String {
+        if isProduction {
+            return "0x8320311d63f3b336"
+        } else {
+            return "0x5a8143da8058740c"
         }
     }
 
@@ -412,6 +428,7 @@ final class FlowDemoViewController: UIViewController {
                     logging: true,
                     testnet: !isProduction
                 )
+                self.setupFCL()
             })
 
         _ = requestAccountButton.rx.tap
@@ -562,7 +579,6 @@ final class FlowDemoViewController: UIViewController {
 
         accountProofVerifyingIndicator.startAnimating()
 
-        let bloctoContract = "0x5b250a8a85b44a67"
         Task {
             do {
                 let valid = try await AppUtilities.verifyAccountProof(
@@ -677,15 +693,15 @@ final class FlowDemoViewController: UIViewController {
                     return
                 }
 
-                let scriptString = #"""
-                import ValueDapp from 0x5a8143da8058740c
+                let scriptString = """
+                import ValueDapp from \(valueDappContract)
 
                 transaction(value: UFix64) {
                     prepare(authorizer: AuthAccount) {
                         ValueDapp.setValue(value)
                     }
                 }
-                """#
+                """
                 let script = Data(scriptString.utf8)
 
                 let argument = Cadence.Argument(.ufix64(123))
