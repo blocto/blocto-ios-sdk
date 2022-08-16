@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'BloctoSDK'
-  s.version          = '0.2.2'
+  s.version          = '0.3.0'
   s.summary          = 'A SDK to interact with Blockchain through Blocto Wallet App.'
 
   s.homepage         = 'https://github.com/portto/blocto-ios-sdk'
