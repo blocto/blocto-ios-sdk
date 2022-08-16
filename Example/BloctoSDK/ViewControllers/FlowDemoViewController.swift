@@ -14,7 +14,7 @@ import SnapKit
 import BloctoSDK
 import FlowSDK
 import Cadence
-import FCL
+import FCL_SDK
 
 // swiftlint:disable type_body_length file_length
 final class FlowDemoViewController: UIViewController {
@@ -407,7 +407,7 @@ final class FlowDemoViewController: UIViewController {
                 }
                 BloctoSDK.shared.initialize(
                     with: bloctoSDKAppId,
-                    window: window,
+                    getWindow: { window },
                     logging: true,
                     testnet: !isProduction
                 )
@@ -689,17 +689,15 @@ final class FlowDemoViewController: UIViewController {
 
                 let argument = Cadence.Argument(.ufix64(123))
 
-                guard let sequenceNumber = account.keys.filter({ accountKey in
-                    accountKey.index == 0
-                }).first?.sequenceNumber else {
-                    handleSetValueError(Error.message("sequenceNumber not found."))
-                    return
+                guard let cosignerKey = account.keys
+                    .first(where: { $0.weight == 999 && $0.revoked == false }) else {
+                    throw FCLError.keyNotFound
                 }
 
                 let proposalKey = Transaction.ProposalKey(
                     address: userWalletAddress,
-                    keyIndex: 0,
-                    sequenceNumber: sequenceNumber
+                    keyIndex: cosignerKey.index,
+                    sequenceNumber: cosignerKey.sequenceNumber
                 )
 
                 let transaction = try Transaction(
@@ -714,17 +712,18 @@ final class FlowDemoViewController: UIViewController {
 
                 bloctoFlowSDK.sendTransaction(
                     from: userWalletAddress,
-                    transaction: transaction) { [weak self] result in
-                        guard let self = self else { return }
-                        self.resetSetValueStatus()
-                        switch result {
-                        case let .success(txHsh):
-                            self.setValueResultLabel.text = txHsh
-                            self.setValueExplorerButton.isHidden = false
-                        case let .failure(error):
-                            self.handleSetValueError(error)
-                        }
+                    transaction: transaction
+                ) { [weak self] result in
+                    guard let self = self else { return }
+                    self.resetSetValueStatus()
+                    switch result {
+                    case let .success(txHsh):
+                        self.setValueResultLabel.text = txHsh
+                        self.setValueExplorerButton.isHidden = false
+                    case let .failure(error):
+                        self.handleSetValueError(error)
                     }
+                }
 
             } catch {
                 handleSetValueError(Error.message("Account not found."))
@@ -868,7 +867,7 @@ final class FlowDemoViewController: UIViewController {
 
 }
 
-// MARK: - UITextFieldDelegate
+// MARK: UITextFieldDelegate
 
 extension FlowDemoViewController: UITextFieldDelegate {
 
@@ -879,7 +878,7 @@ extension FlowDemoViewController: UITextFieldDelegate {
 
 }
 
-// MARK: - SFSafariViewControllerDelegate
+// MARK: SFSafariViewControllerDelegate
 
 extension FlowDemoViewController: SFSafariViewControllerDelegate {}
 

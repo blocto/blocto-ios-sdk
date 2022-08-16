@@ -58,7 +58,7 @@ public class BloctoSDK {
 
     var appId: String = ""
 
-    private var window: UIWindow = UIWindow()
+    private var getWindow: (() throws -> UIWindow)?
 
     var logging: Bool = true
 
@@ -78,14 +78,14 @@ public class BloctoSDK {
     ///   - sessioningType: Type that handles web SDK authentication session, default is ASWebAuthenticationSession, testing purpose.
     public func initialize(
         with appId: String,
-        window: UIWindow,
+        getWindow: (() throws -> UIWindow)?,
         logging: Bool = true,
         testnet: Bool = false,
         urlOpening: URLOpening = UIApplication.shared,
         sessioningType: AuthenticationSessioning.Type = ASWebAuthenticationSession.self
     ) {
         self.appId = appId
-        self.window = window
+        self.getWindow = getWindow
         self.logging = logging
         self.testnet = testnet
         self.urlOpening = urlOpening
@@ -118,13 +118,9 @@ public class BloctoSDK {
 
     /// Entry of custom scheme
     /// - Parameters:
-    ///   - app: UIApplication
     ///   - url: custom scheme URL
-    ///   - options: options from UIApplicationDelegate
     public func application(
-        _ app: UIApplication,
-        open url: URL,
-        options: [UIApplication.OpenURLOptionsKey: Any]
+        open url: URL
     ) {
         do {
             try checkConfigration()
@@ -182,7 +178,14 @@ public class BloctoSDK {
                             message: "can't open universal link \(requestURL)."
                         )
                         if fallbackToWebSDK {
-                            self.routeToWebSDK(window: self.window, method: method)
+                            do {
+                                self.routeToWebSDK(window: try self.getWindow?(), method: method)
+                            } catch {
+                                log(
+                                    enable: self.logging,
+                                    message: "Window not found."
+                                )
+                            }
                         } else {
                             log(
                                 enable: self.logging,
@@ -194,7 +197,14 @@ public class BloctoSDK {
             )
         } catch {
             method.handleError(error: error)
-            routeToWebSDK(window: window, method: method)
+            do {
+                self.routeToWebSDK(window: try self.getWindow?(), method: method)
+            } catch {
+                log(
+                    enable: self.logging,
+                    message: "Window not found."
+                )
+            }
         }
     }
 

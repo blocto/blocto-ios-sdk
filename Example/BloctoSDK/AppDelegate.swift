@@ -35,7 +35,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         window.makeKeyAndVisible()
         BloctoSDK.shared.initialize(
             with: bloctoSDKAppId,
-            window: window,
+            getWindow: { window },
             logging: true,
             testnet: true
         )
@@ -48,9 +48,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         options: [UIApplication.OpenURLOptionsKey: Any] = [:]
     ) -> Bool {
         BloctoSDK.shared.application(
-            app,
-            open: url,
-            options: options
+            open: url
         )
         return true
     }

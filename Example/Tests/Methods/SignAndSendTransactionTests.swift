@@ -32,7 +32,7 @@ class SignAndSendTransactionTests: XCTestCase {
         let expectedTxHash: String = "65ZG7Retj1acmX2DXv9YdU12JJ53a5sKgBmmDGHVexTyDnFq8C3inKMMvcdMXi5NvZCLSueThdSNNHJBWdw7neUC"
         BloctoSDK.shared.initialize(
             with: appId,
-            window: UIWindow(),
+            getWindow: { UIWindow() },
             logging: false,
             testnet: true,
             urlOpening: mockUIApplication
@@ -65,7 +65,7 @@ class SignAndSendTransactionTests: XCTestCase {
                     publicKey: userWalletPublicKey,
                     isSigner: false,
                     isWritable: true
-                )
+                ),
             ],
             programId: programPublicKey,
             data: data
@@ -110,12 +110,10 @@ class SignAndSendTransactionTests: XCTestCase {
         var components = URLComponents(string: appCustomSchemeBaseURLString)
         components?.queryItems = [
             .init(name: "request_id", value: requestId.uuidString),
-            .init(name: "tx_hash", value: expectedTxHash)
+            .init(name: "tx_hash", value: expectedTxHash),
         ]
         BloctoSDK.shared.application(
-            UIApplication.shared,
-            open: components!.url!,
-            options: [:]
+            open: components!.url!
         )
 
         // Then:
@@ -154,7 +152,7 @@ class SignAndSendTransactionTests: XCTestCase {
                     publicKey: userWalletPublicKey,
                     isSigner: false,
                     isWritable: true
-                )
+                ),
             ],
             programId: programPublicKey,
             data: data
@@ -165,7 +163,7 @@ class SignAndSendTransactionTests: XCTestCase {
 
         BloctoSDK.shared.initialize(
             with: appId,
-            window: UIWindow(),
+            getWindow: { UIWindow() },
             logging: false,
             testnet: true,
             urlOpening: mockUIApplication,
@@ -194,7 +192,7 @@ class SignAndSendTransactionTests: XCTestCase {
         var components = URLComponents(string: webRedirectBaseURLString)
         components?.queryItems = [
             .init(name: "request_id", value: requestId.uuidString),
-            .init(name: "tx_hash", value: expectedTxHash)
+            .init(name: "tx_hash", value: expectedTxHash),
         ]
         MockAuthenticationSession.setCallbackURL(components!.url!)
 

@@ -52,7 +52,7 @@ class SendTransactionTests: XCTestCase {
             URLQueryItem(name: .from, value: from),
             URLQueryItem(name: .to, value: to),
             URLQueryItem(name: .value, value: "0x7b"),
-            URLQueryItem(name: .data, value: "0x" + dataString)
+            URLQueryItem(name: .data, value: "0x" + dataString),
         ]
 
         // When:
@@ -72,7 +72,7 @@ class SendTransactionTests: XCTestCase {
         let expectedTxHash: String = "0xe608645ba741c8064a2990c16b395c5b1377c7e1f8683b9319052560f89d279e"
         BloctoSDK.shared.initialize(
             with: appId,
-            window: UIWindow(),
+            getWindow: { UIWindow() },
             logging: false,
             testnet: true,
             urlOpening: mockUIApplication
@@ -104,12 +104,10 @@ class SendTransactionTests: XCTestCase {
         var components = URLComponents(string: appCustomSchemeBaseURLString)
         components?.queryItems = [
             .init(name: "request_id", value: requestId.uuidString),
-            .init(name: "tx_hash", value: expectedTxHash)
+            .init(name: "tx_hash", value: expectedTxHash),
         ]
         BloctoSDK.shared.application(
-            UIApplication.shared,
-            open: components!.url!,
-            options: [:]
+            open: components!.url!
         )
 
         // Then:
@@ -125,7 +123,7 @@ class SendTransactionTests: XCTestCase {
 
         BloctoSDK.shared.initialize(
             with: appId,
-            window: UIWindow(),
+            getWindow: { UIWindow() },
             logging: false,
             testnet: true,
             urlOpening: mockUIApplication,
@@ -144,7 +142,7 @@ class SendTransactionTests: XCTestCase {
         var components = URLComponents(string: webRedirectBaseURLString)
         components?.queryItems = [
             .init(name: "request_id", value: requestId.uuidString),
-            .init(name: "tx_hash", value: expectedTxHash)
+            .init(name: "tx_hash", value: expectedTxHash),
         ]
         MockAuthenticationSession.setCallbackURL(components!.url!)
 

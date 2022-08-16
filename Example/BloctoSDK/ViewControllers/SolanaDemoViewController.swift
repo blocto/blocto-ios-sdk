@@ -389,7 +389,7 @@ final class SolanaDemoViewController: UIViewController {
                 }
                 BloctoSDK.shared.initialize(
                     with: bloctoSDKAppId,
-                    window: window,
+                    getWindow: { window },
                     logging: true,
                     testnet: !isProduction
                 )

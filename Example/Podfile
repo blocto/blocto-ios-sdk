@@ -7,7 +7,7 @@ target 'BloctoSDK_Example' do
   pod 'BloctoSDK/Wallet', :path => '../'
   pod 'BloctoSDK/EVMBase', :path => '../'
   pod 'BloctoSDK/Flow', :path => '../'
-  pod 'FCL', :git => 'git@github.com:portto/fcl-swift.git', :branch => 'feat/transaction'
+  pod 'FCL-SDK', :git => 'git@github.com:portto/fcl-swift.git', :branch => 'feat/transaction'
   pod 'FlowSDK', :git => 'git@github.com:portto/flow-swift-sdk.git'
   pod 'Cadence', :git => 'git@github.com:portto/flow-swift-sdk.git'
   pod 'SnapKit'
