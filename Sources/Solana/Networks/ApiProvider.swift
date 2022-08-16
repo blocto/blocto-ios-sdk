@@ -8,7 +8,7 @@
 import Foundation
 import Moya
 
-final public class ApiProvider: MoyaProvider<ConvertTransactionRequest> {
+public final class ApiProvider: MoyaProvider<ConvertTransactionRequest> {
 
     public init(
         plugins: [PluginType] = [],
@@ -16,13 +16,14 @@ final public class ApiProvider: MoyaProvider<ConvertTransactionRequest> {
         stubClosure: @escaping StubClosure = MoyaProvider.neverStub
     ) {
         var plugins: [PluginType] = plugins
-#if DEBUG
+        #if DEBUG
         plugins.append(BONetworkLoggerPlugin(verbose: true))
-#endif
+        #endif
         super.init(
             endpointClosure: endpointClosure,
             stubClosure: stubClosure,
-            plugins: plugins)
+            plugins: plugins
+        )
     }
 }
 
@@ -53,7 +54,7 @@ public final class BONetworkLoggerPlugin: PluginType {
     }
 
     public func didReceive(_ result: Result<Moya.Response, MoyaError>, target: TargetType) {
-        if case .success(let response) = result {
+        if case let .success(response) = result {
             outputItems(logNetworkResponse(response.response, data: response.data, target: target))
         } else {
             outputItems(logNetworkResponse(nil, data: nil, target: target))
@@ -72,7 +73,7 @@ public final class BONetworkLoggerPlugin: PluginType {
 private extension BONetworkLoggerPlugin {
 
     func format(identifier: String, message: String) -> String {
-        return "\(identifier): \(message)"
+        "\(identifier): \(message)"
     }
 
     func logNetworkRequest(_ request: URLRequest?) -> [String] {

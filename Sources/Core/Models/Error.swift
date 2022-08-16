@@ -63,7 +63,7 @@ public enum BloctoSDKError: Swift.Error {
             return "user_not_match"
         case .ethSignInvalidHexString:
             return "eth_sign_invalid_hex_string"
-        case .other(let code):
+        case let .other(code):
             return code
         }
     }

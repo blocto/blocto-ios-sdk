@@ -16,7 +16,7 @@ public struct QueryItem {
         self.name = name.rawValue
         self.value = value
     }
-    
+
     init(nameString: String, value: Any) {
         self.name = nameString
         self.value = value

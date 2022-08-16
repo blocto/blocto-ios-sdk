@@ -10,13 +10,13 @@ import Foundation
 extension Bundle {
 
     static var resouceBundle: Bundle? {
-#if COCOAPODS
+        #if COCOAPODS
         return Bundle(identifier: "org.cocoapods.BloctoSDK")
-#elseif SWIFT_PACKAGE
+        #elseif SWIFT_PACKAGE
         return nil
-#else
+        #else
         return nil
-#endif
+        #endif
     }
 
 }

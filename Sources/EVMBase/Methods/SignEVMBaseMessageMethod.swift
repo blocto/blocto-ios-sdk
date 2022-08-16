@@ -47,16 +47,17 @@ public struct SignEVMBaseMessageMethod: CallbackMethod {
     public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
         guard let baseURL = URL(string: baseURLString),
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
-                  return nil
-              }
+            return nil
+        }
         var queryItems = URLEncoding.queryItems(
             appId: appId,
             requestId: id.uuidString,
-            blockchain: blockchain)
+            blockchain: blockchain
+        )
         queryItems.append(contentsOf: [
             QueryItem(name: .method, value: type),
             QueryItem(name: .from, value: from),
-            QueryItem(name: .signType, value: signType.rawValue)
+            QueryItem(name: .signType, value: signType.rawValue),
         ])
         let messageValue: String
         switch signType {
@@ -64,8 +65,8 @@ public struct SignEVMBaseMessageMethod: CallbackMethod {
             // input might be hexed string or normal string
             if message.hasPrefix("0x"),
                message
-                .bloctoSDK.drop0x
-                .bloctoSDK.hexDecodedData.isEmpty == false {
+               .bloctoSDK.drop0x
+               .bloctoSDK.hexDecodedData.isEmpty == false {
                 messageValue = message
             } else {
                 throw BloctoSDKError.ethSignInvalidHexString
@@ -74,8 +75,8 @@ public struct SignEVMBaseMessageMethod: CallbackMethod {
             // input is string format
             messageValue = message
         case .typedSignV3,
-                .typedSignV4,
-                .typedSign:
+             .typedSignV4,
+             .typedSign:
             // input should be json format
             messageValue = message
         }
@@ -93,7 +94,8 @@ public struct SignEVMBaseMessageMethod: CallbackMethod {
         guard let signature = components.queryItem(for: targetQueryName) else {
             log(
                 enable: logging,
-                message: "\(targetQueryName.rawValue) not found.")
+                message: "\(targetQueryName.rawValue) not found."
+            )
             callback(.failure(BloctoSDKError.invalidResponse))
             return
         }

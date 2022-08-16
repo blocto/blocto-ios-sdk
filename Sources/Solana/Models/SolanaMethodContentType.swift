@@ -14,6 +14,7 @@ public enum SolanaMethodContentType {
     case signAndSendTransaction(
         from: String,
         isInvokeWrapped: Bool,
-        transactionInfo: SolanaTransactionInfo)
+        transactionInfo: SolanaTransactionInfo
+    )
 
 }

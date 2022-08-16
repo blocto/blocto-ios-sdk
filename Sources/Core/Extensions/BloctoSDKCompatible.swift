@@ -13,9 +13,7 @@ public protocol BloctoSDKCompatible {
 }
 
 public extension BloctoSDKCompatible {
-    var bloctoSDK: BloctoSDKHelper<Self> {
-        get { return BloctoSDKHelper(self) }
-    }
+    var bloctoSDK: BloctoSDKHelper<Self> { BloctoSDKHelper(self) }
 }
 
 public struct BloctoSDKHelper<Base> {

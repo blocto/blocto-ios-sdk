@@ -50,6 +50,8 @@ extension Data {
 
 }
 
+// MARK: - Data + BloctoSDKCompatible
+
 extension Data: BloctoSDKCompatible {}
 
 extension BloctoSDKHelper where Base == Data {
@@ -60,7 +62,7 @@ extension BloctoSDKHelper where Base == Data {
 
     /// Returns the hex string representation of the data.
     public var hexString: String {
-        return base.map({ String(format: "%02x", $0) }).joined()
+        base.map { String(format: "%02x", $0) }.joined()
     }
 
     public var sha256: Data {

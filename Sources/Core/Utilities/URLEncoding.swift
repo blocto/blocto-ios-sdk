@@ -17,13 +17,13 @@ public enum URLEncoding {
         let queryItems = [
             QueryItem(name: .appId, value: appId),
             QueryItem(name: .requestId, value: requestId),
-            QueryItem(name: .blockchain, value: blockchain.rawValue)
+            QueryItem(name: .blockchain, value: blockchain.rawValue),
         ]
         return queryItems
     }
 
     static func encode(_ queryItems: [QueryItem]) -> [URLQueryItem] {
-        queryItems.flatMap { $0.getQueryComponents }
+        queryItems.flatMap(\.getQueryComponents)
     }
 
     static func queryComponents(fromKey key: String, value: Any) -> [URLQueryItem] {
@@ -44,40 +44,46 @@ public enum URLEncoding {
                 components.append(
                     .init(
                         name: escape(key),
-                        value: escape(boolEncoding.encode(value: number.boolValue))))
+                        value: escape(boolEncoding.encode(value: number.boolValue))
+                    ))
             } else {
                 components.append(
                     .init(
                         name: escape(key),
-                        value: escape("\(number)")))
+                        value: escape("\(number)")
+                    ))
             }
         case let bool as Bool:
             let boolEncoding = BoolEncoding()
             components.append(
                 .init(
                     name: escape(key),
-                    value: escape(boolEncoding.encode(value: bool))))
+                    value: escape(boolEncoding.encode(value: bool))
+                ))
         case let data as Data:
             components.append(
                 .init(
                     name: escape(key),
-                    value: escape(data.bloctoSDK.hexStringWith0xPrefix)))
+                    value: escape(data.bloctoSDK.hexStringWith0xPrefix)
+                ))
         default:
             components.append(
                 .init(
                     name: escape(key),
-                    value: escape("\(value)")))
+                    value: escape("\(value)")
+                ))
         }
         return components
     }
-    
+
     static func solanaAppendMessagesQueryItems(dictionary: [String: Data]) -> [URLQueryItem] {
         var components: [URLQueryItem] = []
         for (nestedKey, value) in dictionary {
             components.append(
                 .init(
                     name: escape("\(QueryName.appendTx.rawValue)[\(nestedKey)]"),
-                    value: escape(value.bloctoSDK.hexString)))
+                    value: escape(value.bloctoSDK.hexString)
+                ))
         }
         return components
     }

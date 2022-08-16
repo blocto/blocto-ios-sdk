@@ -12,14 +12,12 @@ private var associateKey: Void?
 extension BloctoSDK {
 
     public var bsc: BloctoBSCSDK {
-        get {
-            if let bscSDK = objc_getAssociatedObject(self, &associateKey) as? BloctoBSCSDK {
-                return bscSDK
-            } else {
-                let bscSDK = BloctoBSCSDK(base: self)
-                objc_setAssociatedObject(self, &associateKey, bscSDK, .OBJC_ASSOCIATION_RETAIN)
-                return bscSDK
-            }
+        if let bscSDK = objc_getAssociatedObject(self, &associateKey) as? BloctoBSCSDK {
+            return bscSDK
+        } else {
+            let bscSDK = BloctoBSCSDK(base: self)
+            objc_setAssociatedObject(self, &associateKey, bscSDK, .OBJC_ASSOCIATION_RETAIN)
+            return bscSDK
         }
     }
 
@@ -62,7 +60,8 @@ public class BloctoBSCSDK {
             message: message,
             signType: signType,
             blockchain: .binanceSmartChain,
-            callback: completion)
+            callback: completion
+        )
         base.send(method: method)
     }
 
@@ -81,7 +80,8 @@ public class BloctoBSCSDK {
             id: uuid,
             blockchain: .binanceSmartChain,
             transaction: transaction,
-            callback: completion)
+            callback: completion
+        )
         base.send(method: method)
     }
 

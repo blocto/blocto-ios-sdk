@@ -54,7 +54,7 @@ public struct SendFlowTransactionMethod: CallbackMethod {
         queryItems.append(contentsOf: [
             QueryItem(name: .method, value: type),
             QueryItem(name: .from, value: from.hexStringWithPrefix),
-            QueryItem(name: .flowTransaction, value: transactionDataHex)
+            QueryItem(name: .flowTransaction, value: transactionDataHex),
         ])
 
         components.queryItems = URLEncoding.encode(queryItems)

@@ -143,7 +143,7 @@ public class BloctoSDK {
             )
         }
     }
-    
+
     /// Send pre-defined method
     /// - Parameters:
     ///   - method: Any method which conform to Method protocol
@@ -198,10 +198,10 @@ public class BloctoSDK {
         } catch {
             method.handleError(error: error)
             do {
-                self.routeToWebSDK(window: try self.getWindow?(), method: method)
+                routeToWebSDK(window: try getWindow?(), method: method)
             } catch {
                 log(
-                    enable: self.logging,
+                    enable: logging,
                     message: "Window not found."
                 )
             }

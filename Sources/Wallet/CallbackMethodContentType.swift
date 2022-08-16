@@ -14,10 +14,10 @@ public enum CallbackMethodContentType {
     case signMessage(signature: String)
 
     case signAndSendTransaction(txHash: String)
-    
+
     // flow
     case authanticate(address: String, accountProof: [FlowCompositeSignature])
-    
+
     case flowSignMessage(signatures: [FlowCompositeSignature])
 
     case error(error: BloctoSDKError)

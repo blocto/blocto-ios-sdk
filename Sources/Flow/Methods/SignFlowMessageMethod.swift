@@ -8,17 +8,17 @@
 import Foundation
 
 public struct SignFlowMessageMethod: CallbackMethod {
-    
+
     public typealias Response = [FlowCompositeSignature]
-    
+
     public let id: UUID
     public let type: String = FlowMethodType.userSignature.rawValue
     public let callback: Callback
-    
+
     let blockchain: Blockchain = .flow
     let from: String
     let message: String
-    
+
     /// initialize sign EVMBase message method
     /// - Parameters:
     ///   - id: Used to find a stored callback. No need to pass if there is no specific requirement, for example, testing.
@@ -38,7 +38,7 @@ public struct SignFlowMessageMethod: CallbackMethod {
         self.message = message
         self.callback = callback
     }
-    
+
     public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
         guard let baseURL = URL(string: baseURLString),
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
@@ -47,16 +47,17 @@ public struct SignFlowMessageMethod: CallbackMethod {
         var queryItems = URLEncoding.queryItems(
             appId: appId,
             requestId: id.uuidString,
-            blockchain: blockchain)
+            blockchain: blockchain
+        )
         queryItems.append(contentsOf: [
             QueryItem(name: .method, value: type),
-            QueryItem(name: .from, value: from)
+            QueryItem(name: .from, value: from),
         ])
         queryItems.append(QueryItem(name: .message, value: message))
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }
-    
+
     public func resolve(components: URLComponents, logging: Bool) {
         if let errorCode = components.queryItem(for: .error) {
             callback(.failure(BloctoSDKError(code: errorCode)))
@@ -65,7 +66,7 @@ public struct SignFlowMessageMethod: CallbackMethod {
         let signatures = components.getSignatures(type: .userSignature)
         callback(.success(signatures))
     }
-    
+
     public func handleError(error: Swift.Error) {
         callback(.failure(error))
     }

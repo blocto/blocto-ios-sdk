@@ -38,18 +38,19 @@ public struct SendEVMBasedTransactionMethod: CallbackMethod {
     public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
         guard let baseURL = URL(string: baseURLString),
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
-                  return nil
-              }
+            return nil
+        }
         var queryItems = URLEncoding.queryItems(
             appId: appId,
             requestId: id.uuidString,
-            blockchain: blockchain)
+            blockchain: blockchain
+        )
         queryItems.append(contentsOf: [
             QueryItem(name: .method, value: type),
             QueryItem(name: .from, value: transaction.from),
             QueryItem(name: .to, value: transaction.to),
             QueryItem(name: .value, value: String(transaction.value, radix: 16).bloctoSDK.add0x),
-            QueryItem(name: .data, value: transaction.data)
+            QueryItem(name: .data, value: transaction.data),
         ])
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
@@ -64,7 +65,8 @@ public struct SendEVMBasedTransactionMethod: CallbackMethod {
         guard let txHash = components.queryItem(for: targetQueryName) else {
             log(
                 enable: logging,
-                message: "\(targetQueryName.rawValue) not found.")
+                message: "\(targetQueryName.rawValue) not found."
+            )
             callback(.failure(BloctoSDKError.invalidResponse))
             return
         }

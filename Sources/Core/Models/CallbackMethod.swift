@@ -9,7 +9,7 @@ import Foundation
 
 public protocol CallbackMethod: Method {
     associatedtype Response
-    typealias Callback = ((Result<Response, Swift.Error>) -> Void)
+    typealias Callback = (Result<Response, Swift.Error>) -> Void
 
     var callback: Callback { get }
 }

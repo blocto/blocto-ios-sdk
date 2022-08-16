@@ -13,14 +13,12 @@ private var associateKey: Void?
 extension BloctoSDK {
 
     public var solana: BloctoSolanaSDK {
-        get {
-            if let solanaSDK = objc_getAssociatedObject(self, &associateKey) as? BloctoSolanaSDK {
-                return solanaSDK
-            } else {
-                let solanaSDK = BloctoSolanaSDK(base: self)
-                objc_setAssociatedObject(self, &associateKey, solanaSDK, .OBJC_ASSOCIATION_RETAIN)
-                return solanaSDK
-            }
+        if let solanaSDK = objc_getAssociatedObject(self, &associateKey) as? BloctoSolanaSDK {
+            return solanaSDK
+        } else {
+            let solanaSDK = BloctoSolanaSDK(base: self)
+            objc_setAssociatedObject(self, &associateKey, solanaSDK, .OBJC_ASSOCIATION_RETAIN)
+            return solanaSDK
         }
     }
 
@@ -90,27 +88,29 @@ public class BloctoSolanaSDK {
                     return
                 }
                 switch result {
-                case .success(let transaction):
+                case let .success(transaction):
                     do {
                         if self.transactionNeedsConvert(transaction) {
                             self.convertToProgramWalletTransaction(
                                 transaction,
-                                solanaAddress: from) { [weak self] result in
-                                    guard let self = self else {
-                                        completion(.failure(InternalError.callbackSelfNotfound))
-                                        return
-                                    }
-                                    switch result {
-                                    case .success(let transaction):
-                                        self.signAndSendTransaction(
-                                            uuid: uuid,
-                                            from: from,
-                                            transaction: transaction,
-                                            completion: completion)
-                                    case .failure(let error):
-                                        completion(.failure(error))
-                                    }
+                                solanaAddress: from
+                            ) { [weak self] result in
+                                guard let self = self else {
+                                    completion(.failure(InternalError.callbackSelfNotfound))
+                                    return
                                 }
+                                switch result {
+                                case let .success(transaction):
+                                    self.signAndSendTransaction(
+                                        uuid: uuid,
+                                        from: from,
+                                        transaction: transaction,
+                                        completion: completion
+                                    )
+                                case let .failure(error):
+                                    completion(.failure(error))
+                                }
+                            }
                         } else {
                             var mutateTransaction = transaction
 
@@ -132,16 +132,18 @@ public class BloctoSolanaSDK {
                                 transactionInfo: SolanaTransactionInfo(
                                     message: serializeMessage.bloctoSDK.hexString,
                                     appendTx: appendTx,
-                                    publicKeySignaturePairs: publicKeySignaturePairs),
+                                    publicKeySignaturePairs: publicKeySignaturePairs
+                                ),
                                 isInvokeWrapped: true,
-                                callback: completion)
+                                callback: completion
+                            )
                             self.appendTxMap[shaString] = nil
                             self.base.send(method: method)
                         }
                     } catch {
                         completion(.failure(error))
                     }
-                case .failure(let error):
+                case let .failure(error):
                     completion(.failure(error))
                 }
             }
@@ -170,7 +172,8 @@ public class BloctoSolanaSDK {
                     let request = ConvertTransactionRequest(
                         solanaAddress: solanaAddress,
                         message: serializeMessage.bloctoSDK.hexString,
-                        baseURL: self.apiBaseURL)
+                        baseURL: self.apiBaseURL
+                    )
                     _ = self.apiProvider.request(request) { [weak self] result in
                         switch result {
                         case let .success(response):
@@ -211,11 +214,11 @@ public class BloctoSolanaSDK {
         let connection = Connection(cluster: cluster)
         connection.getLatestBlockhash(commitment: .confirmed) { result in
             switch result {
-            case .success(let blockhashLastValidBlockHeightPair):
+            case let .success(blockhashLastValidBlockHeightPair):
                 var newTransaction = transaction
                 newTransaction.recentBlockhash = blockhashLastValidBlockHeightPair.blockhash
                 completion(.success(newTransaction))
-            case .failure(let error):
+            case let .failure(error):
                 completion(.failure(error))
             }
         }

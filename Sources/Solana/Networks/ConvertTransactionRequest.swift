@@ -21,9 +21,10 @@ public struct ConvertTransactionRequest: TargetType {
         .requestParameters(
             parameters: [
                 "sol_address": solanaAddress,
-                "raw_tx": message
+                "raw_tx": message,
             ],
-            encoding: JSONEncoding.default)
+            encoding: JSONEncoding.default
+        )
     }
 
     public var sampleData: Data { Data() }
@@ -31,7 +32,7 @@ public struct ConvertTransactionRequest: TargetType {
     public var headers: [String: String]? {
         [
             "blocto-sdk-platform": "iOS",
-            "blocto-sdk-version": SDKInfo.version
+            "blocto-sdk-version": SDKInfo.version,
         ]
     }
 

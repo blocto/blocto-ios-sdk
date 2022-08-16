@@ -12,14 +12,12 @@ private var associateKey: Void?
 extension BloctoSDK {
 
     public var ethereum: BloctoEthereumSDK {
-        get {
-            if let ethereumSDK = objc_getAssociatedObject(self, &associateKey) as? BloctoEthereumSDK {
-                return ethereumSDK
-            } else {
-                let ethereumSDK = BloctoEthereumSDK(base: self)
-                objc_setAssociatedObject(self, &associateKey, ethereumSDK, .OBJC_ASSOCIATION_RETAIN)
-                return ethereumSDK
-            }
+        if let ethereumSDK = objc_getAssociatedObject(self, &associateKey) as? BloctoEthereumSDK {
+            return ethereumSDK
+        } else {
+            let ethereumSDK = BloctoEthereumSDK(base: self)
+            objc_setAssociatedObject(self, &associateKey, ethereumSDK, .OBJC_ASSOCIATION_RETAIN)
+            return ethereumSDK
         }
     }
 
@@ -62,7 +60,8 @@ public class BloctoEthereumSDK {
             message: message,
             signType: signType,
             blockchain: .ethereum,
-            callback: completion)
+            callback: completion
+        )
         base.send(method: method)
     }
 
@@ -81,7 +80,8 @@ public class BloctoEthereumSDK {
             id: uuid,
             blockchain: .ethereum,
             transaction: transaction,
-            callback: completion)
+            callback: completion
+        )
         base.send(method: method)
     }
 

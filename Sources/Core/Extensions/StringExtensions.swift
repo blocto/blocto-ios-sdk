@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - String + BloctoSDKCompatible
+
 extension String: BloctoSDKCompatible {}
 
 extension BloctoSDKHelper where Base == String {
@@ -33,8 +35,8 @@ extension BloctoSDKHelper where Base == String {
         }
 
         var result = Data(capacity: (cString.count - 1) / 2)
-        for i in stride(from: 0, to: (cString.count - 1), by: 2) {
-            guard let l = hexCharToByte(cString[i]), let r = hexCharToByte(cString[i+1]) else {
+        for i in stride(from: 0, to: cString.count - 1, by: 2) {
+            guard let l = hexCharToByte(cString[i]), let r = hexCharToByte(cString[i + 1]) else {
                 return Data()
             }
             var value: UInt8 = (l << 4) | r
@@ -47,7 +49,8 @@ extension BloctoSDKHelper where Base == String {
         if base.prefix(2) == "0x" {
             return String(
                 data: String(base.dropFirst(2)).bloctoSDK.hexDecodedData,
-                encoding: .utf8) ?? base
+                encoding: .utf8
+            ) ?? base
         } else {
             return base
         }

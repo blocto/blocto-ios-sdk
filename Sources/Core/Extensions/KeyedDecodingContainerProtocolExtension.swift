@@ -10,6 +10,7 @@ import Foundation
 public extension KeyedDecodingContainerProtocol {
 
     // MARK: - Dictionary
+
     func decodeStringDataDictionary(forKey key: Self.Key) throws -> [String: Data] {
         let stringDataDict = try decode([String: String].self, forKey: key)
 

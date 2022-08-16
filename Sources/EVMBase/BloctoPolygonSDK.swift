@@ -12,14 +12,12 @@ private var associateKey: Void?
 extension BloctoSDK {
 
     public var polygon: BloctoPolygonSDK {
-        get {
-            if let polygonSDK = objc_getAssociatedObject(self, &associateKey) as? BloctoPolygonSDK {
-                return polygonSDK
-            } else {
-                let polygonSDK = BloctoPolygonSDK(base: self)
-                objc_setAssociatedObject(self, &associateKey, polygonSDK, .OBJC_ASSOCIATION_RETAIN)
-                return polygonSDK
-            }
+        if let polygonSDK = objc_getAssociatedObject(self, &associateKey) as? BloctoPolygonSDK {
+            return polygonSDK
+        } else {
+            let polygonSDK = BloctoPolygonSDK(base: self)
+            objc_setAssociatedObject(self, &associateKey, polygonSDK, .OBJC_ASSOCIATION_RETAIN)
+            return polygonSDK
         }
     }
 
@@ -62,7 +60,8 @@ public class BloctoPolygonSDK {
             message: message,
             signType: signType,
             blockchain: .polygon,
-            callback: completion)
+            callback: completion
+        )
         base.send(method: method)
     }
 
@@ -81,7 +80,8 @@ public class BloctoPolygonSDK {
             id: uuid,
             blockchain: .polygon,
             transaction: transaction,
-            callback: completion)
+            callback: completion
+        )
         base.send(method: method)
     }
 

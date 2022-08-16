@@ -8,7 +8,7 @@
 import Foundation
 
 public struct FlowAccountProofData {
-    
+
     /// A human-readable string e.g. "Blocto", "NBA Top Shot"
     public let appId: String
     /// minimum 32-byte random nonce

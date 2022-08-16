@@ -113,7 +113,7 @@ public enum MethodCallbackHelper {
             ]
         case let .authanticate(address, accountProof):
             var queryItems: [URLQueryItem] = [
-                URLQueryItem(name: .address, value: address)
+                URLQueryItem(name: .address, value: address),
             ]
             if accountProof.isEmpty == false {
                 let accountProofItems = accountProof.enumerated().flatMap {

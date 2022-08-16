@@ -17,7 +17,7 @@ extension URLComponents {
     }
 
     func queryItem(for queryName: QueryName) -> String? {
-        return queryItems?.first(where: { $0.name == queryName.rawValue })?.value
+        queryItems?.first(where: { $0.name == queryName.rawValue })?.value
     }
 
 }

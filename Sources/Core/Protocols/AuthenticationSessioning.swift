@@ -15,10 +15,13 @@ public protocol AuthenticationSessioning {
     init(
         url URL: URL,
         callbackURLScheme: String?,
-        completionHandler: @escaping (URL?, Swift.Error?) -> Void)
+        completionHandler: @escaping (URL?, Swift.Error?) -> Void
+    )
 
     func start() -> Bool
 
 }
+
+// MARK: - ASWebAuthenticationSession + AuthenticationSessioning
 
 extension ASWebAuthenticationSession: AuthenticationSessioning {}

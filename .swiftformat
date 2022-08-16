@@ -1,0 +1,45 @@
+# file options
+--swiftversion 5.6
+
+# rules
+--enable blankLinesBetweenImports
+--enable isEmpty
+--enable markTypes
+--disable andOperator
+--disable extensionAccessControl
+--disable blankLinesAtEndOfScope
+--disable blankLinesAtStartOfScope
+--disable redundantType
+--disable sortedImports
+--disable wrapMultilineStatementBraces
+
+# options
+--assetliterals visual-width
+--beforemarks 
+--funcattributes prev-line
+--groupedextension "MARK: %c"
+--header ignore
+--hexgrouping none
+--ifdef no-indent
+--indent 4
+--lifecycle
+--marktypes never
+--modifierorder
+--nevertrailing
+--nospaceoperators
+--nowrapoperators
+--octalgrouping none
+--self init-only
+--selfrequired
+--semicolons never
+--stripunusedargs closure-only
+--trailingclosures
+--typeattributes prev-line
+--varattributes same-line
+--wraparguments before-first
+--wrapcollections before-first
+--wrapconditions preserve
+--wrapparameters before-first
+--wrapreturntype preserve
+--wrapternary default
+--wraptypealiases preserve

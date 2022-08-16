@@ -22,7 +22,7 @@ public enum QueryName: String {
     case isInvokeWrapped = "is_invoke_wrapped"
     case appendTx = "append_tx"
     case publicKeySignaturePairs = "public_key_signature_pairs"
-    
+
     // flow only
     case flowAppId = "flow_app_id"
     case flowNonce = "flow_nonce"
@@ -34,7 +34,7 @@ public enum QueryName: String {
     case address
     case signature
     case txHash = "tx_hash"
-    
+
     // flow account proof
     case keyId = "key_id"
 

@@ -8,7 +8,7 @@
 import Foundation
 
 public enum QueryDecoding {
-    
+
     static func decodeArray<T>(
         param: [String: String],
         queryName: QueryName
@@ -16,7 +16,8 @@ public enum QueryDecoding {
         do {
             let array = try decodeArray(
                 param: param,
-                target: queryName.rawValue)
+                target: queryName.rawValue
+            )
             switch T.self {
             case is String.Type:
                 if let value = array as? [T] {
@@ -25,18 +26,14 @@ public enum QueryDecoding {
                     return [T]()
                 }
             case is Data.Type:
-                if let value = array as? [String] {
-                    return value.reduce([T]()) { partialResult, value in
-                        var result = partialResult
-                        if let data = value
-                            .bloctoSDK.drop0x
-                            .bloctoSDK.hexDecodedData as? T {
-                            result.append(data)
-                        }
-                        return result
+                return array.reduce([T]()) { partialResult, value in
+                    var result = partialResult
+                    if let data = value
+                        .bloctoSDK.drop0x
+                        .bloctoSDK.hexDecodedData as? T {
+                        result.append(data)
                     }
-                } else {
-                    return [T]()
+                    return result
                 }
             default:
                 return [T]()
@@ -53,7 +50,8 @@ public enum QueryDecoding {
         do {
             let dictionary = try decodeDictionary(
                 param: param,
-                target: queryName.rawValue)
+                target: queryName.rawValue
+            )
             switch T.self {
             case is String.Type:
                 if let value = dictionary[queryName.rawValue] as? [String: T] {
@@ -80,21 +78,21 @@ public enum QueryDecoding {
             return [String: T]()
         }
     }
-    
+
     private static func decodeArray(
         param: [String: String],
         target: String
     ) throws -> [String] {
         let leftBrackets = QueryEscape.escape("[")
         let rightBrackets = QueryEscape.escape("]")
-        let array: [String] = param.reduce([], {
+        let array: [String] = param.reduce([]) {
             if $1.key == (target + leftBrackets + rightBrackets) {
                 var copied = $0
                 copied.append($1.value)
                 return copied
             }
             return $0
-        })
+        }
         return array
     }
 
@@ -104,24 +102,25 @@ public enum QueryDecoding {
     ) throws -> [String: Any] {
         let leftBrackets = QueryEscape.escape("[")
         let rightBrackets = QueryEscape.escape("]")
-        let targets: [String: String] = param.reduce([:], {
+        let targets: [String: String] = param.reduce([:]) {
             var copied = $0
             copied[$1.key] = ($1.key.contains(target) ? $1.value : nil)
             return copied
-        })
+        }
         let regex = try NSRegularExpression(pattern: "(?<=\(leftBrackets))(.*?)(?=\(rightBrackets))")
-        let value = targets.reduce([:], { result, target -> [String: String] in
+        let value = targets.reduce([:]) { result, target -> [String: String] in
             var finalResult = result
             if let result: NSTextCheckingResult = regex.firstMatch(
                 in: target.key,
-                range: NSRange(target.key.startIndex..., in: target.key)),
-               let range = Range(result.range, in: target.key) {
+                range: NSRange(target.key.startIndex..., in: target.key)
+            ),
+                let range = Range(result.range, in: target.key) {
                 finalResult[String(target.key[range])] = target.value
                 return finalResult
             } else {
                 return finalResult
             }
-        })
+        }
         return [target: value]
     }
 

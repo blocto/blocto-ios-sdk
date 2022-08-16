@@ -37,12 +37,13 @@ public struct RequestAccountMethod: CallbackMethod {
     public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
         guard let baseURL = URL(string: baseURLString),
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
-                  return nil
-              }
+            return nil
+        }
         var queryItems = URLEncoding.queryItems(
             appId: appId,
             requestId: id.uuidString,
-            blockchain: blockchain)
+            blockchain: blockchain
+        )
         queryItems.append(QueryItem(name: .method, value: type))
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
@@ -57,7 +58,8 @@ public struct RequestAccountMethod: CallbackMethod {
         guard let address = components.queryItem(for: targetQueryName) else {
             log(
                 enable: logging,
-                message: "\(targetQueryName.rawValue) not found.")
+                message: "\(targetQueryName.rawValue) not found."
+            )
             callback(.failure(BloctoSDKError.invalidResponse))
             return
         }

@@ -43,20 +43,21 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
     public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
         guard let baseURL = URL(string: baseURLString),
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
-                  return nil
-              }
+            return nil
+        }
         var queryItems: [QueryItem] = URLEncoding.queryItems(
             appId: appId,
             requestId: id.uuidString,
-            blockchain: blockchain)
+            blockchain: blockchain
+        )
         queryItems.append(contentsOf: [
             QueryItem(name: .method, value: type),
             QueryItem(name: .from, value: from),
             QueryItem(name: .isInvokeWrapped, value: isInvokeWrapped),
             QueryItem(name: .message, value: transactionInfo.message),
-            QueryItem(name: .publicKeySignaturePairs, value: transactionInfo.publicKeySignaturePairs)
+            QueryItem(name: .publicKeySignaturePairs, value: transactionInfo.publicKeySignaturePairs),
         ])
-        
+
         let appendMessageQuryItems: [URLQueryItem] = URLEncoding.solanaAppendMessagesQueryItems(dictionary: transactionInfo.appendTx ?? [:])
         var urlQueryItems: [URLQueryItem] = []
         urlQueryItems.append(contentsOf: appendMessageQuryItems)
@@ -74,7 +75,8 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
         guard let txHash = components.queryItem(for: targetQueryName) else {
             log(
                 enable: logging,
-                message: "\(targetQueryName.rawValue) not found.")
+                message: "\(targetQueryName.rawValue) not found."
+            )
             callback(.failure(BloctoSDKError.invalidResponse))
             return
         }

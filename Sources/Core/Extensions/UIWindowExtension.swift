@@ -11,7 +11,7 @@ import AuthenticationServices
 extension UIWindow: ASWebAuthenticationPresentationContextProviding {
 
     public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        return self
+        self
     }
 
 }

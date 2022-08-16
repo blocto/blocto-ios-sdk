@@ -12,14 +12,12 @@ private var associateKey: Void?
 extension BloctoSDK {
 
     public var avalanche: BloctoAvalancheSDK {
-        get {
-            if let avalancheSDK = objc_getAssociatedObject(self, &associateKey) as? BloctoAvalancheSDK {
-                return avalancheSDK
-            } else {
-                let avalancheSDK = BloctoAvalancheSDK(base: self)
-                objc_setAssociatedObject(self, &associateKey, avalancheSDK, .OBJC_ASSOCIATION_RETAIN)
-                return avalancheSDK
-            }
+        if let avalancheSDK = objc_getAssociatedObject(self, &associateKey) as? BloctoAvalancheSDK {
+            return avalancheSDK
+        } else {
+            let avalancheSDK = BloctoAvalancheSDK(base: self)
+            objc_setAssociatedObject(self, &associateKey, avalancheSDK, .OBJC_ASSOCIATION_RETAIN)
+            return avalancheSDK
         }
     }
 
@@ -62,7 +60,8 @@ public class BloctoAvalancheSDK {
             message: message,
             signType: signType,
             blockchain: .avalanche,
-            callback: completion)
+            callback: completion
+        )
         base.send(method: method)
     }
 
@@ -81,7 +80,8 @@ public class BloctoAvalancheSDK {
             id: uuid,
             blockchain: .avalanche,
             transaction: transaction,
-            callback: completion)
+            callback: completion
+        )
         base.send(method: method)
     }
 

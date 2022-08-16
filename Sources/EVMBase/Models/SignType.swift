@@ -15,4 +15,6 @@ public enum EVMBaseSignType: String {
     case typedSign = "typed_data_sign" // for now, it's same as default v4
 }
 
+// MARK: CaseIterable
+
 extension EVMBaseSignType: CaseIterable {}
