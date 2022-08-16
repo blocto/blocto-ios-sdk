@@ -49,6 +49,7 @@ Pod::Spec.new do |s|
       "Sources/Flow/Models/**/*"
       ss.dependency "BloctoSDK/Core", "~> 0.2.0"
       ss.dependency "BigInt", "~> 5.0"
+      ss.dependency "FlowSDK"
   end
 
 end

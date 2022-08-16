@@ -2,22 +2,23 @@ PODS:
   - _NIODataStructures (2.40.0)
   - Alamofire (5.6.0)
   - BigInt (5.2.0)
-  - BloctoSDK (0.2.2):
-    - BloctoSDK/Core (= 0.2.2)
-  - BloctoSDK/Core (0.2.2)
-  - BloctoSDK/EVMBase (0.2.2):
+  - BloctoSDK (0.3.0):
+    - BloctoSDK/Core (= 0.3.0)
+  - BloctoSDK/Core (0.3.0)
+  - BloctoSDK/EVMBase (0.3.0):
     - BigInt (~> 5.0)
     - BloctoSDK/Core
-  - BloctoSDK/Flow (0.2.2):
+  - BloctoSDK/Flow (0.3.0):
     - BloctoSDK/Core
     - FlowSDK
-  - BloctoSDK/Solana (0.2.2):
+  - BloctoSDK/Solana (0.3.0):
     - BloctoSDK/Core
     - Moya (~> 14.0.0)
     - SolanaWeb3 (~> 0.0.4)
-  - BloctoSDK/Wallet (0.2.2):
+  - BloctoSDK/Wallet (0.3.0):
     - BigInt (~> 5.0)
     - BloctoSDK/Core (~> 0.2.0)
+    - FlowSDK
   - Cadence (0.4.0):
     - BigInt (~> 5.2.0)
     - CryptoSwift (~> 1.5.1)
@@ -222,10 +223,8 @@ DEPENDENCIES:
   - BloctoSDK/Flow (from `../`)
   - BloctoSDK/Solana (from `../`)
   - BloctoSDK/Wallet (from `../`)
-  - "Cadence (from `git@github.com:portto/flow-swift-sdk.git`)"
   - EthereumSignTypedDataUtil
-  - "FCL-SDK (from `git@github.com:portto/fcl-swift.git`, branch `feat/transaction`)"
-  - "FlowSDK (from `git@github.com:portto/flow-swift-sdk.git`)"
+  - FCL-SDK (from `https://github.com/portto/fcl-swift.git`)
   - RxCocoa
   - RxSwift
   - SnapKit
@@ -237,6 +236,7 @@ SPEC REPOS:
     - _NIODataStructures
     - Alamofire
     - BigInt
+    - Cadence
     - CGRPCZlibp
     - CNIOAtomics
     - CNIOBoringSSL
@@ -247,6 +247,7 @@ SPEC REPOS:
     - CNIOWindows
     - CryptoSwift
     - EthereumSignTypedDataUtil
+    - FlowSDK
     - GenericJSON
     - gRPC-Swiftp
     - Logging
@@ -279,13 +280,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   BloctoSDK:
     :path: "../"
-  Cadence:
-    :git: "git@github.com:portto/flow-swift-sdk.git"
   FCL-SDK:
-    :branch: feat/transaction
-    :git: "git@github.com:portto/fcl-swift.git"
-  FlowSDK:
-    :git: "git@github.com:portto/flow-swift-sdk.git"
+    :git: https://github.com/portto/fcl-swift.git
   SolanaWeb3:
     :git: https://github.com/portto/solana-web3.swift.git
   web3.swift:
@@ -293,15 +289,9 @@ EXTERNAL SOURCES:
     :git: https://github.com/portto/web3.swift.git
 
 CHECKOUT OPTIONS:
-  Cadence:
-    :commit: 1467c999cd076e7607e3575364a52693613d19f8
-    :git: "git@github.com:portto/flow-swift-sdk.git"
   FCL-SDK:
-    :commit: 1ee1b5d7b6a5433d53ec6f45f782b8ae36ed13ab
-    :git: "git@github.com:portto/fcl-swift.git"
-  FlowSDK:
-    :commit: 1467c999cd076e7607e3575364a52693613d19f8
-    :git: "git@github.com:portto/flow-swift-sdk.git"
+    :commit: 38d2f88da90e66bfc608245332decca82d0bc376
+    :git: https://github.com/portto/fcl-swift.git
   SolanaWeb3:
     :commit: 9f430df4ce564d900e41da37821d555b2e644b62
     :git: https://github.com/portto/solana-web3.swift.git
@@ -313,7 +303,7 @@ SPEC CHECKSUMS:
   _NIODataStructures: 3d45d8e70a1d17a15b1dc59d102c63dbc0525ffd
   Alamofire: 0c07058209f211e3d32824f8e0766d7c44ac83b3
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  BloctoSDK: 510b6fe013ae1efc401b12cecb3e020126804a01
+  BloctoSDK: 8272747c9794699222d273c118e2ead9006b2fd0
   Cadence: 9de64e79320285ea8beecfae10327f5853f3b790
   CGRPCZlibp: 2f3e1e7a6d6cb481d4d1a26d3ec09aefacf09cbb
   CNIOAtomics: 8edf08644e5e6fa0f021c239be9e8beb1cd9ef18
@@ -358,6 +348,6 @@ SPEC CHECKSUMS:
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   web3.swift: 4d8b9f69ea92d23c6e87b97c36686f1c541eaef1
 
-PODFILE CHECKSUM: a04112732567dc741bb0e76891ea0cda4fdb0822
+PODFILE CHECKSUM: 1341f4c09442e8347aa53afb547a20b0b730ebc1
 
 COCOAPODS: 1.11.3
