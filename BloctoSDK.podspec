@@ -34,7 +34,7 @@ Pod::Spec.new do |s|
   s.subspec "Flow" do |ss|
       ss.source_files = "Sources/Flow/**/*"
       ss.dependency "BloctoSDK/Core"
-      ss.dependency "FlowSDK"
+      ss.dependency "FlowSDK", "~> 0.4.0"
   end
   
   s.subspec "Wallet" do |ss|
@@ -49,7 +49,7 @@ Pod::Spec.new do |s|
       "Sources/Flow/Models/**/*"
       ss.dependency "BloctoSDK/Core", "~> 0.2.0"
       ss.dependency "BigInt", "~> 5.0"
-      ss.dependency "FlowSDK"
+      ss.dependency "FlowSDK", "~> 0.4.0"
   end
 
 end
