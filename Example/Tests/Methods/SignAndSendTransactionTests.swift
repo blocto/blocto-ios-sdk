@@ -65,7 +65,7 @@ class SignAndSendTransactionTests: XCTestCase {
                     publicKey: userWalletPublicKey,
                     isSigner: false,
                     isWritable: true
-                ),
+                )
             ],
             programId: programPublicKey,
             data: data
@@ -110,7 +110,7 @@ class SignAndSendTransactionTests: XCTestCase {
         var components = URLComponents(string: appCustomSchemeBaseURLString)
         components?.queryItems = [
             .init(name: "request_id", value: requestId.uuidString),
-            .init(name: "tx_hash", value: expectedTxHash),
+            .init(name: "tx_hash", value: expectedTxHash)
         ]
         BloctoSDK.shared.application(
             open: components!.url!
@@ -152,7 +152,7 @@ class SignAndSendTransactionTests: XCTestCase {
                     publicKey: userWalletPublicKey,
                     isSigner: false,
                     isWritable: true
-                ),
+                )
             ],
             programId: programPublicKey,
             data: data
@@ -192,7 +192,7 @@ class SignAndSendTransactionTests: XCTestCase {
         var components = URLComponents(string: webRedirectBaseURLString)
         components?.queryItems = [
             .init(name: "request_id", value: requestId.uuidString),
-            .init(name: "tx_hash", value: expectedTxHash),
+            .init(name: "tx_hash", value: expectedTxHash)
         ]
         MockAuthenticationSession.setCallbackURL(components!.url!)
 

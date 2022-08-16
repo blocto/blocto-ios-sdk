@@ -52,7 +52,7 @@ class SendTransactionTests: XCTestCase {
             URLQueryItem(name: .from, value: from),
             URLQueryItem(name: .to, value: to),
             URLQueryItem(name: .value, value: "0x7b"),
-            URLQueryItem(name: .data, value: "0x" + dataString),
+            URLQueryItem(name: .data, value: "0x" + dataString)
         ]
 
         // When:
@@ -104,7 +104,7 @@ class SendTransactionTests: XCTestCase {
         var components = URLComponents(string: appCustomSchemeBaseURLString)
         components?.queryItems = [
             .init(name: "request_id", value: requestId.uuidString),
-            .init(name: "tx_hash", value: expectedTxHash),
+            .init(name: "tx_hash", value: expectedTxHash)
         ]
         BloctoSDK.shared.application(
             open: components!.url!
@@ -142,7 +142,7 @@ class SendTransactionTests: XCTestCase {
         var components = URLComponents(string: webRedirectBaseURLString)
         components?.queryItems = [
             .init(name: "request_id", value: requestId.uuidString),
-            .init(name: "tx_hash", value: expectedTxHash),
+            .init(name: "tx_hash", value: expectedTxHash)
         ]
         MockAuthenticationSession.setCallbackURL(components!.url!)
 

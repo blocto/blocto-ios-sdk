@@ -18,7 +18,7 @@ PODS:
   - BloctoSDK/Wallet (0.2.2):
     - BigInt (~> 5.0)
     - BloctoSDK/Core (~> 0.2.0)
-  - Cadence (0.3.0):
+  - Cadence (0.4.0):
     - BigInt (~> 5.2.0)
     - CryptoSwift (~> 1.5.1)
   - CGRPCZlibp (1.8.2)
@@ -38,11 +38,11 @@ PODS:
     - BloctoSDK
     - FlowSDK
     - SwiftyJSON
-  - FlowSDK (0.3.0):
-    - FlowSDK/FlowSDK (= 0.3.0)
-  - FlowSDK/FlowSDK (0.3.0):
+  - FlowSDK (0.4.0):
+    - FlowSDK/FlowSDK (= 0.4.0)
+  - FlowSDK/FlowSDK (0.4.0):
     - BigInt (~> 5.2.0)
-    - Cadence (~> 0.3.0)
+    - Cadence (~> 0.4.0)
     - CryptoSwift (~> 1.5.1)
     - gRPC-Swiftp (~> 1.8.2)
     - secp256k1Swift (~> 0.7.4)
@@ -293,13 +293,13 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Cadence:
-    :commit: 6932a63d96fdd0da30e0901121fb71933bf58e21
+    :commit: 1467c999cd076e7607e3575364a52693613d19f8
     :git: "git@github.com:portto/flow-swift-sdk.git"
   FCL-SDK:
-    :commit: e26eaf1e918767d565e983ffb72e70cc46b7a01c
+    :commit: 82fd1734c71b56a204927dba32ce5cd3e7c77fed
     :git: "git@github.com:portto/fcl-swift.git"
   FlowSDK:
-    :commit: 6932a63d96fdd0da30e0901121fb71933bf58e21
+    :commit: 1467c999cd076e7607e3575364a52693613d19f8
     :git: "git@github.com:portto/flow-swift-sdk.git"
   SolanaWeb3:
     :commit: 9f430df4ce564d900e41da37821d555b2e644b62
@@ -313,7 +313,7 @@ SPEC CHECKSUMS:
   Alamofire: 0c07058209f211e3d32824f8e0766d7c44ac83b3
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
   BloctoSDK: 510b6fe013ae1efc401b12cecb3e020126804a01
-  Cadence: 2a6cd88c5830c617ccad292111ebcf3073b87429
+  Cadence: 9de64e79320285ea8beecfae10327f5853f3b790
   CGRPCZlibp: 2f3e1e7a6d6cb481d4d1a26d3ec09aefacf09cbb
   CNIOAtomics: 8edf08644e5e6fa0f021c239be9e8beb1cd9ef18
   CNIOBoringSSL: 2c9c96c2e95f15e83fb8d26b9738d939cc39ae33
@@ -325,7 +325,7 @@ SPEC CHECKSUMS:
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
   EthereumSignTypedDataUtil: ae4e33b21e51ee046a86a65b02843090b8bbd3f9
   FCL-SDK: e81299d80db6a2c9f5c4b1167ec9de95ec7fc541
-  FlowSDK: 93ae90e1e9a3beffa8281c36a0cb4b89d4b6375b
+  FlowSDK: 2d7df11aa11c2eb0d53add61025d6c526f88421e
   GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
   gRPC-Swiftp: 1f5a05ce5b544bff3dce93223e72829daac26113
   Logging: beeb016c9c80cf77042d62e83495816847ef108b

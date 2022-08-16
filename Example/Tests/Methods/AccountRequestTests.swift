@@ -90,7 +90,7 @@ class AccountRequestTests: XCTestCase {
         var components = URLComponents(string: appCustomSchemeBaseURLString)
         components?.queryItems = [
             .init(name: "request_id", value: requestId.uuidString),
-            .init(name: "address", value: expectedAddress),
+            .init(name: "address", value: expectedAddress)
         ]
         BloctoSDK.shared.application(
             open: components!.url!
@@ -120,7 +120,7 @@ class AccountRequestTests: XCTestCase {
         var components = URLComponents(string: webRedirectBaseURLString)
         components?.queryItems = [
             .init(name: "address", value: expectedAddress),
-            .init(name: "request_id", value: requestId.uuidString),
+            .init(name: "request_id", value: requestId.uuidString)
         ]
         MockAuthenticationSession.setCallbackURL(components!.url!)
 
