@@ -28,6 +28,7 @@ public enum QueryName: String {
     case flowNonce = "flow_nonce"
     case accountProof = "account_proof"
     case userSignature = "user_signature"
+    case flowTransaction = "flow_transaction"
 
     // response
     case address

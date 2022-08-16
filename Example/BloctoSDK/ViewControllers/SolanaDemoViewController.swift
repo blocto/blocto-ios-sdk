@@ -50,6 +50,7 @@ final class SolanaDemoViewController: UIViewController {
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .white
+        scrollView.contentInset.bottom = 350
 
         scrollView.addSubview(contentView)
 
@@ -389,7 +390,7 @@ final class SolanaDemoViewController: UIViewController {
                 }
                 BloctoSDK.shared.initialize(
                     with: bloctoSDKAppId,
-                    window: window,
+                    getWindow: { window },
                     logging: true,
                     testnet: !isProduction
                 )

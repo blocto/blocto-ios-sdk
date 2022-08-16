@@ -11,6 +11,7 @@ enum InternalError: Swift.Error {
     case callbackSelfNotfound
     case encodeToURLFailed
     case webSDKSessionFailed
+    case flowScriptInvalid
 }
 
 public enum BloctoSDKError: Swift.Error {

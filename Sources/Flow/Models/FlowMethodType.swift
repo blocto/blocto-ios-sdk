@@ -11,7 +11,5 @@ public enum FlowMethodType: String {
     case requestAccount = "request_account"
     case authenticate = "authn"
     case userSignature = "user_signature"
-    
-    // TODO: implementation
-//    case sendTransaction = "send_transaction"
+    case sendTransaction = "flow_send_transaction"
 }

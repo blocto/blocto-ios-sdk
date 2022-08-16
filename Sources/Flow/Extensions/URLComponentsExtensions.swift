@@ -9,7 +9,7 @@ import Foundation
 
 extension URLComponents {
 
-    func getSignatures(type: FlowSignatureType) -> [CompositeSignature] {
+    func getSignatures(type: FlowSignatureType) -> [FlowCompositeSignature] {
         let keyword: String
         switch type {
         case .accountProof:
@@ -26,14 +26,14 @@ extension URLComponents {
         precondition(items.count % 3 == 0, "AcountProof query item should be multiple of 3.")
         let signatureCount = items.count / 3
         if signatureCount > 0 {
-            var result: [CompositeSignature] = []
+            var result: [FlowCompositeSignature] = []
             for index in 0 ... (signatureCount - 1) {
                 if let address = dic[keyword + "[\(index)]" + "[\(QueryName.address.rawValue)]"],
                    let keyIdString = dic[keyword + "[\(index)]" + "[\(QueryName.keyId.rawValue)]"],
                    let keyId = Int(keyIdString),
                    let signature = dic[keyword + "[\(index)]" + "[\(QueryName.signature.rawValue)]"] {
                     result.append(
-                        CompositeSignature(
+                        FlowCompositeSignature(
                             address: address,
                             keyId: keyId,
                             signature: signature

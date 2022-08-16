@@ -112,44 +112,47 @@ public enum MethodCallbackHelper {
                 .init(name: .txHash, value: txHash),
             ]
         case let .authanticate(address, accountProof):
-            let queryItems: [QueryItem] = [
-                QueryItem(name: .address, value: address),
+            var queryItems: [URLQueryItem] = [
+                URLQueryItem(name: .address, value: address)
             ]
-            + accountProof.enumerated().flatMap {
+            if accountProof.isEmpty == false {
+                let accountProofItems = accountProof.enumerated().flatMap {
                     [
-                        QueryItem(
-                            nameString: QueryName.accountProof.rawValue + "[\(String($0))]" + "[\(QueryName.address.rawValue)]",
+                        URLQueryItem(
+                            name: QueryName.accountProof.rawValue + "[\(String($0))]" + "[\(QueryName.address.rawValue)]",
                             value: $1.address
                         ),
-                        QueryItem(
-                            nameString: QueryName.accountProof.rawValue + "[\(String($0))]" + "[\(QueryName.keyId.rawValue)]",
+                        URLQueryItem(
+                            name: QueryName.accountProof.rawValue + "[\(String($0))]" + "[\(QueryName.keyId.rawValue)]",
                             value: String($1.keyId)
                         ),
-                        QueryItem(
-                            nameString: QueryName.accountProof.rawValue + "[\(String($0))]" + "[\(QueryName.signature.rawValue)]",
+                        URLQueryItem(
+                            name: QueryName.accountProof.rawValue + "[\(String($0))]" + "[\(QueryName.signature.rawValue)]",
                             value: $1.signature
                         ),
                     ]
                 }
-            return URLEncoding.encode(queryItems)
+                queryItems.append(contentsOf: accountProofItems)
+            }
+            return queryItems
         case let .flowSignMessage(signatures):
-            let queryItems: [QueryItem] = signatures.enumerated().flatMap {
+            let queryItems: [URLQueryItem] = signatures.enumerated().flatMap {
                 [
-                    QueryItem(
-                        nameString: QueryName.userSignature.rawValue + "[\(String($0))]" + "[\(QueryName.address.rawValue)]",
+                    URLQueryItem(
+                        name: QueryName.userSignature.rawValue + "[\(String($0))]" + "[\(QueryName.address.rawValue)]",
                         value: $1.address
                     ),
-                    QueryItem(
-                        nameString: QueryName.userSignature.rawValue + "[\(String($0))]" + "[\(QueryName.keyId.rawValue)]",
+                    URLQueryItem(
+                        name: QueryName.userSignature.rawValue + "[\(String($0))]" + "[\(QueryName.keyId.rawValue)]",
                         value: String($1.keyId)
                     ),
-                    QueryItem(
-                        nameString: QueryName.userSignature.rawValue + "[\(String($0))]" + "[\(QueryName.signature.rawValue)]",
+                    URLQueryItem(
+                        name: QueryName.userSignature.rawValue + "[\(String($0))]" + "[\(QueryName.signature.rawValue)]",
                         value: $1.signature
                     ),
                 ]
             }
-            return URLEncoding.encode(queryItems)
+            return queryItems
         case let .error(error):
             return [
                 .init(name: .error, value: error.rawValue),

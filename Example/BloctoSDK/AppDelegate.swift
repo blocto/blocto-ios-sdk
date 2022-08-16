@@ -13,7 +13,7 @@ var isProduction = false
 
 var bloctoSDKAppId: String {
     if isProduction {
-        return "4915cb12-117e-4d9c-99bd-8d82365721cc"
+        return "9c2d24b6-4358-46fc-b967-e3284805a856"
     } else {
         return "64776cec-5953-4a58-8025-772f55a3917b"
     }
@@ -35,7 +35,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         window.makeKeyAndVisible()
         BloctoSDK.shared.initialize(
             with: bloctoSDKAppId,
-            window: window,
+            getWindow: { window },
             logging: true,
             testnet: true
         )
@@ -48,9 +48,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         options: [UIApplication.OpenURLOptionsKey: Any] = [:]
     ) -> Bool {
         BloctoSDK.shared.application(
-            app,
-            open: url,
-            options: options
+            open: url
         )
         return true
     }

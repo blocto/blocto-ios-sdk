@@ -26,7 +26,7 @@ class AccountRequestTests: XCTestCase {
 
         BloctoSDK.shared.initialize(
             with: appId,
-            window: UIWindow(),
+            getWindow: { UIWindow() },
             logging: false,
             testnet: true,
             urlOpening: mockUIApplication
@@ -65,7 +65,7 @@ class AccountRequestTests: XCTestCase {
         let expectedAddress: String = "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv"
         BloctoSDK.shared.initialize(
             with: appId,
-            window: UIWindow(),
+            getWindow: { UIWindow() },
             logging: false,
             testnet: true,
             urlOpening: mockUIApplication
@@ -93,9 +93,7 @@ class AccountRequestTests: XCTestCase {
             .init(name: "address", value: expectedAddress)
         ]
         BloctoSDK.shared.application(
-            UIApplication.shared,
-            open: components!.url!,
-            options: [:]
+            open: components!.url!
         )
 
         // Then:
@@ -110,7 +108,7 @@ class AccountRequestTests: XCTestCase {
         let expectedAddress: String = "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv"
         BloctoSDK.shared.initialize(
             with: appId,
-            window: UIWindow(),
+            getWindow: { UIWindow() },
             logging: false,
             testnet: true,
             urlOpening: mockUIApplication,

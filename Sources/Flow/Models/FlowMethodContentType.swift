@@ -6,20 +6,14 @@
 //
 
 import Foundation
+import FlowSDK
 
 public enum FlowMethodContentType {
-    
-    case authenticate(accountProofData: AccountProofData?)
-    
+
+    case authenticate(accountProofData: FlowAccountProofData?)
+
     case userSignature(from: String, message: String)
-    
-    // TODO: implementation
-//    case signMessage(
-//        from: String,
-//        message: String,
-//        signType: EVMBaseSignType)
-//
-//    case sendTransaction(
-//        transaction: EVMBaseTransaction)
-    
+
+    case sendTransaction(from: String, transaction: Transaction)
+
 }

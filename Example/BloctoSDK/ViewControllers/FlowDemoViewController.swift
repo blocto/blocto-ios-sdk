@@ -12,17 +12,41 @@ import RxSwift
 import RxCocoa
 import SnapKit
 import BloctoSDK
+import FlowSDK
 import Cadence
-import FCL
+import FCL_SDK
 
 // swiftlint:disable type_body_length file_length
 final class FlowDemoViewController: UIViewController {
 
-    private var userWalletAddress: Address?
-    private var nonce = "75f8587e5bd5f9dcc9909d0dae1f0ac5814458b2ae129620502cb936fde7120a"
+    private var nonce = "this is demo app"
+
+    var flowAPIClient: Client {
+        if isProduction {
+            return Client(network: Network.mainnet)
+        } else {
+            return Client(network: Network.testnet)
+        }
+    }
+
+    private var bloctoContract: String {
+        if isProduction {
+            return "0xdb6b70764af4ff68"
+        } else {
+            return "0x5b250a8a85b44a67"
+        }
+    }
+
+    private var valueDappContract: String {
+        if isProduction {
+            return "0x8320311d63f3b336"
+        } else {
+            return "0x5a8143da8058740c"
+        }
+    }
 
     private lazy var bloctoFlowSDK = BloctoSDK.shared.flow
-    private var userSignatures: [CompositeSignature] = []
+    private var userSignatures: [FlowCompositeSignature] = []
 
     private lazy var networkSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["devnet", "mainnet-beta"])
@@ -36,6 +60,7 @@ final class FlowDemoViewController: UIViewController {
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .white
+        scrollView.contentInset.bottom = 350
 
         scrollView.addSubview(contentView)
 
@@ -65,6 +90,14 @@ final class FlowDemoViewController: UIViewController {
         view.addSubview(signingVerifyingIndicator)
         view.addSubview(signButton)
         view.addSubview(signingLoadingIndicator)
+
+        view.addSubview(separator2)
+
+        view.addSubview(setValueTitleLabel)
+        view.addSubview(nomalTxInputTextField)
+        view.addSubview(setValueButton)
+        view.addSubview(setValueResultLabel)
+        view.addSubview(setValueExplorerButton)
 
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().inset(30)
@@ -131,6 +164,39 @@ final class FlowDemoViewController: UIViewController {
 
         signButton.snp.makeConstraints {
             $0.top.equalTo(signingResultLabel.snp.bottom).offset(20)
+            $0.leading.equalToSuperview().inset(20)
+        }
+
+        separator2.snp.makeConstraints {
+            $0.top.equalTo(signButton.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
+        setValueTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(separator2.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
+        nomalTxInputTextField.snp.makeConstraints {
+            $0.top.equalTo(setValueTitleLabel.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(35)
+        }
+
+        setValueResultLabel.snp.makeConstraints {
+            $0.top.equalTo(nomalTxInputTextField.snp.bottom).offset(20)
+            $0.leading.equalToSuperview().inset(20)
+        }
+
+        setValueExplorerButton.snp.makeConstraints {
+            $0.centerY.equalTo(setValueResultLabel)
+            $0.size.equalTo(40)
+            $0.leading.equalTo(setValueResultLabel.snp.trailing).offset(20)
+            $0.trailing.equalToSuperview().inset(20)
+        }
+
+        setValueButton.snp.makeConstraints {
+            $0.top.equalTo(setValueResultLabel.snp.bottom).offset(20)
             $0.bottom.equalToSuperview().inset(20)
             $0.leading.equalToSuperview().inset(20)
         }
@@ -241,6 +307,53 @@ final class FlowDemoViewController: UIViewController {
 
     private lazy var signingLoadingIndicator = createLoadingIndicator()
 
+    private lazy var separator2 = createSeparator()
+
+    private lazy var setValueTitleLabel: UILabel = createLabel(text: "Set a Value")
+
+    private lazy var nomalTxInputTextField: UITextField = {
+        let textField = UITextField()
+        textField.font = UIFont.systemFont(ofSize: 16)
+        textField.textColor = .black
+        textField.backgroundColor = .lightGray
+        textField.text = "5566"
+        textField.returnKeyType = .done
+        textField.delegate = self
+        textField.leftViewMode = .always
+        textField.layer.cornerRadius = 5
+        textField.clipsToBounds = true
+        let leftView = UIView()
+        leftView.snp.makeConstraints {
+            $0.size.equalTo(10)
+        }
+        textField.leftView = leftView
+        return textField
+    }()
+
+    private lazy var setValueButton: UIButton = createButton(
+        text: "Send transaction",
+        indicator: setValueLoadingIndicator
+    )
+
+    private lazy var setValueLoadingIndicator = createLoadingIndicator()
+
+    private lazy var setValueResultLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .black
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
+
+    private lazy var setValueExplorerButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.setImage(UIImage(named: "ic28Earth"), for: .normal)
+        button.contentEdgeInsets = .init(top: 4, left: 4, bottom: 4, right: 4)
+        button.isHidden = true
+        return button
+    }()
+
     private lazy var disposeBag: DisposeBag = DisposeBag()
 
     override func viewDidLoad() {
@@ -311,10 +424,11 @@ final class FlowDemoViewController: UIViewController {
                 }
                 BloctoSDK.shared.initialize(
                     with: bloctoSDKAppId,
-                    window: window,
+                    getWindow: { window },
                     logging: true,
                     testnet: !isProduction
                 )
+                self.setupFCL()
             })
 
         _ = requestAccountButton.rx.tap
@@ -330,18 +444,18 @@ final class FlowDemoViewController: UIViewController {
 
                 /// 1. request account only
                 /*
-                let requestAccountMethod = RequestAccountMethod(
-                    blockchain: .flow) { result in
-                        switch result {
-                        case let .success(address):
-                            let userAddress = address
-                            // receive userAddress here
-                        case let .failure(error):
-                            debugPrint(error)
-                        }
-                    }
-                BloctoSDK.shared.send(method: requestAccountMethod)
-                */
+                 let requestAccountMethod = RequestAccountMethod(
+                     blockchain: .flow) { result in
+                         switch result {
+                         case let .success(address):
+                             let userAddress = address
+                             // receive userAddress here
+                         case let .failure(error):
+                             debugPrint(error)
+                         }
+                     }
+                 BloctoSDK.shared.send(method: requestAccountMethod)
+                 */
 
                 /// 2. Authanticate like FCL
                 let accountProofData = FCLAccountProofData(
@@ -427,6 +541,33 @@ final class FlowDemoViewController: UIViewController {
                 guard let self = self else { return }
                 self.verifySignature()
             })
+
+        _ = setValueButton.rx.tap
+            .throttle(
+                DispatchTimeInterval.milliseconds(500),
+                latest: false,
+                scheduler: MainScheduler.instance
+            )
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.resetSetValueStatus()
+                self.setValueLoadingIndicator.startAnimating()
+                self.sendTransaction()
+            })
+
+        _ = setValueExplorerButton.rx.tap
+            .throttle(
+                DispatchTimeInterval.milliseconds(500),
+                latest: false,
+                scheduler: MainScheduler.instance
+            )
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self,
+                      let hash = self.setValueResultLabel.text else { return }
+                self.routeToExplorer(with: .txhash(hash))
+            })
     }
 
     private func verifyAccountProof() {
@@ -438,7 +579,6 @@ final class FlowDemoViewController: UIViewController {
 
         accountProofVerifyingIndicator.startAnimating()
 
-        let bloctoContract = "0x5b250a8a85b44a67"
         Task {
             do {
                 let valid = try await AppUtilities.verifyAccountProof(
@@ -530,6 +670,84 @@ final class FlowDemoViewController: UIViewController {
         }
     }
 
+    private func sendTransaction() {
+        guard let userWalletAddress = fcl.currentUser?.address else {
+            handleSetValueError(Error.message("User address not found. Please request account first."))
+            return
+        }
+        guard let inputValue = nomalTxInputTextField.text,
+              inputValue.isEmpty == false else {
+            handleSetValueError(Error.message("Input not found."))
+            return
+        }
+
+        Task { @MainActor in
+            do {
+                guard let account = try await flowAPIClient.getAccountAtLatestBlock(address: userWalletAddress) else {
+                    handleSetValueError(Error.message("Account not found."))
+                    return
+                }
+
+                guard let block = try await flowAPIClient.getLatestBlock(isSealed: true) else {
+                    handleSetValueError(Error.message("Latest block not found."))
+                    return
+                }
+
+                let scriptString = """
+                import ValueDapp from \(valueDappContract)
+
+                transaction(value: UFix64) {
+                    prepare(authorizer: AuthAccount) {
+                        ValueDapp.setValue(value)
+                    }
+                }
+                """
+                let script = Data(scriptString.utf8)
+
+                let argument = Cadence.Argument(.ufix64(123))
+
+                guard let cosignerKey = account.keys
+                    .first(where: { $0.weight == 999 && $0.revoked == false }) else {
+                    throw FCLError.keyNotFound
+                }
+
+                let proposalKey = Transaction.ProposalKey(
+                    address: userWalletAddress,
+                    keyIndex: cosignerKey.index,
+                    sequenceNumber: cosignerKey.sequenceNumber
+                )
+
+                let transaction = try Transaction(
+                    script: script,
+                    arguments: [argument],
+                    referenceBlockId: block.blockHeader.id,
+                    gasLimit: 100,
+                    proposalKey: proposalKey,
+                    payer: Address(hexString: "f086a545ce3c552d"),
+                    authorizers: [userWalletAddress]
+                )
+
+                bloctoFlowSDK.sendTransaction(
+                    from: userWalletAddress,
+                    transaction: transaction
+                ) { [weak self] result in
+                    guard let self = self else { return }
+                    self.resetSetValueStatus()
+                    switch result {
+                    case let .success(txHsh):
+                        self.setValueResultLabel.text = txHsh
+                        self.setValueExplorerButton.isHidden = false
+                    case let .failure(error):
+                        self.handleSetValueError(error)
+                    }
+                }
+
+            } catch {
+                handleSetValueError(Error.message("Account not found."))
+            }
+        }
+    }
+
     private func createSeparator() -> UIView {
         let view = UIView()
         view.backgroundColor = .gray
@@ -590,6 +808,13 @@ final class FlowDemoViewController: UIViewController {
         signingLoadingIndicator.stopAnimating()
     }
 
+    private func resetSetValueStatus() {
+        setValueResultLabel.text = nil
+        setValueResultLabel.textColor = .black
+        setValueLoadingIndicator.stopAnimating()
+        setValueExplorerButton.isHidden = true
+    }
+
     private func handleRequestAccountError(_ error: Swift.Error) {
         handleGeneralError(label: requestAccountResultLabel, error: error)
         requestAccountLoadingIndicator.stopAnimating()
@@ -598,6 +823,11 @@ final class FlowDemoViewController: UIViewController {
     private func handleSignError(_ error: Swift.Error) {
         handleGeneralError(label: signingResultLabel, error: error)
         signingLoadingIndicator.stopAnimating()
+    }
+
+    private func handleSetValueError(_ error: Swift.Error) {
+        handleGeneralError(label: setValueResultLabel, error: error)
+        setValueLoadingIndicator.stopAnimating()
     }
 
     private func handleGeneralError(label: UILabel, error: Swift.Error) {
@@ -654,7 +884,7 @@ final class FlowDemoViewController: UIViewController {
 
 }
 
-// MARK: - UITextFieldDelegate
+// MARK: UITextFieldDelegate
 
 extension FlowDemoViewController: UITextFieldDelegate {
 
@@ -665,7 +895,7 @@ extension FlowDemoViewController: UITextFieldDelegate {
 
 }
 
-// MARK: - SFSafariViewControllerDelegate
+// MARK: SFSafariViewControllerDelegate
 
 extension FlowDemoViewController: SFSafariViewControllerDelegate {}
 

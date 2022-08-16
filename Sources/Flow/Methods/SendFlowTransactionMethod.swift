@@ -1,64 +1,62 @@
 //
-//  AuthenticateMethod.swift
+//  SendFlowTransactionMethod.swift
 //  BloctoSDK
 //
-//  Created by Andrew Wang on 2022/7/7.
+//  Created by Andrew Wang on 2022/8/3.
 //
 
 import Foundation
+import Cadence
+import FlowSDK
 
-public struct AuthenticateMethod: CallbackMethod {
-    public typealias Response = (address: String, accountProof: [FlowCompositeSignature])
+public struct SendFlowTransactionMethod: CallbackMethod {
+    public typealias Response = String
 
     public let id: UUID
-    public let type: String = FlowMethodType.authenticate.rawValue
+    public let type: String = FlowMethodType.sendTransaction.rawValue
+    public let from: Address
+    public let transaction: Transaction
     public let callback: Callback
 
     let blockchain: Blockchain = .flow
-    let accountProofData: FlowAccountProofData?
 
     /// initialize request account method
     /// - Parameters:
     ///   - id: Used to find a stored callback. No need to pass if there is no specific requirement, for example, testing.
+    ///   - from: Pre-defined Cadence Address.
+    ///   - transactionInfo: Elements describe Flow transaction.
     ///   - callback: callback will be called by either from blocto native app or web SDK after getting account or reject.
     public init(
         id: UUID = UUID(),
-        accountProofData: FlowAccountProofData?,
+        from: Address,
+        transaction: Transaction,
         callback: @escaping Callback
     ) {
         self.id = id
-        self.accountProofData = accountProofData
+        self.from = from
+        self.transaction = transaction
         self.callback = callback
     }
 
     public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
         guard let baseURL = URL(string: baseURLString),
-              var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
+              var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
             return nil
         }
-        var queryItems = URLEncoding.queryItems(
+        var queryItems: [QueryItem] = URLEncoding.queryItems(
             appId: appId,
             requestId: id.uuidString,
             blockchain: blockchain
         )
-        queryItems.append(
-            QueryItem(
-                name: .method,
-                value: type
-            )
-        )
-        if let accountProofData = accountProofData {
-            queryItems.append(contentsOf: [
-                QueryItem(
-                    name: .flowAppId,
-                    value: accountProofData.appId
-                ),
-                QueryItem(
-                    name: .flowNonce,
-                    value: accountProofData.nonce
-                ),
-            ])
-        }
+
+        let transactionDataHex = transaction.encode().bloctoSDK.hexString
+
+        queryItems.append(contentsOf: [
+            QueryItem(name: .method, value: type),
+            QueryItem(name: .from, value: from.hexStringWithPrefix),
+            QueryItem(name: .flowTransaction, value: transactionDataHex)
+        ])
+
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }
@@ -68,8 +66,8 @@ public struct AuthenticateMethod: CallbackMethod {
             callback(.failure(BloctoSDKError(code: errorCode)))
             return
         }
-        let targetQueryName = QueryName.address
-        guard let address = components.queryItem(for: targetQueryName) else {
+        let targetQueryName = QueryName.txHash
+        guard let txHash = components.queryItem(for: targetQueryName) else {
             log(
                 enable: logging,
                 message: "\(targetQueryName.rawValue) not found."
@@ -77,8 +75,7 @@ public struct AuthenticateMethod: CallbackMethod {
             callback(.failure(BloctoSDKError.invalidResponse))
             return
         }
-        let signatures = components.getSignatures(type: .accountProof)
-        callback(.success((address: address, accountProof: signatures)))
+        callback(.success(txHash))
     }
 
     public func handleError(error: Swift.Error) {

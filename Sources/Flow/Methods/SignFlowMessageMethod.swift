@@ -9,7 +9,7 @@ import Foundation
 
 public struct SignFlowMessageMethod: CallbackMethod {
     
-    public typealias Response = [CompositeSignature]
+    public typealias Response = [FlowCompositeSignature]
     
     public let id: UUID
     public let type: String = FlowMethodType.userSignature.rawValue

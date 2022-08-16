@@ -7,6 +7,7 @@
 
 import Foundation
 import BigInt
+import FlowSDK
 
 public struct ParsedMethod {
 
@@ -108,10 +109,10 @@ public struct ParsedMethod {
                     )
                 )
             case .authenticate:
-                var accountProofData: AccountProofData?
+                var accountProofData: FlowAccountProofData?
                 if let accountProofAppId = param[QueryName.flowAppId.rawValue],
                    let nonce = param[QueryName.flowNonce.rawValue] {
-                    accountProofData = AccountProofData(
+                    accountProofData = FlowAccountProofData(
                         appId: accountProofAppId,
                         nonce: nonce
                     )
@@ -129,6 +130,17 @@ public struct ParsedMethod {
 
                 self.methodContentType = .flow(
                     .userSignature(from: from, message: removingPercentEncodingString)
+                )
+            case .sendTransaction:
+                guard let from = param[QueryName.from.rawValue],
+                      let transactionDataHex = param[QueryName.flowTransaction.rawValue] else { return nil }
+
+                guard let transaction = try? Transaction(rlpData: transactionDataHex.bloctoSDK.hexDecodedData) else {
+                    return nil
+                }
+
+                self.methodContentType = .flow(
+                    .sendTransaction(from: from, transaction: transaction)
                 )
             }
         }
