@@ -47,7 +47,7 @@ Pod::Spec.new do |s|
       "Sources/EVMBase/Models/EVMBaseTransaction.swift",
       "Sources/EVMBase/Models/SignType.swift",
       "Sources/Flow/Models/**/*"
-      ss.dependency "BloctoSDK/Core", "~> 0.2.0"
+      ss.dependency "BloctoSDK/Core", "~> 0.3.0"
       ss.dependency "BigInt", "~> 5.0"
       ss.dependency "FlowSDK", "~> 0.4.0"
   end
