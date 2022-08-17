@@ -286,7 +286,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   FCL-SDK:
-    :commit: b63ff2c66167388d0f9ecceed22b26c02ae3a58c
+    :commit: 6f0a59dfa2bdaa23fdf69194ecd8c2ffe35cce7c
     :git: https://github.com/portto/fcl-swift.git
   SolanaWeb3:
     :commit: 420ddd0eb04a62071265bf530cb55cfc61cc82eb
