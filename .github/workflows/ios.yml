@@ -13,11 +13,13 @@ jobs:
     runs-on: macOS-latest
     strategy:
         matrix:
-          swift: ["5.0"]
+          swift: ["5.6"]
           destination: ['platform=iOS Simulator,OS=15.2,name=iPhone 13 Pro']
 
     steps:
     - uses: actions/checkout@v1
+      with: 
+        xcode-version: '13.3'
 
     - name: Install Dependencies
       run: |
@@ -28,6 +30,12 @@ jobs:
 
     - name: Get swift version
       run: swift --version
+
+    - name: Get xcode version
+      run: xcodebuild -version
+
+    - name: Get MacOS version
+      run: sw_vers
 
     - name: start test
       run: echo start test!
