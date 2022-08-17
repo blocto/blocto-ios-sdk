@@ -790,7 +790,6 @@ final class FlowDemoViewController: UIViewController {
 
         signingVerifyingIndicator.startAnimating()
 
-        let bloctoContract = "0x5b250a8a85b44a67"
         let sigs = userSignatures.map {
             FCLCompositeSignature(
                 address: $0.address,
