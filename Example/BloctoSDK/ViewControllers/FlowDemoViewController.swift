@@ -1053,6 +1053,12 @@ final class FlowDemoViewController: UIViewController {
                 label.text = "user not matched."
             case .ethSignInvalidHexString:
                 label.text = "input text should be hex string with 0x prefix."
+            case .userCancel:
+                label.text = "user canceled."
+            case .redirectURLNotFound:
+                label.text = "redirect url not found."
+            case let .sessionError(code):
+                label.text = "ASWebAuthenticationSessionError \(code)"
             case let .other(code):
                 label.text = code
             }
