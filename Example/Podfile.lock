@@ -1,24 +1,22 @@
 PODS:
   - _NIODataStructures (2.40.0)
-  - Alamofire (5.6.0)
+  - Alamofire (5.6.2)
   - BigInt (5.2.0)
-  - BloctoSDK (0.3.0):
-    - BloctoSDK/Core (= 0.3.0)
   - BloctoSDK/Core (0.3.0)
   - BloctoSDK/EVMBase (0.3.0):
     - BigInt (~> 5.0)
     - BloctoSDK/Core
   - BloctoSDK/Flow (0.3.0):
     - BloctoSDK/Core
-    - FlowSDK
+    - FlowSDK (~> 0.4.0)
   - BloctoSDK/Solana (0.3.0):
     - BloctoSDK/Core
     - Moya (~> 14.0.0)
     - SolanaWeb3 (~> 0.0.4)
   - BloctoSDK/Wallet (0.3.0):
     - BigInt (~> 5.0)
-    - BloctoSDK/Core (~> 0.2.0)
-    - FlowSDK
+    - BloctoSDK/Core (~> 0.3.0)
+    - FlowSDK (~> 0.4.0)
   - Cadence (0.4.0):
     - BigInt (~> 5.2.0)
     - CryptoSwift (~> 1.5.1)
@@ -36,9 +34,7 @@ PODS:
     - BigInt (~> 5.0)
     - CryptoSwift (~> 1.4)
   - FCL-SDK (0.1.0):
-    - BloctoSDK
-    - Cadence
-    - FlowSDK
+    - BloctoSDK/Flow (~> 0.3.0)
     - SwiftyJSON
   - FlowSDK (0.4.0):
     - FlowSDK/FlowSDK (= 0.4.0)
@@ -64,17 +60,17 @@ PODS:
   - Moya/Core (14.0.0):
     - Alamofire (~> 5.0)
   - Runtime (2.2.2)
-  - RxCocoa (6.2.0):
-    - RxRelay (= 6.2.0)
-    - RxSwift (= 6.2.0)
-  - RxRelay (6.2.0):
-    - RxSwift (= 6.2.0)
-  - RxSwift (6.2.0)
+  - RxCocoa (6.5.0):
+    - RxRelay (= 6.5.0)
+    - RxSwift (= 6.5.0)
+  - RxRelay (6.5.0):
+    - RxSwift (= 6.5.0)
+  - RxSwift (6.5.0)
   - secp256k1.swift (0.1.4)
   - secp256k1Swift (0.7.4):
     - secp256k1Wrapper (~> 0.0.5)
   - secp256k1Wrapper (0.0.5)
-  - SnapKit (5.0.1)
+  - SnapKit (5.6.0)
   - SolanaWeb3 (0.0.4):
     - Alamofire (~> 5.5)
     - CryptoSwift (~> 1.4)
@@ -290,10 +286,10 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   FCL-SDK:
-    :commit: 38d2f88da90e66bfc608245332decca82d0bc376
+    :commit: 6f0a59dfa2bdaa23fdf69194ecd8c2ffe35cce7c
     :git: https://github.com/portto/fcl-swift.git
   SolanaWeb3:
-    :commit: 9f430df4ce564d900e41da37821d555b2e644b62
+    :commit: 420ddd0eb04a62071265bf530cb55cfc61cc82eb
     :git: https://github.com/portto/solana-web3.swift.git
   web3.swift:
     :commit: 6a9d8d655fde7e8300d011e3781bb7176b34a9ed
@@ -301,9 +297,9 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   _NIODataStructures: 3d45d8e70a1d17a15b1dc59d102c63dbc0525ffd
-  Alamofire: 0c07058209f211e3d32824f8e0766d7c44ac83b3
+  Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  BloctoSDK: 8272747c9794699222d273c118e2ead9006b2fd0
+  BloctoSDK: b85673507a12f1678ee021abe2db2128c72768c7
   Cadence: 9de64e79320285ea8beecfae10327f5853f3b790
   CGRPCZlibp: 2f3e1e7a6d6cb481d4d1a26d3ec09aefacf09cbb
   CNIOAtomics: 8edf08644e5e6fa0f021c239be9e8beb1cd9ef18
@@ -315,20 +311,20 @@ SPEC CHECKSUMS:
   CNIOWindows: 3047f2d8165848a3936a0a755fee27c6b5ee479b
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
   EthereumSignTypedDataUtil: ae4e33b21e51ee046a86a65b02843090b8bbd3f9
-  FCL-SDK: fdb4740ce9cf80e503c13adc52de8d62b55030a3
+  FCL-SDK: c5b6ecb3de01164e7ef9ff04a42c99872ab1d50c
   FlowSDK: 2d7df11aa11c2eb0d53add61025d6c526f88421e
   GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
   gRPC-Swiftp: 1f5a05ce5b544bff3dce93223e72829daac26113
   Logging: beeb016c9c80cf77042d62e83495816847ef108b
   Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
   Runtime: 67741bd196fb4ad821c4d259ccc527bf734d8806
-  RxCocoa: 4baf94bb35f2c0ab31bc0cb9f1900155f646ba42
-  RxRelay: e72dbfd157807478401ef1982e1c61c945c94b2f
-  RxSwift: d356ab7bee873611322f134c5f9ef379fa183d8f
+  RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
+  RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
+  RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
   secp256k1Swift: ea49d2b06724444a03cf7938a2d3fc7acc4c0f08
   secp256k1Wrapper: 0378417cd06d51187bbc9e178ec318e7902e2120
-  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   SolanaWeb3: 518d1fddf72ac8e0f76dd19a01d90079edb5da47
   SwiftNIO: 829958aab300642625091f82fc2f49cb7cf4ef24
   SwiftNIOConcurrencyHelpers: 697370136789b1074e4535eaae75cbd7f900370e
