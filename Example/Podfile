@@ -1,6 +1,6 @@
-use_frameworks!
-
+source 'https://cdn.cocoapods.org/'
 platform :ios, '13.0'
+use_frameworks!
 
 target 'BloctoSDK_Example' do
   pod 'BloctoSDK/Solana', :path => '../'
