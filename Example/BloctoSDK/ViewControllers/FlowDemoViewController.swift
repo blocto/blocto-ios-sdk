@@ -29,6 +29,14 @@ final class FlowDemoViewController: UIViewController {
         }
     }
 
+    private var bloctoApiBaseURLString: String {
+        if isProduction {
+            return "https://api.blocto.app"
+        } else {
+            return "https://api-staging.blocto.app"
+        }
+    }
+
     private var bloctoContract: String {
         if isProduction {
             return "0xdb6b70764af4ff68"
@@ -717,13 +725,35 @@ final class FlowDemoViewController: UIViewController {
                     sequenceNumber: cosignerKey.sequenceNumber
                 )
 
+                guard let url = URL(string: bloctoApiBaseURLString + "/flow/feePayer") else {
+                    throw FCLError.urlNotFound
+                }
+
+                let feePayerRequest = URLRequest(url: url)
+
+                let data: Data = try await withCheckedThrowingContinuation { continuation in
+                    URLSession(configuration: .default).dataTask(with: feePayerRequest) { data, _, error in
+                        if let error = error {
+                            continuation.resume(with: .failure(error))
+                        } else if let data = data {
+                            continuation.resume(with: .success(data))
+                        } else {
+                            continuation.resume(with: .failure(Error.message("feePayerRequest data not found.")))
+                        }
+                    }.resume()
+                }
+                let response = try JSONDecoder().decode([String: String].self, from: data)
+                guard let address = response["address"] else {
+                    throw Error.message("feePayer not found.")
+                }
+
                 let transaction = try Transaction(
                     script: script,
                     arguments: [argument],
                     referenceBlockId: block.blockHeader.id,
                     gasLimit: 100,
                     proposalKey: proposalKey,
-                    payer: Address(hexString: "f086a545ce3c552d"),
+                    payer: Address(hexString: address),
                     authorizers: [userWalletAddress]
                 )
 
