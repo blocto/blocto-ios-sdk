@@ -1123,6 +1123,12 @@ final class EVMBaseDemoViewController: UIViewController {
                 label.text = "user not matched."
             case .ethSignInvalidHexString:
                 label.text = "input text should be hex string with 0x prefix."
+            case .userCancel:
+                label.text = "user canceled."
+            case .redirectURLNotFound:
+                label.text = "redirect url not found."
+            case let .sessionError(code):
+                label.text = "ASWebAuthenticationSessionError \(code)"
             case let .other(code):
                 label.text = code
             }
@@ -1144,7 +1150,7 @@ final class EVMBaseDemoViewController: UIViewController {
 
 }
 
-// MARK: - UITextFieldDelegate
+// MARK: UITextFieldDelegate
 
 extension EVMBaseDemoViewController: UITextFieldDelegate {
 
@@ -1155,7 +1161,7 @@ extension EVMBaseDemoViewController: UITextFieldDelegate {
 
 }
 
-// MARK: - SFSafariViewControllerDelegate
+// MARK: SFSafariViewControllerDelegate
 
 extension EVMBaseDemoViewController: SFSafariViewControllerDelegate {}
 

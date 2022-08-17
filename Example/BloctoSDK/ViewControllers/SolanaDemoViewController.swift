@@ -780,7 +780,7 @@ final class SolanaDemoViewController: UIViewController {
                     publicKey: userWalletPublicKey,
                     isSigner: false,
                     isWritable: true
-                )
+                ),
             ],
             programId: programId,
             data: data
@@ -824,6 +824,12 @@ final class SolanaDemoViewController: UIViewController {
                 label.text = "user not matched."
             case .ethSignInvalidHexString:
                 label.text = "input text should be hex string with 0x prefix."
+            case .userCancel:
+                label.text = "user canceled."
+            case .redirectURLNotFound:
+                label.text = "redirect url not found."
+            case let .sessionError(code):
+                label.text = "ASWebAuthenticationSessionError \(code)"
             case let .other(code):
                 label.text = code
             }
@@ -863,7 +869,7 @@ final class SolanaDemoViewController: UIViewController {
 
 }
 
-// MARK: - UITextFieldDelegate
+// MARK: UITextFieldDelegate
 
 extension SolanaDemoViewController: UITextFieldDelegate {
 
@@ -874,7 +880,7 @@ extension SolanaDemoViewController: UITextFieldDelegate {
 
 }
 
-// MARK: - SFSafariViewControllerDelegate
+// MARK: SFSafariViewControllerDelegate
 
 extension SolanaDemoViewController: SFSafariViewControllerDelegate {}
 

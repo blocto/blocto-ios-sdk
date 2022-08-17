@@ -236,6 +236,13 @@ public class BloctoSDK {
                             enable: self.logging,
                             message: error.localizedDescription
                         )
+                        if let error = error as? ASWebAuthenticationSessionError {
+                            if error.code == ASWebAuthenticationSessionError.Code.canceledLogin {
+                                method.handleError(error: BloctoSDKError.userCancel)
+                            } else {
+                                method.handleError(error: BloctoSDKError.sessionError(code: error.code.rawValue))
+                            }
+                        }
                     } else if let callbackURL = callbackURL {
                         self.methodResolve(expectHost: nil, url: callbackURL)
                     } else {
@@ -243,6 +250,7 @@ public class BloctoSDK {
                             enable: self.logging,
                             message: "callback URL not found."
                         )
+                        method.handleError(error: BloctoSDKError.redirectURLNotFound)
                     }
                     session = nil
                 }
