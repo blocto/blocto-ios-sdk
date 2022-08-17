@@ -107,6 +107,21 @@ final class FlowDemoViewController: UIViewController {
         view.addSubview(setValueResultLabel)
         view.addSubview(setValueExplorerButton)
 
+        view.addSubview(separator3)
+
+        view.addSubview(getValueTitleLabel)
+        view.addSubview(getValueButton)
+        view.addSubview(getValueLoadingIndicator)
+        view.addSubview(getValueResultLabel)
+
+        view.addSubview(separator4)
+
+        view.addSubview(lookupTitleLabel)
+        view.addSubview(txIdInputTextField)
+        view.addSubview(lookupResultLabel)
+        view.addSubview(lookupLoadingIndicator)
+        view.addSubview(lookupButton)
+
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().inset(30)
             $0.leading.trailing.equalToSuperview().inset(20)
@@ -205,6 +220,52 @@ final class FlowDemoViewController: UIViewController {
 
         setValueButton.snp.makeConstraints {
             $0.top.equalTo(setValueResultLabel.snp.bottom).offset(20)
+            $0.leading.equalToSuperview().inset(20)
+        }
+
+        separator3.snp.makeConstraints {
+            $0.top.equalTo(setValueButton.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
+        getValueTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(separator3.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
+        getValueResultLabel.snp.makeConstraints {
+            $0.top.equalTo(getValueTitleLabel.snp.bottom).offset(20)
+            $0.leading.equalToSuperview().inset(20)
+        }
+
+        getValueButton.snp.makeConstraints {
+            $0.top.equalTo(getValueResultLabel.snp.bottom).offset(20)
+            $0.leading.equalToSuperview().inset(20)
+        }
+
+        separator4.snp.makeConstraints {
+            $0.top.equalTo(getValueButton.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
+        lookupTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(separator4.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
+        txIdInputTextField.snp.makeConstraints {
+            $0.top.equalTo(lookupTitleLabel.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(35)
+        }
+
+        lookupResultLabel.snp.makeConstraints {
+            $0.top.equalTo(txIdInputTextField.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
+        lookupButton.snp.makeConstraints {
+            $0.top.equalTo(lookupResultLabel.snp.bottom).offset(20)
             $0.bottom.equalToSuperview().inset(20)
             $0.leading.equalToSuperview().inset(20)
         }
@@ -324,7 +385,7 @@ final class FlowDemoViewController: UIViewController {
         textField.font = UIFont.systemFont(ofSize: 16)
         textField.textColor = .black
         textField.backgroundColor = .lightGray
-        textField.text = "5566"
+        textField.placeholder = "input value"
         textField.returnKeyType = .done
         textField.delegate = self
         textField.leftViewMode = .always
@@ -361,6 +422,65 @@ final class FlowDemoViewController: UIViewController {
         button.isHidden = true
         return button
     }()
+
+    private lazy var separator3 = createSeparator()
+
+    private lazy var getValueTitleLabel: UILabel = createLabel(text: "Get a Value from Value Dapp")
+
+    private lazy var getValueButton: UIButton = createButton(
+        text: "Get Value",
+        indicator: getValueLoadingIndicator
+    )
+
+    private lazy var getValueLoadingIndicator = createLoadingIndicator()
+
+    private lazy var getValueResultLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .black
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        return label
+    }()
+
+    private lazy var separator4 = createSeparator()
+
+    private lazy var lookupTitleLabel: UILabel = createLabel(text: "Look up tx")
+
+    private lazy var txIdInputTextField: UITextField = {
+        let textField = UITextField()
+        textField.font = UIFont.systemFont(ofSize: 16)
+        textField.textColor = .black
+        textField.backgroundColor = .lightGray
+        textField.placeholder = "tx id"
+        textField.returnKeyType = .done
+        textField.delegate = self
+        textField.leftViewMode = .always
+        textField.layer.cornerRadius = 5
+        textField.clipsToBounds = true
+        let leftView = UIView()
+        leftView.snp.makeConstraints {
+            $0.size.equalTo(10)
+        }
+        textField.leftView = leftView
+        return textField
+    }()
+
+    private lazy var lookupResultLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .black
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
+
+    private lazy var lookupLoadingIndicator = createLoadingIndicator()
+
+    private lazy var lookupButton: UIButton = createButton(
+        text: "Look up",
+        indicator: lookupLoadingIndicator
+    )
 
     private lazy var disposeBag: DisposeBag = DisposeBag()
 
@@ -576,6 +696,31 @@ final class FlowDemoViewController: UIViewController {
                       let hash = self.setValueResultLabel.text else { return }
                 self.routeToExplorer(with: .txhash(hash))
             })
+
+        _ = getValueButton.rx.tap
+            .throttle(
+                DispatchTimeInterval.milliseconds(500),
+                latest: false,
+                scheduler: MainScheduler.instance
+            )
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.getValue()
+            })
+
+        _ = lookupButton.rx.tap
+            .throttle(
+                DispatchTimeInterval.milliseconds(500),
+                latest: false,
+                scheduler: MainScheduler.instance
+            )
+            .take(until: rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self,
+                      let hash = self.txIdInputTextField.text else { return }
+                self.lookup(txHash: hash)
+            })
     }
 
     private func verifyAccountProof() {
@@ -684,7 +829,8 @@ final class FlowDemoViewController: UIViewController {
             return
         }
         guard let inputValue = nomalTxInputTextField.text,
-              inputValue.isEmpty == false else {
+              inputValue.isEmpty == false,
+              let input = Decimal(string: inputValue) else {
             handleSetValueError(Error.message("Input not found."))
             return
         }
@@ -712,7 +858,7 @@ final class FlowDemoViewController: UIViewController {
                 """
                 let script = Data(scriptString.utf8)
 
-                let argument = Cadence.Argument(.ufix64(123))
+                let argument = Cadence.Argument(.ufix64(input))
 
                 guard let cosignerKey = account.keys
                     .first(where: { $0.weight == 999 && $0.revoked == false }) else {
@@ -774,6 +920,39 @@ final class FlowDemoViewController: UIViewController {
 
             } catch {
                 handleSetValueError(Error.message("Account not found."))
+            }
+        }
+    }
+
+    private func getValue() {
+        let script = """
+        import ValueDapp from \(valueDappContract)
+
+        pub fun main(): UFix64 {
+            return ValueDapp.value
+        }
+        """
+
+        Task {
+            let argument = try await flowAPIClient.executeScriptAtLatestBlock(script: Data(script.utf8))
+            getValueResultLabel.text = argument.value.description
+        }
+    }
+
+    private func lookup(txHash: String) {
+        lookupLoadingIndicator.startAnimating()
+        lookupResultLabel.text = nil
+
+        Task {
+            do {
+                let result = try await fcl.getTransactionStatus(transactionId: txHash)
+                lookupLoadingIndicator.stopAnimating()
+                let displayString = "status: \(String(describing: result.status ?? .unknown))\nerror message: \(result.errorMessage ?? "no error")"
+                lookupResultLabel.text = displayString
+                debugPrint(result)
+            } catch {
+                lookupLoadingIndicator.stopAnimating()
+                lookupResultLabel.text = error.localizedDescription
             }
         }
     }
