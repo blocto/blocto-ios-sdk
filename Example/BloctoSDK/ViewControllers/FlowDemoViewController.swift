@@ -56,7 +56,7 @@ final class FlowDemoViewController: UIViewController {
     }
 
     private lazy var bloctoFlowSDK = BloctoSDK.shared.flow
-    private var userSignatures: [FlowCompositeSignature] = []
+    private var userSignatures: [FCLCompositeSignature] = []
 
     private lazy var networkSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["devnet", "mainnet-beta"])
@@ -760,7 +760,7 @@ final class FlowDemoViewController: UIViewController {
     }
 
     private func signMessage() {
-        guard let userWalletAddress = fcl.currentUser?.address.hexStringWithPrefix else {
+        guard fcl.currentUser?.address.hexStringWithPrefix != nil else {
             handleSignError(Error.message("User address not found. Please request account first."))
             return
         }
@@ -768,19 +768,15 @@ final class FlowDemoViewController: UIViewController {
             handleSignError(Error.message("message not found."))
             return
         }
-        bloctoFlowSDK.signMessage(
-            from: userWalletAddress,
-            message: message
-        ) { [weak self] result in
-            guard let self = self else { return }
-            self.resetSignStatus()
-            switch result {
-            case let .success(signatures):
-                self.userSignatures = signatures
-                self.signingResultLabel.text = signatures.map(\.signature).joined(separator: "\n")
-                self.signingVerifyButton.isHidden = false
-            case let .failure(error):
-                self.handleSignError(error)
+        
+        Task { @MainActor in
+            do {
+                let signatures = try await fcl.signUserMessage(message: message)
+                userSignatures = signatures
+                signingResultLabel.text = signatures.map(\.signature).joined(separator: "\n\n")
+                signingVerifyButton.isHidden = false
+            } catch {
+                handleSignError(error)
             }
         }
     }
@@ -793,19 +789,11 @@ final class FlowDemoViewController: UIViewController {
 
         signingVerifyingIndicator.startAnimating()
 
-        let sigs = userSignatures.map {
-            FCLCompositeSignature(
-                address: $0.address,
-                keyId: $0.keyId,
-                signature: $0.signature
-            )
-        }
-
         Task {
             do {
                 let valid = try await AppUtilities.verifyUserSignatures(
                     message: Data(message.utf8).bloctoSDK.hexString,
-                    signatures: sigs,
+                    signatures: userSignatures,
                     fclCryptoContract: Address(hexString: bloctoContract)
                 )
                 signingVerifyingIndicator.stopAnimating()
@@ -831,78 +819,42 @@ final class FlowDemoViewController: UIViewController {
             handleSetValueError(Error.message("User address not found. Please request account first."))
             return
         }
+        
         guard let inputValue = nomalTxInputTextField.text,
               inputValue.isEmpty == false,
               let input = Decimal(string: inputValue) else {
             handleSetValueError(Error.message("Input not found."))
             return
         }
-
+        
         Task { @MainActor in
             do {
-                guard let account = try await flowAPIClient.getAccountAtLatestBlock(address: userWalletAddress) else {
-                    handleSetValueError(Error.message("Account not found."))
-                    return
-                }
-
-                guard let block = try await flowAPIClient.getLatestBlock(isSealed: true) else {
-                    handleSetValueError(Error.message("Latest block not found."))
-                    return
-                }
-
+                
                 let scriptString = """
                 import ValueDapp from \(valueDappContract)
-
+                
                 transaction(value: UFix64) {
                     prepare(authorizer: AuthAccount) {
                         ValueDapp.setValue(value)
                     }
                 }
                 """
-                let script = Data(scriptString.utf8)
-
+                
                 let argument = Cadence.Argument(.ufix64(input))
-
-                guard let cosignerKey = account.keys
-                    .first(where: { $0.weight == 999 && $0.revoked == false }) else {
-                    throw FCLError.keyNotFound
-                }
-
-                let proposalKey = Transaction.ProposalKey(
-                    address: userWalletAddress,
-                    keyIndex: cosignerKey.index,
-                    sequenceNumber: cosignerKey.sequenceNumber
-                )
-
-                let payer = try await bloctoFlowSDK.getFeePayerAddress(isTestnet: !isProduction)
-
-                let transaction = try Transaction(
-                    script: script,
+                
+                let txHsh = try await fcl.mutate(
+                    cadence: scriptString,
                     arguments: [argument],
-                    referenceBlockId: block.blockHeader.id,
-                    gasLimit: 100,
-                    proposalKey: proposalKey,
-                    payer: payer,
+                    limit: 100,
                     authorizers: [userWalletAddress]
                 )
-
-                bloctoFlowSDK.sendTransaction(
-                    from: userWalletAddress,
-                    transaction: transaction
-                ) { [weak self] result in
-                    guard let self = self else { return }
-                    self.resetSetValueStatus()
-                    switch result {
-                    case let .success(txHsh):
-                        self.setValueResultLabel.text = txHsh
-                        self.setValueExplorerButton.isHidden = false
-                    case let .failure(error):
-                        self.handleSetValueError(error)
-                    }
-                }
-
+                resetSetValueStatus()
+                setValueResultLabel.text = txHsh.hexString
+                txIdInputTextField.text = txHsh.hexString
+                setValueExplorerButton.isHidden = false
             } catch {
-                handleSetValueError(Error.message("Account not found."))
+                resetSetValueStatus()
+                handleSetValueError(Error.message(error.localizedDescription))
             }
         }
     }
