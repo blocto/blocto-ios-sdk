@@ -870,27 +870,7 @@ final class FlowDemoViewController: UIViewController {
                     sequenceNumber: cosignerKey.sequenceNumber
                 )
 
-                guard let url = URL(string: bloctoApiBaseURLString + "/flow/feePayer") else {
-                    throw FCLError.urlNotFound
-                }
-
-                let feePayerRequest = URLRequest(url: url)
-
-                let data: Data = try await withCheckedThrowingContinuation { continuation in
-                    URLSession(configuration: .default).dataTask(with: feePayerRequest) { data, _, error in
-                        if let error = error {
-                            continuation.resume(with: .failure(error))
-                        } else if let data = data {
-                            continuation.resume(with: .success(data))
-                        } else {
-                            continuation.resume(with: .failure(Error.message("feePayerRequest data not found.")))
-                        }
-                    }.resume()
-                }
-                let response = try JSONDecoder().decode([String: String].self, from: data)
-                guard let address = response["address"] else {
-                    throw Error.message("feePayer not found.")
-                }
+                let payer = try await bloctoFlowSDK.getFeePayerAddress(isTestnet: !isProduction)
 
                 let transaction = try Transaction(
                     script: script,
@@ -898,7 +878,7 @@ final class FlowDemoViewController: UIViewController {
                     referenceBlockId: block.blockHeader.id,
                     gasLimit: 100,
                     proposalKey: proposalKey,
-                    payer: Address(hexString: address),
+                    payer: payer,
                     authorizers: [userWalletAddress]
                 )
 
