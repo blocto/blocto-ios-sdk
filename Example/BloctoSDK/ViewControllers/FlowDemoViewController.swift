@@ -19,7 +19,9 @@ import FCL_SDK
 // swiftlint:disable type_body_length file_length
 final class FlowDemoViewController: UIViewController {
 
-    private var nonce = "this is demo app"
+    private var accountProofAppName = "This is demo app."
+    // minimum 32-byte random nonce as a hex string.
+    private var nonce = "75f8587e5bd5f9dcc9909d0dae1f0ac5814458b2ae129620502cb936fde7120a"
 
     var flowAPIClient: Client {
         if isProduction {
@@ -587,7 +589,7 @@ final class FlowDemoViewController: UIViewController {
 
                 /// 2. Authanticate like FCL
                 let accountProofData = FCLAccountProofData(
-                    appId: bloctoSDKAppId,
+                    appId: self.accountProofAppName,
                     nonce: self.nonce
                 )
                 Task {
@@ -735,7 +737,7 @@ final class FlowDemoViewController: UIViewController {
         Task {
             do {
                 let valid = try await AppUtilities.verifyAccountProof(
-                    appIdentifier: bloctoSDKAppId,
+                    appIdentifier: accountProofAppName,
                     accountProofData: accountProof,
                     fclCryptoContract: Address(hexString: bloctoContract)
                 )
@@ -751,6 +753,7 @@ final class FlowDemoViewController: UIViewController {
                 }
             } catch {
                 accountProofVerifyingIndicator.stopAnimating()
+                accountProofVerifyButton.setImage(UIImage(named: "error"), for: .normal)
                 debugPrint(error)
             }
         }
@@ -817,6 +820,7 @@ final class FlowDemoViewController: UIViewController {
                 }
             } catch {
                 signingVerifyingIndicator.stopAnimating()
+                signingVerifyButton.setImage(UIImage(named: "error"), for: .normal)
                 debugPrint(error)
             }
         }
@@ -870,27 +874,7 @@ final class FlowDemoViewController: UIViewController {
                     sequenceNumber: cosignerKey.sequenceNumber
                 )
 
-                guard let url = URL(string: bloctoApiBaseURLString + "/flow/feePayer") else {
-                    throw FCLError.urlNotFound
-                }
-
-                let feePayerRequest = URLRequest(url: url)
-
-                let data: Data = try await withCheckedThrowingContinuation { continuation in
-                    URLSession(configuration: .default).dataTask(with: feePayerRequest) { data, _, error in
-                        if let error = error {
-                            continuation.resume(with: .failure(error))
-                        } else if let data = data {
-                            continuation.resume(with: .success(data))
-                        } else {
-                            continuation.resume(with: .failure(Error.message("feePayerRequest data not found.")))
-                        }
-                    }.resume()
-                }
-                let response = try JSONDecoder().decode([String: String].self, from: data)
-                guard let address = response["address"] else {
-                    throw Error.message("feePayer not found.")
-                }
+                let payer = try await bloctoFlowSDK.getFeePayerAddress(isTestnet: !isProduction)
 
                 let transaction = try Transaction(
                     script: script,
@@ -898,7 +882,7 @@ final class FlowDemoViewController: UIViewController {
                     referenceBlockId: block.blockHeader.id,
                     gasLimit: 100,
                     proposalKey: proposalKey,
-                    payer: Address(hexString: address),
+                    payer: payer,
                     authorizers: [userWalletAddress]
                 )
 
@@ -1039,36 +1023,7 @@ final class FlowDemoViewController: UIViewController {
     }
 
     private func handleGeneralError(label: UILabel, error: Swift.Error) {
-        if let error = error as? BloctoSDKError {
-            switch error {
-            case .appIdNotSet:
-                label.text = "app id not set."
-            case .userRejected:
-                label.text = "user rejected."
-            case .forbiddenBlockchain:
-                label.text = "Forbidden blockchain. You should check blockchain selection on Blocto developer dashboard."
-            case .invalidResponse:
-                label.text = "invalid response."
-            case .userNotMatch:
-                label.text = "user not matched."
-            case .ethSignInvalidHexString:
-                label.text = "input text should be hex string with 0x prefix."
-            case .userCancel:
-                label.text = "user canceled."
-            case .redirectURLNotFound:
-                label.text = "redirect url not found."
-            case let .sessionError(code):
-                label.text = "ASWebAuthenticationSessionError \(code)"
-            case let .other(code):
-                label.text = code
-            }
-        } else if let error = error as? Error {
-            label.text = error.message
-        } else {
-            debugPrint(error)
-            label.text = error.localizedDescription
-        }
-        label.textColor = .red
+        ErrorHandler.handleGeneralError(label: label, error: error)
     }
 
     enum ExplorerURLType {
@@ -1115,7 +1070,7 @@ extension FlowDemoViewController: SFSafariViewControllerDelegate {}
 
 extension FlowDemoViewController {
 
-    enum Error: Swift.Error {
+    enum Error: Swift.Error, ErrorMessaging {
         case message(String)
 
         var message: String {

@@ -1,0 +1,63 @@
+# .circleci/config.yml
+version: 2.1
+commands:
+  bundle-install-cache:
+    steps:
+      - run: pwd
+      - restore_cache:
+          key: gem-cache-v1-{{ checksum "Example/Gemfile.lock" }}
+      - run: 
+          command: |
+            cd Example
+            bundle install
+      - save_cache:
+          key: gem-cache-v1-{{ checksum "Example/Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+  pod-install-cache:
+    steps:
+      - run: pwd
+      - restore_cache:
+          key: cocoapods-cache-v1-{{ checksum "Example/Podfile.lock" }}
+      - run: 
+          command: |
+            cd Example
+            bundle exec pod install --repo-update
+      - save_cache:
+          key: cocoapods-cache-v1-{{ checksum "Example/Podfile.lock" }}
+          paths:
+            - ./Pods
+
+jobs:
+  unit_tests:
+    macos:
+      xcode: 13.4.1
+    environment:
+      FL_OUTPUT_DIR: output
+      HOMEBREW_NO_AUTO_UPDATE: 1
+    steps:
+      - checkout
+
+      - bundle-install-cache
+      - pod-install-cache
+
+      - run:
+          name: run unit tests
+          no_output_timeout: 60m
+          command: |
+            cd Example
+            xcodebuild clean test -workspace BloctoSDK.xcworkspace -scheme "BloctoSDK-Example" -destination 'platform=iOS Simulator,OS=15.5,name=iPhone 13 Pro'
+      - store_artifacts:
+          path: output
+      - store_test_results:
+          path: output/scan
+
+workflows:
+  build_and_test:
+    jobs:
+      - unit_tests:
+          filters:
+            branches:
+              ignore:
+                - master
+                - /hotfix\/.*/

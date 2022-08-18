@@ -84,7 +84,7 @@ public class BloctoSolanaSDK {
         addRecentBlockhashIfNeeded(
             transaction) { [weak self] result in
                 guard let self = self else {
-                    completion(.failure(InternalError.callbackSelfNotfound))
+                    completion(.failure(BloctoSDKError.callbackSelfNotfound))
                     return
                 }
                 switch result {
@@ -96,7 +96,7 @@ public class BloctoSolanaSDK {
                                 solanaAddress: from
                             ) { [weak self] result in
                                 guard let self = self else {
-                                    completion(.failure(InternalError.callbackSelfNotfound))
+                                    completion(.failure(BloctoSDKError.callbackSelfNotfound))
                                     return
                                 }
                                 switch result {
@@ -161,7 +161,7 @@ public class BloctoSolanaSDK {
     ) {
         addRecentBlockhashIfNeeded(transaction) { [weak self] result in
             guard let self = self else {
-                completion(.failure(InternalError.callbackSelfNotfound))
+                completion(.failure(BloctoSDKError.callbackSelfNotfound))
                 return
             }
             switch result {
