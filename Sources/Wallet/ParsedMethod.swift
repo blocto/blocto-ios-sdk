@@ -113,7 +113,7 @@ public struct ParsedMethod {
                 if let accountProofAppId = param[QueryName.flowAppId.rawValue],
                    let nonce = param[QueryName.flowNonce.rawValue] {
                     accountProofData = FlowAccountProofData(
-                        appId: accountProofAppId,
+                        appId: accountProofAppId.removingPercentEncoding ?? accountProofAppId,
                         nonce: nonce
                     )
                 }
