@@ -23,6 +23,14 @@ func customScheme(appId: String) -> String {
 public class BloctoSDK {
 
     public static let shared: BloctoSDK = BloctoSDK()
+    
+    var bloctoApiBaseURLString: String {
+        if testnet {
+            return "https://api-staging.blocto.app"
+        } else {
+            return "https://api.blocto.app"
+        }
+    }
 
     private var bloctoAssociatedDomain: String {
         if testnet {

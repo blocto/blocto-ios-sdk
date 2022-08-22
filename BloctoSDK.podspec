@@ -22,7 +22,6 @@ Pod::Spec.new do |s|
       ss.source_files = "Sources/Solana/**/*"
       ss.dependency "BloctoSDK/Core"
       ss.dependency "SolanaWeb3", "~> 0.0.4"
-      ss.dependency "Moya", "~> 14.0.0"
   end
   
   s.subspec "EVMBase" do |ss|

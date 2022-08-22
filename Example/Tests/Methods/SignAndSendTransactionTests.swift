@@ -9,7 +9,6 @@
 import XCTest
 @testable import BloctoSDK
 import SolanaWeb3
-import Moya
 
 struct ValueAccountData: BufferLayout {
     let instruction: Int
@@ -65,7 +64,7 @@ class SignAndSendTransactionTests: XCTestCase {
                     publicKey: userWalletPublicKey,
                     isSigner: false,
                     isWritable: true
-                )
+                ),
             ],
             programId: programPublicKey,
             data: data
@@ -74,30 +73,16 @@ class SignAndSendTransactionTests: XCTestCase {
         transaction.add(transactionInstruction)
         transaction.feePayer = userWalletPublicKey
 
-        // swiftlint:disable line_length
-        let response = Data(#"{"raw_tx":"03020208dac7dab484e8d0f174360daad76fe7b849aa929c5103eff76cd6d30fd0ea947d0f2b785bed6b4c9cf079c0ba7ae9264cd3f3d30a9cab45cb442923862c5633a0618db61dfc748ba4ee9e3d0bb4a8364b64ee145c9080ac7af4ceb4039aacdd7e2f044d6abceb87a88416562a21f1bb49e216f5f7a829bc88763a2b0664680fa34aa5298c9669ab8f56b091cc8c6a3f1564d24300f60ab9f313a0ba787ed1ca70e7fdf00ea69dfc9d96968d5108b5c69b0e125ca8794cba62ec9b05af087b30f0aeb08762d01b472df8e2ba21e20132a5c218e2435e02d7e4a84030bcd6b9c2b9dfc7f2af100827ea33addbb9d430e457f5311bb905cb3a86a721bc58d72b2701f14431ce444af93991ca86659d194d68007f51c2b4a5c7afa4ac3654c6db82f401060805040006020107031f030307000001010102030600040205020701030302000601010300be150000","request_id":"dd4bbe67","extra_data":{"append_tx":{}}}"#.utf8)
-        let stubEndpointClosure = { (target: ConvertTransactionRequest) -> Endpoint in
-            Endpoint(
-                url: URL(target: target).absoluteString,
-                sampleResponseClosure: { .networkResponse(200, response) },
-                method: target.method,
-                task: target.task,
-                httpHeaderFields: target.headers
-            )
-        }
-
-        let apiProvider = ApiProvider(
-            endpointClosure: stubEndpointClosure,
-            stubClosure: MoyaProvider.immediatelyStub
-        )
+        let urlSession = URLSessionMock()
+        urlSession.responseJsonString = #"{"raw_tx":"03020208dac7dab484e8d0f174360daad76fe7b849aa929c5103eff76cd6d30fd0ea947d0f2b785bed6b4c9cf079c0ba7ae9264cd3f3d30a9cab45cb442923862c5633a0618db61dfc748ba4ee9e3d0bb4a8364b64ee145c9080ac7af4ceb4039aacdd7e2f044d6abceb87a88416562a21f1bb49e216f5f7a829bc88763a2b0664680fa34aa5298c9669ab8f56b091cc8c6a3f1564d24300f60ab9f313a0ba787ed1ca70e7fdf00ea69dfc9d96968d5108b5c69b0e125ca8794cba62ec9b05af087b30f0aeb08762d01b472df8e2ba21e20132a5c218e2435e02d7e4a84030bcd6b9c2b9dfc7f2af100827ea33addbb9d430e457f5311bb905cb3a86a721bc58d72b2701f14431ce444af93991ca86659d194d68007f51c2b4a5c7afa4ac3654c6db82f401060805040006020107031f030307000001010102030600040205020701030302000601010300be150000","request_id":"dd4bbe67","extra_data":{"append_tx":{}}}"#
 
         // When:
         let solanaSDK = BloctoSDK.shared.solana
-        solanaSDK.apiProvider = apiProvider
         solanaSDK.signAndSendTransaction(
             uuid: requestId,
             from: userWallet,
-            transaction: transaction
+            transaction: transaction,
+            session: urlSession
         ) { result in
             switch result {
             case let .success(receivedtxHash):
@@ -110,7 +95,7 @@ class SignAndSendTransactionTests: XCTestCase {
         var components = URLComponents(string: appCustomSchemeBaseURLString)
         components?.queryItems = [
             .init(name: "request_id", value: requestId.uuidString),
-            .init(name: "tx_hash", value: expectedTxHash)
+            .init(name: "tx_hash", value: expectedTxHash),
         ]
         BloctoSDK.shared.application(
             open: components!.url!
@@ -118,7 +103,6 @@ class SignAndSendTransactionTests: XCTestCase {
 
         // Then:
         XCTAssert(txHash == expectedTxHash, "txHash should be \(expectedTxHash) rather then \(txHash!)")
-
     }
 
     func testOpenWebSDK() throws {
@@ -152,7 +136,7 @@ class SignAndSendTransactionTests: XCTestCase {
                     publicKey: userWalletPublicKey,
                     isSigner: false,
                     isWritable: true
-                )
+                ),
             ],
             programId: programPublicKey,
             data: data
@@ -172,37 +156,23 @@ class SignAndSendTransactionTests: XCTestCase {
 
         mockUIApplication.setup(openedOrder: [false])
 
-        // swiftlint:disable line_length
-        let response = Data(#"{"raw_tx":"03020208dac7dab484e8d0f174360daad76fe7b849aa929c5103eff76cd6d30fd0ea947d0f2b785bed6b4c9cf079c0ba7ae9264cd3f3d30a9cab45cb442923862c5633a0618db61dfc748ba4ee9e3d0bb4a8364b64ee145c9080ac7af4ceb4039aacdd7e2f044d6abceb87a88416562a21f1bb49e216f5f7a829bc88763a2b0664680fa34aa5298c9669ab8f56b091cc8c6a3f1564d24300f60ab9f313a0ba787ed1ca70e7fdf00ea69dfc9d96968d5108b5c69b0e125ca8794cba62ec9b05af087b30f0aeb08762d01b472df8e2ba21e20132a5c218e2435e02d7e4a84030bcd6b9c2b9dfc7f2af100827ea33addbb9d430e457f5311bb905cb3a86a721bc58d72b2701f14431ce444af93991ca86659d194d68007f51c2b4a5c7afa4ac3654c6db82f401060805040006020107031f030307000001010102030600040205020701030302000601010300be150000","request_id":"dd4bbe67","extra_data":{"append_tx":{}}}"#.utf8)
-        let stubEndpointClosure = { (target: ConvertTransactionRequest) -> Endpoint in
-            Endpoint(
-                url: URL(target: target).absoluteString,
-                sampleResponseClosure: { .networkResponse(200, response) },
-                method: target.method,
-                task: target.task,
-                httpHeaderFields: target.headers
-            )
-        }
-
-        let apiProvider = ApiProvider(
-            endpointClosure: stubEndpointClosure,
-            stubClosure: MoyaProvider.immediatelyStub
-        )
-
         var components = URLComponents(string: webRedirectBaseURLString)
         components?.queryItems = [
             .init(name: "request_id", value: requestId.uuidString),
-            .init(name: "tx_hash", value: expectedTxHash)
+            .init(name: "tx_hash", value: expectedTxHash),
         ]
         MockAuthenticationSession.setCallbackURL(components!.url!)
 
+        let urlSession = URLSessionMock()
+        urlSession.responseJsonString = #"{"raw_tx":"03020208dac7dab484e8d0f174360daad76fe7b849aa929c5103eff76cd6d30fd0ea947d0f2b785bed6b4c9cf079c0ba7ae9264cd3f3d30a9cab45cb442923862c5633a0618db61dfc748ba4ee9e3d0bb4a8364b64ee145c9080ac7af4ceb4039aacdd7e2f044d6abceb87a88416562a21f1bb49e216f5f7a829bc88763a2b0664680fa34aa5298c9669ab8f56b091cc8c6a3f1564d24300f60ab9f313a0ba787ed1ca70e7fdf00ea69dfc9d96968d5108b5c69b0e125ca8794cba62ec9b05af087b30f0aeb08762d01b472df8e2ba21e20132a5c218e2435e02d7e4a84030bcd6b9c2b9dfc7f2af100827ea33addbb9d430e457f5311bb905cb3a86a721bc58d72b2701f14431ce444af93991ca86659d194d68007f51c2b4a5c7afa4ac3654c6db82f401060805040006020107031f030307000001010102030600040205020701030302000601010300be150000","request_id":"dd4bbe67","extra_data":{"append_tx":{}}}"#
+
         // When:
         let solanaSDK = BloctoSDK.shared.solana
-        solanaSDK.apiProvider = apiProvider
         solanaSDK.signAndSendTransaction(
             uuid: requestId,
             from: userWallet,
-            transaction: transaction
+            transaction: transaction,
+            session: urlSession
         ) { result in
             switch result {
             case let .success(receivedtxHash):

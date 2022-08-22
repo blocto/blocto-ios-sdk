@@ -26,18 +26,8 @@ extension BloctoSDK {
 
 public class BloctoSolanaSDK {
 
-    lazy var apiProvider: ApiProvider = ApiProvider()
-
     private let base: BloctoSDK
     private var appendTxMap: [String: [String: Data]] = [:]
-
-    private var apiBaseURL: URL {
-        if base.testnet {
-            return URL(string: "https://api-staging.blocto.app")!
-        } else {
-            return URL(string: "https://api.blocto.app")!
-        }
-    }
 
     private var cluster: Cluster {
         if base.testnet {
@@ -79,6 +69,7 @@ public class BloctoSolanaSDK {
         uuid: UUID = UUID(),
         from: String,
         transaction: Transaction,
+        session: URLSessionProtocol = URLSession(configuration: .default),
         completion: @escaping (Result<String, Swift.Error>) -> Void
     ) {
         addRecentBlockhashIfNeeded(
@@ -93,7 +84,8 @@ public class BloctoSolanaSDK {
                         if self.transactionNeedsConvert(transaction) {
                             self.convertToProgramWalletTransaction(
                                 transaction,
-                                solanaAddress: from
+                                solanaAddress: from,
+                                session: session
                             ) { [weak self] result in
                                 guard let self = self else {
                                     completion(.failure(BloctoSDKError.callbackSelfNotfound))
@@ -157,6 +149,7 @@ public class BloctoSolanaSDK {
     public func convertToProgramWalletTransaction(
         _ transaction: Transaction,
         solanaAddress: String,
+        session: URLSessionProtocol = URLSession(configuration: .default),
         completion: @escaping (Result<Transaction, Swift.Error>) -> Void
     ) {
         addRecentBlockhashIfNeeded(transaction) { [weak self] result in
@@ -164,40 +157,45 @@ public class BloctoSolanaSDK {
                 completion(.failure(BloctoSDKError.callbackSelfNotfound))
                 return
             }
-            switch result {
-            case let .success(transaction):
-                do {
-                    var transaction = transaction
-                    let serializeMessage = try transaction.serializeMessage()
-                    let request = ConvertTransactionRequest(
-                        solanaAddress: solanaAddress,
-                        message: serializeMessage.bloctoSDK.hexString,
-                        baseURL: self.apiBaseURL
-                    )
-                    _ = self.apiProvider.request(request) { [weak self] result in
-                        switch result {
-                        case let .success(response):
-                            do {
-                                let createTransactionResponse = try JSONDecoder().decode(SolanaCreateTransactionResponse.self, from: response.data)
+            do {
+                var transaction = try result.get()
+                let serializeMessage = try transaction.serializeMessage()
+                let request = try RequestBuilder.build(
+                    baseURLString: self.base.bloctoApiBaseURLString,
+                    path: "/solana/createRawTransaction",
+                    method: .post,
+                    bodyParam: [
+                        "sol_address": solanaAddress,
+                        "raw_tx": serializeMessage.bloctoSDK.hexString,
+                    ]
+                )
+                session
+                    .dataTask(with: request) { [weak self] data, _, error in
+                        do {
+                            guard let self = self else {
+                                throw BloctoSDKError.callbackSelfNotfound
+                            }
+                            if let error = error {
+                                completion(.failure(error))
+                                return
+                            } else if let data = data {
+                                let createTransactionResponse = try JSONDecoder().decode(SolanaCreateTransactionResponse.self, from: data)
 
                                 let message = try Message(data: createTransactionResponse.rawTx.bloctoSDK.hexDecodedData)
                                 var convertedTransaction = Transaction(message: message, signatures: [])
 
                                 let serializeMessage = try convertedTransaction.serializeMessage()
                                 let shaString = serializeMessage.sha1().bloctoSDK.hexString
-                                self?.appendTxMap[shaString] = createTransactionResponse.appendTx
+                                self.appendTxMap[shaString] = createTransactionResponse.appendTx
                                 completion(.success(convertedTransaction))
-                            } catch {
-                                completion(.failure(error))
+                            } else {
+                                completion(.failure(BloctoSDKError.invalidResponse))
                             }
-                        case let .failure(error):
+                        } catch {
                             completion(.failure(error))
                         }
-                    }
-                } catch {
-                    completion(.failure(error))
-                }
-            case let .failure(error):
+                    }.resume()
+            } catch {
                 completion(.failure(error))
             }
         }
