@@ -11,7 +11,6 @@ PODS:
     - FlowSDK (~> 0.4.0)
   - BloctoSDK/Solana (0.3.3):
     - BloctoSDK/Core
-    - Moya (~> 14.0.0)
     - SolanaWeb3 (~> 0.0.4)
   - BloctoSDK/Wallet (0.3.3):
     - BigInt (~> 5.0)
@@ -55,10 +54,6 @@ PODS:
     - SwiftNIOTransportServices (< 2.0.0, >= 1.11.1)
     - SwiftProtobuf (< 2.0.0, >= 1.9.0)
   - Logging (1.4.0)
-  - Moya (14.0.0):
-    - Moya/Core (= 14.0.0)
-  - Moya/Core (14.0.0):
-    - Alamofire (~> 5.0)
   - Runtime (2.2.2)
   - RxCocoa (6.5.0):
     - RxRelay (= 6.5.0)
@@ -247,7 +242,6 @@ SPEC REPOS:
     - GenericJSON
     - gRPC-Swiftp
     - Logging
-    - Moya
     - Runtime
     - RxCocoa
     - RxRelay
@@ -299,7 +293,7 @@ SPEC CHECKSUMS:
   _NIODataStructures: 3d45d8e70a1d17a15b1dc59d102c63dbc0525ffd
   Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  BloctoSDK: c74bfb1aaeeced9f557c30a3d0fb9d286354db81
+  BloctoSDK: 2a74dcaabee4e50f05ae6c5a54c6c83fb80d732f
   Cadence: 9de64e79320285ea8beecfae10327f5853f3b790
   CGRPCZlibp: 2f3e1e7a6d6cb481d4d1a26d3ec09aefacf09cbb
   CNIOAtomics: 8edf08644e5e6fa0f021c239be9e8beb1cd9ef18
@@ -316,7 +310,6 @@ SPEC CHECKSUMS:
   GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
   gRPC-Swiftp: 1f5a05ce5b544bff3dce93223e72829daac26113
   Logging: beeb016c9c80cf77042d62e83495816847ef108b
-  Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
   Runtime: 67741bd196fb4ad821c4d259ccc527bf734d8806
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd

@@ -15,17 +15,17 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/Moya/Moya.git", .upToNextMinor(from: "14.0.0")),
         .package(url: "https://github.com/attaswift/BigInt.git", .upToNextMajor(from: "5.0.0")),
         .package(url: "https://github.com/portto/solana-web3.swift", .upToNextMinor(from: "0.0.4")),
+        .package(url: "https://github.com/portto/flow-swift-sdk.git", .upToNextMajor(from: "0.4.0")),
     ],
     targets: [
         .target(
             name: "BloctoSDK",
             dependencies: [
                 "BigInt",
-                "Moya",
                 .product(name: "SolanaWeb3", package: "solana-web3.swift"),
+                .product(name: "FlowSDK", package: "flow-swift-sdk"),
             ],
             path: "Sources"
         ),

@@ -31,14 +31,6 @@ final class FlowDemoViewController: UIViewController {
         }
     }
 
-    private var bloctoApiBaseURLString: String {
-        if isProduction {
-            return "https://api.blocto.app"
-        } else {
-            return "https://api-staging.blocto.app"
-        }
-    }
-
     private var bloctoContract: String {
         if isProduction {
             return "0xdb6b70764af4ff68"

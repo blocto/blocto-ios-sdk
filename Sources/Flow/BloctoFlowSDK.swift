@@ -106,15 +106,7 @@ public class BloctoFlowSDK {
     }
 
     public func getFeePayerAddress(isTestnet: Bool) async throws -> Cadence.Address {
-
-        let bloctoApiBaseURLString: String
-        if isTestnet {
-            bloctoApiBaseURLString = "https://api-staging.blocto.app"
-        } else {
-            bloctoApiBaseURLString = "https://api.blocto.app"
-        }
-
-        guard let url = URL(string: bloctoApiBaseURLString + "/flow/feePayer") else {
+        guard let url = URL(string: base.bloctoApiBaseURLString + "/flow/feePayer") else {
             throw BloctoSDKError.urlNotFound
         }
 
