@@ -1,46 +1,46 @@
-name: Testing
-on:
-  push:
-    branches: 
-    - main
-  pull_request:
-    types: [opened, reopened, edited, ready_for_review]
-    branches:
-    - main
-jobs:
-  test:
-    name: Testing Swift Package and iOS app
-    runs-on: macOS-latest
-    strategy:
-        matrix:
-          swift: ["5.6"]
-          destination: ['platform=iOS Simulator,OS=15.2,name=iPhone 13 Pro']
-
-    steps:
-    - uses: actions/checkout@v1
-      with: 
-        xcode-version: '13.3'
-
-    - name: Install Dependencies
-      run: |
-        cd Example
-        bundle install
-        bundle exec pod install --repo-update
-      shell: bash
-
-    - name: Get swift version
-      run: swift --version
-
-    - name: Get xcode version
-      run: xcodebuild -version
-
-    - name: Get MacOS version
-      run: sw_vers
-
-    - name: start test
-      run: echo start test!
-
-    - name: clean build and test
-      run: xcodebuild clean test -workspace ./Example/BloctoSDK.xcworkspace -scheme "BloctoSDK-Example" -destination "${destination}"
-      env: 
-         destination: ${{ matrix.destination }}
+#name: Testing
+#on:
+#  push:
+#    branches: 
+#    - main
+#  pull_request:
+#    types: [opened, reopened, edited, ready_for_review]
+#    branches:
+#    - main
+#jobs:
+#  test:
+#    name: Testing Swift Package and iOS app
+#    runs-on: macOS-latest
+#    strategy:
+#        matrix:
+#          swift: ["5.6"]
+#          destination: ['platform=iOS Simulator,OS=15.2,name=iPhone 13 Pro']
+#
+#    steps:
+#    - uses: actions/checkout@v1
+#      with: 
+#        xcode-version: '13.3'
+#
+#    - name: Install Dependencies
+#      run: |
+#        cd Example
+#        bundle install
+#        bundle exec pod install --repo-update
+#      shell: bash
+#
+#    - name: Get swift version
+#      run: swift --version
+#
+#    - name: Get xcode version
+#      run: xcodebuild -version
+#
+#    - name: Get MacOS version
+#      run: sw_vers
+#
+#    - name: start test
+#      run: echo start test!
+#
+#    - name: clean build and test
+#      run: xcodebuild clean test -workspace ./Example/BloctoSDK.xcworkspace -scheme "BloctoSDK-Example" -destination "${destination}"
+#      env: 
+#         destination: ${{ matrix.destination }}
