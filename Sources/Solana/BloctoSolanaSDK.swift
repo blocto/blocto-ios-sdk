@@ -130,7 +130,13 @@ public class BloctoSolanaSDK {
                                 callback: completion
                             )
                             self.appendTxMap[shaString] = nil
-                            self.base.send(method: method)
+                            if Thread.isMainThread {
+                                self.base.send(method: method)
+                            } else {
+                                DispatchQueue.main.async {
+                                    self.base.send(method: method)
+                                }
+                            }
                         }
                     } catch {
                         completion(.failure(error))
@@ -171,30 +177,28 @@ public class BloctoSolanaSDK {
                 )
                 session
                     .dataTask(with: request) { [weak self] data, _, error in
-                        DispatchQueue.main.async {
-                            do {
-                                guard let self = self else {
-                                    throw BloctoSDKError.callbackSelfNotfound
-                                }
-                                if let error = error {
-                                    completion(.failure(error))
-                                    return
-                                } else if let data = data {
-                                    let createTransactionResponse = try JSONDecoder().decode(SolanaCreateTransactionResponse.self, from: data)
-                                    
-                                    let message = try Message(data: createTransactionResponse.rawTx.bloctoSDK.hexDecodedData)
-                                    var convertedTransaction = Transaction(message: message, signatures: [])
-                                    
-                                    let serializeMessage = try convertedTransaction.serializeMessage()
-                                    let shaString = serializeMessage.sha1().bloctoSDK.hexString
-                                    self.appendTxMap[shaString] = createTransactionResponse.appendTx
-                                    completion(.success(convertedTransaction))
-                                } else {
-                                    completion(.failure(BloctoSDKError.invalidResponse))
-                                }
-                            } catch {
-                                completion(.failure(error))
+                        do {
+                            guard let self = self else {
+                                throw BloctoSDKError.callbackSelfNotfound
                             }
+                            if let error = error {
+                                completion(.failure(error))
+                                return
+                            } else if let data = data {
+                                let createTransactionResponse = try JSONDecoder().decode(SolanaCreateTransactionResponse.self, from: data)
+
+                                let message = try Message(data: createTransactionResponse.rawTx.bloctoSDK.hexDecodedData)
+                                var convertedTransaction = Transaction(message: message, signatures: [])
+
+                                let serializeMessage = try convertedTransaction.serializeMessage()
+                                let shaString = serializeMessage.sha1().bloctoSDK.hexString
+                                self.appendTxMap[shaString] = createTransactionResponse.appendTx
+                                completion(.success(convertedTransaction))
+                            } else {
+                                completion(.failure(BloctoSDKError.invalidResponse))
+                            }
+                        } catch {
+                            completion(.failure(error))
                         }
                     }.resume()
             } catch {
