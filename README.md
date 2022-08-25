@@ -20,17 +20,69 @@ from the Example directory first.
 
 ## Installation
 
-BloctoSDK is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+### CocoaPods
+
+BloctoSDK is available through [CocoaPods](https://cocoapods.org). You can only include specific subspec to install, simply add the following line to your Podfile:
 
 ```ruby
-pod 'BloctoSDK'
+pod 'BloctoSDK', '~> 0.3.4'
+
+# or 
+
+pod 'BloctoSDK/Solana', '~> 0.3.4'
+
+# or
+
+pod 'BloctoSDK/EVMBase', '~> 0.3.4'
+
+# or
+
+pod 'BloctoSDK/Flow', '~> 0.3.4'
+```
+
+### Swift Package Manager
+
+
+```swift
+.package(url: "https://github.com/portto/blocto-ios-sdk.git", .upToNextMinor(from: "0.3.4"))
+```
+
+and then specify `"BloctoSDK"` as a dependency of the Target in which you wish to use.
+Here's an example `PackageDescription`:
+
+```swift
+// swift-tools-version: 5.6
+import PackageDescription
+
+let package = Package(
+    name: "MyPackage",
+    products: [
+        .library(
+            name: "MyPackage",
+            targets: ["MyPackage"]
+        ),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/portto/blocto-ios-sdk.git", .upToNextMinor(from: "0.3.4"))
+    ],
+    targets: [
+        .target(
+            name: "MyPackage",
+            dependencies: [
+                .product(name: "BloctoSDK", package: "blocto-ios-sdk"),
+            ]
+        )
+    ]
+)
 ```
 
 ## Usage
-Only support Solana SDK for now.
+Currently support 
+ * Solana SDK
+ * EVMBase SDK (Ethereum, Avalanche, BSC, Polygon)
+ * Flow SDK
 
-Please refer to [here](https://docs.blocto.app/blocto-ios-sdk/overview)
+For further instructions please refer to [Blocto Docs](https://docs.blocto.app/blocto-ios-sdk/overview)
 
 ## Author
 
