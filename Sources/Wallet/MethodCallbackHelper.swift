@@ -14,13 +14,6 @@ public enum MethodCallbackHelper {
         routingInfo: RoutingInfo,
         completion: @escaping (_ opened: Bool) -> Void
     ) {
-        if routingInfo.baseURLString.isEmpty {
-            log(
-                enable: true,
-                message: "❗️❗️Universal link should be implemented to prevent from potential attack."
-            )
-        }
-
         var components = URLComponents(string: routingInfo.baseURLString)
         components?.path = responsePath
         var items = queryItems(from: routingInfo.methodContentType)
