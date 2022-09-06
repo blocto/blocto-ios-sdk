@@ -99,6 +99,12 @@ public class BloctoSDK {
         self.urlOpening = urlOpening
         self.sessioningType = sessioningType
     }
+    
+    /// To simply update blockchain network.
+    /// - Parameter isTestnet: Is testnet or mainnet
+    public func updateNetwork(isTestnet: Bool) {
+        self.testnet = isTestnet
+    }
 
     /// Entry of Universal Links
     /// - Parameter userActivity: the same userActivity from UIApplicationDelegate
