@@ -14,10 +14,13 @@ public enum MethodCallbackHelper {
         routingInfo: RoutingInfo,
         completion: @escaping (_ opened: Bool) -> Void
     ) {
-        guard routingInfo.baseURLString.isEmpty == false else {
-            completion(false)
-            return
+        if routingInfo.baseURLString.isEmpty {
+            log(
+                enable: true,
+                message: "❗️❗️Universal link should be implemented to prevent from potential attack."
+            )
         }
+
         var components = URLComponents(string: routingInfo.baseURLString)
         components?.path = responsePath
         var items = queryItems(from: routingInfo.methodContentType)
@@ -81,14 +84,14 @@ public enum MethodCallbackHelper {
         ) { opened in
             if opened {
                 log(
-                    enable: true,
+                    enable: BloctoSDK.shared.logging,
                     message: "opened with custom scheme \(openURL)."
                 )
                 completion(true)
                 return
             } else {
                 log(
-                    enable: true,
+                    enable: BloctoSDK.shared.logging,
                     message: "can't open with custom scheme \(openURL)."
                 )
                 completion(false)
