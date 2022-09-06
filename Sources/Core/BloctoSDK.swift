@@ -130,6 +130,13 @@ public class BloctoSDK {
     public func application(
         open url: URL
     ) {
+        if let scheme = url.scheme?.lowercased(),
+           scheme.hasPrefix("blocto") || scheme.hasPrefix("blocto-staging") {
+            log(
+                enable: true,
+                message: "❗️❗️Universal link should be implemented to prevent from potential attack."
+            )
+        }
         do {
             try checkConfigration()
             guard url.scheme == customScheme(appId: appId) else {

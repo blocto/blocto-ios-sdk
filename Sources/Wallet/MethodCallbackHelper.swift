@@ -14,28 +14,16 @@ public enum MethodCallbackHelper {
         routingInfo: RoutingInfo,
         completion: @escaping (_ opened: Bool) -> Void
     ) {
-        guard routingInfo.baseURLString.isEmpty == false else {
-            completion(false)
-            return
-        }
         var components = URLComponents(string: routingInfo.baseURLString)
         components?.path = responsePath
         var items = queryItems(from: routingInfo.methodContentType)
         items.append(.init(name: .requestId, value: routingInfo.requestId))
         components?.queryItems = items
         guard let components = components else {
-            log(
-                enable: true,
-                message: "components not found."
-            )
             completion(false)
             return
         }
         guard let openURL = components.url else {
-            log(
-                enable: true,
-                message: "components's url not found."
-            )
             completion(false)
             return
         }
@@ -67,10 +55,6 @@ public enum MethodCallbackHelper {
         components.host = ""
         components.path = ""
         guard let openURL = components.url else {
-            log(
-                enable: true,
-                message: "components's url not found."
-            )
             completion(false)
             return
         }
@@ -80,17 +64,9 @@ public enum MethodCallbackHelper {
             options: [:]
         ) { opened in
             if opened {
-                log(
-                    enable: true,
-                    message: "opened with custom scheme \(openURL)."
-                )
                 completion(true)
                 return
             } else {
-                log(
-                    enable: true,
-                    message: "can't open with custom scheme \(openURL)."
-                )
                 completion(false)
                 return
             }
