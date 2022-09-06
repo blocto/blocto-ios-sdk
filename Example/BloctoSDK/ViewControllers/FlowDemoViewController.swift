@@ -862,7 +862,8 @@ final class FlowDemoViewController: UIViewController {
 
         Task {
             let argument = try await flowAPIClient.executeScriptAtLatestBlock(script: Data(script.utf8))
-            getValueResultLabel.text = argument.value.description
+            let value: Decimal = try argument.value.toSwiftValue()
+            getValueResultLabel.text = value.description
         }
     }
 
