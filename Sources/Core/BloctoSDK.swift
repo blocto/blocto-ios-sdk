@@ -26,7 +26,7 @@ public class BloctoSDK {
 
     var bloctoApiBaseURLString: String {
         if testnet {
-            return "https://api-staging.blocto.app"
+            return "https://api-dev.blocto.app"
         } else {
             return "https://api.blocto.app"
         }
@@ -34,7 +34,7 @@ public class BloctoSDK {
 
     private var bloctoAssociatedDomain: String {
         if testnet {
-            return "https://staging.blocto.app/"
+            return "https://dev.blocto.app/"
         } else {
             return "https://blocto.app/"
         }
@@ -137,7 +137,7 @@ public class BloctoSDK {
         open url: URL
     ) {
         if let scheme = url.scheme?.lowercased(),
-           scheme.hasPrefix("blocto") || scheme.hasPrefix("blocto-staging") {
+           scheme.hasPrefix("blocto") || scheme.hasPrefix("blocto-dev") {
             log(
                 enable: true,
                 message: "❗️❗️Universal link should be implemented to prevent from potential attack."

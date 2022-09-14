@@ -49,7 +49,7 @@
 	<string>10</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>blocto-staging</string>
+		<string>blocto-dev</string>
 		<string>blocto</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
