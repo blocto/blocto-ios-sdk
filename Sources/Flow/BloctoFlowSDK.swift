@@ -105,14 +105,15 @@ public class BloctoFlowSDK {
         )
     }
 
-    public func getFeePayerAddress(isTestnet: Bool) async throws -> Cadence.Address {
+    public func getFeePayerAddress() async throws -> Cadence.Address {
         guard let url = URL(string: base.bloctoApiBaseURLString + "/flow/feePayer") else {
             throw BloctoSDKError.urlNotFound
         }
 
         let feePayerRequest = URLRequest(url: url)
-        
-        let response: [String: String] = try await URLSession(configuration: .default).dataDecode(for: feePayerRequest)
+
+        let response: [String: String] = try await URLSession(configuration: .default)
+            .dataDecode(for: feePayerRequest)
         guard let address = response["address"] else {
             throw BloctoSDKError.feePayerNotFound
         }
