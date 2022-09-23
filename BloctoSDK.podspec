@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'BloctoSDK'
-  s.version          = '0.3.7'
+  s.version          = '0.3.8'
   s.summary          = 'A SDK to interact with Blockchain through Blocto Wallet App.'
 
   s.homepage         = 'https://github.com/portto/blocto-ios-sdk'
@@ -26,13 +26,13 @@ Pod::Spec.new do |s|
   
   s.subspec "EVMBase" do |ss|
       ss.source_files = "Sources/EVMBase/**/*"
-      ss.dependency "BloctoSDK/Core", "~> 0.3.7"
+      ss.dependency "BloctoSDK/Core", "~> 0.3.8"
       ss.dependency "BigInt", "~> 5.0"
   end
   
   s.subspec "Flow" do |ss|
       ss.source_files = "Sources/Flow/**/*"
-      ss.dependency "BloctoSDK/Core", "~> 0.3.7"
+      ss.dependency "BloctoSDK/Core", "~> 0.3.8"
       ss.dependency "FlowSDK", "~> 0.4.0"
   end
   
@@ -46,7 +46,7 @@ Pod::Spec.new do |s|
       "Sources/EVMBase/Models/EVMBaseTransaction.swift",
       "Sources/EVMBase/Models/SignType.swift",
       "Sources/Flow/Models/**/*"
-      ss.dependency "BloctoSDK/Core", "~> 0.3.7"
+      ss.dependency "BloctoSDK/Core", "~> 0.3.8"
       ss.dependency "BigInt", "~> 5.0"
       ss.dependency "FlowSDK", "~> 0.4.0"
   end
