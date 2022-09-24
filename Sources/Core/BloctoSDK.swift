@@ -173,17 +173,21 @@ public class BloctoSDK {
         method: Method,
         fallbackToWebSDK: Bool = true
     ) {
-        do {
-            try checkConfigration()
-            guard let requestURL = try method.encodeToURL(
-                appId: appId,
-                baseURLString: requestBloctoBaseURLString
-            ) else {
-                method.handleError(error: BloctoSDKError.encodeToURLFailed)
+        let send = { [weak self] in
+            guard let self = self else {
+                method.handleError(error: BloctoSDKError.callbackSelfNotfound)
                 return
             }
-            uuidToMethod[method.id] = method
-            DispatchQueue.main.async {
+            do {
+                try self.checkConfigration()
+                guard let requestURL = try method.encodeToURL(
+                    appId: self.appId,
+                    baseURLString: self.requestBloctoBaseURLString
+                ) else {
+                    method.handleError(error: BloctoSDKError.encodeToURLFailed)
+                    return
+                }
+                self.uuidToMethod[method.id] = method
                 self.urlOpening.open(
                     requestURL,
                     options: [.universalLinksOnly: true],
@@ -217,16 +221,23 @@ public class BloctoSDK {
                         }
                     }
                 )
-            }
-        } catch {
-            method.handleError(error: error)
-            do {
-                routeToWebSDK(window: try getWindow?(), method: method)
             } catch {
-                log(
-                    enable: logging,
-                    message: "Window not found."
-                )
+                method.handleError(error: error)
+                do {
+                    self.routeToWebSDK(window: try self.getWindow?(), method: method)
+                } catch {
+                    log(
+                        enable: self.logging,
+                        message: "Window not found."
+                    )
+                }
+            }
+        }
+        if Thread.isMainThread {
+            send()
+        } else {
+            DispatchQueue.main.async {
+                send()
             }
         }
     }
@@ -248,49 +259,47 @@ public class BloctoSDK {
                 return
             }
 
-            DispatchQueue.main.async {
-                var session: AuthenticationSessioning?
+            var session: AuthenticationSessioning?
 
-                session = self.sessioningType.init(
-                    url: requestURL,
-                    callbackURLScheme: self.webCallbackURLScheme,
-                    completionHandler: { [weak self] callbackURL, error in
-                        guard let self = self else { return }
-                        if let error = error {
-                            log(
-                                enable: self.logging,
-                                message: error.localizedDescription
-                            )
-                            if let error = error as? ASWebAuthenticationSessionError {
-                                if error.code == ASWebAuthenticationSessionError.Code.canceledLogin {
-                                    method.handleError(error: BloctoSDKError.userCancel)
-                                } else {
-                                    method.handleError(error: BloctoSDKError.sessionError(code: error.code.rawValue))
-                                }
+            session = sessioningType.init(
+                url: requestURL,
+                callbackURLScheme: webCallbackURLScheme,
+                completionHandler: { [weak self] callbackURL, error in
+                    guard let self = self else { return }
+                    if let error = error {
+                        log(
+                            enable: self.logging,
+                            message: error.localizedDescription
+                        )
+                        if let error = error as? ASWebAuthenticationSessionError {
+                            if error.code == ASWebAuthenticationSessionError.Code.canceledLogin {
+                                method.handleError(error: BloctoSDKError.userCancel)
+                            } else {
+                                method.handleError(error: BloctoSDKError.sessionError(code: error.code.rawValue))
                             }
-                        } else if let callbackURL = callbackURL {
-                            self.methodResolve(expectHost: nil, url: callbackURL)
-                        } else {
-                            log(
-                                enable: self.logging,
-                                message: "callback URL not found."
-                            )
-                            method.handleError(error: BloctoSDKError.redirectURLNotFound)
                         }
-                        session = nil
+                    } else if let callbackURL = callbackURL {
+                        self.methodResolve(expectHost: nil, url: callbackURL)
+                    } else {
+                        log(
+                            enable: self.logging,
+                            message: "callback URL not found."
+                        )
+                        method.handleError(error: BloctoSDKError.redirectURLNotFound)
                     }
-                )
-
-                session?.presentationContextProvider = window
-
-                log(
-                    enable: self.logging,
-                    message: "About to route to Web SDK \(requestURL)."
-                )
-                let startsSuccessfully = session?.start()
-                if startsSuccessfully == false {
-                    method.handleError(error: BloctoSDKError.webSDKSessionFailed)
+                    session = nil
                 }
+            )
+
+            session?.presentationContextProvider = window
+
+            log(
+                enable: logging,
+                message: "About to route to Web SDK \(requestURL)."
+            )
+            let startsSuccessfully = session?.start()
+            if startsSuccessfully == false {
+                method.handleError(error: BloctoSDKError.webSDKSessionFailed)
             }
         } catch {
             method.handleError(error: error)
