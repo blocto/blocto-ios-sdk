@@ -49,10 +49,12 @@ public class BloctoFlowSDK {
             accountProofData: accountProofData,
             callback: completion
         )
+        #if canImport(UIKit)
         base.send(
             method: method,
             fallbackToWebSDK: false
         )
+        #endif
     }
 
     /// To sign Flow message
@@ -74,10 +76,12 @@ public class BloctoFlowSDK {
             message: message,
             callback: completion
         )
+        #if canImport(UIKit)
         base.send(
             method: method,
             fallbackToWebSDK: false
         )
+        #endif
     }
 
     /// To sign Flow transaction and then send transaction.
@@ -99,10 +103,12 @@ public class BloctoFlowSDK {
             transaction: transaction,
             callback: completion
         )
+        #if canImport(UIKit)
         base.send(
             method: method,
             fallbackToWebSDK: false
         )
+        #endif
     }
 
     public func getFeePayerAddress() async throws -> Cadence.Address {

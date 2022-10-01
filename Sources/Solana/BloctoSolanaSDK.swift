@@ -55,7 +55,9 @@ public class BloctoSolanaSDK {
     ///   The successful result is address String for Solana.
     public func requestAccount(completion: @escaping (Result<String, Swift.Error>) -> Void) {
         let method = RequestAccountMethod(blockchain: .solana, callback: completion)
+        #if canImport(UIKit)
         base.send(method: method)
+        #endif
     }
 
     /// To sign transaction and then send transaction
@@ -131,10 +133,14 @@ public class BloctoSolanaSDK {
                             )
                             self.appendTxMap[shaString] = nil
                             if Thread.isMainThread {
+                                #if canImport(UIKit)
                                 self.base.send(method: method)
+                                #endif
                             } else {
                                 DispatchQueue.main.async {
+                                    #if canImport(UIKit)
                                     self.base.send(method: method)
+                                    #endif
                                 }
                             }
                         }

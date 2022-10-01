@@ -37,7 +37,9 @@ public class BloctoAvalancheSDK {
     ///   The successful result is address String for Avalanche.
     public func requestAccount(completion: @escaping (Result<String, Swift.Error>) -> Void) {
         let method = RequestAccountMethod(blockchain: .avalanche, callback: completion)
+        #if canImport(UIKit)
         base.send(method: method)
+        #endif
     }
 
     /// To sign message
@@ -62,7 +64,9 @@ public class BloctoAvalancheSDK {
             blockchain: .avalanche,
             callback: completion
         )
+        #if canImport(UIKit)
         base.send(method: method)
+        #endif
     }
 
     /// To sign transaction and then send transaction
@@ -82,7 +86,9 @@ public class BloctoAvalancheSDK {
             transaction: transaction,
             callback: completion
         )
+        #if canImport(UIKit)
         base.send(method: method)
+        #endif
     }
 
 }

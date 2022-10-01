@@ -5,6 +5,8 @@
 //  Created by Andrew Wang on 2022/3/21.
 //
 
+import Foundation
+#if canImport(UIKit)
 import UIKit
 
 public protocol URLOpening {
@@ -18,3 +20,4 @@ public protocol URLOpening {
 // MARK: - UIApplication + URLOpening
 
 extension UIApplication: URLOpening {}
+#endif

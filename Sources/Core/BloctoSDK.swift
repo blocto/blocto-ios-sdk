@@ -5,7 +5,10 @@
 //  Created by Andrew Wang on 2022/3/10.
 //
 
+import Foundation
+#if canImport(UIKit)
 import UIKit
+#endif
 import AuthenticationServices
 
 func log(enable: Bool, message: String) {
@@ -66,13 +69,17 @@ public class BloctoSDK {
 
     var appId: String = ""
 
+    #if canImport(UIKit)
     private var getWindow: (() throws -> UIWindow)?
+    #endif
 
     var logging: Bool = true
 
     var testnet: Bool = false
 
+    #if canImport(UIKit)
     var urlOpening: URLOpening = UIApplication.shared
+    #endif
 
     var sessioningType: AuthenticationSessioning.Type = ASWebAuthenticationSession.self
 
@@ -84,6 +91,7 @@ public class BloctoSDK {
     ///   - testnet: Determine which blockchain environment. e.g. testnet (Ethereum testnet, Solana devnet), mainnet (Ethereum mannet, Solana mainnet Beta)
     ///   - urlOpening: Handling url which opened app, default is UIApplication.shared, testing purpose.
     ///   - sessioningType: Type that handles web SDK authentication session, default is ASWebAuthenticationSession, testing purpose.
+#if canImport(UIKit)
     public func initialize(
         with appId: String,
         getWindow: (() throws -> UIWindow)?,
@@ -99,6 +107,7 @@ public class BloctoSDK {
         self.urlOpening = urlOpening
         self.sessioningType = sessioningType
     }
+#endif
 
     /// To simply update blockchain network.
     /// - Parameter isTestnet: Is testnet or mainnet
@@ -169,6 +178,7 @@ public class BloctoSDK {
     /// - Parameters:
     ///   - method: Any method which conform to Method protocol
     ///   - fallbackToWebSDK: Whether to fallback to WebSDK if native Blocto app not install.
+#if canImport(UIKit)
     public func send(
         method: Method,
         fallbackToWebSDK: Bool = true
@@ -241,11 +251,13 @@ public class BloctoSDK {
             }
         }
     }
+#endif
 
     private func checkConfigration() throws {
         guard appId.isEmpty == false else { throw BloctoSDKError.appIdNotSet }
     }
 
+#if canImport(UIKit)
     private func routeToWebSDK(
         window: UIWindow? = nil,
         method: Method
@@ -305,6 +317,7 @@ public class BloctoSDK {
             method.handleError(error: error)
         }
     }
+#endif
 
     private func methodResolve(
         expectHost: String? = nil,

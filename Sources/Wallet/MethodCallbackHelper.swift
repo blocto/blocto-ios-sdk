@@ -9,6 +9,7 @@ import Foundation
 
 public enum MethodCallbackHelper {
 
+    #if canImport(UIKit)
     public static func sendBack(
         urlOpening: URLOpening,
         routingInfo: RoutingInfo,
@@ -43,7 +44,9 @@ public enum MethodCallbackHelper {
             }
         }
     }
+    #endif
 
+    #if canImport(UIKit)
     static func openWithCustomScheme(
         urlOpening: URLOpening,
         appId: String,
@@ -72,6 +75,7 @@ public enum MethodCallbackHelper {
             }
         }
     }
+    #endif
 
     static func queryItems(from methodContentType: CallbackMethodContentType) -> [URLQueryItem] {
         switch methodContentType {

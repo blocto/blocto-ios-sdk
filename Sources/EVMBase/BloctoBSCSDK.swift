@@ -37,7 +37,9 @@ public class BloctoBSCSDK {
     ///   The successful result is address String for Binance Smart Chain.
     public func requestAccount(completion: @escaping (Result<String, Swift.Error>) -> Void) {
         let method = RequestAccountMethod(blockchain: .binanceSmartChain, callback: completion)
+        #if canImport(UIKit)
         base.send(method: method)
+        #endif
     }
 
     /// To sign message
@@ -62,7 +64,9 @@ public class BloctoBSCSDK {
             blockchain: .binanceSmartChain,
             callback: completion
         )
+        #if canImport(UIKit)
         base.send(method: method)
+        #endif
     }
 
     /// To sign transaction and then send transaction
@@ -82,7 +86,9 @@ public class BloctoBSCSDK {
             transaction: transaction,
             callback: completion
         )
+        #if canImport(UIKit)
         base.send(method: method)
+        #endif
     }
 
 }

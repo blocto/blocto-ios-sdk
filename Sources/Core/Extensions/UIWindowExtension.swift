@@ -6,8 +6,12 @@
 //
 
 import Foundation
+#if canImport(UIKit)
+import UIKit
+#endif
 import AuthenticationServices
 
+#if canImport(UIKit)
 extension UIWindow: ASWebAuthenticationPresentationContextProviding {
 
     public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
@@ -15,3 +19,4 @@ extension UIWindow: ASWebAuthenticationPresentationContextProviding {
     }
 
 }
+#endif
