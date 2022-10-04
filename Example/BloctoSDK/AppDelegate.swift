@@ -9,12 +9,13 @@
 import UIKit
 import BloctoSDK
 
-var isProduction = false
+var bloctoEnvironment: BloctoEnvironment = .dev
 
 var bloctoSDKAppId: String {
-    if isProduction {
+    switch bloctoEnvironment {
+    case .prod:
         return "9c2d24b6-4358-46fc-b967-e3284805a856"
-    } else {
+    case .dev:
         return "64776cec-5953-4a58-8025-772f55a3917b"
     }
 }
@@ -37,7 +38,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             with: bloctoSDKAppId,
             getWindow: { window },
             logging: true,
-            testnet: true
+            environment: .dev
         )
         return true
     }

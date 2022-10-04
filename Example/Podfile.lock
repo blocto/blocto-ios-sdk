@@ -32,9 +32,6 @@ PODS:
   - EthereumSignTypedDataUtil (0.1.2):
     - BigInt (~> 5.0)
     - CryptoSwift (~> 1.4)
-  - FCL-SDK (0.1.0):
-    - BloctoSDK/Flow (~> 0.3.0)
-    - SwiftyJSON
   - FlowSDK (0.4.0):
     - FlowSDK/FlowSDK (= 0.4.0)
   - FlowSDK/FlowSDK (0.4.0):
@@ -202,7 +199,6 @@ PODS:
     - SwiftNIOPosix (< 3, >= 2.32.0)
     - SwiftNIOTLS (< 3, >= 2.32.0)
   - SwiftProtobuf (1.19.1)
-  - SwiftyJSON (5.0.1)
   - TweetNacl (1.0.2)
   - web3.swift (0.9.3):
     - BigInt (~> 5)
@@ -215,7 +211,6 @@ DEPENDENCIES:
   - BloctoSDK/Solana (from `../`)
   - BloctoSDK/Wallet (from `../`)
   - EthereumSignTypedDataUtil
-  - FCL-SDK (from `https://github.com/portto/fcl-swift.git`)
   - RxCocoa
   - RxSwift
   - SnapKit
@@ -264,14 +259,11 @@ SPEC REPOS:
     - SwiftNIOTLS
     - SwiftNIOTransportServices
     - SwiftProtobuf
-    - SwiftyJSON
     - TweetNacl
 
 EXTERNAL SOURCES:
   BloctoSDK:
     :path: "../"
-  FCL-SDK:
-    :git: https://github.com/portto/fcl-swift.git
   SolanaWeb3:
     :git: https://github.com/portto/solana-web3.swift.git
   web3.swift:
@@ -279,9 +271,6 @@ EXTERNAL SOURCES:
     :git: https://github.com/portto/web3.swift.git
 
 CHECKOUT OPTIONS:
-  FCL-SDK:
-    :commit: 6f0a59dfa2bdaa23fdf69194ecd8c2ffe35cce7c
-    :git: https://github.com/portto/fcl-swift.git
   SolanaWeb3:
     :commit: 420ddd0eb04a62071265bf530cb55cfc61cc82eb
     :git: https://github.com/portto/solana-web3.swift.git
@@ -305,7 +294,6 @@ SPEC CHECKSUMS:
   CNIOWindows: 3047f2d8165848a3936a0a755fee27c6b5ee479b
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
   EthereumSignTypedDataUtil: ae4e33b21e51ee046a86a65b02843090b8bbd3f9
-  FCL-SDK: c5b6ecb3de01164e7ef9ff04a42c99872ab1d50c
   FlowSDK: 2d7df11aa11c2eb0d53add61025d6c526f88421e
   GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
   gRPC-Swiftp: 1f5a05ce5b544bff3dce93223e72829daac26113
@@ -333,10 +321,9 @@ SPEC CHECKSUMS:
   SwiftNIOTLS: 598af547490133e9aac52aed0c23c4a90c31dcfc
   SwiftNIOTransportServices: 0b2b407819d82eb63af558c5396e33c945759503
   SwiftProtobuf: 59d9ea2eb5f84b509f32d170a65f3348ae758f1e
-  SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   web3.swift: 4d8b9f69ea92d23c6e87b97c36686f1c541eaef1
 
-PODFILE CHECKSUM: f52d53b68448138e838956d2c0bd60bb0c3ec2eb
+PODFILE CHECKSUM: 9c6b18662d4e5dad1a027838e9f376ebfb059956
 
 COCOAPODS: 1.11.3

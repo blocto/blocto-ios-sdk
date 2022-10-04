@@ -7,7 +7,6 @@ target 'BloctoSDK_Example' do
   pod 'BloctoSDK/Wallet', :path => '../'
   pod 'BloctoSDK/EVMBase', :path => '../'
   pod 'BloctoSDK/Flow', :path => '../'
-  pod 'FCL-SDK', :git => 'https://github.com/portto/fcl-swift.git'
   pod 'SnapKit'
   pod 'RxSwift'
   pod 'RxCocoa'
