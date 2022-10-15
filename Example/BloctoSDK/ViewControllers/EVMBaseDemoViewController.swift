@@ -575,9 +575,9 @@ final class EVMBaseDemoViewController: UIViewController {
                 self.resetValueTxStatus()
                 switch index {
                 case 0:
-                    isProduction = false
+                    bloctoEnvironment = .dev
                 case 1:
-                    isProduction = true
+                    bloctoEnvironment = .prod
                 default:
                     break
                 }
@@ -585,7 +585,7 @@ final class EVMBaseDemoViewController: UIViewController {
                     with: bloctoSDKAppId,
                     getWindow: { window },
                     logging: true,
-                    testnet: !isProduction
+                    environment: bloctoEnvironment
                 )
             })
 

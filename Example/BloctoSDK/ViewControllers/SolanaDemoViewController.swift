@@ -19,21 +19,30 @@ final class SolanaDemoViewController: UIViewController {
 
     private var userWalletAddress: String?
     private var dappAddress: String {
-        isProduction
-            ? "EajAHVxAVvf4yNUu37ZEh8QS7Lk5bw9yahTGiTSL1Rwt"
-            : "4AXy5YYCXpMapaVuzKkz25kVHzrdLDgKN3TiQvtf1Eu8"
+        switch bloctoEnvironment {
+        case .prod:
+            return "EajAHVxAVvf4yNUu37ZEh8QS7Lk5bw9yahTGiTSL1Rwt"
+        case .dev:
+            return "4AXy5YYCXpMapaVuzKkz25kVHzrdLDgKN3TiQvtf1Eu8"
+        }
     }
 
     private var programId: String {
-        isProduction
-            ? "EN2Ln23fzm4qag1mHfx7FDJwDJog5u4SDgqRY256ZgFt"
-            : "G4YkbRN4nFQGEUg4SXzPsrManWzuk8bNq9JaMhXepnZ6"
+        switch bloctoEnvironment {
+        case .prod:
+            return "EN2Ln23fzm4qag1mHfx7FDJwDJog5u4SDgqRY256ZgFt"
+        case .dev:
+            return "G4YkbRN4nFQGEUg4SXzPsrManWzuk8bNq9JaMhXepnZ6"
+        }
     }
 
     private var cluster: Cluster {
-        isProduction
-            ? .mainnetBeta
-            : .devnet
+        switch bloctoEnvironment {
+        case .prod:
+            return .mainnetBeta
+        case .dev:
+            return .devnet
+        }
     }
 
     private lazy var bloctoSolanaSDK = BloctoSDK.shared.solana
@@ -382,9 +391,9 @@ final class SolanaDemoViewController: UIViewController {
                 self.resetPartialSignTxStatus()
                 switch index {
                 case 0:
-                    isProduction = false
+                    bloctoEnvironment = .dev
                 case 1:
-                    isProduction = true
+                    bloctoEnvironment = .prod
                 default:
                     break
                 }
@@ -392,7 +401,7 @@ final class SolanaDemoViewController: UIViewController {
                     with: bloctoSDKAppId,
                     getWindow: { window },
                     logging: true,
-                    testnet: !isProduction
+                    environment: bloctoEnvironment
                 )
             })
 
@@ -820,13 +829,19 @@ final class SolanaDemoViewController: UIViewController {
         func url() -> URL? {
             switch self {
             case let .txhash(hash):
-                return isProduction
-                    ? URL(string: "https://explorer.solana.com/tx/\(hash)")
-                    : URL(string: "https://explorer.solana.com/tx/\(hash)?cluster=devnet")
+                switch bloctoEnvironment {
+                case .prod:
+                    return URL(string: "https://explorer.solana.com/tx/\(hash)")
+                case .dev:
+                    return URL(string: "https://explorer.solana.com/tx/\(hash)?cluster=devnet")
+                }
             case let .address(address):
-                return isProduction
-                    ? URL(string: "https://explorer.solana.com/address/\(address)")
-                    : URL(string: "https://explorer.solana.com/address/\(address)?cluster=devnet")
+                switch bloctoEnvironment {
+                case .prod:
+                    return URL(string: "https://explorer.solana.com/address/\(address)")
+                case .dev:
+                    return URL(string: "https://explorer.solana.com/address/\(address)?cluster=devnet")
+                }
             }
         }
     }

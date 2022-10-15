@@ -28,7 +28,7 @@ class AccountRequestTests: XCTestCase {
             with: appId,
             getWindow: { UIWindow() },
             logging: false,
-            testnet: true,
+            environment: .dev,
             urlOpening: mockUIApplication
         )
 
@@ -67,7 +67,7 @@ class AccountRequestTests: XCTestCase {
             with: appId,
             getWindow: { UIWindow() },
             logging: false,
-            testnet: true,
+            environment: .dev,
             urlOpening: mockUIApplication
         )
 
@@ -110,7 +110,7 @@ class AccountRequestTests: XCTestCase {
             with: appId,
             getWindow: { UIWindow() },
             logging: false,
-            testnet: true,
+            environment: .dev,
             urlOpening: mockUIApplication,
             sessioningType: MockAuthenticationSession.self
         )

@@ -74,7 +74,7 @@ class SendTransactionTests: XCTestCase {
             with: appId,
             getWindow: { UIWindow() },
             logging: false,
-            testnet: true,
+            environment: .dev,
             urlOpening: mockUIApplication
         )
 
@@ -125,7 +125,7 @@ class SendTransactionTests: XCTestCase {
             with: appId,
             getWindow: { UIWindow() },
             logging: false,
-            testnet: true,
+            environment: .dev,
             urlOpening: mockUIApplication,
             sessioningType: MockAuthenticationSession.self
         )

@@ -25,26 +25,29 @@ public class BloctoSDK {
     public static let shared: BloctoSDK = BloctoSDK()
 
     var bloctoApiBaseURLString: String {
-        if testnet {
-            return "https://api-staging.blocto.app"
-        } else {
+        switch environment {
+        case .prod:
             return "https://api.blocto.app"
+        case .dev:
+            return "https://api-dev.blocto.app"
         }
     }
 
     private var bloctoAssociatedDomain: String {
-        if testnet {
-            return "https://staging.blocto.app/"
-        } else {
+        switch environment {
+        case .prod:
             return "https://blocto.app/"
+        case .dev:
+            return "https://dev.blocto.app/"
         }
     }
 
     private var webBaseURLString: String {
-        if testnet {
-            return "https://wallet-testnet.blocto.app/"
-        } else {
+        switch environment {
+        case .prod:
             return "https://wallet.blocto.app/"
+        case .dev:
+            return "https://wallet-testnet.blocto.app/"
         }
     }
 
@@ -70,7 +73,7 @@ public class BloctoSDK {
 
     var logging: Bool = true
 
-    var testnet: Bool = false
+    var environment: BloctoEnvironment = .prod
 
     var urlOpening: URLOpening = UIApplication.shared
 
@@ -88,22 +91,22 @@ public class BloctoSDK {
         with appId: String,
         getWindow: (() throws -> UIWindow)?,
         logging: Bool = true,
-        testnet: Bool = false,
+        environment: BloctoEnvironment = .prod,
         urlOpening: URLOpening = UIApplication.shared,
         sessioningType: AuthenticationSessioning.Type = ASWebAuthenticationSession.self
     ) {
         self.appId = appId
         self.getWindow = getWindow
         self.logging = logging
-        self.testnet = testnet
+        self.environment = environment
         self.urlOpening = urlOpening
         self.sessioningType = sessioningType
     }
 
     /// To simply update blockchain network.
-    /// - Parameter isTestnet: Is testnet or mainnet
-    public func updateNetwork(isTestnet: Bool) {
-        testnet = isTestnet
+    /// - Parameter environment: Blocto Environment
+    public func updateEnvironment(_ environment: BloctoEnvironment) {
+        self.environment = environment
     }
 
     /// Entry of Universal Links
@@ -137,7 +140,7 @@ public class BloctoSDK {
         open url: URL
     ) {
         if let scheme = url.scheme?.lowercased(),
-           scheme.hasPrefix("blocto") || scheme.hasPrefix("blocto-staging") {
+           scheme.hasPrefix("blocto") || scheme.hasPrefix("blocto-dev") {
             log(
                 enable: true,
                 message: "❗️❗️Universal link should be implemented to prevent from potential attack."

@@ -86,7 +86,7 @@ For further instructions please refer to [Blocto Docs](https://docs.blocto.app/b
 
 ## Author
 
-Dawson, dawson@portto.com, scottphc, scott@portto.com
+Dawson, dawson@portto.com, Scott, scott@portto.com
 
 ## License
 

@@ -30,17 +30,19 @@ public class BloctoSolanaSDK {
     private var appendTxMap: [String: [String: Data]] = [:]
 
     private var cluster: Cluster {
-        if base.testnet {
+        switch base.environment {
+        case .dev:
             return .devnet
-        } else {
+        case .prod:
             return .mainnetBeta
         }
     }
 
     private var walletProgramId: String {
-        if base.testnet {
+        switch base.environment {
+        case .dev:
             return "Ckv4czD7qPmQvy2duKEa45WRp3ybD2XuaJzQAWrhAour"
-        } else {
+        case .prod:
             return "JBn9VwAiqpizWieotzn6FjEXrBu4fDe2XFjiFqZwp8Am"
         }
     }
