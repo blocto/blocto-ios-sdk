@@ -96,7 +96,7 @@ enum EVMBase: CaseIterable {
             case .prod:
                 urlString = "https://mainnet.infura.io/v3/b2f4b3f635d8425c96854c3d28ba6bb0"
             case .dev:
-                urlString = "https://rinkeby.infura.io/v3/b2f4b3f635d8425c96854c3d28ba6bb0"
+                urlString = "https://rinkeby.blocto.app"
             }
         case .bsc:
             switch bloctoEnvironment {
