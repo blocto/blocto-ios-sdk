@@ -115,9 +115,9 @@ class SolanaMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .from, value: solanaAddress),
             URLQueryItem(name: .isInvokeWrapped, value: "true"),
             URLQueryItem(name: .message, value: messageHex),
-            URLQueryItem(name: QueryEscape.escape("\(QueryName.appendTx.rawValue)[\(appendTxKey1)]"), value: appendTxValue1),
-            URLQueryItem(name: QueryEscape.escape("\(QueryName.appendTx.rawValue)[\(appendTxKey2)]"), value: appendTxValue2),
-            URLQueryItem(name: QueryEscape.escape("\(QueryName.publicKeySignaturePairs.rawValue)[\(publicKey)]"), value: signature)
+            URLQueryItem(name: "\(QueryName.appendTx.rawValue)[\(appendTxKey1)]", value: appendTxValue1),
+            URLQueryItem(name: "\(QueryName.appendTx.rawValue)[\(appendTxKey2)]", value: appendTxValue2),
+            URLQueryItem(name: "\(QueryName.publicKeySignaturePairs.rawValue)[\(publicKey)]", value: signature)
         ]
 
         // When:

@@ -21,8 +21,8 @@
                 "test2": "2"
             ])
         let expect: [URLQueryItem] = [
-            URLQueryItem(name: QueryName.publicKeySignaturePairs.rawValue + "%5Btest1%5D", value: "1"),
-            URLQueryItem(name: QueryName.publicKeySignaturePairs.rawValue + "%5Btest2%5D", value: "2")
+            URLQueryItem(name: QueryName.publicKeySignaturePairs.rawValue + "[test1]", value: "1"),
+            URLQueryItem(name: QueryName.publicKeySignaturePairs.rawValue + "[test2]", value: "2")
         ]
 
         // When:

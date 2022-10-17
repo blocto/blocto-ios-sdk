@@ -17,27 +17,28 @@ public func XCTAssertURLEqual(
     line: UInt = #line
 ) {
     do {
-        guard let url1 = try expression1(),
-              let urlComponents1 = URLComponents(url: url1, resolvingAgainstBaseURL: false) else {
-                  XCTFail("urlComponents1 not found.", file: file, line: line)
-                  return
-              }
-        guard let url2 = try expression2(),
-              let urlComponents2 = URLComponents(url: url2, resolvingAgainstBaseURL: false) else {
-                  XCTFail("urlComponents2 not found.", file: file, line: line)
-                  return
-              }
+        guard let url1 = try expression1() else {
+            XCTFail("url1 not found.", file: file, line: line)
+            return
+        }
+        guard let url1QueryPart = url1.absoluteString.components(separatedBy: "?").last else {
+            XCTFail("url1 query part not found.", file: file, line: line)
+            return
+        }
+        guard let url2 = try expression2() else {
+            XCTFail("url2 not found.", file: file, line: line)
+            return
+        }
+        guard let url2QueryPart = url2.absoluteString.components(separatedBy: "?").last else {
+            XCTFail("url2 query part not found.", file: file, line: line)
+            return
+        }
 
-        XCTAssertEqual(urlComponents1.scheme, urlComponents2.scheme)
-        XCTAssertEqual(urlComponents1.host, urlComponents2.host)
-        XCTAssertEqual(urlComponents1.path, urlComponents2.path)
-
-        guard let queryItems1 = urlComponents1.queryItems,
-              let queryItems2 = urlComponents2.queryItems else {
-                  XCTFail("queryItems1 is \(String(describing: urlComponents1.queryItems)) and queryItems2 is \(String(describing: urlComponents2.queryItems)) are not equal.", file: file, line: line)
-                  return
-              }
-        XCTAssertArrayElementsEqual(queryItems1, queryItems2)
+        XCTAssertEqual(url1.host, url2.host)
+        XCTAssertEqual(url1.scheme, url2.scheme)
+        let url1QueryComponents = url1QueryPart.components(separatedBy: "&")
+        let url2QueryComponents = url2QueryPart.components(separatedBy: "&")
+        XCTAssertArrayElementsEqual(url1QueryComponents, url2QueryComponents)
     } catch {
         XCTFail(error.localizedDescription, file: file, line: line)
     }

@@ -64,13 +64,19 @@ public enum URLEncoding {
             components.append(
                 .init(
                     name: escape(key),
-                    value: escape(data.bloctoSDK.hexStringWith0xPrefix)
+                    value: data.bloctoSDK.hexStringWith0xPrefix
+                ))
+        case let string as String:
+            components.append(
+                .init(
+                    name: key,
+                    value: string
                 ))
         default:
             components.append(
                 .init(
                     name: escape(key),
-                    value: escape("\(value)")
+                    value: "\(value)"
                 ))
         }
         return components
@@ -81,7 +87,7 @@ public enum URLEncoding {
         for (nestedKey, value) in dictionary {
             components.append(
                 .init(
-                    name: escape("\(QueryName.appendTx.rawValue)[\(nestedKey)]"),
+                    name: "\(QueryName.appendTx.rawValue)[\(nestedKey)]",
                     value: escape(value.bloctoSDK.hexString)
                 ))
         }

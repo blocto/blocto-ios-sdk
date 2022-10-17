@@ -12,6 +12,19 @@ import BigInt
 
 // swiftlint:disable type_body_length
 class EVMBaseMethodURLEncodeTests: XCTestCase {
+    
+    func testURLComponent() throws {
+        // Given:
+        let item = URLQueryItem(name: .accountProof, value: "123 456 % 1")
+
+        let expectedURL = URL(string: "https://123?account_proof=123%20456%20%25%201")
+        // When:
+        var component = URLComponents(string: "https://123")
+        component?.queryItems = [item]
+        
+        // Then:
+        XCTAssertEqual(component?.url, expectedURL)
+    }
 
     func testEVMBaseRequestAccount() throws {
         // Given:
@@ -97,7 +110,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .method, value: EVMBaseMethodType.signMessage.rawValue),
             URLQueryItem(name: .signType, value: EVMBaseSignType.personalSign.rawValue),
             URLQueryItem(name: .from, value: ethereumAddress),
-            URLQueryItem(name: .message, value: QueryEscape.escape(message))
+            URLQueryItem(name: .message, value: message)
         ]
 
         // When:
@@ -198,7 +211,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .method, value: EVMBaseMethodType.signMessage.rawValue),
             URLQueryItem(name: .signType, value: EVMBaseSignType.typedSignV3.rawValue),
             URLQueryItem(name: .from, value: ethereumAddress),
-            URLQueryItem(name: .message, value: QueryEscape.escape(message))
+            URLQueryItem(name: .message, value: message)
         ]
 
         // When:
@@ -318,7 +331,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .method, value: EVMBaseMethodType.signMessage.rawValue),
             URLQueryItem(name: .signType, value: EVMBaseSignType.typedSignV4.rawValue),
             URLQueryItem(name: .from, value: ethereumAddress),
-            URLQueryItem(name: .message, value: QueryEscape.escape(message))
+            URLQueryItem(name: .message, value: message)
         ]
 
         // When:
