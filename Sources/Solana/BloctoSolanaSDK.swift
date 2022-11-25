@@ -178,10 +178,20 @@ public class BloctoSolanaSDK {
                     ]
                 )
                 session
-                    .dataTask(with: request) { [weak self] data, _, error in
+                    .dataTask(with: request) { [weak self] data, response, error in
                         do {
                             guard let self = self else {
                                 throw BloctoSDKError.callbackSelfNotfound
+                            }
+                            guard let response = response as? HTTPURLResponse,
+                                  (200 ..< 300) ~= response.statusCode else {
+                                log(enable: self.base.logging, message: "error: \(error.debugDescription)")
+                                if let data = data,
+                                   let text = String(data: data, encoding: .utf8) {
+                                    log(enable: self.base.logging, message: "response: \(text)")
+                                }
+                                completion(.failure(BloctoSDKError.responseUnexpected))
+                                return
                             }
                             if let error = error {
                                 completion(.failure(error))
