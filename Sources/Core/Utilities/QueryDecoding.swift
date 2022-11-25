@@ -83,8 +83,8 @@ public enum QueryDecoding {
         param: [String: String],
         target: String
     ) throws -> [String] {
-        let leftBrackets = QueryEscape.escape("[")
-        let rightBrackets = QueryEscape.escape("]")
+        let leftBrackets = "["
+        let rightBrackets = "]"
         let array: [String] = param.reduce([]) {
             if $1.key == (target + leftBrackets + rightBrackets) {
                 var copied = $0
