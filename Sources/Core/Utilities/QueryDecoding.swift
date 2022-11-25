@@ -107,7 +107,7 @@ public enum QueryDecoding {
             copied[$1.key] = ($1.key.contains(target) ? $1.value : nil)
             return copied
         }
-        let regex = try NSRegularExpression(pattern: "(?<=\(leftBrackets))(.*?)(?=\(rightBrackets))")
+        let regex = try NSRegularExpression(pattern: #"(?<=\\#(leftBrackets))(.*?)(?=\\#(rightBrackets))"#)
         let value = targets.reduce([:]) { result, target -> [String: String] in
             var finalResult = result
             if let result: NSTextCheckingResult = regex.firstMatch(
