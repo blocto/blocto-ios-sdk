@@ -43,13 +43,13 @@ public enum URLEncoding {
                 let boolEncoding = BoolEncoding()
                 components.append(
                     .init(
-                        name: escape(key),
+                        name: key,
                         value: escape(boolEncoding.encode(value: number.boolValue))
                     ))
             } else {
                 components.append(
                     .init(
-                        name: escape(key),
+                        name: key,
                         value: escape("\(number)")
                     ))
             }
@@ -57,13 +57,13 @@ public enum URLEncoding {
             let boolEncoding = BoolEncoding()
             components.append(
                 .init(
-                    name: escape(key),
+                    name: key,
                     value: escape(boolEncoding.encode(value: bool))
                 ))
         case let data as Data:
             components.append(
                 .init(
-                    name: escape(key),
+                    name: key,
                     value: data.bloctoSDK.hexStringWith0xPrefix
                 ))
         case let string as String:
@@ -75,7 +75,7 @@ public enum URLEncoding {
         default:
             components.append(
                 .init(
-                    name: escape(key),
+                    name: key,
                     value: "\(value)"
                 ))
         }

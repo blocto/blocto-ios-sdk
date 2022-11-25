@@ -18,14 +18,20 @@ class URLSessionMock: URLSessionProtocol {
         with request: URLRequest,
         completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void
     ) -> URLSessionDataTask {
+        guard let url = request.url else {
+            return URLSessionDataTaskMock {
+                completionHandler(nil, nil, nil)
+            }
+        }
         let error = error
+        let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
         if let dataString = responseJsonString {
             return URLSessionDataTaskMock {
-                completionHandler(Data(dataString.utf8), nil, error)
+                completionHandler(Data(dataString.utf8), response, error)
             }
         }
         return URLSessionDataTaskMock {
-            completionHandler(nil, nil, error)
+            completionHandler(nil, response, error)
         }
     }
 
