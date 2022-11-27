@@ -35,8 +35,8 @@
     func testDictionaryDecoding() throws {
         // Given:
         let param = [
-            QueryName.publicKeySignaturePairs.rawValue + "%5Btest1%5D": "1",
-            QueryName.publicKeySignaturePairs.rawValue + "%5Btest2%5D": "2"
+            QueryName.publicKeySignaturePairs.rawValue + "[test1]": "1",
+            QueryName.publicKeySignaturePairs.rawValue + "[test2]": "2"
         ]
 
         let expect: [String: String] = [
@@ -64,8 +64,8 @@
                 "test2": data2
             ])
         let expect: [URLQueryItem] = [
-            URLQueryItem(name: QueryName.appendTx.rawValue + "%5Btest1%5D", value: "0x1234"),
-            URLQueryItem(name: QueryName.appendTx.rawValue + "%5Btest2%5D", value: "0x2345")
+            URLQueryItem(name: QueryName.appendTx.rawValue + "[test1]", value: "0x1234"),
+            URLQueryItem(name: QueryName.appendTx.rawValue + "[test2]", value: "0x2345")
         ]
 
         // When:
@@ -78,8 +78,8 @@
     func testDictionaryDataDecoding() throws {
         // Given:
         let param = [
-            QueryName.appendTx.rawValue + "%5Btest1%5D": "1234",
-            QueryName.appendTx.rawValue + "%5Btest2%5D": "2345"
+            QueryName.appendTx.rawValue + "[test1]": "1234",
+            QueryName.appendTx.rawValue + "[test2]": "2345"
         ]
 
         let expect: [String: Data] = [

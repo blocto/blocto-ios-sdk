@@ -83,8 +83,8 @@ public enum QueryDecoding {
         param: [String: String],
         target: String
     ) throws -> [String] {
-        let leftBrackets = QueryEscape.escape("[")
-        let rightBrackets = QueryEscape.escape("]")
+        let leftBrackets = "["
+        let rightBrackets = "]"
         let array: [String] = param.reduce([]) {
             if $1.key == (target + leftBrackets + rightBrackets) {
                 var copied = $0
@@ -100,14 +100,14 @@ public enum QueryDecoding {
         param: [String: String],
         target: String
     ) throws -> [String: Any] {
-        let leftBrackets = QueryEscape.escape("[")
-        let rightBrackets = QueryEscape.escape("]")
+        let leftBrackets = "["
+        let rightBrackets = "]"
         let targets: [String: String] = param.reduce([:]) {
             var copied = $0
             copied[$1.key] = ($1.key.contains(target) ? $1.value : nil)
             return copied
         }
-        let regex = try NSRegularExpression(pattern: "(?<=\(leftBrackets))(.*?)(?=\(rightBrackets))")
+        let regex = try NSRegularExpression(pattern: #"(?<=\\#(leftBrackets))(.*?)(?=\\#(rightBrackets))"#)
         let value = targets.reduce([:]) { result, target -> [String: String] in
             var finalResult = result
             if let result: NSTextCheckingResult = regex.firstMatch(

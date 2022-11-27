@@ -640,13 +640,15 @@ final class SolanaDemoViewController: UIViewController {
             transaction: transaction
         ) { [weak self] result in
             guard let self = self else { return }
-            self.resetSetValueStatus()
-            switch result {
-            case let .success(txHsh):
-                self.setValueResultLabel.text = txHsh
-                self.setValueExplorerButton.isHidden = false
-            case let .failure(error):
-                self.handleSetValueError(error)
+            DispatchQueue.main.async {
+                self.resetSetValueStatus()
+                switch result {
+                case let .success(txHsh):
+                    self.setValueResultLabel.text = txHsh
+                    self.setValueExplorerButton.isHidden = false
+                case let .failure(error):
+                    self.handleSetValueError(error)
+                }                
             }
         }
     }
@@ -660,17 +662,19 @@ final class SolanaDemoViewController: UIViewController {
         connetion.getAccountInfo(
             publicKey: dappPublicKey) { [weak self] (result: Result<AccountInfo<ValueAccountData>?, Connection.Error>) in
                 guard let self = self else { return }
-                self.resetGetValueStatus()
-                switch result {
-                case let .success(valueAccount):
-                    guard let data = valueAccount?.data else {
-                        self.handleGetValueError(Error.message("data not found."))
-                        return
-                    }
-                    self.getValueResultLabel.text = "\(data.value)"
-                case let .failure(error):
-                    debugPrint(error)
-                    self.handleGetValueError(error)
+                DispatchQueue.main.async {
+                    self.resetGetValueStatus()
+                    switch result {
+                    case let .success(valueAccount):
+                        guard let data = valueAccount?.data else {
+                            self.handleGetValueError(Error.message("data not found."))
+                            return
+                        }
+                        self.getValueResultLabel.text = "\(data.value)"
+                    case let .failure(error):
+                        debugPrint(error)
+                        self.handleGetValueError(error)
+                    }                    
                 }
             }
     }
@@ -729,31 +733,33 @@ final class SolanaDemoViewController: UIViewController {
                             solanaAddress: userWalletAddress
                         ) { [weak self] result in
                             guard let self = self else { return }
-                            switch result {
-                            case let .success(transaction):
-                                do {
-                                    var newTransaction = transaction
-                                    try newTransaction.partialSign(signers: [newAccount])
-
-                                    self.bloctoSolanaSDK.signAndSendTransaction(
-                                        from: userWalletAddress,
-                                        transaction: newTransaction
-                                    ) { [weak self] result in
-                                        guard let self = self else { return }
-                                        self.resetPartialSignTxStatus()
-                                        switch result {
-                                        case let .success(txHash):
-                                            self.partialSignTxResultLabel.text = txHash
-                                            self.partialSignTxExplorerButton.isHidden = false
-                                        case let .failure(error):
-                                            self.handlePartialSignTxError(error)
+                            DispatchQueue.main.async {
+                                switch result {
+                                case let .success(transaction):
+                                    do {
+                                        var newTransaction = transaction
+                                        try newTransaction.partialSign(signers: [newAccount])
+                                        
+                                        self.bloctoSolanaSDK.signAndSendTransaction(
+                                            from: userWalletAddress,
+                                            transaction: newTransaction
+                                        ) { [weak self] result in
+                                            guard let self = self else { return }
+                                            self.resetPartialSignTxStatus()
+                                            switch result {
+                                            case let .success(txHash):
+                                                self.partialSignTxResultLabel.text = txHash
+                                                self.partialSignTxExplorerButton.isHidden = false
+                                            case let .failure(error):
+                                                self.handlePartialSignTxError(error)
+                                            }
                                         }
+                                    } catch {
+                                        self.handlePartialSignTxError(error)
                                     }
-                                } catch {
+                                case let .failure(error):
                                     self.handlePartialSignTxError(error)
-                                }
-                            case let .failure(error):
-                                self.handlePartialSignTxError(error)
+                                }                                
                             }
                         }
                     } catch {
