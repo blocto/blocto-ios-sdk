@@ -25,26 +25,26 @@ from the Example directory first.
 BloctoSDK is available through [CocoaPods](https://cocoapods.org). You can only include specific subspec to install, simply add the following line to your Podfile:
 
 ```ruby
-pod 'BloctoSDK', '~> 0.4.3'
+pod 'BloctoSDK', '~> 0.4.4'
 
 # or 
 
-pod 'BloctoSDK/Solana', '~> 0.4.3'
+pod 'BloctoSDK/Solana', '~> 0.4.4'
 
 # or
 
-pod 'BloctoSDK/EVMBase', '~> 0.4.3'
+pod 'BloctoSDK/EVMBase', '~> 0.4.4'
 
 # or
 
-pod 'BloctoSDK/Flow', '~> 0.4.3'
+pod 'BloctoSDK/Flow', '~> 0.4.4'
 ```
 
 ### Swift Package Manager
 
 
 ```swift
-.package(url: "https://github.com/portto/blocto-ios-sdk.git", .upToNextMinor(from: "0.4.3"))
+.package(url: "https://github.com/portto/blocto-ios-sdk.git", .upToNextMinor(from: "0.4.4"))
 ```
 
 and then specify `"BloctoSDK"` as a dependency of the Target in which you wish to use.
@@ -63,7 +63,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/portto/blocto-ios-sdk.git", .upToNextMinor(from: "0.4.3"))
+        .package(url: "https://github.com/portto/blocto-ios-sdk.git", .upToNextMinor(from: "0.4.4"))
     ],
     targets: [
         .target(
