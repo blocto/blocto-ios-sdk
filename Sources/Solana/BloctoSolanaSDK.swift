@@ -83,61 +83,38 @@ public class BloctoSolanaSDK {
                 switch result {
                 case let .success(transaction):
                     do {
-                        if self.transactionNeedsConvert(transaction) {
-                            self.convertToProgramWalletTransaction(
-                                transaction,
-                                solanaAddress: from,
-                                session: session
-                            ) { [weak self] result in
-                                guard let self = self else {
-                                    completion(.failure(BloctoSDKError.callbackSelfNotfound))
-                                    return
-                                }
-                                switch result {
-                                case let .success(transaction):
-                                    self.signAndSendTransaction(
-                                        uuid: uuid,
-                                        from: from,
-                                        transaction: transaction,
-                                        completion: completion
-                                    )
-                                case let .failure(error):
-                                    completion(.failure(error))
-                                }
-                            }
+                        let txConverted = self.transactionIsConverted(transaction)
+                        var mutateTransaction = transaction
+
+                        let serializeMessage = try mutateTransaction.serializeMessage()
+
+                        let shaString = serializeMessage.sha1().bloctoSDK.hexString
+                        let appendTx = self.appendTxMap[shaString]
+
+                        let publicKeySignaturePairs = transaction.signatures.reduce([String: String]()) { partialResult, signaturePubkeyPair in
+                            var result = partialResult
+                            result[signaturePubkeyPair.publicKey.description] = signaturePubkeyPair.signature?.bloctoSDK.hexString
+                            return result
+                        }
+
+                        let method = SignAndSendSolanaTransactionMethod(
+                            id: uuid,
+                            blockchain: .solana,
+                            from: from,
+                            transactionInfo: SolanaTransactionInfo(
+                                message: serializeMessage.bloctoSDK.hexString,
+                                appendTx: appendTx,
+                                publicKeySignaturePairs: publicKeySignaturePairs
+                            ),
+                            isInvokeWrapped: txConverted,
+                            callback: completion
+                        )
+                        self.appendTxMap[shaString] = nil
+                        if Thread.isMainThread {
+                            self.base.send(method: method)
                         } else {
-                            var mutateTransaction = transaction
-
-                            let serializeMessage = try mutateTransaction.serializeMessage()
-
-                            let shaString = serializeMessage.sha1().bloctoSDK.hexString
-                            let appendTx = self.appendTxMap[shaString]
-
-                            let publicKeySignaturePairs = transaction.signatures.reduce([String: String]()) { partialResult, signaturePubkeyPair in
-                                var result = partialResult
-                                result[signaturePubkeyPair.publicKey.description] = signaturePubkeyPair.signature?.bloctoSDK.hexString
-                                return result
-                            }
-
-                            let method = SignAndSendSolanaTransactionMethod(
-                                id: uuid,
-                                blockchain: .solana,
-                                from: from,
-                                transactionInfo: SolanaTransactionInfo(
-                                    message: serializeMessage.bloctoSDK.hexString,
-                                    appendTx: appendTx,
-                                    publicKeySignaturePairs: publicKeySignaturePairs
-                                ),
-                                isInvokeWrapped: true,
-                                callback: completion
-                            )
-                            self.appendTxMap[shaString] = nil
-                            if Thread.isMainThread {
+                            DispatchQueue.main.async {
                                 self.base.send(method: method)
-                            } else {
-                                DispatchQueue.main.async {
-                                    self.base.send(method: method)
-                                }
                             }
                         }
                     } catch {
@@ -240,10 +217,8 @@ public class BloctoSolanaSDK {
         }
     }
 
-    func transactionNeedsConvert(_ transaction: Transaction) -> Bool {
-        transaction.instructions.allSatisfy { TransactionInstruction in
-            TransactionInstruction.programId.description != walletProgramId
-        }
+    func transactionIsConverted(_ transaction: Transaction) -> Bool {
+        transaction.instructions.contains(where: { $0.programId.description == walletProgramId })
     }
 
 }
