@@ -2,19 +2,19 @@ PODS:
   - _NIODataStructures (2.40.0)
   - Alamofire (5.6.2)
   - BigInt (5.2.0)
-  - BloctoSDK/Core (0.4.2)
-  - BloctoSDK/EVMBase (0.4.2):
+  - BloctoSDK/Core (0.4.4)
+  - BloctoSDK/EVMBase (0.4.4):
     - BigInt (~> 5.0)
-    - BloctoSDK/Core (~> 0.4.2)
-  - BloctoSDK/Flow (0.4.2):
-    - BloctoSDK/Core (~> 0.4.2)
+    - BloctoSDK/Core (~> 0.4.4)
+  - BloctoSDK/Flow (0.4.4):
+    - BloctoSDK/Core (~> 0.4.4)
     - FlowSDK (~> 0.4.2)
-  - BloctoSDK/Solana (0.4.2):
+  - BloctoSDK/Solana (0.4.4):
     - BloctoSDK/Core
     - SolanaWeb3 (~> 0.0.4)
-  - BloctoSDK/Wallet (0.4.2):
+  - BloctoSDK/Wallet (0.4.4):
     - BigInt (~> 5.0)
-    - BloctoSDK/Core (~> 0.4.2)
+    - BloctoSDK/Core (~> 0.4.4)
     - FlowSDK (~> 0.4.2)
   - Cadence (0.4.2):
     - BigInt (~> 5.2.0)
@@ -282,7 +282,7 @@ SPEC CHECKSUMS:
   _NIODataStructures: 3d45d8e70a1d17a15b1dc59d102c63dbc0525ffd
   Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  BloctoSDK: 341d7e5e42d22ecc793f5846fb3443ce5edf59e6
+  BloctoSDK: 8eff53d8171910c2cea1301affd43dc7ccc81669
   Cadence: 2aa3c6d84e3de70a5decf50a0c19658af2707d6a
   CGRPCZlibp: 2f3e1e7a6d6cb481d4d1a26d3ec09aefacf09cbb
   CNIOAtomics: 8edf08644e5e6fa0f021c239be9e8beb1cd9ef18
