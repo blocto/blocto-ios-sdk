@@ -43,7 +43,7 @@ public struct SendFlowTransactionMethod: CallbackMethod {
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
             return nil
         }
-        var queryItems: [QueryItem] = URLEncoding.queryItems(
+        var queryItems: [QueryItem] = URLEncoding.queryGeneralItems(
             appId: appId,
             requestId: id.uuidString,
             blockchain: blockchain

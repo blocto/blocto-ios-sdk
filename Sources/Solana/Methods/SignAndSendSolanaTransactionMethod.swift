@@ -45,7 +45,7 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
             return nil
         }
-        var queryItems: [QueryItem] = URLEncoding.queryItems(
+        var queryItems: [QueryItem] = URLEncoding.queryGeneralItems(
             appId: appId,
             requestId: id.uuidString,
             blockchain: blockchain

@@ -40,4 +40,7 @@ public enum QueryName: String {
 
     // error
     case error
+
+    // platform parameter for event tracking
+    case platform
 }
