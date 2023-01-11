@@ -11,7 +11,8 @@ import XCTest
 import BigInt
 
 class SendTransactionTests: XCTestCase {
-
+    
+    let platform = "sdk_ios"
     var mockUIApplication: MockUIApplication!
 
     override func setUp() {
@@ -52,7 +53,8 @@ class SendTransactionTests: XCTestCase {
             URLQueryItem(name: .from, value: from),
             URLQueryItem(name: .to, value: to),
             URLQueryItem(name: .value, value: "0x7b"),
-            URLQueryItem(name: .data, value: "0x" + dataString)
+            URLQueryItem(name: .data, value: "0x" + dataString),
+            URLQueryItem(name: .platform, value: platform)
         ]
 
         // When:

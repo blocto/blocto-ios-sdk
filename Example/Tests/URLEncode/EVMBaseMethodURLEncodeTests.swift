@@ -13,6 +13,7 @@ import BigInt
 // swiftlint:disable type_body_length
 class EVMBaseMethodURLEncodeTests: XCTestCase {
     
+    let platform = "sdk_ios"
     func testURLComponent() throws {
         // Given:
         let item = URLQueryItem(name: .accountProof, value: "123 456 % 1")
@@ -38,7 +39,8 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .appId, value: appId),
             URLQueryItem(name: .requestId, value: requestId.uuidString),
             URLQueryItem(name: .blockchain, value: Blockchain.ethereum.rawValue),
-            URLQueryItem(name: .method, value: MethodName.requestAccount.rawValue)
+            URLQueryItem(name: .method, value: MethodName.requestAccount.rawValue),
+            URLQueryItem(name: .platform, value: platform)
         ]
 
         // When:
@@ -74,7 +76,8 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .method, value: EVMBaseMethodType.signMessage.rawValue),
             URLQueryItem(name: .signType, value: EVMBaseSignType.sign.rawValue),
             URLQueryItem(name: .from, value: ethereumAddress),
-            URLQueryItem(name: .message, value: message)
+            URLQueryItem(name: .message, value: message),
+            URLQueryItem(name: .platform, value: platform)
         ]
 
         // When:
@@ -110,7 +113,8 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .method, value: EVMBaseMethodType.signMessage.rawValue),
             URLQueryItem(name: .signType, value: EVMBaseSignType.personalSign.rawValue),
             URLQueryItem(name: .from, value: ethereumAddress),
-            URLQueryItem(name: .message, value: message)
+            URLQueryItem(name: .message, value: message),
+            URLQueryItem(name: .platform, value: platform)
         ]
 
         // When:
@@ -211,7 +215,8 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .method, value: EVMBaseMethodType.signMessage.rawValue),
             URLQueryItem(name: .signType, value: EVMBaseSignType.typedSignV3.rawValue),
             URLQueryItem(name: .from, value: ethereumAddress),
-            URLQueryItem(name: .message, value: message)
+            URLQueryItem(name: .message, value: message),
+            URLQueryItem(name: .platform, value: platform)
         ]
 
         // When:
@@ -331,7 +336,8 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .method, value: EVMBaseMethodType.signMessage.rawValue),
             URLQueryItem(name: .signType, value: EVMBaseSignType.typedSignV4.rawValue),
             URLQueryItem(name: .from, value: ethereumAddress),
-            URLQueryItem(name: .message, value: message)
+            URLQueryItem(name: .message, value: message),
+            URLQueryItem(name: .platform, value: platform)
         ]
 
         // When:
@@ -370,7 +376,8 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .from, value: ethereumAddress),
             URLQueryItem(name: .to, value: to),
             URLQueryItem(name: .value, value: "0x0"),
-            URLQueryItem(name: .data, value: "0x" + dataString)
+            URLQueryItem(name: .data, value: "0x" + dataString),
+            URLQueryItem(name: .platform, value: platform)
         ]
 
         // When:
@@ -409,7 +416,8 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .from, value: ethereumAddress),
             URLQueryItem(name: .to, value: to),
             URLQueryItem(name: .value, value: "0x100"),
-            URLQueryItem(name: .data, value: "0x" + dataString)
+            URLQueryItem(name: .data, value: "0x" + dataString),
+            URLQueryItem(name: .platform, value: platform)
         ]
 
         // When:
