@@ -11,6 +11,7 @@ import XCTest
 
 class SolanaMethodURLEncodeTests: XCTestCase {
 
+    let platform = "sdk_ios"
     func testSolanaRequestAccount() throws {
         // Given:
         let requestId = UUID()
@@ -23,7 +24,8 @@ class SolanaMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .appId, value: appId),
             URLQueryItem(name: .requestId, value: requestId.uuidString),
             URLQueryItem(name: .blockchain, value: Blockchain.solana.rawValue),
-            URLQueryItem(name: .method, value: MethodName.requestAccount.rawValue)
+            URLQueryItem(name: .method, value: MethodName.requestAccount.rawValue),
+            URLQueryItem(name: .platform, value: platform)
         ]
 
         // When:
@@ -61,7 +63,8 @@ class SolanaMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .method, value: SolanaMethodType.signAndSendTransaction.rawValue),
             URLQueryItem(name: .from, value: solanaAddress),
             URLQueryItem(name: .isInvokeWrapped, value: "true"),
-            URLQueryItem(name: .message, value: messageHex)
+            URLQueryItem(name: .message, value: messageHex),
+            URLQueryItem(name: .platform, value: platform)
         ]
 
         // When:
@@ -117,7 +120,8 @@ class SolanaMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .message, value: messageHex),
             URLQueryItem(name: "\(QueryName.appendTx.rawValue)[\(appendTxKey1)]", value: appendTxValue1),
             URLQueryItem(name: "\(QueryName.appendTx.rawValue)[\(appendTxKey2)]", value: appendTxValue2),
-            URLQueryItem(name: "\(QueryName.publicKeySignaturePairs.rawValue)[\(publicKey)]", value: signature)
+            URLQueryItem(name: "\(QueryName.publicKeySignaturePairs.rawValue)[\(publicKey)]", value: signature),
+            URLQueryItem(name: .platform, value: platform)
         ]
 
         // When:

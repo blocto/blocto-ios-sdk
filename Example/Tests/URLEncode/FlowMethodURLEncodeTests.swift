@@ -12,7 +12,8 @@ import FlowSDK
 @testable import BloctoSDK
 
 final class FlowMethodURLEncodeTests: XCTestCase {
-
+    
+    let platform = "sdk_ios"
     func testFlowRequestAccount() throws {
         // Given:
         let requestId = UUID()
@@ -27,6 +28,7 @@ final class FlowMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .requestId, value: requestId.uuidString),
             URLQueryItem(name: .blockchain, value: Blockchain.flow.rawValue),
             URLQueryItem(name: .method, value: MethodName.requestAccount.rawValue),
+            URLQueryItem(name: .platform, value: platform)
         ]
 
         // When:
@@ -53,6 +55,7 @@ final class FlowMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .requestId, value: requestId.uuidString),
             URLQueryItem(name: .blockchain, value: Blockchain.flow.rawValue),
             URLQueryItem(name: .method, value: FlowMethodType.authenticate.rawValue),
+            URLQueryItem(name: .platform, value: platform)
         ]
 
         // When:
@@ -84,6 +87,7 @@ final class FlowMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .method, value: FlowMethodType.authenticate.rawValue),
             URLQueryItem(name: .flowAppId, value: appId),
             URLQueryItem(name: .flowNonce, value: nonce),
+            URLQueryItem(name: .platform, value: platform)
         ]
 
         // When:
@@ -120,6 +124,7 @@ final class FlowMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .method, value: FlowMethodType.userSignature.rawValue),
             URLQueryItem(name: .from, value: address),
             URLQueryItem(name: .message, value: message),
+            URLQueryItem(name: .platform, value: platform)
         ]
 
         // When:
@@ -173,6 +178,7 @@ final class FlowMethodURLEncodeTests: XCTestCase {
             URLQueryItem(name: .method, value: FlowMethodType.sendTransaction.rawValue),
             URLQueryItem(name: .from, value: addressString),
             URLQueryItem(name: .flowTransaction, value: transactionDataHex),
+            URLQueryItem(name: .platform, value: platform)
         ]
 
         // When:

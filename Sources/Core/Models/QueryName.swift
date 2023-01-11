@@ -40,4 +40,6 @@ public enum QueryName: String {
 
     // error
     case error
+
+    case platform
 }
