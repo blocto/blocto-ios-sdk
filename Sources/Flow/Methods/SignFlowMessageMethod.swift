@@ -44,7 +44,7 @@ public struct SignFlowMessageMethod: CallbackMethod {
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
             return nil
         }
-        var queryItems = URLEncoding.queryItems(
+        var queryItems = URLEncoding.queryGeneralItems(
             appId: appId,
             requestId: id.uuidString,
             blockchain: blockchain
