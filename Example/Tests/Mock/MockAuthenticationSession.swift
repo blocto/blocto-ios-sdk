@@ -19,6 +19,7 @@ class MockAuthenticationSession: AuthenticationSessioning {
             print(newValue.debugDescription)
         }
     }
+    var prefersEphemeralWebBrowserSession: Bool = true
     private let completionHandler: (URL?, Error?) -> Void
     private var callbackURLScheme: String?
     private static var callbackURL: URL?

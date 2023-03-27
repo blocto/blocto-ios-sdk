@@ -11,6 +11,8 @@ import AuthenticationServices
 public protocol AuthenticationSessioning {
 
     var presentationContextProvider: ASWebAuthenticationPresentationContextProviding? { get set }
+    
+    var prefersEphemeralWebBrowserSession: Bool { get set }
 
     init(
         url URL: URL,

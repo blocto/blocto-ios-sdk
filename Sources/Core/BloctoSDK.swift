@@ -294,6 +294,7 @@ public class BloctoSDK {
                 }
             )
 
+            session?.prefersEphemeralWebBrowserSession = true
             session?.presentationContextProvider = window
 
             log(
