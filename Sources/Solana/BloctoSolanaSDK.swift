@@ -111,6 +111,7 @@ public class BloctoSolanaSDK {
 
                         let method = SignAndSendSolanaTransactionMethod(
                             id: uuid,
+                            sessionId: self.sessionId,
                             blockchain: .solana,
                             from: from,
                             transactionInfo: SolanaTransactionInfo(

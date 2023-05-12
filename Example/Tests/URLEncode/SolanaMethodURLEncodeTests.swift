@@ -43,10 +43,12 @@ class SolanaMethodURLEncodeTests: XCTestCase {
     func testSolanaSignAndSendMethod() throws {
         // Given:
         let requestId = UUID()
+        let sessionId = "555E7A3D-77AA-4DDF-B72D-A20AD5C0D41B"
         // swiftlint:disable line_length
         let messageHex = "03020208dac7dab484e8d0f174360daad76fe7b849aa929c5103eff76cd6d30fd0ea947d0f2b785bed6b4c9cf079c0ba7ae9264cd3f3d30a9cab45cb442923862c5633a0618db61dfc748ba4ee9e3d0bb4a8364b64ee145c9080ac7af4ceb4039aacdd7e2f044d6abceb87a88416562a21f1bb49e216f5f7a829bc88763a2b0664680fa34aa5298c9669ab8f56b091cc8c6a3f1564d24300f60ab9f313a0ba787ed1ca70e7fdf00ea69dfc9d96968d5108b5c69b0e125ca8794cba62ec9b05af087b30f0aeb08762d01b472df8e2ba21e20132a5c218e2435e02d7e4a84030bcd6b9c2b9dfc7f2af100827ea33addbb9d430e457f5311bb905cb3a86a721bc58d72b2701fc5744c3c866b88b2eb769024d5115f372bf37019126a2254ca9eac587592ac2010607050400070201030d030302000601010300be150000"
         let method = SignAndSendSolanaTransactionMethod(
             id: requestId,
+            sessionId: sessionId,
             blockchain: .solana,
             from: solanaAddress,
             transactionInfo: SolanaTransactionInfo(
@@ -82,6 +84,7 @@ class SolanaMethodURLEncodeTests: XCTestCase {
     func testSolanaSignAndSendPartialSignMethod() throws {
         // Given:
         let requestId = UUID()
+        let sessionId = "555E7A3D-77AA-4DDF-B72D-A20AD5C0D41B"
         // swiftlint:disable line_length
         let messageHex = "0200050bdac7dab484e8d0f174360daad76fe7b849aa929c5103eff76cd6d30fd0ea947d7d05f650e930daffbe1c4353d265e7c7243d564ffbe2a28046d8e3a52b068bf32f044d6abceb87a88416562a21f1bb49e216f5f7a829bc88763a2b0664680fa34aa5298c9669ab8f56b091cc8c6a3f1564d24300f60ab9f313a0ba787ed1ca70939caebd467f9a655612dd75684a0cfce30d1ee909770c9f9dc154376947ec3bf89fce5ebc54cc43cf3de7c6d8eb921ef1466502b9150a7e6c199082d7e730180000000000000000000000000000000000000000000000000000000000000000aeb08762d01b472df8e2ba21e20132a5c218e2435e02d7e4a84030bcd6b9c2b9dfc7f2af100827ea33addbb9d430e457f5311bb905cb3a86a721bc58d72b2701e7fdf00ea69dfc9d96968d5108b5c69b0e125ca8794cba62ec9b05af087b30f006a7d517192c568ee08a845f73d29788cf035c3145b21ab344d8062ea940000015605c03143987af784c92a219892c063e40bc8450b35908948250819895ffb1020603050a0004040000000708090400030601080203080200"
         let appendTxKey1 = "81919d8e-f9e8-4f5f-a9bb-85562e815ee6"
@@ -101,6 +104,7 @@ class SolanaMethodURLEncodeTests: XCTestCase {
         ]
         let method = SignAndSendSolanaTransactionMethod(
             id: requestId,
+            sessionId: sessionId,
             blockchain: .solana,
             from: solanaAddress,
             transactionInfo: SolanaTransactionInfo(
