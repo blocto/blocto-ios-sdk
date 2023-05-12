@@ -23,6 +23,7 @@ class SendTransactionTests: XCTestCase {
     func testSendTransactionEncodeURL() throws {
         // Given:
         let requestId = UUID()
+        let sessionId = "555E7A3D-77AA-4DDF-B72D-A20AD5C0D41B"
 
         let to = "0x58F385777aa6699b81f741Dd0d5B272A34C1c774"
         let from = "0xC823994cDDdaE5cb4bD1ADFe5AfD03f8E06Bc7ef"
@@ -30,14 +31,15 @@ class SendTransactionTests: XCTestCase {
         let dataString = "5524107700000000000000000000000000000000000000000000000000000000000015be"
 
         let evmBaseTransaction = EVMBaseTransaction(
-            to: to,
             from: from,
+            to: to,
             value: value,
             data: dataString.bloctoSDK.hexDecodedData
         )
 
         let sendTransactionMethod = SendEVMBasedTransactionMethod(
             id: requestId,
+            sessionId: sessionId,
             blockchain: .ethereum,
             transaction: evmBaseTransaction
         ) { _ in }
@@ -83,16 +85,16 @@ class SendTransactionTests: XCTestCase {
         mockUIApplication.setup(openedOrder: [true])
 
         let evmBaseTransaction = EVMBaseTransaction(
-            to: "0x58F385777aa6699b81f741Dd0d5B272A34C1c774",
             from: "0xC823994cDDdaE5cb4bD1ADFe5AfD03f8E06Bc7ef",
+            to: "0x58F385777aa6699b81f741Dd0d5B272A34C1c774",
             value: 100,
             data: "b5aebc80000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000066c616c616c610000000000000000000000000000000000000000000000000000".bloctoSDK.hexDecodedData
         )
 
         // When:
-        let ethereumSDK = BloctoSDK.shared.ethereum
-        ethereumSDK.sendTransaction(
+        BloctoSDK.shared.evm.sendTransaction(
             uuid: requestId,
+            blockchain: .ethereum,
             transaction: evmBaseTransaction
         ) { result in
             switch result {
@@ -135,8 +137,8 @@ class SendTransactionTests: XCTestCase {
         mockUIApplication.setup(openedOrder: [false])
 
         let evmBaseTransaction = EVMBaseTransaction(
-            to: "0x58F385777aa6699b81f741Dd0d5B272A34C1c774",
             from: "0xC823994cDDdaE5cb4bD1ADFe5AfD03f8E06Bc7ef",
+            to: "0x58F385777aa6699b81f741Dd0d5B272A34C1c774",
             value: 100,
             data: "b5aebc80000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000066c616c616c610000000000000000000000000000000000000000000000000000".bloctoSDK.hexDecodedData
         )
@@ -149,9 +151,9 @@ class SendTransactionTests: XCTestCase {
         MockAuthenticationSession.setCallbackURL(components!.url!)
 
         // When:
-        let ethereumSDK = BloctoSDK.shared.ethereum
-        ethereumSDK.sendTransaction(
+        BloctoSDK.shared.evm.sendTransaction(
             uuid: requestId,
+            blockchain: .ethereum,
             transaction: evmBaseTransaction
         ) { result in
             switch result {

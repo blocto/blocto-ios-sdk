@@ -36,7 +36,7 @@ enum EVMBase: CaseIterable {
             case .prod:
                 return "0x806243c7368a90D957592B55875eF4C3353C5bEa"
             case .dev:
-                return "0x58F385777aa6699b81f741Dd0d5B272A34C1c774"
+                return "0x009c403BdFaE357d82AAef2262a163287c30B739"
             }
         case .bsc:
             switch bloctoEnvironment {
@@ -75,19 +75,6 @@ enum EVMBase: CaseIterable {
         }
     }
 
-    var sdkProvider: EVMBaseSDKProvider {
-        switch self {
-        case .ethereum:
-            return BloctoSDK.shared.ethereum
-        case .bsc:
-            return BloctoSDK.shared.bsc
-        case .polygon:
-            return BloctoSDK.shared.polygon
-        case .avalanche:
-            return BloctoSDK.shared.avalanche
-        }
-    }
-
     var rpcClient: EthereumClient {
         let urlString: String
         switch self {
@@ -96,7 +83,7 @@ enum EVMBase: CaseIterable {
             case .prod:
                 urlString = "https://mainnet.infura.io/v3/b2f4b3f635d8425c96854c3d28ba6bb0"
             case .dev:
-                urlString = "https://rinkeby.blocto.app"
+                urlString = "https://goerli.infura.io/v3/b2f4b3f635d8425c96854c3d28ba6bb0"
             }
         case .bsc:
             switch bloctoEnvironment {
@@ -132,14 +119,14 @@ enum EVMBase: CaseIterable {
                 case .prod:
                     return URL(string: "https://etherscan.io/tx/\(hash)")
                 case .dev:
-                    return URL(string: "https://rinkeby.etherscan.io/tx/\(hash)")
+                    return URL(string: "https://goerli.etherscan.io/tx/\(hash)")
                 }
             case let .address(address):
                 switch bloctoEnvironment {
                 case .prod:
                     return URL(string: "https://etherscan.io/address/\(address)")
                 case .dev:
-                    return URL(string: "https://rinkeby.etherscan.io/address/\(address)")
+                    return URL(string: "https://goerli.etherscan.io/address/\(address)")
                 }
             }
         case .bsc:
@@ -192,6 +179,33 @@ enum EVMBase: CaseIterable {
                 case .dev:
                     return URL(string: "https://testnet.snowtrace.io/address/\(address)")
                 }
+            }
+        }
+    }
+    
+    func chainId(_ env: BloctoEnvironment) -> Int {
+        switch env {
+        case .prod:
+            switch self {
+            case .ethereum:
+                return 1
+            case .bsc:
+                return 56
+            case .polygon:
+                return 137
+            case .avalanche:
+                return 43114
+            }
+        case .dev:
+            switch self {
+            case .ethereum:
+                return 5 // Goerli
+            case .bsc:
+                return 97 // Binance Smart Chain Testnet
+            case .polygon:
+                return 80001 // Mumbai
+            case .avalanche:
+                return 43113 // Avalanche Fuji Testnet
             }
         }
     }

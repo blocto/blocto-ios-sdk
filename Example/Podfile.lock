@@ -5,16 +5,16 @@ PODS:
   - BloctoSDK/Core (0.5.0)
   - BloctoSDK/EVMBase (0.5.0):
     - BigInt (~> 5.0)
-    - BloctoSDK/Core (~> 0.4.4)
+    - BloctoSDK/Core (~> 0.5.0)
   - BloctoSDK/Flow (0.5.0):
-    - BloctoSDK/Core (~> 0.4.4)
+    - BloctoSDK/Core (~> 0.5.0)
     - FlowSDK (~> 0.5.0)
   - BloctoSDK/Solana (0.5.0):
     - BloctoSDK/Core
     - SolanaWeb3 (~> 0.0.4)
   - BloctoSDK/Wallet (0.5.0):
     - BigInt (~> 5.0)
-    - BloctoSDK/Core (~> 0.4.4)
+    - BloctoSDK/Core (~> 0.5.0)
     - FlowSDK (~> 0.5.0)
   - Cadence (0.5.0):
     - BigInt (~> 5.2.0)
@@ -282,7 +282,7 @@ SPEC CHECKSUMS:
   _NIODataStructures: 3d45d8e70a1d17a15b1dc59d102c63dbc0525ffd
   Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  BloctoSDK: 6155b169d6119b5222ad2e563211f95e29aac906
+  BloctoSDK: ee7b4dfe3fe249fb27254d42d6cdb3de4b268544
   Cadence: f354a678487ab17716acd61ddbb637130e9642b8
   CGRPCZlibp: 2f3e1e7a6d6cb481d4d1a26d3ec09aefacf09cbb
   CNIOAtomics: 8edf08644e5e6fa0f021c239be9e8beb1cd9ef18

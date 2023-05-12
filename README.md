@@ -2,7 +2,7 @@
 
 [![CI Status](https://dl.circleci.com/status-badge/img/gh/portto/blocto-ios-sdk/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/portto/blocto-ios-sdk/tree/main)
 [![Version](https://img.shields.io/cocoapods/v/BloctoSDK.svg?style=flat)](https://cocoapods.org/pods/BloctoSDK)
-[![License](https://img.shields.io/cocoapods/l/BloctoSDK.svg?style=flat)](https://cocoapods.org/pods/BloctoSDK)
+[![License](https://img.shields.io/badge/license-MIT-black)](https://cocoapods.org/pods/BloctoSDK)
 [![Platform](https://img.shields.io/cocoapods/p/BloctoSDK.svg?style=flat)](https://cocoapods.org/pods/BloctoSDK)
 
 ## Example

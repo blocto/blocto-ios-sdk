@@ -40,7 +40,7 @@ class AccountRequestTests: XCTestCase {
             blockchain: Blockchain.solana
         ) { result in
             switch result {
-            case let .success(receivedAddress):
+            case let .success((receivedAddress, _)):
                 address = receivedAddress
             case let .failure(error):
                 XCTFail(error.localizedDescription)
@@ -79,7 +79,7 @@ class AccountRequestTests: XCTestCase {
             blockchain: Blockchain.solana
         ) { result in
             switch result {
-            case let .success(receivedAddress):
+            case let .success((receivedAddress, _)):
                 address = receivedAddress
             case let .failure(error):
                 XCTFail(error.localizedDescription)
@@ -130,7 +130,7 @@ class AccountRequestTests: XCTestCase {
             blockchain: Blockchain.solana
         ) { result in
             switch result {
-            case let .success(receivedAddress):
+            case let .success((receivedAddress, _)):
                 address = receivedAddress
             case let .failure(error):
                 XCTFail(error.localizedDescription)

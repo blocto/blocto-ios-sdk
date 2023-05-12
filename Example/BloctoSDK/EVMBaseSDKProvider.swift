@@ -10,10 +10,15 @@ import BloctoSDK
 
 protocol EVMBaseSDKProvider {
 
-    func requestAccount(completion: @escaping (Result<String, Swift.Error>) -> Void)
+    func requestAccount(
+        uuid: UUID,
+        blockchain: Blockchain,
+        completion: @escaping (Result<String, Swift.Error>) -> Void
+    )
 
     func signMessage(
         uuid: UUID,
+        blockchain: Blockchain,
         from: String,
         message: String,
         signType: EVMBaseSignType,
@@ -22,6 +27,7 @@ protocol EVMBaseSDKProvider {
 
     func sendTransaction(
         uuid: UUID,
+        blockchain: Blockchain,
         transaction: EVMBaseTransaction,
         completion: @escaping (Result<String, Swift.Error>) -> Void
     )
@@ -31,6 +37,7 @@ protocol EVMBaseSDKProvider {
 extension EVMBaseSDKProvider {
 
     func signMessage(
+        blockchain: Blockchain,
         from: String,
         message: String,
         signType: EVMBaseSignType,
@@ -38,6 +45,7 @@ extension EVMBaseSDKProvider {
     ) {
         signMessage(
             uuid: UUID(),
+            blockchain: blockchain,
             from: from,
             message: message,
             signType: signType,
@@ -45,21 +53,17 @@ extension EVMBaseSDKProvider {
     }
 
     func sendTransaction(
+        blockchain: Blockchain,
         transaction: EVMBaseTransaction,
         completion: @escaping (Result<String, Swift.Error>) -> Void
     ) {
         sendTransaction(
             uuid: UUID(),
+            blockchain: blockchain,
             transaction: transaction,
             completion: completion)
     }
 
 }
 
-extension BloctoEthereumSDK: EVMBaseSDKProvider {}
-
-extension BloctoBSCSDK: EVMBaseSDKProvider {}
-
-extension BloctoPolygonSDK: EVMBaseSDKProvider {}
-
-extension BloctoAvalancheSDK: EVMBaseSDKProvider {}
+extension BloctoEVMSDK: EVMBaseSDKProvider {}

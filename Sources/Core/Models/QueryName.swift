@@ -32,6 +32,7 @@ public enum QueryName: String {
 
     // response
     case address
+    case sessionId = "session_id"
     case signature
     case txHash = "tx_hash"
 
@@ -40,6 +41,8 @@ public enum QueryName: String {
 
     // error
     case error
+
+    case requestSource = "request_source"
 
     case platform
 }

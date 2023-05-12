@@ -41,28 +41,39 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
     }
 
     public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
-        guard let baseURL = URL(string: baseURLString),
-              var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
+        guard let baseURL = URL(string: baseURLString) else {
             return nil
         }
-        var queryItems: [QueryItem] = URLEncoding.queryGeneralItems(
-            appId: appId,
-            requestId: id.uuidString,
-            blockchain: blockchain
-        )
-        queryItems.append(contentsOf: [
-            QueryItem(name: .method, value: type),
-            QueryItem(name: .from, value: from),
-            QueryItem(name: .isInvokeWrapped, value: isInvokeWrapped),
-            QueryItem(name: .message, value: transactionInfo.message),
-            QueryItem(name: .publicKeySignaturePairs, value: transactionInfo.publicKeySignaturePairs),
-        ])
-
-        let appendMessageQuryItems: [URLQueryItem] = URLEncoding.solanaAppendMessagesQueryItems(dictionary: transactionInfo.appendTx ?? [:])
-        var urlQueryItems: [URLQueryItem] = []
-        urlQueryItems.append(contentsOf: appendMessageQuryItems)
-        urlQueryItems.append(contentsOf: URLEncoding.encode(queryItems))
-        components.queryItems = urlQueryItems
+        let newURL = baseURL
+            .appendingPathComponent("api")
+            .appendingPathComponent(blockchain.rawValue)
+            .appendingPathComponent("dapp")
+            .appendingPathComponent("authz")
+        guard let components = URLComponents(url: newURL, resolvingAgainstBaseURL: true) else {
+            return nil
+        }
+//        guard let baseURL = URL(string: baseURLString),
+//              var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
+//            return nil
+//        }
+//        var queryItems: [QueryItem] = URLEncoding.queryGeneralItems(
+//            appId: appId,
+//            requestId: id.uuidString,
+//            blockchain: blockchain
+//        )
+//        queryItems.append(contentsOf: [
+//            QueryItem(name: .method, value: type),
+//            QueryItem(name: .from, value: from),
+//            QueryItem(name: .isInvokeWrapped, value: isInvokeWrapped),
+//            QueryItem(name: .message, value: transactionInfo.message),
+//            QueryItem(name: .publicKeySignaturePairs, value: transactionInfo.publicKeySignaturePairs),
+//        ])
+//
+//        let appendMessageQuryItems: [URLQueryItem] = URLEncoding.solanaAppendMessagesQueryItems(dictionary: transactionInfo.appendTx ?? [:])
+//        var urlQueryItems: [URLQueryItem] = []
+//        urlQueryItems.append(contentsOf: appendMessageQuryItems)
+//        urlQueryItems.append(contentsOf: URLEncoding.encode(queryItems))
+//        components.queryItems = urlQueryItems
         return components.url
     }
 
