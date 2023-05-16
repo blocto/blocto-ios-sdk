@@ -73,16 +73,12 @@ class SignAndSendTransactionTests: XCTestCase {
         transaction.add(transactionInstruction)
         transaction.feePayer = userWalletPublicKey
 
-        let urlSession = URLSessionMock()
-        urlSession.responseJsonString = #"{"raw_tx":"03020208dac7dab484e8d0f174360daad76fe7b849aa929c5103eff76cd6d30fd0ea947d0f2b785bed6b4c9cf079c0ba7ae9264cd3f3d30a9cab45cb442923862c5633a0618db61dfc748ba4ee9e3d0bb4a8364b64ee145c9080ac7af4ceb4039aacdd7e2f044d6abceb87a88416562a21f1bb49e216f5f7a829bc88763a2b0664680fa34aa5298c9669ab8f56b091cc8c6a3f1564d24300f60ab9f313a0ba787ed1ca70e7fdf00ea69dfc9d96968d5108b5c69b0e125ca8794cba62ec9b05af087b30f0aeb08762d01b472df8e2ba21e20132a5c218e2435e02d7e4a84030bcd6b9c2b9dfc7f2af100827ea33addbb9d430e457f5311bb905cb3a86a721bc58d72b2701f14431ce444af93991ca86659d194d68007f51c2b4a5c7afa4ac3654c6db82f401060805040006020107031f030307000001010102030600040205020701030302000601010300be150000","request_id":"dd4bbe67","extra_data":{"append_tx":{}}}"#
-
         // When:
         let solanaSDK = BloctoSDK.shared.solana
         solanaSDK.signAndSendTransaction(
             uuid: requestId,
             from: userWallet,
-            transaction: transaction,
-            session: urlSession
+            transaction: transaction
         ) { result in
             switch result {
             case let .success(receivedtxHash):
@@ -107,6 +103,7 @@ class SignAndSendTransactionTests: XCTestCase {
 
     func testOpenWebSDK() throws {
         // Given:
+        let expectation = XCTestExpectation(description: "wait for received address")
         let requestId = UUID()
         var txHash: String?
         let expectedTxHash: String = "65ZG7Retj1acmX2DXv9YdU12JJ53a5sKgBmmDGHVexTyDnFq8C3inKMMvcdMXi5NvZCLSueThdSNNHJBWdw7neUC"
@@ -164,10 +161,11 @@ class SignAndSendTransactionTests: XCTestCase {
         MockAuthenticationSession.setCallbackURL(components!.url!)
 
         let urlSession = URLSessionMock()
-        urlSession.responseJsonString = #"{"raw_tx":"03020208dac7dab484e8d0f174360daad76fe7b849aa929c5103eff76cd6d30fd0ea947d0f2b785bed6b4c9cf079c0ba7ae9264cd3f3d30a9cab45cb442923862c5633a0618db61dfc748ba4ee9e3d0bb4a8364b64ee145c9080ac7af4ceb4039aacdd7e2f044d6abceb87a88416562a21f1bb49e216f5f7a829bc88763a2b0664680fa34aa5298c9669ab8f56b091cc8c6a3f1564d24300f60ab9f313a0ba787ed1ca70e7fdf00ea69dfc9d96968d5108b5c69b0e125ca8794cba62ec9b05af087b30f0aeb08762d01b472df8e2ba21e20132a5c218e2435e02d7e4a84030bcd6b9c2b9dfc7f2af100827ea33addbb9d430e457f5311bb905cb3a86a721bc58d72b2701f14431ce444af93991ca86659d194d68007f51c2b4a5c7afa4ac3654c6db82f401060805040006020107031f030307000001010102030600040205020701030302000601010300be150000","request_id":"dd4bbe67","extra_data":{"append_tx":{}}}"#
+        urlSession.responseJsonString = #"{"status":"PENDING","authorizationId":"XjBJU_TbC2yG4C723uLkR"}"#
+        let solanaSDK = BloctoSDK.shared.solana
+        solanaSDK.sessionId = "XRqupAW5jt1DogqLjbCkE-N8Iqo-XYgwBphqUIiRqQ-"
 
         // When:
-        let solanaSDK = BloctoSDK.shared.solana
         solanaSDK.signAndSendTransaction(
             uuid: requestId,
             from: userWallet,
@@ -177,13 +175,15 @@ class SignAndSendTransactionTests: XCTestCase {
             switch result {
             case let .success(receivedtxHash):
                 txHash = receivedtxHash
+                XCTAssert(txHash == expectedTxHash, "txHash should be \(expectedTxHash) rather then \(txHash!)")
+                expectation.fulfill()
             case let .failure(error):
                 XCTAssert(false, error.localizedDescription)
             }
         }
 
         // Then:
-        XCTAssert(txHash == expectedTxHash, "txHash should be \(expectedTxHash) rather then \(txHash!)")
+        wait(for: [expectation], timeout: 4)
     }
 
 }

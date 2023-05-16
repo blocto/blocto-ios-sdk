@@ -32,6 +32,7 @@
 		6DB66656282E525D0015A6F6 /* EVMBaseSDKProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB66655282E525D0015A6F6 /* EVMBaseSDKProvider.swift */; };
 		6DB66661282E57240015A6F6 /* EVMBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB66660282E57240015A6F6 /* EVMBase.swift */; };
 		6DB66663282E58690015A6F6 /* ExplorerURLType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB66662282E58690015A6F6 /* ExplorerURLType.swift */; };
+		6DC171952A0E473C0075233F /* MockSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC171942A0E473C0075233F /* MockSession.swift */; };
 		6DD6F12127EDBF0000B514B1 /* MockUIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F11D27EDBA4600B514B1 /* MockUIApplication.swift */; };
 		6DD6F12227EDBF0300B514B1 /* MockAuthenticationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F11F27EDBB6600B514B1 /* MockAuthenticationSession.swift */; };
 		6DECCF7C28421CD90084C9E8 /* SolanaMethodURLEncodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DECCF7B28421CD90084C9E8 /* SolanaMethodURLEncodeTests.swift */; };
@@ -88,6 +89,7 @@
 		6DB66655282E525D0015A6F6 /* EVMBaseSDKProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMBaseSDKProvider.swift; sourceTree = "<group>"; };
 		6DB66660282E57240015A6F6 /* EVMBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMBase.swift; sourceTree = "<group>"; };
 		6DB66662282E58690015A6F6 /* ExplorerURLType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplorerURLType.swift; sourceTree = "<group>"; };
+		6DC171942A0E473C0075233F /* MockSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSession.swift; sourceTree = "<group>"; };
 		6DD6F11D27EDBA4600B514B1 /* MockUIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIApplication.swift; sourceTree = "<group>"; };
 		6DD6F11F27EDBB6600B514B1 /* MockAuthenticationSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthenticationSession.swift; sourceTree = "<group>"; };
 		6DECCF7B28421CD90084C9E8 /* SolanaMethodURLEncodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolanaMethodURLEncodeTests.swift; sourceTree = "<group>"; };
@@ -313,6 +315,7 @@
 			isa = PBXGroup;
 			children = (
 				6DD6F11D27EDBA4600B514B1 /* MockUIApplication.swift */,
+				6DC171942A0E473C0075233F /* MockSession.swift */,
 				6DD6F11F27EDBB6600B514B1 /* MockAuthenticationSession.swift */,
 			);
 			path = Mock;
@@ -677,6 +680,7 @@
 				6D02E63028329A0700432971 /* XCTAssertURLEqual.swift in Sources */,
 				6D3D57952808367A00228BBD /* Consts.swift in Sources */,
 				6D72112327FDE61200F1EB7F /* QueryItemEncodingTests.swift in Sources */,
+				6DC171952A0E473C0075233F /* MockSession.swift in Sources */,
 				6DD6F12127EDBF0000B514B1 /* MockUIApplication.swift in Sources */,
 				6D1FC37B27F5973100F7FD5C /* ParsedMethodTests.swift in Sources */,
 				6DFA2AF72801601300F7DA2C /* XCTAssertArrayElementsEqual.swift in Sources */,

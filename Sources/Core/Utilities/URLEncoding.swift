@@ -8,6 +8,8 @@
 import Foundation
 
 public enum URLEncoding {
+    
+    static let platform: String = "sdk_ios"
 
     static func queryGeneralItems(
         appId: String,
@@ -15,13 +17,22 @@ public enum URLEncoding {
         blockchain: Blockchain
     ) -> [QueryItem] {
 
-        let platform: String = "sdk_ios"
-
         let queryItems = [
             QueryItem(name: .appId, value: appId),
             QueryItem(name: .requestId, value: requestId),
             QueryItem(name: .blockchain, value: blockchain.rawValue),
-            QueryItem(name: .platform, value: platform)
+            QueryItem(name: .platform, value: platform),
+        ]
+        return queryItems
+    }
+
+    static func queryGeneralWebItems(
+        requestId: String
+    ) -> [QueryItem] {
+
+        let queryItems = [
+            QueryItem(name: .requestId, value: requestId),
+            QueryItem(name: .requestSource, value: platform),
         ]
         return queryItems
     }

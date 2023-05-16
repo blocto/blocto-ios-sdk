@@ -15,7 +15,10 @@ public enum BloctoSDKError: Swift.Error {
     case decodeFailed
     case responseUnexpected
     case urlNotFound
+    case urlComponentsNotFound
     case feePayerNotFound
+    case functionNotImplemented
+    case sessionIdNotProvided
 
     // info check
     case appIdNotSet
@@ -33,9 +36,12 @@ public enum BloctoSDKError: Swift.Error {
     case userCancel
     case redirectURLNotFound
     case sessionError(code: Int)
+    case postRequestFailed(reason: String)
 
     case other(code: String)
-
+    
+    /// Only use code to initialize error if the error type is from Blocto's backend.
+    /// - Parameter code: error code
     init(code: String) {
         switch code {
         case Self.appIdNotSet.rawValue:
@@ -73,7 +79,13 @@ public enum BloctoSDKError: Swift.Error {
             return ""
         case .urlNotFound:
             return ""
+        case .urlComponentsNotFound:
+            return ""
         case .feePayerNotFound:
+            return ""
+        case .functionNotImplemented:
+            return ""
+        case .sessionIdNotProvided:
             return ""
         case .appIdNotSet:
             return "app_id_not_set"
@@ -93,6 +105,8 @@ public enum BloctoSDKError: Swift.Error {
             return "webSDK_redirect_url_not_found"
         case let .sessionError(code):
             return "webSDK_session_error_\(code)"
+        case let .postRequestFailed(reason):
+            return "webSDK_post_request_error_\(reason)"
         case let .other(code):
             return code
         }

@@ -14,9 +14,9 @@ var bloctoEnvironment: BloctoEnvironment = .dev
 var bloctoSDKAppId: String {
     switch bloctoEnvironment {
     case .prod:
-        return "9c2d24b6-4358-46fc-b967-e3284805a856"
+        return "0896e44c-20fd-443b-b664-d305b52fe8e8"
     case .dev:
-        return "64776cec-5953-4a58-8025-772f55a3917b"
+        return "0896e44c-20fd-443b-b664-d305b52fe8e8"
     }
 }
 

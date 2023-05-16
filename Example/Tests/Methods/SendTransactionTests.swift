@@ -23,6 +23,7 @@ class SendTransactionTests: XCTestCase {
     func testSendTransactionEncodeURL() throws {
         // Given:
         let requestId = UUID()
+        let sessionId = "555E7A3D-77AA-4DDF-B72D-A20AD5C0D41B"
 
         let to = "0x58F385777aa6699b81f741Dd0d5B272A34C1c774"
         let from = "0xC823994cDDdaE5cb4bD1ADFe5AfD03f8E06Bc7ef"
@@ -30,14 +31,15 @@ class SendTransactionTests: XCTestCase {
         let dataString = "5524107700000000000000000000000000000000000000000000000000000000000015be"
 
         let evmBaseTransaction = EVMBaseTransaction(
-            to: to,
             from: from,
+            to: to,
             value: value,
             data: dataString.bloctoSDK.hexDecodedData
         )
 
         let sendTransactionMethod = SendEVMBasedTransactionMethod(
             id: requestId,
+            sessionId: sessionId,
             blockchain: .ethereum,
             transaction: evmBaseTransaction
         ) { _ in }
@@ -58,7 +60,7 @@ class SendTransactionTests: XCTestCase {
         ]
 
         // When:
-        let url = try sendTransactionMethod.encodeToURL(
+        let url = try sendTransactionMethod.encodeToNativeURL(
             appId: appId,
             baseURLString: baseURLString
         )
@@ -83,16 +85,17 @@ class SendTransactionTests: XCTestCase {
         mockUIApplication.setup(openedOrder: [true])
 
         let evmBaseTransaction = EVMBaseTransaction(
-            to: "0x58F385777aa6699b81f741Dd0d5B272A34C1c774",
             from: "0xC823994cDDdaE5cb4bD1ADFe5AfD03f8E06Bc7ef",
+            to: "0x58F385777aa6699b81f741Dd0d5B272A34C1c774",
             value: 100,
             data: "b5aebc80000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000066c616c616c610000000000000000000000000000000000000000000000000000".bloctoSDK.hexDecodedData
         )
 
         // When:
-        let ethereumSDK = BloctoSDK.shared.ethereum
-        ethereumSDK.sendTransaction(
+        BloctoSDK.shared.evm.sessionId = "555E7A3D-77AA-4DDF-B72D-A20AD5C0D41B"
+        BloctoSDK.shared.evm.sendTransaction(
             uuid: requestId,
+            blockchain: .ethereum,
             transaction: evmBaseTransaction
         ) { result in
             switch result {
@@ -119,9 +122,13 @@ class SendTransactionTests: XCTestCase {
 
     func testOpenWebSDK() throws {
         // Given:
+        let expectation = XCTestExpectation(description: "wait for tx")
         let requestId = UUID()
         var txHash: String?
         let expectedTxHash: String = "0xe608645ba741c8064a2990c16b395c5b1377c7e1f8683b9319052560f89d279e"
+        
+        let urlSession = URLSessionMock()
+        urlSession.responseJsonString = #"{"status":"PENDING","authorizationId":"XjBJU_TbC2yG4C723uLkR"}"#
 
         BloctoSDK.shared.initialize(
             with: appId,
@@ -134,9 +141,11 @@ class SendTransactionTests: XCTestCase {
 
         mockUIApplication.setup(openedOrder: [false])
 
+        BloctoSDK.shared.evm.sessionId = "XRqupAW5jt1DogqLjbCkE-N8Iqo-XYgwBphqUIiRqQ-"
+
         let evmBaseTransaction = EVMBaseTransaction(
-            to: "0x58F385777aa6699b81f741Dd0d5B272A34C1c774",
             from: "0xC823994cDDdaE5cb4bD1ADFe5AfD03f8E06Bc7ef",
+            to: "0x58F385777aa6699b81f741Dd0d5B272A34C1c774",
             value: 100,
             data: "b5aebc80000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000066c616c616c610000000000000000000000000000000000000000000000000000".bloctoSDK.hexDecodedData
         )
@@ -149,21 +158,24 @@ class SendTransactionTests: XCTestCase {
         MockAuthenticationSession.setCallbackURL(components!.url!)
 
         // When:
-        let ethereumSDK = BloctoSDK.shared.ethereum
-        ethereumSDK.sendTransaction(
+        BloctoSDK.shared.evm.sendTransaction(
             uuid: requestId,
-            transaction: evmBaseTransaction
+            blockchain: .ethereum,
+            transaction: evmBaseTransaction,
+            session: urlSession
         ) { result in
             switch result {
             case let .success(receivedtxHash):
                 txHash = receivedtxHash
+                XCTAssert(txHash == expectedTxHash, "txHash should be \(expectedTxHash) rather then \(txHash!)")
+                expectation.fulfill()
             case let .failure(error):
                 XCTFail(error.localizedDescription)
             }
         }
 
         // Then:
-        XCTAssert(txHash == expectedTxHash, "txHash should be \(expectedTxHash) rather then \(txHash!)")
+        wait(for: [expectation], timeout: 4)
     }
 
 }

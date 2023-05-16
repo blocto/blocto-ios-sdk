@@ -25,7 +25,7 @@ extension EVMBaseSignType {
         }
     }
 
-    var defaultText: String {
+    func defaultText(chainId: Int) -> String {
         switch self {
         case .sign:
             return "0x506173746520746865207465787420796F75207769736820746F2048657820656E636F646520686572653A"
@@ -82,7 +82,7 @@ extension EVMBaseSignType {
     "domain": {
         "name": "Ether Mail",
         "version": "1",
-        "chainId": 4,
+        "chainId": \(chainId),
         "verifyingContract": "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"
     },
     "message": {
@@ -103,7 +103,7 @@ extension EVMBaseSignType {
             return """
 {
     "domain": {
-        "chainId": 4,
+        "chainId": \(chainId),
         "name": "Ether Mail",
         "verifyingContract": "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
         "version": "1"

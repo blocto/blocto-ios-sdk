@@ -40,7 +40,7 @@ class AccountRequestTests: XCTestCase {
             blockchain: Blockchain.solana
         ) { result in
             switch result {
-            case let .success(receivedAddress):
+            case let .success((receivedAddress, _)):
                 address = receivedAddress
             case let .failure(error):
                 XCTFail(error.localizedDescription)
@@ -79,7 +79,7 @@ class AccountRequestTests: XCTestCase {
             blockchain: Blockchain.solana
         ) { result in
             switch result {
-            case let .success(receivedAddress):
+            case let .success((receivedAddress, _)):
                 address = receivedAddress
             case let .failure(error):
                 XCTFail(error.localizedDescription)
@@ -103,6 +103,7 @@ class AccountRequestTests: XCTestCase {
 
     func testOpenWebSDK() {
         // Given:
+        let expectation = XCTestExpectation(description: "wait for received address")
         let requestId = UUID()
         var address: String?
         let expectedAddress: String = "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv"
@@ -130,8 +131,10 @@ class AccountRequestTests: XCTestCase {
             blockchain: Blockchain.solana
         ) { result in
             switch result {
-            case let .success(receivedAddress):
+            case let .success((receivedAddress, _)):
                 address = receivedAddress
+                XCTAssert(address == expectedAddress, "address should be \(expectedAddress) rather then \(address!)")
+                expectation.fulfill()
             case let .failure(error):
                 XCTFail(error.localizedDescription)
             }
@@ -139,7 +142,7 @@ class AccountRequestTests: XCTestCase {
         BloctoSDK.shared.send(method: requestAccountMethod)
 
         // Then:
-        XCTAssert(address == expectedAddress, "address should be \(expectedAddress) rather then \(address!)")
+        wait(for: [expectation], timeout: 4)
     }
 
 }

@@ -21,7 +21,7 @@ final class EVMBaseDemoViewController: UIViewController {
 
     private var userWalletAddress: String?
 
-    private lazy var bloctoEthereumSDK = BloctoSDK.shared.ethereum
+    private lazy var bloctoEVMSDK = BloctoSDK.shared.evm
 
     private var selectedBlockchain: EVMBase = .ethereum
     private var selectedSigningType: EVMBaseSignType = .sign
@@ -363,7 +363,7 @@ final class EVMBaseDemoViewController: UIViewController {
         textView.font = UIFont.systemFont(ofSize: 16)
         textView.textColor = .black
         textView.backgroundColor = .lightGray
-        textView.text = selectedSigningType.defaultText
+        textView.text = selectedSigningType.defaultText(chainId: selectedBlockchain.chainId(bloctoEnvironment))
         textView.returnKeyType = .done
         textView.layer.cornerRadius = 5
         textView.clipsToBounds = true
@@ -608,7 +608,7 @@ final class EVMBaseDemoViewController: UIViewController {
                 self.resetSignStatus()
                 self.signingTypeDataSegmentedControl.selectedSegmentIndex = UISegmentedControl.noSegment
                 self.selectedSigningType = self.signingSelections[index]
-                self.signingTextView.text = self.selectedSigningType.defaultText
+                self.signingTextView.text = self.selectedSigningType.defaultText(chainId: self.selectedBlockchain.chainId(bloctoEnvironment))
             })
 
         _ = signingTypeDataSegmentedControl.rx.value.changed
@@ -618,7 +618,7 @@ final class EVMBaseDemoViewController: UIViewController {
                 self.resetSignStatus()
                 self.signingSegmentedControl.selectedSegmentIndex = UISegmentedControl.noSegment
                 self.selectedSigningType = Array(self.signingSelections.dropFirst(2))[index]
-                self.signingTextView.text = self.selectedSigningType.defaultText
+                self.signingTextView.text = self.selectedSigningType.defaultText(chainId: self.selectedBlockchain.chainId(bloctoEnvironment))
             })
 
         _ = requestAccountButton.rx.tap
@@ -632,7 +632,7 @@ final class EVMBaseDemoViewController: UIViewController {
                 guard let self = self else { return }
                 self.resetRequestAccountStatus()
 
-                self.selectedBlockchain.sdkProvider.requestAccount { [weak self] result in
+                self.bloctoEVMSDK.requestAccount(blockchain: self.selectedBlockchain.blockchain) { [weak self] result in
                     switch result {
                     case let .success(address):
                         self?.userWalletAddress = address
@@ -887,7 +887,8 @@ final class EVMBaseDemoViewController: UIViewController {
             handleSignError(Error.message("message not found."))
             return
         }
-        selectedBlockchain.sdkProvider.signMessage(
+        bloctoEVMSDK.signMessage(
+            blockchain: selectedBlockchain.blockchain,
             from: userWalletAddress,
             message: message,
             signType: selectedSigningType
@@ -994,12 +995,13 @@ final class EVMBaseDemoViewController: UIViewController {
             let functionData = try setValueABIFunction.functionData()
 
             let evmBaseTransaction = EVMBaseTransaction(
-                to: selectedBlockchain.dappAddress,
                 from: userWalletAddress,
+                to: selectedBlockchain.dappAddress,
                 value: "0",
                 data: functionData
             )
-            selectedBlockchain.sdkProvider.sendTransaction(
+            bloctoEVMSDK.sendTransaction(
+                blockchain: selectedBlockchain.blockchain,
                 transaction: evmBaseTransaction
             ) { [weak self] result in
                 guard let self = self else { return }
@@ -1059,12 +1061,13 @@ final class EVMBaseDemoViewController: UIViewController {
             let functionData = try donateABIFunction.functionData()
 
             let evmBaseTransaction = EVMBaseTransaction(
-                to: selectedBlockchain.dappAddress,
                 from: userWalletAddress,
+                to: selectedBlockchain.dappAddress,
                 value: value,
                 data: functionData
             )
-            selectedBlockchain.sdkProvider.sendTransaction(
+            bloctoEVMSDK.sendTransaction(
+                blockchain: selectedBlockchain.blockchain,
                 transaction: evmBaseTransaction
             ) { [weak self] result in
                 guard let self = self else { return }

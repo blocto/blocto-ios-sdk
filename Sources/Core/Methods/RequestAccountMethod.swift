@@ -8,7 +8,7 @@
 import Foundation
 
 public struct RequestAccountMethod: CallbackMethod {
-    public typealias Response = String
+    public typealias Response = (address: String, sessionId: String?)
 
     public let id: UUID
     public let type: String = MethodName.requestAccount.rawValue
@@ -34,7 +34,7 @@ public struct RequestAccountMethod: CallbackMethod {
         self.callback = callback
     }
 
-    public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
+    public func encodeToNativeURL(appId: String, baseURLString: String) throws -> URL? {
         guard let baseURL = URL(string: baseURLString),
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
             return nil
@@ -47,6 +47,35 @@ public struct RequestAccountMethod: CallbackMethod {
         queryItems.append(QueryItem(name: .method, value: type))
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
+    }
+
+    /// To support Blocto SDK API v2 endpoint
+    /// - Parameters:
+    ///   - appId: Registed id in https://developers.blocto.app/
+    ///   - baseURLString: API v2 endpoint
+    /// - Returns: URL for v2
+    public func converToWebURLRequest(
+        appId: String,
+        baseURLString: String
+    ) async throws -> URL {
+        guard let baseURL = URL(string: baseURLString) else {
+            throw BloctoSDKError.urlNotFound
+        }
+        let newURL = baseURL
+            .appendingPathComponent(appId)
+            .appendingPathComponent(blockchain.rawValue)
+            .appendingPathComponent("authn")
+        guard var components = URLComponents(url: newURL, resolvingAgainstBaseURL: true) else {
+            throw BloctoSDKError.urlComponentsNotFound
+        }
+        let queryItems = URLEncoding.queryGeneralWebItems(
+            requestId: id.uuidString
+        )
+        components.queryItems = URLEncoding.encode(queryItems)
+        guard let finalURL = components.url else {
+            throw BloctoSDKError.urlNotFound
+        }
+        return finalURL
     }
 
     public func resolve(components: URLComponents, logging: Bool) {
@@ -63,7 +92,8 @@ public struct RequestAccountMethod: CallbackMethod {
             callback(.failure(BloctoSDKError.invalidResponse))
             return
         }
-        callback(.success(address))
+        let sessionId = components.queryItem(for: .sessionId)
+        callback(.success((address: address, sessionId: sessionId)))
     }
 
     public func handleError(error: Swift.Error) {

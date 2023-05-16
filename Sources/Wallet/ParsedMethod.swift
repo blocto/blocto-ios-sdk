@@ -65,7 +65,9 @@ public struct ParsedMethod {
         case .ethereum,
              .binanceSmartChain,
              .polygon,
-             .avalanche:
+             .avalanche,
+             .arbitrum,
+             .optimism:
             guard let methodType = EVMBaseMethodType(rawValue: rawMethod) else { return nil }
             switch methodType {
             case .requestAccount:
@@ -91,8 +93,8 @@ public struct ParsedMethod {
                 self.methodContentType = .evmBase(
                     .sendTransaction(
                         transaction: EVMBaseTransaction(
-                            to: to,
                             from: from,
+                            to: to,
                             value: BigUInt(value.bloctoSDK.drop0x, radix: 16) ?? 0,
                             data: dataString
                                 .bloctoSDK.drop0x

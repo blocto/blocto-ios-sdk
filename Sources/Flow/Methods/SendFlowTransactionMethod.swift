@@ -38,7 +38,7 @@ public struct SendFlowTransactionMethod: CallbackMethod {
         self.callback = callback
     }
 
-    public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
+    public func encodeToNativeURL(appId: String, baseURLString: String) throws -> URL? {
         guard let baseURL = URL(string: baseURLString),
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
             return nil

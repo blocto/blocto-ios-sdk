@@ -34,6 +34,20 @@ class URLSessionMock: URLSessionProtocol {
             completionHandler(nil, response, error)
         }
     }
+    
+    func asyncDataTask<Response>(with request: URLRequest) async throws -> Response where Response : Decodable {
+        guard let url = request.url else {
+            throw BloctoSDKError.urlNotFound
+        }
+        if let error = error {
+            throw error
+        }
+        let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
+        if let dataString = responseJsonString {
+            return try JSONDecoder().decode(Response.self, from: Data(dataString.utf8))
+        }
+        throw BloctoSDKError.invalidResponse
+    }
 
 }
 

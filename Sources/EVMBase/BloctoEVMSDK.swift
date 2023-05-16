@@ -1,8 +1,8 @@
 //
-//  BloctoAvalancheSDK.swift
+//  BloctoEVMSDK.swift
 //  BloctoSDK
 //
-//  Created by Andrew Wang on 2022/5/13.
+//  Created by Andrew Wang on 2023/5/9.
 //
 
 import Foundation
@@ -11,44 +11,63 @@ private var associateKey: Void?
 
 extension BloctoSDK {
 
-    public var avalanche: BloctoAvalancheSDK {
-        if let avalancheSDK = objc_getAssociatedObject(self, &associateKey) as? BloctoAvalancheSDK {
-            return avalancheSDK
+    public var evm: BloctoEVMSDK {
+        if let evmSDK = objc_getAssociatedObject(self, &associateKey) as? BloctoEVMSDK {
+            return evmSDK
         } else {
-            let avalancheSDK = BloctoAvalancheSDK(base: self)
-            objc_setAssociatedObject(self, &associateKey, avalancheSDK, .OBJC_ASSOCIATION_RETAIN)
-            return avalancheSDK
+            let evmSDK = BloctoEVMSDK(base: self)
+            objc_setAssociatedObject(self, &associateKey, evmSDK, .OBJC_ASSOCIATION_RETAIN)
+            return evmSDK
         }
     }
 
 }
 
-public class BloctoAvalancheSDK {
+public class BloctoEVMSDK {
 
+    var sessionId: String?
     private let base: BloctoSDK
 
     init(base: BloctoSDK) {
         self.base = base
     }
 
-    /// To request Avalanche account address
+    /// To request EVM base blockchain account address
     /// - Parameters:
     ///   - completion: completion handler for this methods. Please note this completion might not be called in some circumstances. e.g. SDK version incompatible with Blocto Wallet app.
-    ///   The successful result is address String for Avalanche.
-    public func requestAccount(completion: @escaping (Result<String, Swift.Error>) -> Void) {
-        let method = RequestAccountMethod(blockchain: .avalanche, callback: completion)
+    ///   The successful result is address String for Ethereum.
+    public func requestAccount(
+        uuid: UUID = UUID(),
+        blockchain: Blockchain,
+        completion: @escaping (Result<String, Swift.Error>) -> Void
+    ) {
+        let method = RequestAccountMethod(
+            id: uuid,
+            blockchain: blockchain,
+            callback: { [weak self] result in
+                switch result {
+                case let .success((address, sessionId)):
+                    self?.sessionId = sessionId
+                    completion(.success(address))
+                case let .failure(error):
+                    completion(.failure(error))
+                }
+            }
+        )
         base.send(method: method)
     }
 
-    /// To sign message
+    /// To sign a message
     /// - Parameters:
     ///   - uuid: The id to identify this request, you can pass your owned uuid here.
+    ///   - blockchain: Blockchain used to sign message.
     ///   - from: send from which address.
     ///   - message: message needs to be sign in String format.
-    ///   - signType: pre-defined signType in BloctoSDK/EVMBase
+    ///   - signType: pre-defined signTypes in BloctoSDK/EVMBase
     ///   - completion: completion handler for this methods. Please note this completion might not be called in some circumstances. e.g. SDK version incompatible with Blocto Wallet app.
     public func signMessage(
         uuid: UUID = UUID(),
+        blockchain: Blockchain,
         from: String,
         message: String,
         signType: EVMBaseSignType,
@@ -56,30 +75,35 @@ public class BloctoAvalancheSDK {
     ) {
         let method = SignEVMBaseMessageMethod(
             id: uuid,
+            sessionId: sessionId,
             from: from,
             message: message,
             signType: signType,
-            blockchain: .avalanche,
+            blockchain: blockchain,
             callback: completion
         )
         base.send(method: method)
     }
 
-    /// To sign transaction and then send transaction
+    /// To sign a transaction and then send a transaction
     /// - Parameters:
     ///   - uuid: The id to identify this request, you can pass your owned uuid here.
     ///   - transaction: Custom type EVMBaseTransaction.
     ///   - completion: completion handler for this methods. Please note this completion might not be called in some circumstances. e.g. SDK version incompatible with Blocto Wallet app.
-    ///   The successful result is Tx hash of Avalanche.
+    ///   The successful result is Tx hash of Ethereum.
     public func sendTransaction(
         uuid: UUID = UUID(),
+        blockchain: Blockchain,
         transaction: EVMBaseTransaction,
+        session: URLSessionProtocol = URLSession.shared,
         completion: @escaping (Result<String, Swift.Error>) -> Void
     ) {
         let method = SendEVMBasedTransactionMethod(
             id: uuid,
-            blockchain: .avalanche,
+            sessionId: sessionId,
+            blockchain: blockchain,
             transaction: transaction,
+            session: session,
             callback: completion
         )
         base.send(method: method)

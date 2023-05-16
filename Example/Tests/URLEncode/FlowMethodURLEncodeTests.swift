@@ -32,7 +32,7 @@ final class FlowMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString
         ) else {
@@ -59,7 +59,7 @@ final class FlowMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString
         ) else {
@@ -91,7 +91,7 @@ final class FlowMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString
         ) else {
@@ -128,7 +128,7 @@ final class FlowMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString
         ) else {
@@ -182,7 +182,7 @@ final class FlowMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString
         ) else {

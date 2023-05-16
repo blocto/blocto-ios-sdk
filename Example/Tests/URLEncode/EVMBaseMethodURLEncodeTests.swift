@@ -44,7 +44,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString) else {
                 XCTFail("requestURL not found.")
@@ -63,6 +63,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
 
         let method = SignEVMBaseMessageMethod(
             id: requestId,
+            sessionId: nil,
             from: ethereumAddress,
             message: message,
             signType: .sign,
@@ -81,7 +82,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString) else {
                 XCTFail("requestURL not found.")
@@ -100,6 +101,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
 
         let method = SignEVMBaseMessageMethod(
             id: requestId,
+            sessionId: nil,
             from: ethereumAddress,
             message: message,
             signType: .personalSign,
@@ -118,7 +120,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString) else {
                 XCTFail("requestURL not found.")
@@ -202,6 +204,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
 
         let method = SignEVMBaseMessageMethod(
             id: requestId,
+            sessionId: nil,
             from: ethereumAddress,
             message: message,
             signType: .typedSignV3,
@@ -220,7 +223,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString) else {
                 XCTFail("requestURL not found.")
@@ -323,6 +326,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
 
         let method = SignEVMBaseMessageMethod(
             id: requestId,
+            sessionId: nil,
             from: ethereumAddress,
             message: message,
             signType: .typedSignV4,
@@ -341,7 +345,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString) else {
                 XCTFail("requestURL not found.")
@@ -358,12 +362,13 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
         let value: BigUInt = 0
         let dataString = "5524107700000000000000000000000000000000000000000000000000000000000015be"
         let evmBaseTransaction = EVMBaseTransaction(
-            to: to,
             from: ethereumAddress,
+            to: to,
             value: value,
             data: dataString.bloctoSDK.hexDecodedData)
         let method = SendEVMBasedTransactionMethod(
             id: requestId,
+            sessionId: nil,
             blockchain: .ethereum,
             transaction: evmBaseTransaction) { _ in }
 
@@ -381,7 +386,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString) else {
                 XCTFail("requestURL not found.")
@@ -398,12 +403,13 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
         let value: BigUInt = 256
         let dataString = "5524107700000000000000000000000000000000000000000000000000000000000015be"
         let evmBaseTransaction = EVMBaseTransaction(
-            to: to,
             from: ethereumAddress,
+            to: to,
             value: value,
             data: dataString.bloctoSDK.hexDecodedData)
         let method = SendEVMBasedTransactionMethod(
             id: requestId,
+            sessionId: nil,
             blockchain: .ethereum,
             transaction: evmBaseTransaction) { _ in }
 
@@ -421,7 +427,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString) else {
                 XCTFail("requestURL not found.")

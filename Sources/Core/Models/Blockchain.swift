@@ -14,4 +14,6 @@ public enum Blockchain: String {
     case polygon
     case avalanche
     case flow
+    case arbitrum
+    case optimism
 }

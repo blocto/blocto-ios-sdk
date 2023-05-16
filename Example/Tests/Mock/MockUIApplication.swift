@@ -14,7 +14,9 @@ class MockUIApplication: URLOpening {
     var lastOptions: [UIApplication.OpenExternalURLOptionsKey: Any]?
     private var openedOrder: [Bool] = []
     private var callback: ((_ url: URL?) -> Void)?
-
+    
+    /// Whether to open universal link when testing.
+    /// - Parameter openedOrder: To open or not in order. True stands for simulating open with universal link, false stands for opening with the WebSDK.
     func setup(openedOrder: [Bool]) {
         self.openedOrder = openedOrder
     }

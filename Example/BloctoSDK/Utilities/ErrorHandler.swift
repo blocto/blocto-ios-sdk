@@ -54,6 +54,14 @@ enum ErrorHandler {
                 label.text = "ASWebAuthenticationSessionError \(code)"
             case let .other(code):
                 label.text = code
+            case .urlComponentsNotFound:
+                label.text = "url components not found."
+            case .functionNotImplemented:
+                label.text = "web post request not implemented."
+            case .sessionIdNotProvided:
+                label.text = "make sure to request account first."
+            case .postRequestFailed(reason: let reason):
+                label.text = "request from web failed with reason: \(reason)"
             }
         } else if let error = error as? ErrorMessaging {
             label.text = error.message

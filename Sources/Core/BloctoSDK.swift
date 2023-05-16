@@ -42,12 +42,12 @@ public class BloctoSDK {
         }
     }
 
-    private var webBaseURLString: String {
+    var webBaseURLString: String {
         switch environment {
         case .prod:
-            return "https://wallet.blocto.app/"
+            return "https://wallet-v2.blocto.app/"
         case .dev:
-            return "https://wallet-testnet.blocto.app/"
+            return "https://wallet-v2-dev.blocto.app/"
         }
     }
 
@@ -55,10 +55,6 @@ public class BloctoSDK {
 
     var requestBloctoBaseURLString: String {
         bloctoAssociatedDomain + requestPath
-    }
-
-    var webRequestBloctoBaseURLString: String {
-        webBaseURLString + requestPath
     }
 
     var webCallbackURLScheme: String {
@@ -183,7 +179,7 @@ public class BloctoSDK {
             }
             do {
                 try self.checkConfigration()
-                guard let requestURL = try method.encodeToURL(
+                guard let requestURL = try method.encodeToNativeURL(
                     appId: self.appId,
                     baseURLString: self.requestBloctoBaseURLString
                 ) else {
@@ -208,7 +204,10 @@ public class BloctoSDK {
                             )
                             if fallbackToWebSDK {
                                 do {
-                                    self.routeToWebSDK(window: try self.getWindow?(), method: method)
+                                    let window = try self.getWindow?()
+                                    Task(priority: .high) {
+                                        await self.routeToWebSDK(window: window, method: method)
+                                    }
                                 } catch {
                                     log(
                                         enable: self.logging,
@@ -227,7 +226,10 @@ public class BloctoSDK {
             } catch {
                 method.handleError(error: error)
                 do {
-                    self.routeToWebSDK(window: try self.getWindow?(), method: method)
+                    let window = try self.getWindow?()
+                    Task(priority: .high) {
+                        await self.routeToWebSDK(window: window, method: method)
+                    }
                 } catch {
                     log(
                         enable: self.logging,
@@ -249,18 +251,16 @@ public class BloctoSDK {
         guard appId.isEmpty == false else { throw BloctoSDKError.appIdNotSet }
     }
 
+    @MainActor
     private func routeToWebSDK(
         window: UIWindow? = nil,
         method: Method
-    ) {
+    ) async {
         do {
-            guard let requestURL = try method.encodeToURL(
+            let requestURL = try await method.converToWebURLRequest(
                 appId: appId,
-                baseURLString: webRequestBloctoBaseURLString
-            ) else {
-                method.handleError(error: BloctoSDKError.encodeToURLFailed)
-                return
-            }
+                baseURLString: webBaseURLString
+            )
 
             var session: AuthenticationSessioning?
 
@@ -298,7 +298,7 @@ public class BloctoSDK {
 
             log(
                 enable: logging,
-                message: "About to route to Web SDK \(requestURL)."
+                message: "About to route to Web SDK \(requestURL.absoluteString)."
             )
             let startsSuccessfully = session?.start()
             if startsSuccessfully == false {
