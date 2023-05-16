@@ -15,6 +15,8 @@ enum EVMBase: CaseIterable {
     case bsc
     case polygon
     case avalanche
+    case arbitrum
+    case optimism
 
     var displayString: String {
         switch self {
@@ -26,6 +28,10 @@ enum EVMBase: CaseIterable {
             return "MATIC"
         case .avalanche:
             return "AVAX"
+        case .arbitrum:
+            return "ARB"
+        case .optimism:
+            return "OPT"
         }
     }
 
@@ -34,30 +40,44 @@ enum EVMBase: CaseIterable {
         case .ethereum:
             switch bloctoEnvironment {
             case .prod:
-                return "0x806243c7368a90D957592B55875eF4C3353C5bEa"
+                return "0x009c403BdFaE357d82AAef2262a163287c30B739"
             case .dev:
                 return "0x009c403BdFaE357d82AAef2262a163287c30B739"
             }
         case .bsc:
             switch bloctoEnvironment {
             case .prod:
-                return "0x806243c7368a90D957592B55875eF4C3353C5bEa"
+                return "0x009c403BdFaE357d82AAef2262a163287c30B739"
             case .dev:
-                return "0xfde90c9Bc193F520d119302a2dB8520D3A4408c8"
+                return "0x009c403BdFaE357d82AAef2262a163287c30B739"
             }
         case .polygon:
             switch bloctoEnvironment {
             case .prod:
-                return "0x806243c7368a90D957592B55875eF4C3353C5bEa"
+                return "0xD76bAA840e3D5AE1C5E5C7cEeF1C1A238687860e"
             case .dev:
-                return "0xfde90c9Bc193F520d119302a2dB8520D3A4408c8"
+                return "0x009c403BdFaE357d82AAef2262a163287c30B739"
             }
         case .avalanche:
             switch bloctoEnvironment {
             case .prod:
                 return "0x806243c7368a90D957592B55875eF4C3353C5bEa"
             case .dev:
-                return "0xfde90c9Bc193F520d119302a2dB8520D3A4408c8"
+                return "0xD76bAA840e3D5AE1C5E5C7cEeF1C1A238687860e"
+            }
+        case .arbitrum:
+            switch bloctoEnvironment {
+            case .prod:
+                return "0x806243c7368a90d957592b55875ef4c3353c5bea"
+            case .dev:
+                return "0x009c403BdFaE357d82AAef2262a163287c30B739"
+            }
+        case .optimism:
+            switch bloctoEnvironment {
+            case .prod:
+                return "0x806243c7368a90d957592b55875ef4c3353c5bea"
+            case .dev:
+                return "0x009c403BdFaE357d82AAef2262a163287c30B739"
             }
         }
     }
@@ -72,6 +92,10 @@ enum EVMBase: CaseIterable {
             return .polygon
         case .avalanche:
             return .avalanche
+        case .arbitrum:
+            return .arbitrum
+        case .optimism:
+            return .optimism
         }
     }
 
@@ -105,6 +129,20 @@ enum EVMBase: CaseIterable {
                 urlString = "https://api.avax.network/ext/bc/C/rpc"
             case .dev:
                 urlString = "https://api.avax-test.network/ext/bc/C/rpc"
+            }
+        case .arbitrum:
+            switch bloctoEnvironment {
+            case .prod:
+                urlString = "https://arbitrum-mainnet.infura.io/v3/bb9000f1014d4b2cb5c2fdc15618b56e"
+            case .dev:
+                urlString = "https://arbitrum-goerli.infura.io/v3/bb9000f1014d4b2cb5c2fdc15618b56e"
+            }
+        case .optimism:
+            switch bloctoEnvironment {
+            case .prod:
+                urlString = "https://optimism-mainnet.infura.io/v3/bb9000f1014d4b2cb5c2fdc15618b56e"
+            case .dev:
+                urlString = "https://optimism-goerli.infura.io/v3/bb9000f1014d4b2cb5c2fdc15618b56e"
             }
         }
         return EthereumClient(url: URL(string: urlString)!)
@@ -180,6 +218,40 @@ enum EVMBase: CaseIterable {
                     return URL(string: "https://testnet.snowtrace.io/address/\(address)")
                 }
             }
+        case .arbitrum:
+            switch type {
+            case let .txhash(hash):
+                switch bloctoEnvironment {
+                case .prod:
+                    return URL(string: "https://arbiscan.io/tx/\(hash)")
+                case .dev:
+                    return URL(string: "https://testnet.arbiscan.io/tx/\(hash)")
+                }
+            case let .address(address):
+                switch bloctoEnvironment {
+                case .prod:
+                    return URL(string: "https://arbiscan.io/address/\(address)")
+                case .dev:
+                    return URL(string: "https://testnet.arbiscan.io/address/\(address)")
+                }
+            }
+        case .optimism:
+            switch type {
+            case let .txhash(hash):
+                switch bloctoEnvironment {
+                case .prod:
+                    return URL(string: "https://optimistic.etherscan.io/tx/\(hash)")
+                case .dev:
+                    return URL(string: "https://goerli-optimism.etherscan.io/tx/\(hash)")
+                }
+            case let .address(address):
+                switch bloctoEnvironment {
+                case .prod:
+                    return URL(string: "https://optimistic.etherscan.io/address/\(address)")
+                case .dev:
+                    return URL(string: "https://goerli-optimism.etherscan.io/address/\(address)")
+                }
+            }
         }
     }
     
@@ -195,6 +267,10 @@ enum EVMBase: CaseIterable {
                 return 137
             case .avalanche:
                 return 43114
+            case .arbitrum:
+                return 42161 // Arbitrum One
+            case .optimism:
+                return 10 // Optimism
             }
         case .dev:
             switch self {
@@ -206,6 +282,10 @@ enum EVMBase: CaseIterable {
                 return 80001 // Mumbai
             case .avalanche:
                 return 43113 // Avalanche Fuji Testnet
+            case .arbitrum:
+                return 421613 // Arbitrum Goerli
+            case .optimism:
+                return 420 // Optimism Goerli Testnet
             }
         }
     }
