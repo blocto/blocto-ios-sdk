@@ -53,7 +53,7 @@ public struct SignEVMBaseMessageMethod: CallbackMethod {
     ///   - appId: Registed id in https://developers.blocto.app/
     ///   - baseURLString: The base URL string for universal link of Blocto App
     /// - Returns: URL for universal link of Blocto App
-    public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
+    public func encodeToNativeURL(appId: String, baseURLString: String) throws -> URL? {
         guard let baseURL = URL(string: baseURLString),
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
             return nil
@@ -93,65 +93,6 @@ public struct SignEVMBaseMessageMethod: CallbackMethod {
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }
-
-    /// To support Blocto SDK API v2 endpoint
-    /// - Parameters:
-    ///   - appId: Registed id in https://developers.blocto.app/
-    ///   - baseURLString: API v2 endpoint
-    /// - Returns: URL for v2
-//    public func encodeToWebURLRequest(appId: String, baseURLString: String) throws -> URLRequest? {
-//        guard let baseURL = URL(string: baseURLString) else {
-//            return nil
-//        }
-//        let newURL = baseURL
-//            .appendingPathComponent(appId)
-//            .appendingPathComponent(blockchain.rawValue)
-//            .appendingPathComponent("dapp")
-//            .appendingPathComponent("user-signature")
-//        guard let components = URLComponents(url: newURL, resolvingAgainstBaseURL: true),
-//              let url = components.url else {
-//            return nil
-//        }
-//        var request = URLRequest(url: url)
-//        request.httpMethod = RequestBuilder.Method.post.rawValue
-//        return request
-//    }
-
-    /// Only handle request method is POST
-    /// - Parameter urlRequest: The request from encodeToWebURLRequest
-    /// - Returns: The url which the webview should browse
-//    public func handlePostRequest(_ urlRequest: URLRequest) async throws -> URL {
-//        let reqeustBody = RequestBody(
-//            from: from,
-//            message: message,
-//            method: signType.rawValue
-//        )
-//        let request = try RequestBuilder.buildRequest(
-//            baseURLString: BloctoSDK.shared.webBaseURLString,
-//            path: "api/\(blockchain.rawValue)/dapp/user-signature",
-//            method: .post,
-//            body: reqeustBody
-//        )
-//        let response: PostRequestResponse = try await URLSession.shared.asyncDataTask(with: request)
-//        switch response.status {
-//        case let .pending(signatureId):
-//            guard let baseURL = URL(string: BloctoSDK.shared.webBaseURLString) else {
-//                throw BloctoSDKError.urlNotFound
-//            }
-//            let newURL = baseURL
-//                .appendingPathComponent(BloctoSDK.shared.appId)
-//                .appendingPathComponent(blockchain.rawValue)
-//                .appendingPathComponent("user-signature")
-//                .appendingPathComponent(signatureId)
-//            guard let components = URLComponents(url: newURL, resolvingAgainstBaseURL: true),
-//                  let url = components.url else {
-//                throw BloctoSDKError.urlNotFound
-//            }
-//            return url
-//        case let .declined(reason):
-//            throw BloctoSDKError.postRequestFailed(reason: reason)
-//        }
-//    }
 
     /// To support Blocto SDK API v2 endpoint
     /// - Parameters:

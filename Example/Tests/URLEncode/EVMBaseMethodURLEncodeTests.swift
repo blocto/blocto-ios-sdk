@@ -44,7 +44,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString) else {
                 XCTFail("requestURL not found.")
@@ -82,7 +82,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString) else {
                 XCTFail("requestURL not found.")
@@ -120,7 +120,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString) else {
                 XCTFail("requestURL not found.")
@@ -223,7 +223,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString) else {
                 XCTFail("requestURL not found.")
@@ -345,7 +345,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString) else {
                 XCTFail("requestURL not found.")
@@ -386,7 +386,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString) else {
                 XCTFail("requestURL not found.")
@@ -427,7 +427,7 @@ class EVMBaseMethodURLEncodeTests: XCTestCase {
         ]
 
         // When:
-        guard let requestURL = try method.encodeToURL(
+        guard let requestURL = try method.encodeToNativeURL(
             appId: appId,
             baseURLString: BloctoSDK.shared.requestBloctoBaseURLString) else {
                 XCTFail("requestURL not found.")

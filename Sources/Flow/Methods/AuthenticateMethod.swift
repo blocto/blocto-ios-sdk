@@ -20,6 +20,7 @@ public struct AuthenticateMethod: CallbackMethod {
     /// initialize request account method
     /// - Parameters:
     ///   - id: Used to find a stored callback. No need to pass if there is no specific requirement, for example, testing.
+    ///   - accountProofData: accountProofData to be sign along with authantication.
     ///   - callback: callback will be called by either from blocto native app or web SDK after getting account or reject.
     public init(
         id: UUID = UUID(),
@@ -31,7 +32,7 @@ public struct AuthenticateMethod: CallbackMethod {
         self.callback = callback
     }
 
-    public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
+    public func encodeToNativeURL(appId: String, baseURLString: String) throws -> URL? {
         guard let baseURL = URL(string: baseURLString),
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
             return nil
@@ -61,6 +62,11 @@ public struct AuthenticateMethod: CallbackMethod {
         }
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
+    }
+
+    public func converToWebURLRequest(appId: String, baseURLString: String) async throws -> URL {
+        log(enable: BloctoSDK.shared.logging, message: "This method shouldn't be called for Flow authenticate. Blocto SDK only support for native request. FCL should handle the web request.")
+        throw BloctoSDKError.functionNotImplemented
     }
 
     public func resolve(components: URLComponents, logging: Bool) {

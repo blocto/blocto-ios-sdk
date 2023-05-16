@@ -25,8 +25,8 @@ extension BloctoSDK {
 
 public class BloctoEVMSDK {
 
+    var sessionId: String?
     private let base: BloctoSDK
-    private var sessionId: String?
 
     init(base: BloctoSDK) {
         self.base = base
@@ -95,6 +95,7 @@ public class BloctoEVMSDK {
         uuid: UUID = UUID(),
         blockchain: Blockchain,
         transaction: EVMBaseTransaction,
+        session: URLSessionProtocol = URLSession.shared,
         completion: @escaping (Result<String, Swift.Error>) -> Void
     ) {
         let method = SendEVMBasedTransactionMethod(
@@ -102,6 +103,7 @@ public class BloctoEVMSDK {
             sessionId: sessionId,
             blockchain: blockchain,
             transaction: transaction,
+            session: session,
             callback: completion
         )
         base.send(method: method)

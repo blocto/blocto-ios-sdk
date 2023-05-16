@@ -34,7 +34,7 @@ public struct RequestAccountMethod: CallbackMethod {
         self.callback = callback
     }
 
-    public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
+    public func encodeToNativeURL(appId: String, baseURLString: String) throws -> URL? {
         guard let baseURL = URL(string: baseURLString),
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
             return nil
@@ -48,29 +48,6 @@ public struct RequestAccountMethod: CallbackMethod {
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }
-
-//    public func encodeToWebURLRequest(appId: String, baseURLString: String) throws -> URLRequest? {
-//        guard let baseURL = URL(string: baseURLString) else {
-//            return nil
-//        }
-//        let newURL = baseURL
-//            .appendingPathComponent(appId)
-//            .appendingPathComponent(blockchain.rawValue)
-//            .appendingPathComponent("authn")
-//        guard var components = URLComponents(url: newURL, resolvingAgainstBaseURL: true) else {
-//            return nil
-//        }
-//        let queryItems = URLEncoding.queryGeneralWebItems(
-//            requestId: id.uuidString
-//        )
-//        components.queryItems = URLEncoding.encode(queryItems)
-//        guard let finalURL = components.url else {
-//            throw BloctoSDKError.urlNotFound
-//        }
-//        var request = URLRequest(url: finalURL)
-//        request.httpMethod = RequestBuilder.Method.get.rawValue
-//        return request
-//    }
 
     /// To support Blocto SDK API v2 endpoint
     /// - Parameters:

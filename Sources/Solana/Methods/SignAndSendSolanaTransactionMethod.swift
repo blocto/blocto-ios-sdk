@@ -16,6 +16,7 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
     public let from: String
     public let transactionInfo: SolanaTransactionInfo
     public let isInvokeWrapped: Bool
+    public let session: URLSessionProtocol
     public let callback: Callback
 
     let blockchain: Blockchain
@@ -25,6 +26,10 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
     ///   - id: Used to find a stored callback. No need to pass if there is no specific requirement, for example, testing.
     ///   - sessionId: The session id for web browsing, so if request the account is from native Blocto App then this should be nil.
     ///   - blockchain: pre-defined blockchain in BloctoSDK
+    ///   - from: The sender address.
+    ///   - transactionInfo: The transaction info.
+    ///   - isInvokeWrapped: The indicate whether the transaction already convert to what Blocto contract wallet can execute.
+    ///   - session: The session dependency injection for testing.
     ///   - callback: callback will be called by either from blocto native app or web SDK after getting account or reject.
     public init(
         id: UUID = UUID(),
@@ -33,6 +38,7 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
         from: String,
         transactionInfo: SolanaTransactionInfo,
         isInvokeWrapped: Bool = true,
+        session: URLSessionProtocol = URLSession.shared,
         callback: @escaping Callback
     ) {
         self.id = id
@@ -41,43 +47,33 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
         self.from = from
         self.transactionInfo = transactionInfo
         self.isInvokeWrapped = isInvokeWrapped
+        self.session = session
         self.callback = callback
     }
 
-    public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
-        guard let baseURL = URL(string: baseURLString) else {
+    public func encodeToNativeURL(appId: String, baseURLString: String) throws -> URL? {
+        guard let baseURL = URL(string: baseURLString),
+              var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
             return nil
         }
-        let newURL = baseURL
-            .appendingPathComponent("api")
-            .appendingPathComponent(blockchain.rawValue)
-            .appendingPathComponent("dapp")
-            .appendingPathComponent("authz")
-        guard let components = URLComponents(url: newURL, resolvingAgainstBaseURL: true) else {
-            return nil
-        }
-//        guard let baseURL = URL(string: baseURLString),
-//              var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
-//            return nil
-//        }
-//        var queryItems: [QueryItem] = URLEncoding.queryGeneralItems(
-//            appId: appId,
-//            requestId: id.uuidString,
-//            blockchain: blockchain
-//        )
-//        queryItems.append(contentsOf: [
-//            QueryItem(name: .method, value: type),
-//            QueryItem(name: .from, value: from),
-//            QueryItem(name: .isInvokeWrapped, value: isInvokeWrapped),
-//            QueryItem(name: .message, value: transactionInfo.message),
-//            QueryItem(name: .publicKeySignaturePairs, value: transactionInfo.publicKeySignaturePairs),
-//        ])
-//
-//        let appendMessageQuryItems: [URLQueryItem] = URLEncoding.solanaAppendMessagesQueryItems(dictionary: transactionInfo.appendTx ?? [:])
-//        var urlQueryItems: [URLQueryItem] = []
-//        urlQueryItems.append(contentsOf: appendMessageQuryItems)
-//        urlQueryItems.append(contentsOf: URLEncoding.encode(queryItems))
-//        components.queryItems = urlQueryItems
+        var queryItems: [QueryItem] = URLEncoding.queryGeneralItems(
+            appId: appId,
+            requestId: id.uuidString,
+            blockchain: blockchain
+        )
+        queryItems.append(contentsOf: [
+            QueryItem(name: .method, value: type),
+            QueryItem(name: .from, value: from),
+            QueryItem(name: .isInvokeWrapped, value: isInvokeWrapped),
+            QueryItem(name: .message, value: transactionInfo.message),
+            QueryItem(name: .publicKeySignaturePairs, value: transactionInfo.publicKeySignaturePairs),
+        ])
+        
+        let appendMessageQuryItems: [URLQueryItem] = URLEncoding.solanaAppendMessagesQueryItems(dictionary: transactionInfo.appendTx ?? [:])
+        var urlQueryItems: [URLQueryItem] = []
+        urlQueryItems.append(contentsOf: appendMessageQuryItems)
+        urlQueryItems.append(contentsOf: URLEncoding.encode(queryItems))
+        components.queryItems = urlQueryItems
         return components.url
     }
 
@@ -103,7 +99,7 @@ public struct SignAndSendSolanaTransactionMethod: CallbackMethod {
             path: "api/\(blockchain.rawValue)/dapp/authz",
             body: reqeustBody
         )
-        let response: PostRequestResponse = try await URLSession.shared.asyncDataTask(with: request)
+        let response: PostRequestResponse = try await session.asyncDataTask(with: request)
         switch response.status {
         case let .pending(authorizationId):
             guard let baseURL = URL(string: baseURLString) else {

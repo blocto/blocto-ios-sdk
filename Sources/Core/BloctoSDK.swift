@@ -179,7 +179,7 @@ public class BloctoSDK {
             }
             do {
                 try self.checkConfigration()
-                guard let requestURL = try method.encodeToURL(
+                guard let requestURL = try method.encodeToNativeURL(
                     appId: self.appId,
                     baseURLString: self.requestBloctoBaseURLString
                 ) else {
@@ -261,16 +261,6 @@ public class BloctoSDK {
                 appId: appId,
                 baseURLString: webBaseURLString
             )
-//            let requestURL: URL
-//            if urlRequest.httpMethod == RequestBuilder.Method.post.rawValue {
-//                requestURL = try await method.handlePostRequest(urlRequest)
-//            } else {
-//                guard let url = urlRequest.url else {
-//                    method.handleError(error: BloctoSDKError.urlNotFound)
-//                    return
-//                }
-//                requestURL = url
-//            }
 
             var session: AuthenticationSessioning?
 

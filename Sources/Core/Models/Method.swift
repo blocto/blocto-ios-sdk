@@ -11,9 +11,7 @@ public protocol Method {
     var id: UUID { get }
     var type: String { get }
 
-    func encodeToURL(appId: String, baseURLString: String) throws -> URL?
-//    func encodeToWebURLRequest(appId: String, baseURLString: String) throws -> URLRequest?
-//    func handlePostRequest(_ urlRequest: URLRequest) async throws -> URL
+    func encodeToNativeURL(appId: String, baseURLString: String) throws -> URL?
     func converToWebURLRequest(
         appId: String,
         baseURLString: String
@@ -23,15 +21,6 @@ public protocol Method {
 }
 
 extension Method {
-
-//    @available(*, deprecated, message: "should be deleted")
-//    public func encodeToWebURLRequest(appId: String, baseURLString: String) throws -> URLRequest? {
-//        throw BloctoSDKError.urlNotFound
-//    }
-//
-//    public func handlePostRequest(_ urlRequest: URLRequest) async throws -> URL {
-//        throw BloctoSDKError.functionNotImplemented
-//    }
 
     @available(*, deprecated, message: "should be deleted")
     public func converToWebURLRequest(

@@ -18,6 +18,7 @@ public struct SendEVMBasedTransactionMethod: CallbackMethod {
 
     let blockchain: Blockchain
     let transaction: EVMBaseTransaction
+    let session: URLSessionProtocol
 
     /// initialize request account method
     /// - Parameters:
@@ -25,22 +26,25 @@ public struct SendEVMBasedTransactionMethod: CallbackMethod {
     ///   - sessionId: The session id for web browsing, so if request the account is from native Blocto App then this should be nil.
     ///   - blockchain: pre-defined blockchain in BloctoSDK
     ///   - transaction: The transaction structure describe the EVM base transaction.
+    ///   - session: The session dependency injection for testing.
     ///   - callback: callback will be called by either from blocto native app or web SDK after getting account or reject.
     public init(
         id: UUID = UUID(),
         sessionId: String?,
         blockchain: Blockchain,
         transaction: EVMBaseTransaction,
+        session: URLSessionProtocol = URLSession.shared,
         callback: @escaping Callback
     ) {
         self.id = id
         self.sessionId = sessionId
         self.blockchain = blockchain
         self.transaction = transaction
+        self.session = session
         self.callback = callback
     }
 
-    public func encodeToURL(appId: String, baseURLString: String) throws -> URL? {
+    public func encodeToNativeURL(appId: String, baseURLString: String) throws -> URL? {
         guard let baseURL = URL(string: baseURLString),
               var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true) else {
             return nil
@@ -60,38 +64,6 @@ public struct SendEVMBasedTransactionMethod: CallbackMethod {
         components.queryItems = URLEncoding.encode(queryItems)
         return components.url
     }
-
-//    public func encodeToWebURLRequest(appId: String, baseURLString: String) throws -> URLRequest? {
-//        guard let baseURL = URL(string: baseURLString) else {
-//            return nil
-//        }
-//        let newURL = baseURL
-//            .appendingPathComponent(appId)
-//            .appendingPathComponent(blockchain.rawValue)
-//            .appendingPathComponent("dapp")
-//            .appendingPathComponent("user-signature")
-//        guard var components = URLComponents(url: newURL, resolvingAgainstBaseURL: true) else {
-//            return nil
-//        }
-//        var queryItems = URLEncoding.queryGeneralItems(
-//            appId: appId,
-//            requestId: id.uuidString,
-//            blockchain: blockchain
-//        )
-//        queryItems.append(contentsOf: [
-//            QueryItem(name: .method, value: type),
-//            QueryItem(name: .from, value: transaction.from),
-//            QueryItem(name: .to, value: transaction.to),
-//            QueryItem(name: .value, value: String(transaction.value, radix: 16).bloctoSDK.add0x),
-//            QueryItem(name: .data, value: transaction.data),
-//        ])
-//        components.queryItems = URLEncoding.encode(queryItems)
-//
-//        // TODO: implemente
-//        var request = URLRequest(url: components.url!)
-//        request.httpMethod = RequestBuilder.Method.post.rawValue
-//        return request
-//    }
 
     /// To support Blocto SDK API v2 endpoint
     /// - Parameters:
@@ -122,7 +94,7 @@ public struct SendEVMBasedTransactionMethod: CallbackMethod {
             path: "api/\(blockchain.rawValue)/dapp/authz",
             body: [reqeustBody]
         )
-        let response: PostRequestResponse = try await URLSession.shared.asyncDataTask(with: request)
+        let response: PostRequestResponse = try await session.asyncDataTask(with: request)
         switch response.status {
         case let .pending(authorizationId):
             guard let baseURL = URL(string: baseURLString) else {

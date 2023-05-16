@@ -26,8 +26,8 @@ extension BloctoSDK {
 
 public class BloctoSolanaSDK {
 
+    var sessionId: String?
     private let base: BloctoSDK
-    private var sessionId: String?
     private var appendTxMap: [String: [String: Data]] = [:]
 
     private var cluster: Cluster {
@@ -83,7 +83,7 @@ public class BloctoSolanaSDK {
         uuid: UUID = UUID(),
         from: String,
         transaction: Transaction,
-        session: URLSessionProtocol = URLSession(configuration: .default),
+        session: URLSessionProtocol = URLSession.shared,
         completion: @escaping (Result<String, Swift.Error>) -> Void
     ) {
         addRecentBlockhashIfNeeded(
@@ -120,6 +120,7 @@ public class BloctoSolanaSDK {
                                 publicKeySignaturePairs: publicKeySignaturePairs
                             ),
                             isInvokeWrapped: txConverted,
+                            session: session,
                             callback: completion
                         )
                         self.appendTxMap[shaString] = nil
@@ -147,7 +148,7 @@ public class BloctoSolanaSDK {
     public func convertToProgramWalletTransaction(
         _ transaction: Transaction,
         solanaAddress: String,
-        session: URLSessionProtocol = URLSession(configuration: .default),
+        session: URLSessionProtocol = URLSession.shared,
         completion: @escaping (Result<Transaction, Swift.Error>) -> Void
     ) {
         addRecentBlockhashIfNeeded(transaction) { [weak self] result in

@@ -29,6 +29,7 @@ protocol EVMBaseSDKProvider {
         uuid: UUID,
         blockchain: Blockchain,
         transaction: EVMBaseTransaction,
+        session: URLSessionProtocol,
         completion: @escaping (Result<String, Swift.Error>) -> Void
     )
 
@@ -55,12 +56,14 @@ extension EVMBaseSDKProvider {
     func sendTransaction(
         blockchain: Blockchain,
         transaction: EVMBaseTransaction,
+        session: URLSessionProtocol = URLSession.shared,
         completion: @escaping (Result<String, Swift.Error>) -> Void
     ) {
         sendTransaction(
             uuid: UUID(),
             blockchain: blockchain,
             transaction: transaction,
+            session: session,
             completion: completion)
     }
 
