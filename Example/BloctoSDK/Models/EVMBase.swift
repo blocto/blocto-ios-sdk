@@ -121,7 +121,7 @@ enum EVMBase: CaseIterable {
             case .prod:
                 urlString = "https://polygon-rpc.com/"
             case .dev:
-                urlString = "https://rpc-mumbai.matic.today"
+                urlString = "https://polygon-mumbai-bor.publicnode.com"
             }
         case .avalanche:
             switch bloctoEnvironment {
