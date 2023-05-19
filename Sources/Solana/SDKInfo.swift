@@ -13,7 +13,7 @@ enum SDKInfo {
         #if COCOAPODS
         return Bundle.resouceBundle?.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
         #else
-        return "0.6.0"
+        return "0.6.1"
         #endif
     }
 
