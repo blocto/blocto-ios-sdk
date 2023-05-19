@@ -959,11 +959,11 @@ final class EVMBaseDemoViewController: UIViewController {
         ) { [weak self] error, response in
             guard let self = self else { return }
             DispatchQueue.main.async {
+                self.resetSignVerifyStatus()
                 if let error = error {
                     debugPrint(error)
                     self.signingVerifyButton.setImage(UIImage(named: "error"), for: .normal)
                 } else {
-                    self.resetSignVerifyStatus()
                     if let value = response?.value,
                        value.bloctoSDK.hexStringWith0xPrefix == ERC1271ABIFunction.Response.erc1271ValidSignature {
                         self.signingVerifyButton.setImage(UIImage(named: "icon20Selected"), for: .normal)
