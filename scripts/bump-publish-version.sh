@@ -19,7 +19,7 @@ sed -i '' -e 's/, '\''~> [^\;]*'\''/, '\''~> '$BUMPED_VERSION''\''/' README.md
 sed -i '' -e 's/.package(url: "https:\/\/github.com\/portto\/blocto-ios-sdk.git", .upToNextMinor(from: [^\;]*))/.package(url: "https:\/\/github.com\/portto\/blocto-ios-sdk.git", .upToNextMinor(from: "'$BUMPED_VERSION'"))/' README.md
 
 # commit all changes
-git add --all
+git add BloctoSDK.podspec README.md Sources/Solana/SDKInfo.swift
 git commit -m "Bump version"
 git push origin main
 
