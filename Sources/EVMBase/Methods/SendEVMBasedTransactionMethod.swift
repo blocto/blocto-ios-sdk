@@ -80,7 +80,7 @@ public struct SendEVMBasedTransactionMethod: CallbackMethod {
         let reqeustBody = RequestBody(
             from: transaction.from,
             to: transaction.to,
-            value: transaction.value.description,
+            value: String(transaction.value, radix: 16).bloctoSDK.add0x,
             data: transaction.data.bloctoSDK.hexStringWith0xPrefix,
             gas: transaction.gas?.description,
             maxPriorityFeePerGas: transaction.maxPriorityFeePerGas?.description,
