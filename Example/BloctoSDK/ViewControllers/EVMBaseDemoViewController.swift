@@ -918,10 +918,6 @@ final class EVMBaseDemoViewController: UIViewController {
             handleSignError(Error.message("signature not found."))
             return
         }
-        guard let addressData = Data(hex: userWalletAddress) else {
-            handleSignError(Error.message("User address not found. Please request account first."))
-            return
-        }
         signingVerifyingIndicator.startAnimating()
 
         let data: Data
