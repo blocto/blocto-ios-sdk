@@ -925,7 +925,9 @@ final class EVMBaseDemoViewController: UIViewController {
         case .sign:
             data = Data(ethMessage: message)
         case .personalSign:
-            data = Data(message.utf8)
+            var messageData = Data(message.utf8)
+            let prefix = "\u{19}Ethereum Signed Message:\n\(messageData.count)".data(using: .utf8) ?? Data()
+            data = prefix + messageData
         case .typedSignV3,
              .typedSignV4,
              .typedSign:
