@@ -920,14 +920,14 @@ final class EVMBaseDemoViewController: UIViewController {
         }
         signingVerifyingIndicator.startAnimating()
 
-        let data: Data
+        let hashedData: Data
         switch selectedSigningType {
         case .sign:
-            data = Data(ethMessage: message)
+            hashedData = Data(ethMessage: message).sha3(.keccak256)
         case .personalSign:
-            var messageData = Data(message.utf8)
+            let messageData = Data(message.utf8)
             let prefix = "\u{19}Ethereum Signed Message:\n\(messageData.count)".data(using: .utf8) ?? Data()
-            data = prefix + messageData
+            hashedData = (prefix + messageData).sha3(.keccak256)
         case .typedSignV3,
              .typedSignV4,
              .typedSign:
@@ -939,7 +939,7 @@ final class EVMBaseDemoViewController: UIViewController {
                 } else {
                     signableHash = try typedData.signableHash(version: .v4)
                 }
-                data = signableHash
+                hashedData = signableHash
             } catch {
                 signingVerifyButton.setImage(UIImage(named: "error"), for: .normal)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
@@ -950,7 +950,7 @@ final class EVMBaseDemoViewController: UIViewController {
         }
 
         let verifySignatureABIFunction = ERC1271ABIFunction(
-            hash: data.sha3(.keccak256),
+            hash: hashedData,
             signature: signature.bloctoSDK.hexDecodedData,
             contract: EthereumAddress(userWalletAddress)
         )
