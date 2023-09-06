@@ -225,16 +225,19 @@ public class BloctoSDK {
                 )
             } catch {
                 method.handleError(error: error)
-                do {
-                    let window = try self.getWindow?()
-                    Task(priority: .high) {
-                        await self.routeToWebSDK(window: window, method: method)
+                // would not routeToWebSDK when error occured request account
+                if self.evm.sessionId != nil {
+                    do {
+                        let window = try self.getWindow?()
+                        Task(priority: .high) {
+                            await self.routeToWebSDK(window: window, method: method)
+                        }
+                    } catch {
+                        log(
+                            enable: self.logging,
+                            message: "Window not found."
+                        )
                     }
-                } catch {
-                    log(
-                        enable: self.logging,
-                        message: "Window not found."
-                    )
                 }
             }
         }
