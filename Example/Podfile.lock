@@ -8,15 +8,15 @@ PODS:
     - BloctoSDK/Core (~> 0.6.2)
   - BloctoSDK/Flow (0.6.2):
     - BloctoSDK/Core (~> 0.6.2)
-    - FlowSDK (~> 0.5.0)
+    - FlowSDK (~> 0.7.0)
   - BloctoSDK/Solana (0.6.2):
     - BloctoSDK/Core
     - SolanaWeb3 (~> 0.0.4)
   - BloctoSDK/Wallet (0.6.2):
     - BigInt (~> 5.0)
     - BloctoSDK/Core (~> 0.6.2)
-    - FlowSDK (~> 0.5.0)
-  - Cadence (0.5.0):
+    - FlowSDK (~> 0.7.0)
+  - Cadence (0.7.0):
     - BigInt (~> 5.2.0)
     - CryptoSwift (~> 1.5.1)
   - CGRPCZlibp (1.8.2)
@@ -32,14 +32,15 @@ PODS:
   - EthereumSignTypedDataUtil (0.1.2):
     - BigInt (~> 5.0)
     - CryptoSwift (~> 1.4)
-  - FlowSDK (0.5.0):
-    - FlowSDK/FlowSDK (= 0.5.0)
-  - FlowSDK/FlowSDK (0.5.0):
+  - FlowSDK (0.7.0):
+    - FlowSDK/FlowSDK (= 0.7.0)
+  - FlowSDK/FlowSDK (0.7.0):
     - BigInt (~> 5.2.0)
-    - Cadence (~> 0.5.0)
+    - Cadence (~> 0.7.0)
     - CryptoSwift (~> 1.5.1)
-    - gRPC-Swiftp (~> 1.8.2)
+    - gRPC-Swiftp (= 1.8.2)
     - secp256k1Swift (~> 0.7.4)
+    - SwiftProtobuf (= 1.9.0)
   - GenericJSON (2.0.1)
   - gRPC-Swiftp (1.8.2):
     - CGRPCZlibp (= 1.8.2)
@@ -198,7 +199,7 @@ PODS:
     - SwiftNIOFoundationCompat (< 3, >= 2.32.0)
     - SwiftNIOPosix (< 3, >= 2.32.0)
     - SwiftNIOTLS (< 3, >= 2.32.0)
-  - SwiftProtobuf (1.20.3)
+  - SwiftProtobuf (1.9.0)
   - TweetNacl (1.0.2)
   - web3.swift (0.9.3):
     - BigInt (~> 5)
@@ -282,8 +283,8 @@ SPEC CHECKSUMS:
   _NIODataStructures: 3d45d8e70a1d17a15b1dc59d102c63dbc0525ffd
   Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  BloctoSDK: 7fcd6266eab0bca2745baad5e0556093be66684b
-  Cadence: f354a678487ab17716acd61ddbb637130e9642b8
+  BloctoSDK: 70816dd7f38615f2b0800f63b4d0d276ae67df46
+  Cadence: 79d047b56a71c8177ba6627b57959a5045e54f28
   CGRPCZlibp: 2f3e1e7a6d6cb481d4d1a26d3ec09aefacf09cbb
   CNIOAtomics: 8edf08644e5e6fa0f021c239be9e8beb1cd9ef18
   CNIOBoringSSL: 2c9c96c2e95f15e83fb8d26b9738d939cc39ae33
@@ -294,7 +295,7 @@ SPEC CHECKSUMS:
   CNIOWindows: 3047f2d8165848a3936a0a755fee27c6b5ee479b
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
   EthereumSignTypedDataUtil: ae4e33b21e51ee046a86a65b02843090b8bbd3f9
-  FlowSDK: 08c8b36cdc7b1c0d7017504592e8d13042e71bd0
+  FlowSDK: 87999862b3416590f309b9bb09e23f4cdc156e95
   GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
   gRPC-Swiftp: 1f5a05ce5b544bff3dce93223e72829daac26113
   Logging: beeb016c9c80cf77042d62e83495816847ef108b
