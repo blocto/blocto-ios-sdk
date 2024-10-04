@@ -2,21 +2,22 @@ PODS:
   - _NIODataStructures (2.40.0)
   - Alamofire (5.6.2)
   - BigInt (5.2.0)
-  - BloctoSDK/Core (0.6.2)
-  - BloctoSDK/EVMBase (0.6.2):
-    - BigInt (~> 5.0)
-    - BloctoSDK/Core (~> 0.6.2)
-  - BloctoSDK/Flow (0.6.2):
-    - BloctoSDK/Core (~> 0.6.2)
-    - FlowSDK (~> 0.7.0)
-  - BloctoSDK/Solana (0.6.2):
+  - BloctoSDK/Core (0.6.3)
+  - BloctoSDK/EVMBase (0.6.3):
+    - BigInt (~> 5.2.0)
+    - BloctoSDK/Core (~> 0.6.3)
+  - BloctoSDK/Flow (0.6.3):
+    - BloctoSDK/Core (~> 0.6.3)
+    - FlowSDK (~> 0.7.1)
+  - BloctoSDK/Solana (0.6.3):
     - BloctoSDK/Core
+    - Runtime (= 2.2.1)
     - SolanaWeb3 (~> 0.0.4)
-  - BloctoSDK/Wallet (0.6.2):
-    - BigInt (~> 5.0)
-    - BloctoSDK/Core (~> 0.6.2)
-    - FlowSDK (~> 0.7.0)
-  - Cadence (0.7.0):
+  - BloctoSDK/Wallet (0.6.3):
+    - BigInt (~> 5.2.0)
+    - BloctoSDK/Core (~> 0.6.3)
+    - FlowSDK (~> 0.7.1)
+  - Cadence (0.7.1):
     - BigInt (~> 5.2.0)
     - CryptoSwift (~> 1.5.1)
   - CGRPCZlibp (1.8.2)
@@ -32,11 +33,11 @@ PODS:
   - EthereumSignTypedDataUtil (0.1.2):
     - BigInt (~> 5.0)
     - CryptoSwift (~> 1.4)
-  - FlowSDK (0.7.0):
-    - FlowSDK/FlowSDK (= 0.7.0)
-  - FlowSDK/FlowSDK (0.7.0):
+  - FlowSDK (0.7.1):
+    - FlowSDK/FlowSDK (= 0.7.1)
+  - FlowSDK/FlowSDK (0.7.1):
     - BigInt (~> 5.2.0)
-    - Cadence (~> 0.7.0)
+    - Cadence (~> 0.7.1)
     - CryptoSwift (~> 1.5.1)
     - gRPC-Swiftp (= 1.8.2)
     - secp256k1Swift (~> 0.7.4)
@@ -52,7 +53,7 @@ PODS:
     - SwiftNIOTransportServices (< 2.0.0, >= 1.11.1)
     - SwiftProtobuf (< 2.0.0, >= 1.9.0)
   - Logging (1.4.0)
-  - Runtime (2.2.2)
+  - Runtime (2.2.1)
   - RxCocoa (6.5.0):
     - RxRelay (= 6.5.0)
     - RxSwift (= 6.5.0)
@@ -283,8 +284,8 @@ SPEC CHECKSUMS:
   _NIODataStructures: 3d45d8e70a1d17a15b1dc59d102c63dbc0525ffd
   Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  BloctoSDK: 70816dd7f38615f2b0800f63b4d0d276ae67df46
-  Cadence: 79d047b56a71c8177ba6627b57959a5045e54f28
+  BloctoSDK: 165408263646b41091986ea4c9befb1b374739a8
+  Cadence: c8a624ee9e7d517def42073a7a74b1cda9e70750
   CGRPCZlibp: 2f3e1e7a6d6cb481d4d1a26d3ec09aefacf09cbb
   CNIOAtomics: 8edf08644e5e6fa0f021c239be9e8beb1cd9ef18
   CNIOBoringSSL: 2c9c96c2e95f15e83fb8d26b9738d939cc39ae33
@@ -295,11 +296,11 @@ SPEC CHECKSUMS:
   CNIOWindows: 3047f2d8165848a3936a0a755fee27c6b5ee479b
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
   EthereumSignTypedDataUtil: ae4e33b21e51ee046a86a65b02843090b8bbd3f9
-  FlowSDK: 87999862b3416590f309b9bb09e23f4cdc156e95
+  FlowSDK: 8487d7a00b17beb034d01c4d62fa1171666e8423
   GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
   gRPC-Swiftp: 1f5a05ce5b544bff3dce93223e72829daac26113
   Logging: beeb016c9c80cf77042d62e83495816847ef108b
-  Runtime: 67741bd196fb4ad821c4d259ccc527bf734d8806
+  Runtime: 3f5c64c182a73f2a3630c30403cf777274af8d9d
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
@@ -321,10 +322,10 @@ SPEC CHECKSUMS:
   SwiftNIOSSL: d153c5a6fc5b2301b0519b4c4d037a9414212da6
   SwiftNIOTLS: 598af547490133e9aac52aed0c23c4a90c31dcfc
   SwiftNIOTransportServices: 0b2b407819d82eb63af558c5396e33c945759503
-  SwiftProtobuf: b02b5075dcf60c9f5f403000b3b0c202a11b6ae1
+  SwiftProtobuf: ecbec1be9036d15655f6b3443a1c4ea693c97932
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   web3.swift: 4d8b9f69ea92d23c6e87b97c36686f1c541eaef1
 
 PODFILE CHECKSUM: 9c6b18662d4e5dad1a027838e9f376ebfb059956
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.11.3
