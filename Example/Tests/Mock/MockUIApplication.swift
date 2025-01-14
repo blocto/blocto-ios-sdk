@@ -21,15 +21,22 @@ class MockUIApplication: URLOpening {
         self.openedOrder = openedOrder
     }
 
-    func open(
-        _ url: URL,
-        options: [UIApplication.OpenExternalURLOptionsKey: Any],
-        completionHandler completion: ((Bool) -> Void)?
-    ) {
+    func open(_ url: URL, options: [UIApplication.OpenExternalURLOptionsKey : Any]) async -> Bool {
         self.url = url
         lastOptions = options
         let first = openedOrder.removeFirst()
-        completion?(first)
+        return first
+    }
+    
+    func open(
+        _ url: URL,
+        options: [UIApplication.OpenExternalURLOptionsKey : Any],
+        completionHandler: ((Bool) -> Void)? = nil
+    ) {
+        Task(priority: .high) { @MainActor in
+            let opened = await open(url, options: options)
+            completionHandler?(opened)
+        }
     }
 
 }
