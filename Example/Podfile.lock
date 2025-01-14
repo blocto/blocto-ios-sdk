@@ -1,21 +1,21 @@
 PODS:
   - _NIODataStructures (2.40.0)
-  - Alamofire (5.6.2)
+  - Alamofire (5.10.2)
   - BigInt (5.2.0)
-  - BloctoSDK/Core (0.6.3)
-  - BloctoSDK/EVMBase (0.6.3):
+  - BloctoSDK/Core (0.6.4)
+  - BloctoSDK/EVMBase (0.6.4):
     - BigInt (~> 5.2.0)
-    - BloctoSDK/Core (~> 0.6.3)
-  - BloctoSDK/Flow (0.6.3):
-    - BloctoSDK/Core (~> 0.6.3)
+    - BloctoSDK/Core (~> 0.6.4)
+  - BloctoSDK/Flow (0.6.4):
+    - BloctoSDK/Core (~> 0.6.4)
     - FlowSDK (~> 0.7.1)
-  - BloctoSDK/Solana (0.6.3):
+  - BloctoSDK/Solana (0.6.4):
     - BloctoSDK/Core
-    - Runtime (= 2.2.1)
+    - Runtime (~> 2.2.7)
     - SolanaWeb3 (~> 0.0.4)
-  - BloctoSDK/Wallet (0.6.3):
+  - BloctoSDK/Wallet (0.6.4):
     - BigInt (~> 5.2.0)
-    - BloctoSDK/Core (~> 0.6.3)
+    - BloctoSDK/Core (~> 0.6.4)
     - FlowSDK (~> 0.7.1)
   - Cadence (0.7.1):
     - BigInt (~> 5.2.0)
@@ -42,7 +42,7 @@ PODS:
     - gRPC-Swiftp (= 1.8.2)
     - secp256k1Swift (~> 0.7.4)
     - SwiftProtobuf (= 1.9.0)
-  - GenericJSON (2.0.1)
+  - GenericJSON (2.0.2)
   - gRPC-Swiftp (1.8.2):
     - CGRPCZlibp (= 1.8.2)
     - Logging (< 2.0.0, >= 1.4.0)
@@ -53,18 +53,18 @@ PODS:
     - SwiftNIOTransportServices (< 2.0.0, >= 1.11.1)
     - SwiftProtobuf (< 2.0.0, >= 1.9.0)
   - Logging (1.4.0)
-  - Runtime (2.2.1)
-  - RxCocoa (6.5.0):
-    - RxRelay (= 6.5.0)
-    - RxSwift (= 6.5.0)
-  - RxRelay (6.5.0):
-    - RxSwift (= 6.5.0)
-  - RxSwift (6.5.0)
+  - Runtime (2.2.7)
+  - RxCocoa (6.8.0):
+    - RxRelay (= 6.8.0)
+    - RxSwift (= 6.8.0)
+  - RxRelay (6.8.0):
+    - RxSwift (= 6.8.0)
+  - RxSwift (6.8.0)
   - secp256k1.swift (0.1.4)
   - secp256k1Swift (0.7.4):
     - secp256k1Wrapper (~> 0.0.5)
   - secp256k1Wrapper (0.0.5)
-  - SnapKit (5.6.0)
+  - SnapKit (5.7.1)
   - SolanaWeb3 (0.0.4):
     - Alamofire (~> 5.5)
     - CryptoSwift (~> 1.4)
@@ -282,9 +282,9 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   _NIODataStructures: 3d45d8e70a1d17a15b1dc59d102c63dbc0525ffd
-  Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
+  Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  BloctoSDK: 165408263646b41091986ea4c9befb1b374739a8
+  BloctoSDK: 12d9ae14ab2c1ddf39548c6cdc61bb964924a458
   Cadence: c8a624ee9e7d517def42073a7a74b1cda9e70750
   CGRPCZlibp: 2f3e1e7a6d6cb481d4d1a26d3ec09aefacf09cbb
   CNIOAtomics: 8edf08644e5e6fa0f021c239be9e8beb1cd9ef18
@@ -297,18 +297,18 @@ SPEC CHECKSUMS:
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
   EthereumSignTypedDataUtil: ae4e33b21e51ee046a86a65b02843090b8bbd3f9
   FlowSDK: 8487d7a00b17beb034d01c4d62fa1171666e8423
-  GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
+  GenericJSON: 79a840eeb77030962e8cf02a62d36bd413b67626
   gRPC-Swiftp: 1f5a05ce5b544bff3dce93223e72829daac26113
   Logging: beeb016c9c80cf77042d62e83495816847ef108b
-  Runtime: 3f5c64c182a73f2a3630c30403cf777274af8d9d
-  RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
-  RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
-  RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
+  Runtime: b31390b08874d04349c05719e264f9837cc66b7b
+  RxCocoa: 2d33c1e1e5d66492052ad46b11024ae287572880
+  RxRelay: 335c78b926a2aea8d863a6d25f1ed3b5ad8e8705
+  RxSwift: 4e28be97cbcfeee614af26d83415febbf2bf6f45
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
   secp256k1Swift: ea49d2b06724444a03cf7938a2d3fc7acc4c0f08
   secp256k1Wrapper: 0378417cd06d51187bbc9e178ec318e7902e2120
-  SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
-  SolanaWeb3: 518d1fddf72ac8e0f76dd19a01d90079edb5da47
+  SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
+  SolanaWeb3: 12fccc228c40748b8dc7e8a0ccaf7a0d3da724fa
   SwiftNIO: 829958aab300642625091f82fc2f49cb7cf4ef24
   SwiftNIOConcurrencyHelpers: 697370136789b1074e4535eaae75cbd7f900370e
   SwiftNIOCore: 473fdfe746534d7aa25766916459eeaf6f92ef49
@@ -326,6 +326,6 @@ SPEC CHECKSUMS:
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   web3.swift: 4d8b9f69ea92d23c6e87b97c36686f1c541eaef1
 
-PODFILE CHECKSUM: 9c6b18662d4e5dad1a027838e9f376ebfb059956
+PODFILE CHECKSUM: 8ea927fcd77c6600dc8f6ee887727a7baa7e2349
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.15.2

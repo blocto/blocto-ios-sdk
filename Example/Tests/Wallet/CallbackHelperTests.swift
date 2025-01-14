@@ -28,6 +28,7 @@ class CallbackHelperTests: XCTestCase {
         let address = "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv"
         let expectedOpenedOrder: [Bool] = [true]
         var receivingOpened: Bool?
+        let expectation = XCTestExpectation(description: "wait for receiving opened")
 
         mockUIApplication.setup(openedOrder: expectedOpenedOrder)
 
@@ -38,21 +39,23 @@ class CallbackHelperTests: XCTestCase {
                 appId: appId,
                 requestId: requestId,
                 methodContentType: .requestAccount(address: address),
-                baseURLString: appUniversalLinkBaseURLString)) { opened in
+                baseURLString: appUniversalLinkBaseURLString)) { [unowned self] opened in
                     receivingOpened = opened
+                    // Then:
+                    XCTAssertArrayElementsEqual(
+                        URLComponents(
+                            url: self.mockUIApplication.url!,
+                            resolvingAgainstBaseURL: false)!.queryItems!,
+                        URLComponents(
+                            url: URL(string: "\(appUniversalLinkBaseURLString)blocto?request_id=\(requestId)&address=\(address)")!,
+                            resolvingAgainstBaseURL: false)!.queryItems!)
+                    // swiftlint:disable force_cast
+                    XCTAssertEqual(mockUIApplication.lastOptions as! [UIApplication.OpenExternalURLOptionsKey: Bool], [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly: true])
+                    XCTAssertEqual(receivingOpened, true)
+                    expectation.fulfill()
                 }
-
-        // Then:
-        XCTAssertArrayElementsEqual(
-            URLComponents(
-                url: mockUIApplication.url!,
-                resolvingAgainstBaseURL: false)!.queryItems!,
-            URLComponents(
-                url: URL(string: "\(appUniversalLinkBaseURLString)blocto?request_id=\(requestId)&address=\(address)")!,
-                resolvingAgainstBaseURL: false)!.queryItems!)
-        // swiftlint:disable force_cast
-        XCTAssertEqual(mockUIApplication.lastOptions as! [UIApplication.OpenExternalURLOptionsKey: Bool], [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly: true])
-        XCTAssertEqual(receivingOpened, true)
+        
+        wait(for: [expectation], timeout: 4)
     }
 
     func testSendBackUniversalLinksFailed() throws {
@@ -61,9 +64,9 @@ class CallbackHelperTests: XCTestCase {
         let address = "2oz91K9pKf2sYr4oRtQvxBcxxo8gniZvXyNoMTQYhoqv"
         let openedOrder: [Bool] = [false, true]
         var receivingOpened: Bool?
+        let expectation = XCTestExpectation(description: "wait for receiving opened")
 
         mockUIApplication.setup(openedOrder: openedOrder)
-
         // When:
         MethodCallbackHelper.sendBack(
             urlOpening: mockUIApplication,
@@ -71,20 +74,22 @@ class CallbackHelperTests: XCTestCase {
                 appId: appId,
                 requestId: requestId,
                 methodContentType: .requestAccount(address: address),
-                baseURLString: appUniversalLinkBaseURLString)) { opened in
+                baseURLString: appUniversalLinkBaseURLString)) { [unowned self] opened in
                     receivingOpened = opened
+                    // Then:
+                    XCTAssertArrayElementsEqual(
+                        URLComponents(
+                            url: self.mockUIApplication.url!,
+                            resolvingAgainstBaseURL: false)!.queryItems!,
+                        URLComponents(
+                            url: URL(string: "\(appCustomSchemeBaseURLString)?request_id=\(requestId)&address=\(address)")!,
+                            resolvingAgainstBaseURL: false)!.queryItems!)
+                    XCTAssertEqual(receivingOpened!, true)
+                    expectation.fulfill()
                 }
 
-        // Then:
-        XCTAssertArrayElementsEqual(
-            URLComponents(
-                url: mockUIApplication.url!,
-                resolvingAgainstBaseURL: false)!.queryItems!,
-            URLComponents(
-                url: URL(string: "\(appCustomSchemeBaseURLString)?request_id=\(requestId)&address=\(address)")!,
-                resolvingAgainstBaseURL: false)!.queryItems!)
-
-        XCTAssertEqual(receivingOpened!, true)
+        
+        wait(for: [expectation], timeout: 4)
     }
 
     func testRequestAccountQueryItems() throws {
