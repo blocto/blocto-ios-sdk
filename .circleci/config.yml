@@ -31,7 +31,7 @@ commands:
 jobs:
   unit_tests:
     macos:
-      xcode: 14.1.0
+      xcode: 16.2.0
     environment:
       FL_OUTPUT_DIR: output
       HOMEBREW_NO_AUTO_UPDATE: 1
