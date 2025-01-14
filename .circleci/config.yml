@@ -46,7 +46,8 @@ jobs:
           no_output_timeout: 60m
           command: |
             cd Example
-            xcodebuild clean test -workspace BloctoSDK.xcworkspace -scheme "BloctoSDK-Example" -destination 'platform=iOS Simulator'
+            xcrun simctl list devices
+            xcodebuild clean test -workspace BloctoSDK.xcworkspace -scheme "BloctoSDK-Example" -destination 'platform=iOS Simulator,OS=18.2,name=iPhone 16'
       - store_artifacts:
           path: output
       - store_test_results:
