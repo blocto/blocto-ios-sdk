@@ -12,7 +12,7 @@ To run the example project, clone the repo, and run
 bundle install
 bundle exec pod install
 ```
-or (if Bundler not installed) 
+or (iif Bundler is not installed) 
 ```
 pod install
 ```
@@ -22,7 +22,7 @@ from the Example directory first.
 
 ### CocoaPods
 
-BloctoSDK is available through [CocoaPods](https://cocoapods.org). You can only include specific subspec to install, simply add the following line to your Podfile:
+BloctoSDK is available through [CocoaPods](https://cocoapods.org). You can include a specific subspec to install, simply add the following line to your Podfile:
 
 ```ruby
 pod 'BloctoSDK', '~> 0.6.4'
@@ -77,7 +77,7 @@ let package = Package(
 ```
 
 ## Usage
-Currently support 
+Currently supports 
  * Solana SDK
  * EVMBase SDK (Ethereum, Avalanche, BSC, Polygon)
  * Flow SDK
