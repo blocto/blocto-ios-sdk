@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.author           = { 'Dawson' => 'dawson@portto.com', 'Scott' => 'scott@portto.com' }
   s.source           = { :git => 'https://github.com/portto/blocto-ios-sdk.git', :tag => s.version.to_s }
   s.default_subspec = "Core"
-  s.social_media_url = 'https://twitter.com/BloctoApp'
+  s.social_media_url = 'https://x.com/BloctoApp'
 
   s.swift_version = '5.0.0'
   s.ios.deployment_target = '13.0'
