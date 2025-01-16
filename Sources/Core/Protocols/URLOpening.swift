@@ -14,7 +14,3 @@ public protocol URLOpening {
         completionHandler completion: ((Bool) -> Void)?
     )
 }
-
-// MARK: - UIApplication + URLOpening
-
-extension UIApplication: URLOpening {}

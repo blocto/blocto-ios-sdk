@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'BloctoSDK'
-  s.version          = '0.6.4'
+  s.version          = '0.6.5'
   s.summary          = 'A SDK to interact with Blockchain through Blocto Wallet App.'
 
   s.homepage         = 'https://github.com/portto/blocto-ios-sdk'
@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
       ss.source_files = "Sources/Solana/**/*"
       ss.dependency "BloctoSDK/Core"
       ss.dependency "SolanaWeb3", "~> 0.0.4"
-      ss.dependency 'Runtime', '2.2.1'
+      ss.dependency 'Runtime', "~> 2.2.7"
   end
   
   s.subspec "EVMBase" do |ss|
