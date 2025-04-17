@@ -5,6 +5,18 @@
 [![License](https://img.shields.io/badge/license-MIT-black)](https://cocoapods.org/pods/BloctoSDK)
 [![Platform](https://img.shields.io/cocoapods/p/BloctoSDK.svg?style=flat)](https://cocoapods.org/pods/BloctoSDK)
 
+> ⚠️ **Deprecation Notice**
+>
+> This repository is **no longer maintained** and has been officially deprecated.
+>
+> We recommend NOT using this SDK in new projects.
+>
+> For existing integrations, please be aware that no further updates, bug fixes, or support will be provided.
+>
+> **IMPORTANT**: As of June 11, 2025, all services associated with this SDK will be completely discontinued and existing integrations will cease to function.
+>
+> Thank you for your support and for being part of the Blocto developer community.
+
 ## Example
 
 To run the example project, clone the repo, and run 
