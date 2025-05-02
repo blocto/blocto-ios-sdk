@@ -45,7 +45,7 @@ enum ErrorHandler {
             case .userNotMatch:
                 label.text = "user not matched."
             case .ethSignInvalidHexString:
-                label.text = "input text should be hex string with 0x prefix."
+                label.text = "input text invalid, should be hex string with 0x prefix."
             case .userCancel:
                 label.text = "user canceled."
             case .redirectURLNotFound:
