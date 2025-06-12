@@ -71,7 +71,7 @@ public class BloctoSDK {
 
     var environment: BloctoEnvironment = .prod
 
-    var urlOpening: URLOpening = UIApplication.shared
+    var urlOpening: URLOpening = URLOpener()
 
     var sessioningType: AuthenticationSessioning.Type = ASWebAuthenticationSession.self
 
@@ -88,7 +88,7 @@ public class BloctoSDK {
         getWindow: (() throws -> UIWindow)?,
         logging: Bool = true,
         environment: BloctoEnvironment = .prod,
-        urlOpening: URLOpening = UIApplication.shared,
+        urlOpening: URLOpening = URLOpener(),
         sessioningType: AuthenticationSessioning.Type = ASWebAuthenticationSession.self
     ) {
         self.appId = appId

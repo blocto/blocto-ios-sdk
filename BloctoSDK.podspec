@@ -10,6 +10,8 @@ Pod::Spec.new do |s|
   s.default_subspec = "Core"
   s.social_media_url = 'https://twitter.com/BloctoApp'
 
+  s.deprecated = true
+
   s.swift_version = '5.0.0'
   s.ios.deployment_target = '13.0'
 
