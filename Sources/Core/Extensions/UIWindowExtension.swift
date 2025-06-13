@@ -8,7 +8,7 @@
 import Foundation
 import AuthenticationServices
 
-extension UIWindow: ASWebAuthenticationPresentationContextProviding {
+extension UIWindow: @retroactive ASWebAuthenticationPresentationContextProviding {
 
     public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
         self

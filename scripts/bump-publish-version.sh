@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if pod spec lint ./BloctoSDK.podspec
+if pod lib lint ./BloctoSDK.podspec
 then 
     echo "lint suceess"
 else
