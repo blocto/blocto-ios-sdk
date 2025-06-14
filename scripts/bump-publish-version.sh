@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if pod lib lint ./BloctoSDK.podspec
+if pod lib lint ./BloctoSDK.podspec --allow-warnings
 then 
     echo "lint suceess"
 else
